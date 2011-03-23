@@ -1,3 +1,61 @@
+;;reference from murasesyuka's dotemacs
+;;https://github.com/murasesyuka/dotemacs
+
+;; OSを判別、UNIX系？
+(defvar run-unix
+  (or (equal system-type 'gnu/linux)
+      (or (equal system-type 'usg-unix-v)
+          (or  (equal system-type 'berkeley-unix)
+               (equal system-type 'cygwin)))))
+
+
+; OSを判別、個別判別
+(defvar run-linux
+  (equal system-type 'gnu/linux))
+(defvar run-system-v
+  (equal system-type 'usg-unix-v)); OpenSolaris2090.06
+(defvar run-bsd
+  (equal system-type 'berkeley-unix))
+(defvar run-cygwin ;; cygwinもunixグループにしておく
+  (equal system-type 'cygwin))
+
+(defvar run-w32
+  (and (null run-unix)
+       (or (equal system-type 'windows-nt)
+           (equal system-type 'ms-dos))))
+(defvar run-darwin (equal system-type 'darwin))
+
+
+;; Emacsenの種類とVerを判別
+(defvar run-emacs20
+  (and (equal emacs-major-version 20)
+       (null (featurep 'xemacs))))
+(defvar run-emacs21
+  (and (equal emacs-major-version 21)
+       (null (featurep 'xemacs))))
+(defvar run-emacs22
+  (and (equal emacs-major-version 22)
+       (null (featurep 'xemacs)))); OpenSolaris2090.06
+(defvar run-emacs23
+  (and (equal emacs-major-version 23)
+       (null (featurep 'xemacs))))
+
+
+;; meadowの種類とVerを判別
+(defvar run-meadow (featurep 'meadow))
+(defvar run-meadow1 (and run-meadow run-emacs20))
+(defvar run-meadow2 (and run-meadow run-emacs21))
+(defvar run-meadow3 (and run-meadow run-emacs22))
+
+
+
+(defvar run-xemacs (featurep 'xemacs))
+(defvar run-xemacs-no-mule
+  (and run-xemacs (not (featurep 'mule))))
+(defvar run-carbon-emacs (and run-darwin window-system))
+
+;;from from murasesyuka's dotemacs end
+
 ;;highlight parenthesis
 (show-paren-mode t)
 
@@ -43,6 +101,9 @@
         anything-c-source-files-in-current-dir+
         ))
 
+;;open-junk-file
+(require 'open-junk-file)
+
 ;;original key-bind
 (define-key global-map (kbd "C-8")
   (lambda ()
@@ -51,7 +112,8 @@
     (load-file buffer-file-name)
     (message "load %S succeeded!" (current-buffer))))
 
-
+;;reference from ALICE meadow
+;;http://d.hatena.ne.jp/zqwell-ss/20100620/1277025809
 ;;; *scrach*をkill-bufferしたら自動復活させる
 (defun my-make-scratch (&optional arg)
   (interactive)
@@ -131,8 +193,22 @@
   (my-window-size-save))
 ;;; ウィンドウのサイズを閉じる前に記憶しておく ここまで
 
+;;from ALICE meadow code end.
+
 ;;; 列番号を表示
 (column-number-mode t)
 
-(require 'wb-line-number)
-(wb-line-number-toggle)
+;;行番号表示のelisp
+;(require 'wb-line-number)
+;(wb-line-number-toggle)
+
+;; 常時デバッグ状態
+(setq debug-on-error t)
+
+;; 文字コード
+;;(set-language-environment 'Japanese)
+(set-language-environment  'utf-8)
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8-unix)
+
+(require 'flymake)
