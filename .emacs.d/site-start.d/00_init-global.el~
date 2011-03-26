@@ -1,0 +1,5 @@
+;;; 列番号を表示
+(column-number-mode t)
+
+;; 常時デバッグ状態
+(setq debug-on-error t)
