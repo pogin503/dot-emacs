@@ -1,66 +1,6 @@
-;;reference from murasesyuka's dotemacs
-;;https://github.com/murasesyuka/dotemacs
-
-;; OSを判別、UNIX系？
-(defvar run-unix
-  (or (equal system-type 'gnu/linux)
-      (or (equal system-type 'usg-unix-v)
-          (or  (equal system-type 'berkeley-unix)
-               (equal system-type 'cygwin)))))
-
-
-; OSを判別、個別判別
-(defvar run-linux
-  (equal system-type 'gnu/linux))
-(defvar run-system-v
-  (equal system-type 'usg-unix-v)); OpenSolaris2090.06
-(defvar run-bsd
-  (equal system-type 'berkeley-unix))
-(defvar run-cygwin ;; cygwinもunixグループにしておく
-  (equal system-type 'cygwin))
-
-(defvar run-w32
-  (and (null run-unix)
-       (or (equal system-type 'windows-nt)
-           (equal system-type 'ms-dos))))
-(defvar run-darwin (equal system-type 'darwin))
-
-
-;; Emacsenの種類とVerを判別
-(defvar run-emacs20
-  (and (equal emacs-major-version 20)
-       (null (featurep 'xemacs))))
-(defvar run-emacs21
-  (and (equal emacs-major-version 21)
-       (null (featurep 'xemacs))))
-(defvar run-emacs22
-  (and (equal emacs-major-version 22)
-       (null (featurep 'xemacs)))); OpenSolaris2090.06
-(defvar run-emacs23
-  (and (equal emacs-major-version 23)
-       (null (featurep 'xemacs))))
-
-
-;; meadowの種類とVerを判別
-(defvar run-meadow (featurep 'meadow))
-(defvar run-meadow1 (and run-meadow run-emacs20))
-(defvar run-meadow2 (and run-meadow run-emacs21))
-(defvar run-meadow3 (and run-meadow run-emacs22))
-
-
-
-(defvar run-xemacs (featurep 'xemacs))
-(defvar run-xemacs-no-mule
-  (and run-xemacs (not (featurep 'mule))))
-(defvar run-carbon-emacs (and run-darwin window-system))
-
-;;from from murasesyuka's dotemacs end
-
-;;highlight parenthesis
-(show-paren-mode t)
-
 ;;install elisp
 (setq load-path (cons "~/.emacs.d/elisp" load-path))
+
 
 ;;auto-install*******************************
 (require 'auto-install)
@@ -68,12 +8,14 @@
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)             ; 互換性確保
 
+
 ;;auto-complete******************************
 (require 'auto-complete)
 (global-auto-complete-mode t)
 (setq auto-install-directory "~/.emacs.d/elisp/")
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)
+
 
 ;;anything
 (require 'anything)
@@ -101,19 +43,33 @@
         anything-c-source-files-in-current-dir+
         ))
 
+
 ;;open-junk-file
 (require 'open-junk-file)
+
 
 ;;original key-bind
 (define-key global-map (kbd "C-8")
   (lambda ()
     (interactive)
     (save-buffer)
+;;  Tell me about all errors
+    (if (boundp 'debug-ignored-errors)
+	(setq debug-ignored-errors nil))
+    (if (equal debug-on-error nil)
+	(setq debug-on-error t))
     (load-file buffer-file-name)
     (message "load %S succeeded!" (current-buffer))))
 
+
+;;debug config
+;(add-hook 'after-init-hook
+;          '(lambda () (setq debug-on-error t)))
+
+
 ;;reference from ALICE meadow
-;;http://d.hatena.ne.jp/zqwell-ss/20100620/1277025809
+;;@see http://d.hatena.ne.jp/zqwell-ss/20100620/1277025809
+
 ;;; *scrach*をkill-bufferしたら自動復活させる
 (defun my-make-scratch (&optional arg)
   (interactive)
@@ -184,7 +140,6 @@
     (if (file-exists-p file)
         (load file))))
 
-
 (my-window-size-load)
 
 ;;; Call the function above at C-x C-c.
@@ -195,15 +150,43 @@
 
 ;;from ALICE meadow code end.
 
-;;; 列番号を表示
-(column-number-mode t)
+
+;;reference from sakito's config
+
+;; 引数を load-path へ追加
+;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
+;; [A-Za-z] で開始する物だけ追加するので、追加したくない物は . や _ を先頭に付与しておけばロードしない
+;; dolist は Emacs 21 から標準関数なので積極的に利用して良い
+(defun add-to-load-path (&rest paths)
+  (let (path)
+    (dolist (path paths paths)
+      (let ((default-directory (expand-file-name (concat user-emacs-directory path))))
+        (add-to-list 'load-path default-directory)
+        (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+            (normal-top-level-add-subdirs-to-load-path))))))
+
+;; Emacs Lisp のPathを通す
+(add-to-load-path 
+ ;"lisp"
+ ;; 変更したり、自作の Emacs Lisp
+ ;"local-lisp"
+ ;; private 内には自分専用の物がはいっている。依存は private 内で完結するようにしている
+ ;"private"
+ ;; 初期設定ファイル
+ "site-start.d"
+ "plugins")
+
+;;from sakito's config end
+
+
+
 
 ;;行番号表示のelisp
 ;(require 'wb-line-number)
 ;(wb-line-number-toggle)
 
-;; 常時デバッグ状態
-(setq debug-on-error t)
+
+
 
 ;; 文字コード
 ;;(set-language-environment 'Japanese)
@@ -211,4 +194,34 @@
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8-unix)
 
-(require 'flymake)
+
+;;flymake
+;(require 'flymake)
+;(flymake-mode)
+
+
+;;tabbar (tabberじゃなかった...)
+(require 'tabbar)
+(tabbar-mode)
+
+
+
+
+;;highlight-cl
+(require 'highlight-cl)
+(add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
+(add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords)
+
+
+;;elscreen
+;(setq load-path (cons "~/.emacs.d/elscreen" load-path))
+;(load "elscreen" "ElScreen" t)
+
+;;css-mode indent config
+;;(setq cssm-indent-function #'cssm-c-style-indenter)
+
+
+;;init-loader
+(require 'init-loader)
+(init-loader-load "~/.emacs.d/site-start.d/")
+
