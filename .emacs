@@ -1,7 +1,6 @@
 ;;install elisp
 (setq load-path (cons "~/.emacs.d/elisp" load-path))
 
-
 ;;auto-install*******************************
 (require 'auto-install)
 (setq auto-install-directory "~/.emacs.d/auto-install/")
@@ -9,58 +8,8 @@
 (auto-install-compatibility-setup)             ; 互換性確保
 
 
-;;auto-complete******************************
-(require 'auto-complete)
-(global-auto-complete-mode t)
-(setq auto-install-directory "~/.emacs.d/elisp/")
-(auto-install-update-emacswiki-package-name t)
-(auto-install-compatibility-setup)
-
-
-;;anything
-(require 'anything)
-(require 'anything-startup)
-(require 'anything-config)
-(require 'recentf)
-;(add-to-list 'anything-sources 'anything-c-source-emacs-commands)
-(define-key global-map (kbd "M-l") 'anything)
-(setq recentf-max-saved-items 3000)
-(recentf-mode t)
-(setq anything-sources
-      '(anything-c-source-buffers+
-;        anything-c-source-colors
-        anything-c-source-recentf
-        anything-c-source-bookmarks
-        anything-c-source-file-cache
-        anything-c-source-man-pages
-;        anything-c-source-emacs-variable-at-point
-;        anything-c-source-emacs-function-at-point
-        anything-c-source-file-name-history
-;        anything-c-source-anything-grep-fallback
-;        anything-c-source-anything-google-fallback
-        anything-c-source-emacs-commands
-        anything-c-source-emacs-functions
-        anything-c-source-files-in-current-dir+
-        ))
-
-
 ;;open-junk-file
 (require 'open-junk-file)
-
-
-;;original key-bind
-(define-key global-map (kbd "C-8")
-  (lambda ()
-    (interactive)
-    (save-buffer)
-;;  Tell me about all errors
-    (if (boundp 'debug-ignored-errors)
-	(setq debug-ignored-errors nil))
-    (if (equal debug-on-error nil)
-	(setq debug-on-error t))
-    (load-file buffer-file-name)
-    (message "load %S succeeded!" (current-buffer))))
-
 
 ;;debug config
 ;(add-hook 'after-init-hook
@@ -167,32 +116,18 @@
 
 ;; Emacs Lisp のPathを通す
 (add-to-load-path 
- ;"lisp"
- ;; 変更したり、自作の Emacs Lisp
- ;"local-lisp"
- ;; private 内には自分専用の物がはいっている。依存は private 内で完結するようにしている
- ;"private"
  ;; 初期設定ファイル
  "site-start.d"
- "plugins")
+ "plugins"
+ "elisp/color-themes"
+ "elisp/")
 
 ;;from sakito's config end
-
-
 
 
 ;;行番号表示のelisp
 ;(require 'wb-line-number)
 ;(wb-line-number-toggle)
-
-
-
-
-;; 文字コード
-;;(set-language-environment 'Japanese)
-(set-language-environment  'utf-8)
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8-unix)
 
 
 ;;flymake
@@ -225,3 +160,10 @@
 (require 'init-loader)
 (init-loader-load "~/.emacs.d/site-start.d/")
 
+;; 00 一般設定
+;; 10 起動前実行系
+;; 20 関数定義
+;; 30 追加機能系
+;; 40 マイナーモード
+;; 50 メジャーモード
+;; 90 起動後実行系

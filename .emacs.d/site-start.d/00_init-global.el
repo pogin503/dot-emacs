@@ -66,3 +66,20 @@
          (dolist (function functions)
            (autoload function file docstring interactive type))
          t )))
+
+
+;;ガベージコレクションの頻度を下げる 初期設定は4000000
+;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html
+(setq gc-cons-threshold 5242880)
+
+;;regionの選択中にBackspaceを押すと消せるようにする
+;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html#ys:backward-delete-region
+(defadvice backward-delete-char-untabify
+  (around ys:backward-delete-region activate)
+  (if (and transient-mark-mode mark-active)
+      (delete-region (region-beginning) (region-end))
+    ad-do-it))
+
+
+;;load-path
+;;(add-to-load-path 

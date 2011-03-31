@@ -9,7 +9,3 @@
 (define-key esc-map "c" 'seq-capitalize-backward-word)
 (define-key esc-map "l" 'seq-downcase-backward-word)
 
-(define-key global-map (kbd "C-7")
-  (lambda ()
-    (interactive)
-    (message "load-seq")))

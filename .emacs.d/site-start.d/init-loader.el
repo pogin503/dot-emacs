@@ -122,7 +122,9 @@ e.x, 00_hoge.el, 01_huga.el ... 99_keybind.el"
           (let ((time (car (benchmark-run (load (file-name-sans-extension el))))))
             (init-loader-log (format "loaded %s. %s" (locate-library el) time)))
         (error
-         (init-loader-error-log (error-message-string e)))))))
+         (init-loader-error-log (error-message-string e)) ;削除
+	 (init-loader-error-log (format "%s. %s" (locate-library el) (error-message-string e))) ;追加
+	 )))))
 
 (defun init-loader--re-load-files (re dir &optional sort)
     (loop for el in (directory-files dir t)
