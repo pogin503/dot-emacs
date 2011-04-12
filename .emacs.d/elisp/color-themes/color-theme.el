@@ -50,8 +50,7 @@
   (require 'reporter)
   (require 'sendmail))
 
-;;(require 'cl); set-difference is a function...
-(eval-when-compile (require 'cl))
+(require 'cl); set-difference is a function...
 
 ;; for custom-face-attributes-get or face-custom-attributes-get
 (require 'cus-face)
@@ -74,10 +73,9 @@
   "Non-nil if running XEmacs.")
 
 ;; Add this since it appears to miss in emacs-2x
-(if (fboundp 'replace-in-string)
-    (defalias 'color-theme-replace-in-string 'replace-in-string)
-  (defsubst color-theme-replace-in-string (target old new &optional literal)
-    (replace-regexp-in-string old new target nil literal)))
+(or (fboundp 'replace-in-string)
+    (defun replace-in-string (target old new)
+      (replace-regexp-in-string old new  target)))
 
 ;; face-attr-construct has a problem in Emacs 20.7 and older when
 ;; dealing with inverse-video faces.  Here is a short test to check
@@ -220,11 +218,9 @@ not be shown with all themes but yours."
   :group 'color-theme)
 
 (defcustom color-theme-libraries (directory-files 
-                                  (file-name-as-directory 
-				   (expand-file-name 
-                                    "themes" 
-                                    (file-name-directory (locate-library "color-theme")))) 
-                                  t "^color-theme")
+                                  (concat 
+                                   (file-name-directory (locate-library "color-theme"))
+                                   "/themes") t "^color-theme")
   "A list of files, which will be loaded in color-theme-initialize depending
 on `color-theme-load-all-themes' value. 
 This allows a user to prune the default color-themes (which can take a while
@@ -641,8 +637,7 @@ reversed: only non-matching elements will be retained."
 This makes sure that SPEC has the form ((t (PLIST ...))).
 Only properties not in `color-theme-illegal-default-attributes'
 are included in the SPEC returned."
-;  (let ((props (cadar spec))
-   (let ((props (car (cdr (car spec))))
+  (let ((props (cadar spec))
 	result prop val)
     (while props
       (setq prop (nth 0 props)
@@ -691,8 +686,7 @@ Example: Eventhough :bold works in Emacs, it is not recognized by
 function replaces a :bold attribute with the corresponding :weight
 attribute, if there is no :weight, or deletes it.  This undoes the
 doings of `color-theme-spec-canonical-font', more or less."
-;    (let ((props (cadar spec)))
-    (let ((props (car (cdr (car spec)))))
+    (let ((props (cadar spec)))
       (when (plist-member props :bold)
 	(setq props (color-theme-plist-delete props :bold))
 	(unless (plist-member props :weight)
@@ -1153,8 +1147,7 @@ If REGEXP is given, this is only done if faces contains a match for regexps."
   ;; people.  These *must* use a larger font in order to be usable.
   (let (result)
     (dolist (face faces)
-;     (let ((props (cadar (nth 1 face))))
-      (let ((props (car (cdr (car (nth 1 face))))))
+      (let ((props (cadar (nth 1 face))))
 	(if (and (plist-member props :height)
 		 (integerp (plist-get props :height)))
 	    (setq props (color-theme-plist-delete props :height)
@@ -1344,7 +1337,7 @@ Called from `color-theme-install'."
     (dolist (var vars)
       (if (or color-theme-is-global color-theme-xemacs-p)
 	  (set (car var) (cdr var))
-	(frame-parameter nil (car var))
+	(make-variable-frame-local (car var))
 	(modify-frame-parameters (selected-frame) (list var))))))
 
 (defun color-theme-install-faces (faces)
@@ -1633,8 +1626,8 @@ frame-parameter settings of previous color themes."
        (add-to-list 'color-themes
                     (list ',n
                           (upcase-initials
-                           (color-theme-replace-in-string
-                            (color-theme-replace-in-string 
+                           (replace-in-string
+                            (replace-in-string 
                              (symbol-name ',n) "^color-theme-" "") "-" " "))
                           ,author))
        (defun ,n ()

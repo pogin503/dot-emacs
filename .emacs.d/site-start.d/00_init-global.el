@@ -12,7 +12,7 @@
 
 ;;; 対応する括弧をブリンク ()
 (setq blink-matching-paren t)
-(setq blink-matching-delay 1)
+(setq blink-matching-delay 1000)
 
 
 ;;highlight parenthesis
@@ -41,6 +41,28 @@
 ;; scratch のメッセージを空にする
 (setq initial-scratch-message nil)
 
+
+;;@see http://sites.google.com/site/shidoinfo/Home/開発環境/emacs/emacsの基本
+;;カーソルが行頭にある場合も行全体を削除
+(setq kill-whole-line t)                  
+
+
+; スクリプトを保存する時、自動的に chmod +x を行うようにする
+(defun make-file-executable ()
+  "Make the file of this buffer executable, when it is a script source."
+  (save-restriction
+    (widen)
+    (if (string= "#!"
+         (buffer-substring-no-properties 1
+                         (min 3 (point-max))))
+        (let ((name (buffer-file-name)))
+          (or (equal ?. (string-to-char
+             (file-name-nondirectory name)))
+              (let ((mode (file-modes name)))
+                (set-file-modes name (logior mode (logand
+                           (/ mode 4) 73)))
+                (message (concat "Wrote " name " (+x)"))))))))
+(add-hook 'after-save-hook 'make-file-executable)
 
 ;; 安全な実行のための共通系関数
 
@@ -81,5 +103,24 @@
     ad-do-it))
 
 
-;;load-path
-;;(add-to-load-path 
+;;config warnig-suppress-types
+;;@see http://d.hatena.ne.jp/fu7mu4/20101027/1288191419
+(setq warning-suppress-types nil)
+
+;; Emacs 設定ディレクトリを設定。Emacs 22以下用
+;; Emacs 23.1 以上では user-emacs-directory 変数が用意されているのでそれを利用
+(unless (boundp 'user-emacs-directory)
+  (defvar user-emacs-directory (expand-file-name "~/.emacs.d/")))
+
+;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
+;; 終了時バイトコンパイル
+(add-hook 'kill-emacs-query-functions
+          (lambda ()
+	    (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
+					(concat user-emacs-directory "init.elc"))
+                (byte-compile-file (concat user-emacs-directory "init.el")))
+;            (byte-recompile-directory (concat user-emacs-directory "lisp") 0)
+;            (byte-recompile-directory (concat user-emacs-directory "private") 0)
+            (byte-recompile-directory (concat user-emacs-directory "site-start.d") nil)
+            ))
+
