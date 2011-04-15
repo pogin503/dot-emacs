@@ -1,6 +1,8 @@
 ;(auto-install-from-url "https://github.com/m2ym/popwin-el/raw/master/popwin.el")
 ;(auto-install-from-url "https://github.com/m2ym/popwin-el/raw/v0.2/popwin.el")
-(auto-install-from-url "http://www.emacswiki.org/emacs-en/PosTip")
+;(auto-install-from-url "http://www.emacswiki.org/emacs-en/PosTip")
+(add-to-list 'load-path "~/.emacs.d/elisp")
+
 (require 'popwin)
 (setq display-buffer-function 'popwin:display-buffer)
 

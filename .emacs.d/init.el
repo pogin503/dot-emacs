@@ -124,7 +124,7 @@
  "site-start.d"
  "plugins"
  "elisp/color-themes"
- "elisp/"
+ "elisp"
  "plugins/slime")
 
 ;;from sakito's config end
