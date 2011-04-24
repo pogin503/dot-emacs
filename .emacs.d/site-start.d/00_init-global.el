@@ -1,3 +1,7 @@
+; 初期ディレクトリを設定
+(setq default-directory "~/")
+
+
 ;;行番号の表示
 (line-number-mode t)
 
@@ -40,6 +44,19 @@
 (setq inhibit-startup-message t)
 ;; scratch のメッセージを空にする
 (setq initial-scratch-message nil)
+
+
+;;@see http://aikotobaha.blogspot.com/2011/02/emacsdotemacs.html
+; yes/no を y/n へ簡略化
+(fset 'yes-or-no-p 'y-or-n-p)
+
+
+; スクロール時のカーソル位置の維持
+(setq scroll-preserve-screen-position t)
+
+
+; C-x C-f での意味の無いパス表示をグレーアウトする
+(file-name-shadow-mode t)
 
 
 ;;@see http://sites.google.com/site/shidoinfo/Home/開発環境/emacs/emacsの基本

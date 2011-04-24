@@ -1,10 +1,8 @@
 ;;slime
-
-;; 文字コードの設定
-(setq slime-net-coding-system 'utf-8-unix)
-(setq inferior-lisp-program "sbcl") ; your Lisp system
+;(add-to-list 'load-path  "~/.emacs.d/plugins/slime/swank-loader.lisp")
 (add-to-list 'load-path "~/plugins/slime/")  ; your SLIME directory
-(require 'slime)
+(add-to-list 'load-path "~/plugins/slime/contrib/")  ; your SLIME directory
+
 (add-hook 'lisp-mode-hook (lambda ()
                             (slime-mode t)
                             (show-paren-mode)))
@@ -12,12 +10,33 @@
 	  (lambda () 
 	    (inferior-slime-mode t)))
 
-(slime-setup)
+;(custom-set-variables  
+; '(slime-backend 
+;   (expand-file-name "~/.emacs.d/plugins/slime/swank-loader.lisp")))
 
-;;(eval-when (:compile-toplevel :load-toplevel)
-;;	 (sb-ext:unlock-package 'sb-impl))
 
-;; 複数実装を切り変える場合は以下
+;; 文字コードの設定
+;(setq slime-lisp-implementations
+;      '(
+;	;(ccl (,(expand-file-name "~/opt/ccl/scripts/ccl64") "-K"  "utf-8"))
+;	(sbcl ("sbcl") :coding-system utf-8-unix)
+;	(clisp ("clisp") :coding-system euc-jp-unix)
+;	))
+
+(require 'slime)
+(setq slime-net-coding-system 'utf-8-unix)
+(setq inferior-lisp-program "sbcl") ; your Lisp system
+(slime-setup '(slime-repl slime-fancy slime-banner))
+(require 'slime-autoloads)
+
+
+;(eval-when (:compile-toplevel :load-toplevel)
+;	 (sb-ext:unlock-package 'sb-impl))
+
+;;; start swank server in CL
+;(load "swank-loader.lisp" :verbose t)  ; load swank definition files
+;(swank:create-server :port 4005)       ; swank connect waiting port 4005
+
 ;(setq slime-lisp-implementations
 ;      `(
 ;        (ccl (,(expand-file-name "~/opt/ccl/scripts/ccl64") "-K"  "utf-8"))
@@ -30,37 +49,8 @@
 ;	))
 (set-language-environment "utf-8")
 
-;;; Note that if you save a heap image, the character
-;;; encoding specified on the command line will be preserved,
-;;; and you won't have to specify the -K utf-8 any more.
-;(setq inferior-lisp-program "/usr/local/bin/ccl64 -K utf-8")
-
 ;(slime-setup '(slime-fancy))
 ;(setq slime-default-lisp 'clisp)
-
-;;@see http://mono.kmc.gr.jp/~mak/hiki/?lisp%2Flispbuilder%2Femacs-setting
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; emacs-lisp-mode(下のslimeモードとelispモードを分けるため)
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- (setq auto-mode-alist
-       ;;; 拡張子とモードの対応
-       (append
-        '(("/.el" . emacs-lisp-mode))
-        '(("/.emacs-*" . emacs-lisp-mode))
-        '(("/.wl" . emacs-lisp-mode))
-        auto-mode-alist))
- 
- ;;(or SBCL CLISP)
- (defun slime-on (x)
-   (progn (setq inferior-lisp-program x)
-          (slime)))
- (defun slime-clisp ()
-   (interactive)
-   (slime-on "clisp"))
- (defun slime-sbcl ()
-   (interactive)
-   (slime-on "sbcl"))
-;(slime-autodoc-mode)
 
 
 ;;slimeのkey-bindのメモ

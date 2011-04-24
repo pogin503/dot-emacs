@@ -1,6 +1,7 @@
 ;;auto-complete******************************
-(require 'auto-complete)
+(add-to-list 'load-path "~/.emacs.d/plugins/auto-complete")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/plugins/auto-complete/ac-dict")
+(require 'auto-complete-config)
+(ac-config-default)
 (global-auto-complete-mode t)
-(setq auto-install-directory "~/.emacs.d/elisp/")
-(auto-install-update-emacswiki-package-name t)
-(auto-install-compatibility-setup)
+(ac-flyspell-workaround)

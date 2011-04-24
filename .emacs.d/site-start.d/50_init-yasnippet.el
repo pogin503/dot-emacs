@@ -6,16 +6,7 @@
 (require 'anything-c-yasnippet)
 (setq anything-c-yas-space-match-any-greedy t)
 (define-key yas/minor-mode-map (kbd "C-c y") 'anything-c-yas-complete)
-(yas/initialize)
-
-;;複数のスニッペットがある場合
-(setq yas/root-directory '("~/.emacs.d/etc/mysnippets"
-			   "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets"))
-(mapc 'yas/load-directory  yas/root-directory)
-
-;;一つしかディレクトリがない場合
-;(setq yas/root-directory '"~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
-;(yas/load-directory  yas/root-directory)
+(setq anything-c-yas-space-match-any-greedy t) ;スペース区切りで絞り込めるようにする デフォルトは nil
 
 ;;@see http://emacs.g.hatena.ne.jp/Shinnya/20100805/1281034504
 (setq yas/next-field-key "TAB")
@@ -32,4 +23,16 @@
 		    (string= "font-lock-string-face"
 			     (get-char-property (point) 'face))))
              '(require-snippet-condition . force-in-comment)))
+(yas/initialize)
+
+;;複数のスニッペットがある場合
+(setq yas/root-directory '("~/.emacs.d/etc/mysnippets"
+			   "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets"))
+(mapc 'yas/load-directory  yas/root-directory)
+
+;;一つしかディレクトリがない場合
+;(setq yas/root-directory '"~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
+;(yas/load-directory  yas/root-directory)
+
+
 

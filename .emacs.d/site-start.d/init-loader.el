@@ -66,6 +66,11 @@ e.x, 00_hoge.el, 01_huga.el ... 99_keybind.el"
   :group 'init-loader
   :type 'regexp)
 
+(defcustom init-loader-meadow-regexp "^meadow-"
+  "meadow 使用時に読み込まれる設定ファイルにマッチする正規表現"
+  :group 'init-loader
+  :type 'regexp)
+
 (defcustom init-loader-carbon-emacs-regexp "^carbon-emacs-"
   "carbon-emacs 使用時に読み込まれる設定ファイルにマッチする正規表現"
   :group 'init-loader
