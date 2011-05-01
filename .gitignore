@@ -1,3 +1,5 @@
-*.el~
 *~
-ac-comphist.dat
+.emacs.d/private/
+#.emacs.d/plugins/taihi/
+.#*
+\#*\#
