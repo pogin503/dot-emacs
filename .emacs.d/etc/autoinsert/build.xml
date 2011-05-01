@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="iso-2022-jp"?>
+<!DOCTYPE project
+  PUBLIC "-//ANT//DTD project//EN"
+    "file:/Users/sakito/etc/psgml/ant.dtd">
+<project default="main" basedir=".">
+</project>

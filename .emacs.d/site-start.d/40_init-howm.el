@@ -1,15 +1,22 @@
 ;(add-to-list 'load-path "~/.emacs.d/elisp/howm-1.3.9.1/howm/")
 (add-to-list 'load-path "~/.emacs.d/elisp/howm-1.3.9.1/")
 
+(require 'howm-mode)
 ;;はじめて C-c , , した時に読み込む
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/howm/")
 (setq howm-menu-lang 'ja)
-(global-set-key "\C-c,," 'howm-menu)
+(define-key global-map (kbd "C-c , ,") 'howm-menu)
+;(autoload 'howm-menu "howm-mode" "Hitori Otegaru Wiki Modoki" t)
+
+;;@see http://www.bookshelf.jp/soft/meadow_38.html#SEC563
 (mapc
  (lambda (f)
    (autoload f
      "howm" "Hitori Otegaru Wiki Modoki" t))
- '(howm-menu howm-list-all howm-list-recent
-             howm-list-grep howm-create
+ '(howm-menu howm-list-all
+	     howm-list-recent
+             howm-list-grep
+	     howm-create
              howm-keyword-to-kill-ring))
 
 (setq howm-file-name-format "%Y/%m/%Y_%m_%d.howm") ; 1 日 1 ファイル

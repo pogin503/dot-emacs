@@ -23,8 +23,8 @@
    ;;; (コメントかどうかの判断は各モードによる
  )
 
-(mapc
- (lambda (hook)  
-   (add-hook hook 'flyspell-prog-mode))
- '(c-mode-common-hook
-   emacs-lisp-mode-hook))
+;(mapc
+; (lambda (hook)  
+;   (add-hook hook 'flyspell-prog-mode))
+; '(c-mode-common-hook
+;   emacs-lisp-mode-hook))

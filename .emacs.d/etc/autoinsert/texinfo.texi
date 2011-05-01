@@ -1,0 +1,82 @@
+\input texinfo @c -*-texinfo-*-
+@comment %**start of header
+@setfilename (file-name-sans-extension (file-name-nondirectory (buffer-file-name)))
+@settitle title
+@syncodeindex pg cp
+@comment %**end of header
+@copying
+このマニュアルの説明
+
+Copyright @copyright{} 2005 sakito
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1
+published by the Free Software Foundation; with no Invariant Sections,
+with the Front-Cover Texts being ``A GNU Manual,'' and with the
+Back-Cover Texts as in (a) below.  A copy of the license is included in
+the section entitled ``GNU Free Documentation License.''
+@end quotation
+@end copying
+
+@dircategory 紹介マニア
+@direntry
+* sample: (sample)文書の簡易説明.
+@end direntry
+
+
+@today{}
+
+@titlepage
+@title GNU Sample
+@subtitle for version @value{VERSION}, @value{UPDATED}
+@author sakito
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top sakito sample
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Invoking sample::
+* Copying This Manual::
+* Index::
+@end menu
+
+@node Invoking sample
+@chapter Invoking sample
+
+@pindex sample
+@cindex invoking @command{sample}
+
+ここが文書になります
+
+@node この文書のライセンス
+@appendix この文書のライセンス
+
+@c @menu
+@c * GNU Free Documentation License::  License for copying this manual.
+@c @end menu
+@c @include fdl.texi
+
+@menu
+* GNU Free Documentation License::  この文書のライセンス
+@end menu
+
+@insertcopying
+
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye

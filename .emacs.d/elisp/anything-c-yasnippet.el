@@ -161,30 +161,39 @@ If SNIPPET-FILE does not contain directory, it is placed in default snippet dire
   (let ((yas/choose-keys-first nil)
         (yas/choose-tables-first nil)
         (yas/buffer-local-condition 'always))
-    (let* ((result-alist '((candidates) (transformed) (template-key-alist)))
-           (hash-value-alist nil)
-           (cur-table (first (yas/get-snippet-tables anything-c-yas-cur-major-mode)))
-           (hash-table (yas/snippet-table-hash cur-table))) ;`yas/snippet-table-hash'
-      (let ((hashes (loop for table in (yas/get-snippet-tables)
+    (let* ((result-alist '((candidates) (transformed) (template-key-alist)(template-file-alist)))
+           (cur-tables
+            (if table
+                (list table)
+              (yas/get-snippet-tables anything-c-yas-cur-major-mode)))
+           (hash-value-alist nil))
+      (let ((hashes (loop for table in cur-tables
                           collect (yas/snippet-table-hash table))))
         (loop for hash in hashes
               do (maphash (lambda (k v)
-                            (setq hash-value-alist (append v hash-value-alist))
-                            )
+                            (let (a)
+                              (maphash (lambda (n te)
+                                         (setq a (append (list (cons k te)) a)))
+                                       v)
+                              (setq hash-value-alist (append a hash-value-alist))))
                           hash))
         (loop with transformed
               with templates
               with template-key-alist
+              with template-file-alist			  
               for lst in hash-value-alist
               for key = (car lst)
               for template-struct = (cdr lst)
               for name = (yas/template-name template-struct) ;`yas/template-name'
               for template = (yas/template-content template-struct) ;`yas/template-content'
+              for file = (yas/template-file template-struct) ;`yas/template-content'			  
               do (progn (push template templates)
                         (push `(,name . ,template) transformed)
-                        (push `(,template . ,key) template-key-alist))
+						(push `(,template . ,key) template-key-alist)
+                        (push `(,template . ,file) template-file-alist))
               finally (progn (push `(candidates . ,templates) result-alist)
                              (push `(transformed . ,transformed) result-alist)
+                             (push `(template-file-alist . ,template-file-alist) result-alist)
                              (push `(template-key-alist . ,template-key-alist) result-alist)))
         result-alist)
       )))
@@ -241,7 +250,7 @@ like `yas/current-key'"
     ;; sort
     (setq transformed-list (sort* transformed-list 'string< :key 'car))
     transformed-list))
-
+ 
 (defun anything-c-yas-find-snippet-file-by-key (key)
   (let ((modes (anything-c-yas-get-modes))
         (snippet-dirs anything-c-yas-snippets-dir-list))
@@ -267,11 +276,12 @@ like `yas/current-key'"
         finally return path))
 
 (defun anything-c-yas-find-file-snippet-by-template (template &optional other-window)
-  (let* ((path (anything-c-yas-get-path-by-template template))
+  (let* ((path (assoc-default template (assoc-default 'template-file-alist anything-c-yas-cur-snippets-alist)))
          (ff-func (if other-window 'find-file-other-window 'find-file)))
     (if path
         (funcall ff-func path)
       (message "not found snippet file"))))
+
 
 (defun anything-c-yas-get-path-by-template (template)
   (let* ((key (anything-c-yas-get-key-by-template template anything-c-yas-cur-snippets-alist))
@@ -306,12 +316,12 @@ space match anyword greedy"
     (candidate-transformer . (lambda (candidates)
                                (anything-c-yas-get-transformed-list anything-c-yas-cur-snippets-alist anything-c-yas-initial-input)))
     (action . (("Insert snippet" . (lambda (template)
-                                     (yas/expand-snippet anything-c-yas-point-start anything-c-yas-point-end template)
+                                     (yas/expand-snippet template anything-c-yas-point-start anything-c-yas-point-end)
                                      (when anything-c-yas-display-msg-after-complete
                                        (message "this snippet is bound to [ %s ]"
                                                 (anything-c-yas-get-key-by-template template anything-c-yas-cur-snippets-alist)))))
                ("Open snippet file" . (lambda (template)
-                                        (anything-c-yas-find-file-snippet-by-template template)))
+										(anything-c-yas-find-file-snippet-by-template template)))
                ("Open snippet file other window" . (lambda (template)
                                                      (anything-c-yas-find-file-snippet-by-template template t)))
                ("Create new snippet on region" . (lambda (template)

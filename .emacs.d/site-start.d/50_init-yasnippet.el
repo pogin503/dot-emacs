@@ -25,7 +25,7 @@
              '(require-snippet-condition . force-in-comment)))
 (yas/initialize)
 
-;;複数のスニッペットがある場合
+;;複数のスニッペットディレクトリがある場合
 (setq yas/root-directory '("~/.emacs.d/etc/mysnippets"
 			   "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets"))
 (mapc 'yas/load-directory  yas/root-directory)
@@ -34,5 +34,42 @@
 ;(setq yas/root-directory '"~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
 ;(yas/load-directory  yas/root-directory)
 
+;;@see http://d.hatena.ne.jp/rubikitch/20101204/yasnippet
+;;; [2010/07/13]
+(defun yas/expand-link (key)
+  "Hyperlink function for yasnippet expansion."
+  (delete-region (point-at-bol) (1+ (point-at-eol)))
+  (insert key)
+  (yas/expand))
+;;; [2010/12/02]
+(defun yas/expand-link-choice (&rest keys)
+  "Hyperlink to select yasnippet template."
+  (yas/expand-link (completing-read "Select template: " keys nil t)))
+;; (yas/expand-link-choice "defgp" "defcm")
 
+(defun ac-yasnippet-candidate ()
+  (let ((table (yas/get-snippet-tables major-mode)))
+    (if table
+      (let (candidates (list))
+            (mapcar (lambda (mode)          
+              (maphash (lambda (key value)    
+                (push key candidates))          
+              (yas/snippet-table-hash mode))) 
+            table)
+        (all-completions ac-prefix candidates)))))
 
+(defface ac-yasnippet-candidate-face
+  '((t (:background "sandybrown" :foreground "black")))
+  "Face for yasnippet candidate.")
+
+(defface ac-yasnippet-selection-face
+  '((t (:background "coral3" :foreground "white"))) 
+  "Face for the yasnippet selected candidate.")
+
+(defvar ac-source-yasnippet
+  '((candidates . ac-yasnippet-candidate)
+    (action . yas/expand)
+    (limit . 3)
+    (candidate-face . ac-yasnippet-candidate-face)
+    (selection-face . ac-yasnippet-selection-face)) 
+  "Source for Yasnippet.")

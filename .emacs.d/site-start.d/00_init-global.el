@@ -138,6 +138,36 @@
                 (byte-compile-file (concat user-emacs-directory "init.el")))
 ;            (byte-recompile-directory (concat user-emacs-directory "lisp") 0)
 ;            (byte-recompile-directory (concat user-emacs-directory "private") 0)
-            (byte-recompile-directory (concat user-emacs-directory "site-start.d") nil)
+            (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
             ))
 
+
+
+(cond (window-system 
+       (setq x-select-enable-clipboard t)))
+
+
+;;スクロール量について
+(setq scroll-conservatively 1)
+(setq scroll-step 1)
+(setq next-screen-context-lines 1)
+
+
+;; マウスホイールでスクロール
+;(defun scroll-down-with-lines ()
+;  "" (interactive) (scroll-down 5))
+;(defun scroll-up-with-lines ()
+;   "" (interactive) (scroll-up 5))
+;(global-set-key [mouse-4] 'scroll-down-with-lines)
+;(global-set-key [mouse-5] 'scroll-up-with-lines)
+
+
+;;スクロールバーの場所
+;;(set-scroll-bar-mode 'left) ;; 左側
+(set-scroll-bar-mode nil) ;; なし
+;;(set-scroll-bar-mode 'right) ;; 右側
+
+
+;;recentf-mode
+(setq recentf-auto-cleanup 'never)
+(recentf-mode 1)
