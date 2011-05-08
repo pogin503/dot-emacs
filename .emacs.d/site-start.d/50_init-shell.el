@@ -8,14 +8,14 @@
 
 ;;shell-toggle************************
 ;;@see http://gihyo.jp/admin/serial/01/ubuntu-recipe/0038
-;(load-library "~/.emacs.d/elisp/shell-toggle-pathed.el")
-; (autoload 'shell-toggle "shell-toggle"
-;  "Toggles between the *shell* buffer and whatever buffer you are editing."
-;  t)
-; (autoload 'shell-toggle-cd "shell-toggle"
-;  "Pops up a shell-buffer and insert a \"cd <file-dir>\" command." t)
-; (global-set-key "\C-ct" 'shell-toggle)
-; (global-set-key "\C-cd" 'shell-toggle-cd)
+(load-library "~/.emacs.d/elisp/shell-toggle-pathed.el")
+(autoload 'shell-toggle "shell-toggle"
+ "Toggles between the *shell* buffer and whatever buffer you are editing."
+ t)
+(autoload 'shell-toggle-cd "shell-toggle"
+ "Pops up a shell-buffer and insert a \"cd <file-dir>\" command." t)
+(global-set-key "\C-ct" 'shell-toggle)
+(global-set-key "\C-cd" 'shell-toggle-cd)
 
 
 ;;shell-command*******************
