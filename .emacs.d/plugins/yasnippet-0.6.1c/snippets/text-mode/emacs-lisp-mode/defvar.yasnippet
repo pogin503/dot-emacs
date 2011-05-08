@@ -1,0 +1,13 @@
+# name : defvar template
+# group : defvar 
+# contributor : kiwanami
+# --
+(defvar ${1:`(save-excursion
+  (let ((re "(def\\\\(un\\\\|var\\\\)[ \t\n]*\\\\([a-z0-9]*[:-]\\\\)"))
+    (cond
+     ((or 
+       (re-search-backward re nil t)
+       (re-search-forward  re nil t))
+      (match-string 2))
+     (t ""))))`}${2:var-name} ${3:value}$0
+  "$1$2.")
