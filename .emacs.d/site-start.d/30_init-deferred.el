@@ -5,7 +5,6 @@
 (setq inertias-global-minor-mode-map 
       (inertias-define-keymap
        '(
-
          ("<wheel-up>"   . inertias-down-wheel)
          ("<wheel-down>" . inertias-up-wheel)
          ("<mouse-4>"    . inertias-down-wheel)
