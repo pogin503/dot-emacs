@@ -66,12 +66,12 @@
                (define-key eshell-mode-map [up] 'previous-line)
                (define-key eshell-mode-map [down] 'next-line)
                ;(define-key eshell-mode-map [(meta return)] 'ns-toggle-fullscreen)
-               (define-key eshell-mode-map [(meta return)] (select-toggle-fullscreen))
+               ;(define-key eshell-mode-map [(meta return)] (select-toggle-fullscreen))
                )
              ))
 (define-key global-map (kbd "C-z") 'eshell)
 ;; エスケープシーケンスを処理
-;; http://d.hatena.ne.jp/hiboma/20061031/1162277851
+;; @see http://d.hatena.ne.jp/hiboma/20061031/1162277851
 (autoload 'ansi-color-for-comint-mode-on "ansi-color"
           "Set `ansi-color-for-comint-mode' to t." t)
 (add-hook 'eshell-load-hook 'ansi-color-for-comint-mode-on)
