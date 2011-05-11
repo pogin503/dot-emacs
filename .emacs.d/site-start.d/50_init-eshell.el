@@ -68,8 +68,6 @@
 	       ;(yas/minor-mode -1)      
                (define-key eshell-mode-map (kbd "<up>") 'eshell-previous-matching-input-from-input)
                (define-key eshell-mode-map (kbd "<down>") 'eshell-next-matching-input-from-input)
-               ;(define-key eshell-mode-map [up] 'previous-line)
-               ;(define-key eshell-mode-map [down] 'next-line)
                ;(define-key eshell-mode-map [(meta return)] 'ns-toggle-fullscreen)
                ;(define-key eshell-mode-map [(meta return)] (select-toggle-fullscreen))
 
