@@ -5,7 +5,8 @@
 (add-hook 'after-init-hook
           (lambda()
             (eshell)
-            (switch-to-buffer "*scratch*")))
+            ;(switch-to-buffer "*scratch*")
+	    ))
 
 (defun my-toggle-term ()
   "eshell と直前のバッファを行き来する。C-u 付きで呼ぶと 今いるバッファと同じディレクトリに cd して開く"
@@ -62,11 +63,16 @@
           '(lambda ()
              (progn
                (define-key eshell-mode-map "\C-a" 'eshell-bol)
-;               (yas/minor-mode -1)      ; yasnippet マイナーモードだと eshell-cmpl-cycle-completions がバグるのでオフる。 C-u - M-x yas/minor-mode と等価。
-               (define-key eshell-mode-map [up] 'previous-line)
-               (define-key eshell-mode-map [down] 'next-line)
+               ; yasnippet マイナーモードだと eshell-cmpl-cycle-completions がバグるのでオフる。
+	       ;:C-u - M-x yas/minor-mode と等価。;               
+	       ;(yas/minor-mode -1)      
+               (define-key eshell-mode-map (kbd "<up>") 'eshell-previous-matching-input-from-input)
+               (define-key eshell-mode-map (kbd "<down>") 'eshell-next-matching-input-from-input)
+               ;(define-key eshell-mode-map [up] 'previous-line)
+               ;(define-key eshell-mode-map [down] 'next-line)
                ;(define-key eshell-mode-map [(meta return)] 'ns-toggle-fullscreen)
                ;(define-key eshell-mode-map [(meta return)] (select-toggle-fullscreen))
+
                )
              ))
 (define-key global-map (kbd "C-z") 'eshell)

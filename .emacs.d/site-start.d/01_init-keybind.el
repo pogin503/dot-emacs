@@ -73,3 +73,4 @@
 ;		    (cut)
 ;		    (clipboard-kill-region))))  ; クリップボードにコピー
 
+(global-set-key (kbd "C-x C-e") 'eval-last-sexp-popup)
