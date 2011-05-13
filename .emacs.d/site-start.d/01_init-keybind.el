@@ -20,7 +20,7 @@
     (interactive)
     (kill-buffer buffer-file-name)))
 
-;;EmacsWiki WishList
+;;@see EmacsWiki WishList
 (defun copy (beg end)
   "Copy region into clipboard"
   (interactive "r")
@@ -58,6 +58,7 @@
 
 
 ;;end EmacsWiki WishList
+
 ;(global-set-key "\M-w" 
 ;		(lambda ()
 ;		  (interactive)
@@ -74,3 +75,5 @@
 ;		    (clipboard-kill-region))))  ; クリップボードにコピー
 
 (global-set-key (kbd "C-x C-e") 'eval-last-sexp-popup)
+
+()
