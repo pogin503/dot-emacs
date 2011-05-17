@@ -22,4 +22,6 @@
 (setq inertias-rest-coef 0)         ; 画面端でのバウンド量（0はバウンドしない。1.0で弾性反発）
 (setq inertias-update-time 60)      ; 画面描画のwait時間（msec）
 
-
+;eval-last-sexp-popup
+(load-file "~/.emacs.d/elisp/eval-last-sexp-popup.el")
+(global-set-key (kbd "C-x C-e") 'eval-last-sexp-popup)
