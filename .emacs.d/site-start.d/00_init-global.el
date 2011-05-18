@@ -171,3 +171,15 @@
 ;;recentf-mode
 (setq recentf-auto-cleanup 'never)
 (recentf-mode 1)
+
+
+;;@see http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
+;;cua-mode
+(cua-mode t)
+(setq cua-enable-cua-keys nil) ;; 変なキーバインド禁止
+
+
+;;改行コード表示
+(setq eol-mnemonic-dos "(CRLF)")
+(setq eol-mnemonic-mac "(CR)")
+(setq eol-mnemonic-unix "(LF)")
