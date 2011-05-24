@@ -16,7 +16,7 @@
               auto-mode-alist))
 
 ;;@see http://blog.livedoor.jp/tek_nishi/archives/3197109.html
-(setq align-c++-modes (cons 'objc-mode align-c++-modes))
+;;(setq align-c++-modes (cons 'objc-mode align-c++-modes))
 
 
 ;; ;;@see http://ja.w3support.net/index.php?db=so&id=663588

@@ -79,3 +79,5 @@
     (message mstr)
     (ad-activate-regexp "eval-last-sexp-override")
     (eval-last-sexp-popup-loop t)))
+
+(provide 'eval-last-sexp-popup)

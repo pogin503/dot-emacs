@@ -5,7 +5,7 @@
 (add-hook 'after-init-hook
           (lambda()
             (eshell)
-            ;(switch-to-buffer "*scratch*")
+            (switch-to-buffer "*scratch*")
 	    ))
 
 (defun my-toggle-term ()

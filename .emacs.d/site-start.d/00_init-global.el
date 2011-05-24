@@ -136,8 +136,8 @@
 	    (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
 					(concat user-emacs-directory "init.elc"))
                 (byte-compile-file (concat user-emacs-directory "init.el")))
-;            (byte-recompile-directory (concat user-emacs-directory "lisp") 0)
-;            (byte-recompile-directory (concat user-emacs-directory "private") 0)
+;;            (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
+;;            (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
             (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
             ))
 
@@ -153,13 +153,13 @@
 (setq next-screen-context-lines 1)
 
 
-;; マウスホイールでスクロール
-;(defun scroll-down-with-lines ()
-;  "" (interactive) (scroll-down 5))
-;(defun scroll-up-with-lines ()
-;   "" (interactive) (scroll-up 5))
-;(global-set-key [mouse-4] 'scroll-down-with-lines)
-;(global-set-key [mouse-5] 'scroll-up-with-lines)
+;; ;; マウスホイールでスクロール
+;; (defun scroll-down-with-lines ()
+;;   "" (interactive) (scroll-down 5))
+;; (defun scroll-up-with-lines ()
+;;    "" (interactive) (scroll-up 5))
+;; (global-set-key [mouse-4] 'scroll-down-with-lines)
+;; (global-set-key [mouse-5] 'scroll-up-with-lines)
 
 
 ;;スクロールバーの場所
@@ -179,7 +179,5 @@
 (setq cua-enable-cua-keys nil) ;; 変なキーバインド禁止
 
 
-;;改行コード表示
-(setq eol-mnemonic-dos "(CRLF)")
-(setq eol-mnemonic-mac "(CR)")
-(setq eol-mnemonic-unix "(LF)")
+;;msb-mode
+(msb-mode 1)

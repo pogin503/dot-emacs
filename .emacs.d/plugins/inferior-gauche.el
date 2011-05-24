@@ -29,12 +29,12 @@
 (defvar igosh-processes nil)
 
 (defvar igosh-mode-line-format
-  (if (member 'mode-line-process default-mode-line-format)
+  (if (member 'mode-line-process mode-line-format)
       (append
-       (reverse (cdr (member 'mode-line-process (reverse default-mode-line-format))))
+       (reverse (cdr (member 'mode-line-process (reverse mode-line-format))))
        '((:eval (igosh-mode-line-process)))
-       (member 'mode-line-process default-mode-line-format))
-    default-mode-line-format))
+       (member 'mode-line-process mode-line-format))
+    mode-line-format))
 
 (defvar igosh-font-lock-keywords
   (append

@@ -17,11 +17,13 @@
 
 (inertias-global-minor-mode 1)
 
-(setq inertias-initial-velocity 80) ; 初速（大きいほど一気にスクロールする）
-(setq inertias-friction 120)        ; 摩擦抵抗（大きいほどすぐ止まる）
+(setq inertias-initial-velocity 70) ; 初速（大きいほど一気にスクロールする）
+(setq inertias-friction 100)        ; 摩擦抵抗（大きいほどすぐ止まる）
 (setq inertias-rest-coef 0)         ; 画面端でのバウンド量（0はバウンドしない。1.0で弾性反発）
 (setq inertias-update-time 60)      ; 画面描画のwait時間（msec）
 
 ;eval-last-sexp-popup
-(load-file "~/.emacs.d/elisp/eval-last-sexp-popup.el")
+;;(load-file "~/.emacs.d/elisp/eval-last-sexp-popup.el")
+(require 'eval-last-sexp-popup)
+;; (global-set-key (kbd "C-x C-e") 'eval-last-sexp)
 (global-set-key (kbd "C-x C-e") 'eval-last-sexp-popup)

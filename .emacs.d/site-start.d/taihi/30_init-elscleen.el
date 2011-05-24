@@ -1,6 +1,10 @@
+
 ;;====================
 ;; ElScreen
 ;;====================
+(add-to-list 'load-path "~/.emacs.d/share/apel-10.8/")
+(add-to-list 'load-path "~/.emacs.d/elisp/elscreen/")
+
 ;; EmacsでGNU screen風のインターフェイスを使う
 (setq elscreen-prefix-key "\C-z")
 (require 'elscreen)
