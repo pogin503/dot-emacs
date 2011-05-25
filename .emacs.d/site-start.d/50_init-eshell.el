@@ -1,18 +1,14 @@
 ;; Eshell
 
 ;;@see http://d.hatena.ne.jp/kitokitoki/20110222/p2
-;; emacs 起動時に eshell バッファも一つ用意する
-(add-hook 'after-init-hook
-          (lambda()
-            (eshell)
-            (switch-to-buffer "*scratch*")
-	    ))
 
 (defun my-toggle-term ()
   "eshell と直前のバッファを行き来する。C-u 付きで呼ぶと 今いるバッファと同じディレクトリに cd して開く"
   (interactive)
   (let ((ignore-list '("*Help*" "*Minibuf-1*" "*Messages*"
-                       "*terminal<1>*" "*terminal<2>*" "*terminal<3>*"))
+                       "*terminal<1>*" "*terminal<2>*" "*terminal<3>*"
+		       "*complilation*" "*Anything Log*" "*Completions*"
+		       "*anything*"))
         (dir default-directory))
     (labels
         ((_my-toggle-term (target)
@@ -73,7 +69,7 @@
 
                )
              ))
-(define-key global-map (kbd "C-z") 'eshell)
+
 ;; エスケープシーケンスを処理
 ;; @see http://d.hatena.ne.jp/hiboma/20061031/1162277851
 (autoload 'ansi-color-for-comint-mode-on "ansi-color"
@@ -106,3 +102,10 @@
 
 (custom-set-faces
     '(eshell-prompt-face ((t (:foreground "maroon2" :bold nil)))))
+
+;; emacs 起動時に eshell バッファも一つ用意する
+(add-hook 'after-init-hook
+          (lambda()
+            (eshell)
+            (switch-to-buffer "*scratch*")
+	    ))
