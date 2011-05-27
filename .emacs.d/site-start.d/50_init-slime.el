@@ -23,9 +23,10 @@
 ;	(clisp ("clisp") :coding-system euc-jp-unix)
 ;	))
 
-(require 'slime)
 (setq slime-net-coding-system 'utf-8-unix)
 (setq inferior-lisp-program "sbcl") ; your Lisp system
+
+(require 'slime)
 (slime-setup '(slime-repl slime-fancy slime-banner))
 (require 'slime-autoloads)
 
