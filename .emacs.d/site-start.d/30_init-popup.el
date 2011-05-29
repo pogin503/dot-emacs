@@ -3,7 +3,7 @@
 ;(auto-install-from-url "http://www.emacswiki.org/emacs-en/PosTip")
 (add-to-list 'load-path "~/.emacs.d/elisp")
 
-(require 'popwin)
+(req popwin)
 (setq display-buffer-function 'popwin:display-buffer)
 
 ;;anything

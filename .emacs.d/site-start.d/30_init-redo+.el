@@ -1,7 +1,7 @@
 ;; INSTALL
 ;; (install-elisp-from-emacswiki "redo+.el")
 
-(require 'redo+)
+(req redo+)
 (global-set-key (kbd "C-M-_") 'redo)
 (setq undo-no-redo t)
 (setq undo-limit 600000)

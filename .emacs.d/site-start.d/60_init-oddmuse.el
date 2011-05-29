@@ -1,7 +1,7 @@
 ;;INSTALL
 ;(install-elisp "http://www.emacswiki.org/cgi-bin/wiki/download/oddmuse.el")
 
-;(require 'oddmuse)
+;(req oddmuse)
 ;; if needed
 ;(setq url-proxy-services '(("http" . "your.proxy.host:portnumber")))
 ;(oddmuse-mode-initialize)
@@ -16,6 +16,6 @@
 
 ;(auto-install-from-url http://www.emacswiki.org/emacs/download/yaoddmuse.el)
 
-(require 'yaoddmuse)
+(req yaoddmuse)
 ;(yaoddmuse-update-pagename t)
 

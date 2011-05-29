@@ -17,7 +17,7 @@
           '(lambda () (inf-ruby-keys)))
 
 ;; ruby-electric
-(require 'ruby-electric)
+(req ruby-electric)
 (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
 
 ;; ;;;; rubydb
@@ -34,11 +34,11 @@
 ;;         try-complete-file-name
 ;;         try-expand-dabbrev))
 ;; (setq rails-use-mongrel t)
-;; (require 'cl)
-;; (require 'rails)
+;; (req cl)
+;; (req rails)
 
 ;; ruby-block
-(require 'ruby-block)
+(req ruby-block)
 (ruby-block-mode t)
 ;; ミニバッファに表示し, かつ, オーバレイする.
 (setq ruby-block-highlight-toggle t)

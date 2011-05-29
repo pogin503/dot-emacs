@@ -26,9 +26,9 @@
 (setq slime-net-coding-system 'utf-8-unix)
 (setq inferior-lisp-program "sbcl") ; your Lisp system
 
-(require 'slime)
+(req slime)
 (slime-setup '(slime-repl slime-fancy slime-banner))
-(require 'slime-autoloads)
+(req slime-autoloads)
 
 
 ;(eval-when (:compile-toplevel :load-toplevel)
@@ -119,6 +119,6 @@
 ;    ad-do-it))
 
 ;;ac-slime
-(require 'ac-slime)
+(req ac-slime)
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)

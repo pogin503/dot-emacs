@@ -30,7 +30,7 @@
 ;;sudo make install-dict
 
 ;;@see http://hgw09.exblog.jp/12670557/
-(require 'sdic-inline)
+(req sdic-inline)
 (sdic-inline-mode t) ; sdic-inline モードの起動
 (setq sdic-inline-word-at-point-strict t)
 
@@ -39,7 +39,7 @@
 (setq sdic-inline-waei-dictionary "~/.emacs.d/etc/dict/jedict.sdic")
 
 ;sdic tooltip
-(require 'sdic-inline-pos-tip)
+(req sdic-inline-pos-tip)
 (setq sdic-inline-display-func 'sdic-inline-pos-tip-show)
 
 (setq transient-mark-mode t)

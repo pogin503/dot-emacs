@@ -1,5 +1,5 @@
 ;;pos-tip
-(require 'pos-tip)
+(req pos-tip)
 
  (defun my-describe-function (function)
    "Display the full documentation of FUNCTION (a symbol) in tooltip."
@@ -20,7 +20,7 @@
 (define-key emacs-lisp-mode-map (kbd "C-;") 'my-describe-function)
 
 ;;popup-pos-tip
- (require 'popup-pos-tip)
+ (req popup-pos-tip)
  (defadvice popup-tip
    (around popup-pos-tip-wrapper (string &rest args) activate)
    (if (eq window-system 'x)

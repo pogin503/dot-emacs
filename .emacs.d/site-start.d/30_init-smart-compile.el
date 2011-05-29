@@ -1,4 +1,4 @@
-(require 'smart-compile)
+(req smart-compile)
 (defvar smart-compile-alist '(
   ("\\.c\\'"          . "gcc -O2 %f -lm -o %n")
   ("\\.[Cc]+[Pp]*\\'" . "g++ -O2 %f -lm -o %n")

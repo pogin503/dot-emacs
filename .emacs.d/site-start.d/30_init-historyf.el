@@ -1,2 +1,2 @@
 ;;少ないけどどこにまとめようか…
-(require 'historyf)
+(req historyf)

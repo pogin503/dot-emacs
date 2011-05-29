@@ -1,5 +1,5 @@
 ;; text-translator
-(require 'text-translator)
+(req text-translator)
   
 ;;; キーバインド設定
 (global-set-key "\C-xt" 'text-translator)

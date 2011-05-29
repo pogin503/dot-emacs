@@ -76,15 +76,15 @@
           "Set `ansi-color-for-comint-mode' to t." t)
 (add-hook 'eshell-load-hook 'ansi-color-for-comint-mode-on)
 ;; http://www.emacswiki.org/emacs-ja/EshellColor
-(require 'ansi-color)
-(require 'eshell)
+(req ansi-color)
+(req eshell)
 (defun eshell-handle-ansi-color ()
   (ansi-color-apply-on-region eshell-last-output-start
                               eshell-last-output-end))
 (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
 
 ;;@see http://valvallow.blogspot.com/2011/02/eshell.html
-(require 'pcomplete)
+(req pcomplete)
 (add-to-list 'ac-modes 'eshell-mode)
 (ac-define-source pcomplete
   '((candidates . pcomplete-completions)))

@@ -36,8 +36,8 @@
 ;; ファイルロード後,変数`init-loader-show-log-after-init'の値がnon-nilなら,ログバッファを表示する関数を`after-init-hook'へ追加する.
 ;; ログの表示は, M-x init-loader-show-log でも可能.
 
-(eval-when-compile (require 'cl))
-(require 'benchmark)
+(eval-when-compile (req cl))
+(req benchmark)
 
 ;;; customize-variables
 (defgroup init-loader nil

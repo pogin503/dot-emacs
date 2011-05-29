@@ -7,7 +7,7 @@
 ;======================================================================
 ; 言語・文字コード関連の設定
 ;======================================================================
-(when (equal emacs-major-version 21) (require 'un-define))
+(when (equal emacs-major-version 21) (req un-define))
 (set-language-environment "Japanese")
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
@@ -32,7 +32,7 @@
 ;=======================================================================
 ;フォント
 ;=======================================================================
-(if (eq window-system 'w32) (require 'ntemacs-font))
+(if (eq window-system 'w32) (req ntemacs-font))
 (fixed-width-set-fontset "msgothic" 14)
 
 (create-fontset-from-ascii-font

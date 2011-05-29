@@ -7,7 +7,7 @@
 
 ;; EmacsでGNU screen風のインターフェイスを使う
 (setq elscreen-prefix-key "\C-z")
-(require 'elscreen)
+(req elscreen)
 (if window-system
     (define-key elscreen-map "\C-z" 'iconify-or-deiconify-frame)
   (define-key elscreen-map "\C-z" 'suspend-emacs))
@@ -38,11 +38,11 @@
 (global-set-key [(C-S-tab)] 'elscreen-previous) ; ブラウザみたいに　その2
 
 ;; elscreen-server
-(require 'elscreen-server)
+(req elscreen-server)
 
 ;; elscreen-dired
-(require 'elscreen-dired)
+(req elscreen-dired)
 
 ;; elscreen-color-theme
-(require 'elscreen-color-theme)
+(req elscreen-color-theme)
 

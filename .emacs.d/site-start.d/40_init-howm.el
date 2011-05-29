@@ -1,7 +1,7 @@
 ;(add-to-list 'load-path "~/.emacs.d/elisp/howm-1.3.9.1/howm/")
 (add-to-list 'load-path "~/.emacs.d/elisp/howm-1.3.9.1/")
 
-(require 'howm-mode)
+(req howm-mode)
 ;;はじめて C-c , , した時に読み込む
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/howm/")
 (setq howm-menu-lang 'ja)

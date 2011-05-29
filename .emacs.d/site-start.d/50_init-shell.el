@@ -1,7 +1,7 @@
 ;;shell-pop***************************
 ;;@see http://d.hatena.ne.jp/kyagi/20090601
 ;;http://sakito.jp/emacs/emacsshell.html
-(require 'shell-pop)
+(req shell-pop)
 (add-to-list 'shell-pop-internal-mode-list '("multi-term" "*terminal<1>*" '(lambda () (multi-term))))
 (shell-pop-set-internal-mode "multi-term")
 
@@ -20,21 +20,21 @@
 
 ;;shell-command*******************
 ;;auto-install-from emacswiki shell-command.el
-(require 'shell-command)
+(req shell-command)
 (shell-command-completion-mode)
 
 
 
 ;;@see http://d.hatena.ne.jp/tomoya/20090601/1243817036
 ;; eshell
-(when (require 'eshell-auto nil t)
+(when (req eshell-auto nil t)
   (add-hook 'eshell-mode-hook
 	    (lambda () 
 	      (define-key eshell-mode-map (kbd "C-a") 'eshell-bol)
 	      (define-key eshell-mode-map (kbd "C-r") 'eshell-isearch-backward)))
 
-  (when (require 'pcmpl-auto nil t)
-    (when (require 'pcmpl-ssh nil t)
+  (when (req pcmpl-auto nil t)
+    (when (req pcmpl-ssh nil t)
       (add-hook 'eshell-mode-hook 'pcomplete-shell-setup)))
 
   (setq eshell-cmpl-ignore-case t)	; 補完時に大文字小文字を区別しない
@@ -45,8 +45,8 @@
   (setq eshell-hist-ignoredups t))		; ヒストリの重複を無視
 
 ;; shell
-(when (require 'shell-history nil t)
-  (when (require 'anything-complete nil t)
+(when (req shell-history nil t)
+  (when (req anything-complete nil t)
     (add-hook 'shell-mode-hook
 	      (lambda ()
 		(define-key shell-mode-map (kbd "C-r") 'anything-complete-shell-history)))
@@ -60,14 +60,14 @@
   "Set `ansi-color-for-comint-mode' to t." t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
-(when (require 'shell-pop nil t)
+(when (req shell-pop nil t)
   (setq shell-pop-window-height 60) ; percentage for shell-buffer window height
   (define-key global-map [(super t)] 'shell-pop))
 
 
 ;;multi-term***************************
 ;;@see http://sakito.jp/emacs/emacsshell.html
-(require 'multi-term)
+(req multi-term)
 (setq multi-term-program shell-file-name)
 
 (add-to-list 'term-unbind-key-list '"M-x")

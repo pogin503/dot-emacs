@@ -35,4 +35,4 @@
 ;; この状態だとまだ保存をしてないので，あとは"C-x s"してから"!"で全部のバッファを保存してしまいましょう．
 
 ;;grep-edit
-(require 'grep-edit)
+(req grep-edit)

@@ -2,12 +2,12 @@
 
 (add-to-list 'load-path "~/.emacs.d/plugins/yasnippet-0.6.1c")
 
-(require 'anything-c-yasnippet)
+(req anything-c-yasnippet)
 (setq anything-c-yas-space-match-any-greedy t)
 (define-key yas/minor-mode-map (kbd "C-c y") 'anything-c-yas-complete)
 (setq anything-c-yas-space-match-any-greedy t) ;スペース区切りで絞り込めるようにする デフォルトは nil
 
-(require 'yasnippet)
+(req yasnippet)
 
 ;;@see http://emacs.g.hatena.ne.jp/Shinnya/20100805/1281034504
 (setq yas/next-field-key "TAB")

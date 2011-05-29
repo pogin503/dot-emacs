@@ -2,7 +2,7 @@
 ;; INSTALL
 ;; (install-elisp "https://github.com/imakado/emacs-smartchr/raw/master/smartchr.el")
 
-(require 'smartchr)
+(req smartchr)
 
 ;; (defun my-smartchr-setting ()
 ;;   (local-set-key (kbd "=") (smartchr '("=" " = " " == ")))

@@ -1,7 +1,7 @@
 ;(auto-install-from-url "http://github.com/kiwanami/emacs-deferred/raw/master/deferred.el")
 ;(auto-install-from-url "http://github.com/kiwanami/emacs-inertial-scroll/raw/master/inertial-scroll.el")
 
-(require 'inertial-scroll)
+(req inertial-scroll)
 (setq inertias-global-minor-mode-map 
       (inertias-define-keymap
        '(
@@ -24,6 +24,6 @@
 
 ;eval-last-sexp-popup
 ;;(load-file "~/.emacs.d/elisp/eval-last-sexp-popup.el")
-(require 'eval-last-sexp-popup)
+(req eval-last-sexp-popup)
 ;; (global-set-key (kbd "C-x C-e") 'eval-last-sexp)
 (global-set-key (kbd "C-x C-e") 'eval-last-sexp-popup)

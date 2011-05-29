@@ -1,4 +1,4 @@
-(require 'windows)
+(req windows)
 
 ;; ;; キーバインドを変更．
 ;; ;; デフォルトは C-c C-w
@@ -6,7 +6,7 @@
 ;; (setq win:switch-prefix "\C-z")
 ;; (define-key global-map win:switch-prefix nil)
 ;; (define-key global-map "\C-z1" 'win-switch-to-window)
-;; (require 'windows)
+;; (req windows)
 ;; ;; 新規にフレームを作らない
 ;; (setq win:use-frame nil)
 ;; (win:startup-with-window)

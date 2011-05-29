@@ -1,2 +1,2 @@
 (server-start)
-(require 'sudo-ext)
+(req sudo-ext)

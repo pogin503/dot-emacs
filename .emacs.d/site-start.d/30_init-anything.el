@@ -1,7 +1,7 @@
 ;;anything
-(require 'anything-startup)
-;(require 'anything-config)
-;(require 'recentf)
+(req anything-startup)
+;(req anything-config)
+;(req recentf)
 ;(define-key global-map (kbd "M-l") 'anything)
 (setq recentf-max-saved-items 3000)
 ;(recentf-mode t)

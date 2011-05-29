@@ -1,5 +1,5 @@
 ;鬼軍曹.el
-;(require 'drill-instructor)
+;(req drill-instructor)
 ;(setq drill-instructor-global nil)
 
 ;; ↓ここから追加
