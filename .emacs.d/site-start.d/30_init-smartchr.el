@@ -29,8 +29,14 @@
   (local-set-key (kbd "{") (smartchr '("{\n`!!'\n}" "{`!!'}" "{")))
   (local-set-key (kbd "`") (smartchr '("\``!!''" "\`")))
   (local-set-key (kbd "\"") (smartchr '("\"`!!'\"" "\"")))
-  (local-set-key (kbd ">") (smartchr '(">" " => " " => '`!!''" " => \"`!!'\"")))
-  (local-set-key (kbd "<") (smartchr '("<" "<`!!'>")))
+  (local-set-key (kbd ">") (smartchr '(" > " "->" " >> " " => ")))
+  (local-set-key (kbd "<") (smartchr '("<" " < " " << " "<`!!'>")))
+  (local-set-key (kbd ",") (smartchr '(", " ",")))
+  (local-set-key (kbd ".") (smartchr '("." " . ")))
+  (local-set-key (kbd "?") (smartchr '("?" "? `!!' " "<? `!!' ?>" "<?= `!!' ?>")))
+  (local-set-key (kbd "!") (smartchr '("!" " != ")))
+  (local-set-key (kbd "&") (smartchr '("&" " && ")))
+  (local-set-key (kbd "|") (smartchr '("|" " || ")))
   )
 
 (defun my-smartchr-lisp-keybindings ()
@@ -46,12 +52,11 @@
 (add-hook 'c-mode-common-hook 'smartchr-custom-keybindings)
 (add-hook 'c++-mode-hook 'smartchr-custom-keybindings)
 (add-hook 'objc-mode-hook 'smartchr-custom-keybindings-objc)
-(add-hook 'php-mode-hook 'my-smartchr-setting)
-(add-hook 'javascript-mode-hook 'my-smartchr-setting)
-(add-hook 'ruby-mode-hook 'my-smartchr-setting)
-(add-hook 'cperl-mode-hook 'my-smartchr-setting)
+(add-hook 'php-mode-hook 'smartchr-custom-keybindings)
+(add-hook 'ruby-mode-hook 'smartchr-custom-keybindings)
+(add-hook 'cperl-mode-hook 'smartchr-custom-keybindings)
 (add-hook 'emacs-lisp-mode-hook 'my-smartchr-lisp-keybindings)
-
-
-
+(add-hook 'javascript-mode-hook 'smartchr-custom-keybindings)
+(add-hook 'js-mode-hook 'smartchr-custom-keybindings)
+;;(remove-hook 'javascript-mode-hook 'smartchr-custom-keybindings)
 
