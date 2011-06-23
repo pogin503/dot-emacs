@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd ~/.emacs.d/
+cp init.el*              ~/.emacs.d/
 cp -r site-start.d/   ~/dot-emacs/.emacs.d/
 cp -r elisp/          ~/dot-emacs/.emacs.d/
 cp -r etc/mysnippets/ ~/dot-emacs/.emacs.d/etc/
