@@ -2,6 +2,7 @@
 
 cd ~/dot-emacs/.emacs.d/
 git pull
+cp init.el*              ~/.emacs.d/
 cp -r site-start.d/      ~/.emacs.d/
 cp -r elisp/             ~/.emacs.d/
 cp -r etc/mysnippets/    ~/.emacs.d/etc/
