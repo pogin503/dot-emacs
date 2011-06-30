@@ -19,8 +19,9 @@
 
 ;;inferior-gauche-mode
 (req inferior-gauche)
-(setq auto-mode-alist
-      (cons '("\\.scm$" . inferior-gauche-mode) auto-mode-alist))
+(if (equal system-type run-linux)
+	(setq auto-mode-alist
+		  (cons '("\\.scm$" . inferior-gauche-mode) auto-mode-alist)))
 ;(setq default-major-mode 'inferior-gauche-mode)
 ;(inferior-gauche-mode)
 

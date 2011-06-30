@@ -3,7 +3,7 @@
 (setq default-input-method "MW32-IME")
 
 
-@see http://sites.google.com/site/shidoinfo/Home/開発環境/emacs/emacsの基本
+;;@see http://sites.google.com/site/shidoinfo/Home/開発環境/emacs/emacsの基本
 ;======================================================================
 ; 言語・文字コード関連の設定
 ;======================================================================
