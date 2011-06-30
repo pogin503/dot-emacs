@@ -89,10 +89,10 @@
 (defun my-toggle-term ()
   "eshell と直前のバッファを行き来する。C-u 付きで呼ぶと 今いるバッファと同じディレクトリに cd して開く"
   (interactive)
-  (let ((ignore-list '("*Help*" "*Minibuf-1*" "*Messages*"
+  (let ((ignore-list '("*Help*"  " *Minibuf-0*" " *Minibuf-1*" "*Messages*"
                        "*terminal<1>*" "*terminal<2>*" "*terminal<3>*"
-					   "*complilation*" "*Anything Log*" "*Completions*"
-					   "*anything*"))
+					   "*compilation*" "*Anything Log*" "*Completions*"
+					   "*anything*" "*anything coplete*"))
         (dir default-directory))
     (labels
         ((_my-toggle-term (target)
