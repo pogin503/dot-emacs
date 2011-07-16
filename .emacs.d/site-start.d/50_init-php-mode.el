@@ -19,4 +19,3 @@
 			 (define-key php-mode-map "C-m" 'newline-and-indent)
              ;; (setq php-manual-path "/usr/share/doc/php/html")
              (setq php-manual-url "http://www.phppro.jp/phpmanual"))
-;; (pop php-mode-hook)

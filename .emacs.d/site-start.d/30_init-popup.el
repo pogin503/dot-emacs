@@ -34,5 +34,6 @@
 (push '("*VC-log*" :height 10 :position bottom) popwin:special-display-config)
 ;;Compile-Log
 (push '("*Compile-Log*" :height 10 :noselect t) popwin:special-display-config)
+(push '("*Process List*" :stick t) popwin:special-display-config)
 (push '("*sdic*" :noselect t) popwin:special-display-config)
 (push '("*init log*" :stick t) popwin:special-display-config)

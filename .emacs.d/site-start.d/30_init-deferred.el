@@ -9,6 +9,8 @@
          ("<wheel-down>" . inertias-up-wheel)
          ("<mouse-4>"    . inertias-down-wheel)
          ("<mouse-5>"    . inertias-up-wheel)
+         ("<mouse-6>"    . inertias-down-wheel)
+         ("<mouse-7>"    . inertias-up-wheel)
          ("<next>"  . inertias-up)
          ("<prior>" . inertias-down)
          ("C-v"     . inertias-up)
