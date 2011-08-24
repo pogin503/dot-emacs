@@ -60,3 +60,5 @@ use
 var
 while
 xor
+_POST
+_GET

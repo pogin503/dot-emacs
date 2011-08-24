@@ -4,9 +4,10 @@
              (c-toggle-auto-hungry-state 1)
              ;; RET キーで自動改行+インデント
              (define-key c-mode-base-map "\C-m" 'newline-and-indent)
-	     (flyspell-prog-mode)
-	     (c-set-style "stroustrup")
-	     ))
+			 (flyspell-prog-mode)
+			 (c-set-style "stroustrup")
+			 (indent-tabs-mode nil)
+			 ))
 
 
 ;; C++
