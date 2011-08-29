@@ -4,10 +4,9 @@
 ;; OSを判別、UNIX系？
 (defvar run-unix
   (or (equal system-type 'gnu/linux)
-      (or (equal system-type 'usg-unix-v)
-          (or  (equal system-type 'berkeley-unix)
-               (equal system-type 'cygwin)))))
-
+      (equal system-type 'usg-unix-v)
+      (equal system-type 'berkeley-unix)
+      (equal system-type 'cygwin)))
 
 ; OSを判別、個別判別
 (defvar run-linux
@@ -19,7 +18,7 @@
 (defvar run-cygwin ;; cygwinもunixグループにしておく
   (equal system-type 'cygwin))
 
-(defvar run-w32
+(defvar run-windows
   (and (null run-unix)
        (or (equal system-type 'windows-nt)
            (equal system-type 'ms-dos))))

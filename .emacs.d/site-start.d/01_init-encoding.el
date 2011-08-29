@@ -6,7 +6,9 @@
 ;;(setq default-buffer-file-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
-(setq file-name-coding-system 'utf-8)
+(if (eq run-windows t)
+	(setq file-name-coding-system 'sjis-dos)
+  (setq file-name-coding-system 'utf-8))
 
 ;;改行コード表示
 (setq eol-mnemonic-dos "(CRLF)")
