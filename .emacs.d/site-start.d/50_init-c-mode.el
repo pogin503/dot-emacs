@@ -1,14 +1,17 @@
-(add-hook 'c-mode-common-hook
-          '(lambda ()
-             ;; センテンスの終了である ';' を入力したら、自動改行+インデント
-             (c-toggle-auto-hungry-state 1)
-             ;; RET キーで自動改行+インデント
-             (define-key c-mode-base-map "\C-m" 'newline-and-indent)
-			 (flyspell-prog-mode)
-			 (c-set-style "stroustrup")
-			 (indent-tabs-mode nil)
-			 ))
-
+(defun add-c-mode-common-conf ()
+  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
+  ;;カーソルの左側を一気に削除する
+  (c-toggle-auto-hungry-state 1)            
+  (setq c-auto-newline t)                     ;;全自動インデント
+  (define-key c-mode-base-map "\C-m" 'newline-and-indent)
+  (setq indent-tabs-mode nil)                 ;;インデントスペースでする
+  (c-set-style "stroustrup")                  ;;スタイルはストラウストラップ
+  (flyspell-prog-mode)                        ;;flyspell-prog-mode(自動ispell機能)
+  (show-paren-mode t)                         ;;カッコを強調表示する
+  )
+	 
+(add-hook 'c-mode-common-hook 'add-c-mode-common-conf)
+;;(pop c-mode-common-hook)
 
 ;; C++
 ; ヘッダファイル(.h)をc++モードで開く
