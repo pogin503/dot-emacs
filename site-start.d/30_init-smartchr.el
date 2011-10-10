@@ -61,8 +61,9 @@
 (add-hook 'cperl-mode-hook 'my-smartchr-keybindings)
 
 (add-hook 'emacs-lisp-mode-hook 'my-smartchr-keybindings-lisp)
-(add-hook 'inferior-gauche-mode 'my-smartchr-keybindings-lisp)
-(add-hook 'scheme-mode 'my-smartchr-keybindings-lisp)
+(add-hook 'inferior-gauche-mode-hook 'my-smartchr-keybindings-lisp)
+(add-hook 'scheme-mode-hook 'my-smartchr-keybindings-lisp)
+(add-hook 'lisp-mode-hook 'my-smartchr-keybindings-lisp)
 
 (add-hook 'javascript-mode-hook 'my-smartchr-keybindings)
 (add-hook 'js-mode-hook 'my-smartchr-keybindings)
