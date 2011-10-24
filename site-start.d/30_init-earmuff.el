@@ -1,0 +1,7 @@
+(require 'earmuff)
+(add-to-list 'insert-pair-alist '(?" ?"))
+(add-to-list 'insert-pair-alist '(?* ?*))
+(add-to-list 'insert-pair-alist '(?+ ?+))
+(add-to-list 'insert-pair-alist '(?` ?'))
+(define-key global-map [f12] (emf:cycle-earmuff-gen))
+(define-key global-map (kbd "M-<f12>") (emf:earmuff-and-move-next-gen '(?" ?")))
