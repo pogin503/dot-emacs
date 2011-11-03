@@ -1,4 +1,6 @@
 (req server)
 (unless (server-running-p)
-  (server-start))
+  (if (< emacs-major-version 23)
+	  (server-start)))
+
 (req sudo-ext)
