@@ -10,6 +10,9 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/ac-dict/")
 (req auto-complete-config)
 (ac-config-default)
+(setq ac-use-comphist t)
+(define-key ac-mode-map (kbd "C-i") 'auto-complete)
+
 ;;end
 
 (ac-flyspell-workaround)
