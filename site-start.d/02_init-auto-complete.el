@@ -11,7 +11,7 @@
 (req auto-complete-config)
 (ac-config-default)
 (setq ac-use-comphist t)
-(define-key ac-mode-map (kbd "C-i") 'auto-complete)
+(define-key ac-mode-map (kbd "M-i") 'auto-complete)
 
 ;;end
 

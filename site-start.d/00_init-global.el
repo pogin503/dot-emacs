@@ -156,3 +156,23 @@
 
 ;;msb-mode
 (msb-mode 1)
+
+
+;;backup file
+
+(setq backup-by-copying t)
+(defun my-define-backup-directory ()
+  (let ((dir-name ".backup"))
+    (if (not (file-exists-p (concat user-emacs-directory dir-name)))
+        (make-directory dir-name user-emacs-directory))
+    (add-to-list 'backup-directory-alist 
+                 `("\\.*$" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
+(my-define-backup-directory)
+
+(setq version-control t)     ; 複数のバックアップを残します。世代。
+(setq kept-new-versions 5)   ; 新しいものをいくつ残すか
+(setq kept-old-versions 5)   ; 古いものをいくつ残すか
+(setq delete-old-versions t) ; 確認せずに古いものを消す。
+(setq vc-make-backup-files t) ; バージョン管理下のファイルもバックアップを作る。
+
+(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))

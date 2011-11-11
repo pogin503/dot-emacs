@@ -1,7 +1,11 @@
 *~
-.emacs.d/private/
-#.emacs.d/plugins/taihi/
+private/
+plugins/taihi/
 .#*
 \#*\#
 TAGS
 init.elc
+.session
+.framesize
+session.*
+.backup/
