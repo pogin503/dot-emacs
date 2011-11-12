@@ -1,7 +1,3 @@
-; 初期ディレクトリを設定
-(setq default-directory "~/")
-
-
 ;;行番号の表示
 (line-number-mode t)
 
