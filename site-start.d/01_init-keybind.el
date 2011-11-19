@@ -1,6 +1,6 @@
 
 ;;original key-bind
-(define-key global-map (kbd "C-8")
+(global-set-key (kbd "C-8")
   (lambda ()
     (interactive)
     (save-buffer)
@@ -16,13 +16,14 @@
 (global-set-key "\M-w" 'clipboard-kill-ring-save)  ; クリップボードにコピー
 (global-set-key "\C-w" 'clipboard-kill-region)     ; 切り取ってクリップボードへ
 
-(define-key global-map (kbd "C-M-k") 
+(global-set-key (kbd "C-M-k") 
   (lambda ()
     (interactive)
     (kill-buffer (current-buffer))))
 
-(define-key global-map (kbd "C-z") 'undo)
-(define-key global-map (kbd "C-S-z") 'redo)
+(global-set-key (kbd "C-z") 'undo)
+(global-set-key (kbd "C-S-z") 'redo)
 
-(define-key global-map (kbd "C-h") 'delete-backward-char)
-
+(global-set-key (kbd "C-h") 'delete-backward-char)
+;; (keyboard-translate ?\C-h ?\C-?)
+(global-set-key (kbd "C-m") 'newline-and-indent)
