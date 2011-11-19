@@ -16,9 +16,9 @@
 (setq eshell-hist-ignoredups nil)
 ;; prompt 文字列の変更
 (setq eshell-prompt-function
-	  (lambda ()
-		(concat "[" (user-login-name) "@" (system-name) " " (eshell/pwd) "]"
-				(if (= (user-uid) 0) "\n# " "\n$ "))))
+      (lambda ()
+        (concat "[" (user-login-name) "@" (system-name) " " (eshell/pwd) "]"
+                (if (= (user-uid) 0) "\n# " "\n$ "))))
 
 ;; (setq eshell-prompt-function
 ;;       (lambda ()
@@ -33,9 +33,9 @@
 (add-hook-fn 'eshell-mode-hook
              (progn
                (define-key eshell-mode-map "\C-a" 'eshell-bol)
-			   ;; yasnippet マイナーモードだと eshell-cmpl-cycle-completions がバグるのでオフる。
-			   ;; C-u - M-x yas/minor-mode と等価。;               
-			   ;;(yas/minor-mode -1)      
+               ;; yasnippet マイナーモードだと eshell-cmpl-cycle-completions がバグるのでオフる。
+               ;; C-u - M-x yas/minor-mode と等価。;               
+               ;;(yas/minor-mode -1)      
                (define-key eshell-mode-map (kbd "<up>") 'eshell-previous-matching-input-from-input)
                (define-key eshell-mode-map (kbd "<down>") 'eshell-next-matching-input-from-input)
                ;;(define-key eshell-mode-map [(meta return)] 'ns-toggle-fullscreen)
@@ -72,8 +72,8 @@
           ac-source-dictionary)))
 
 (add-hook-fn 'eshell-mode-hook
-			 (my-ac-eshell-mode)
-			 (define-key eshell-mode-map (kbd "C-i") 'auto-complete))
+             (my-ac-eshell-mode)
+             (define-key eshell-mode-map (kbd "C-i") 'auto-complete))
 
 (custom-set-faces
  '(eshell-prompt-face ((t (:foreground "maroon2" :bold nil)))))
@@ -83,7 +83,7 @@
           (lambda()
             (eshell)
             (switch-to-buffer "*init log*")
-			))
+            ))
 ;;@see http://d.hatena.ne.jp/kitokitoki/20110222/p2
 
 (defun my-toggle-term ()
@@ -91,20 +91,20 @@
   (interactive)
   (let ((ignore-list '("*Help*"  " *Minibuf-0*" " *Minibuf-1*" "*Messages*"
                        "*terminal<1>*" "*terminal<2>*" "*terminal<3>*"
-					   "*compilation*" "*Anything Log*" "*Completions*"
-					   "*anything*" "*anything coplete*"))
+                       "*compilation*" "*Anything Log*" "*Completions*"
+                       "*anything*" "*anything coplete*"))
         (dir default-directory))
     (labels
         ((_my-toggle-term (target)
-						  (if (null (member (buffer-name (second target)) ignore-list))
-							  (if (equal "*eshell*" (buffer-name (window-buffer)))
-								  (switch-to-buffer (second target))
-								(switch-to-buffer "*eshell*")
-								(when current-prefix-arg
-								  (cd dir)
-								  (eshell-interactive-print (concat "cd " dir "\n"))
-								  (eshell-emit-prompt)))
-							(_my-toggle-term (cdr target)))))
+                          (if (null (member (buffer-name (second target)) ignore-list))
+                              (if (equal "*eshell*" (buffer-name (window-buffer)))
+                                  (switch-to-buffer (second target))
+                                (switch-to-buffer "*eshell*")
+                                (when current-prefix-arg
+                                  (cd dir)
+                                  (eshell-interactive-print (concat "cd " dir "\n"))
+                                  (eshell-emit-prompt)))
+                            (_my-toggle-term (cdr target)))))
       (_my-toggle-term (buffer-list)))))
 
 
