@@ -15,7 +15,7 @@
   (local-set-key (kbd "{") (smartchr '("{\n`!!'\n}" "{`!!'}" "{")))
   (local-set-key (kbd "`") (smartchr '("\``!!''" "\`")))
   (local-set-key (kbd "\"") (smartchr '("\"`!!'\"" "\"")))
-  (local-set-key (kbd ">") (smartchr '(" > " "->" " >> " " => " ">")))
+  (local-set-key (kbd ">") (smartchr '(">" " > " " => " " >> ")))
   (local-set-key (kbd "<") (smartchr '("<" " < " " << " "<`!!'>")))
   (local-set-key (kbd ",") (smartchr '(", " ",")))
   (local-set-key (kbd ".") (smartchr '("." " . ")))
@@ -44,19 +44,20 @@
                'javascript-mode-hook       
                'js-mode-hook               
                'js2-mode-hook
+               'text-mode-hook
                ))
   (add-hook hook 'my-smartchr-keybindings))
 
 (dolist (hook (list
                'emacs-lisp-mode-hook       
                'lisp-interaction-mode-hook 
-               'inferior-gauche-mode       
-               'scheme-mode                
+               'inferior-gauche-mode-hook
+               'scheme-mode-hook  
                ))
   (add-hook hook 'my-smartchr-keybindings))
 
 
-(add-hook 'objc-mode-hook             'my-smartchr-keybindings-objc)
+(add-hook 'objc-mode-hook 'my-smartchr-keybindings-objc)
 
 (defun my-smartchr-keybindings-html ()
   ;; !! がカーソルの位置
@@ -75,4 +76,5 @@
   )
 
 (add-hook 'html-mode-hook 'my-smartchr-keybindings-html)
+
 
