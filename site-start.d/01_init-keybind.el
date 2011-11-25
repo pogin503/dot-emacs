@@ -13,8 +13,8 @@
     (message "load %S succeeded!" (current-buffer))))
 ;;original end
 
-(global-set-key "\M-w" 'clipboard-kill-ring-save)  ; クリップボードにコピー
-(global-set-key "\C-w" 'clipboard-kill-region)     ; 切り取ってクリップボードへ
+;; (global-set-key "\M-w" 'clipboard-kill-ring-save)  ; クリップボードにコピー
+;; (global-set-key "\C-w" 'clipboard-kill-region)     ; 切り取ってクリップボードへ
 
 (global-set-key (kbd "C-M-k") 
   (lambda ()
