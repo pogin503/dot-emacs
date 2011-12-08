@@ -1,4 +1,4 @@
-;;@see 
+;;@see
 
 ;; 背景の透過
 ;; (add-to-list 'default-frame-alist '(alpha . (85 20)))
@@ -14,3 +14,20 @@
 (hl-line-mode 1)
 
 
+;;color-theme***********************************
+
+(req color-theme)
+;; (eval-after-load "color-theme"
+;;   '(progn
+;;      (color-theme-initialize)
+;;      (color-theme-blue-sea)
+;;      (color-theme-solarized-light)
+;;      ))
+
+
+(req color-theme-solarized)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     (color-theme-solarized-light)
+     ))

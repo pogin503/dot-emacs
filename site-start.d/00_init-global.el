@@ -172,3 +172,29 @@
 (setq vc-make-backup-files t) ; バージョン管理下のファイルもバックアップを作る。
 
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
+
+;; 行末のwhitespaceを削除
+(setq delete-trailing-whitespace-exclude-patterns (list "\\.md$" "\\.markdown$"))
+
+(require 'cl)
+(defun delete-trailing-whitespace-with-exclude-pattern ()
+  (interactive)
+  (cond ((equal nil (loop for pattern in delete-trailing-whitespace-exclude-patterns
+                          thereis (string-match pattern buffer-file-name)))
+         (delete-trailing-whitespace))))
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace-with-exclude-pattern)
+
+
+;; ファイル末尾の改行を削除
+;; http://www.emacswiki.org/emacs/DeletingWhitespace
+(defun my-delete-trailing-blank-lines ()
+  "Deletes all blank lines at the end of the file."
+  (interactive)
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-max))
+      (delete-blank-lines))))
+
+(add-hook 'before-save-hook 'my-delete-trailing-blank-lines)
