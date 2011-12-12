@@ -1,11 +1,22 @@
+# Emacs backup files
+
 *~
-private/
-plugins/taihi/
 .#*
 \#*\#
-TAGS
-init.elc
-.session
-.framesize
 session.*
+
+#Backup dir
 .backup/
+
+#private dir
+private/
+
+# TAGS
+TAGS
+
+#etc
+init.elc
+.framesize
+.session
+plugins/taihi/
+ac-comphist.dat
