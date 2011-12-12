@@ -1,7 +1,7 @@
 ;;;; 30_init-smartchr.el ---- smartchr
 ;; -*- Mode: Emacs-Lisp -*-
 
-;; Copyright (C) pogin 
+;; Copyright (C) pogin
 
 ;; Author: pogin
 ;; Keywords: tools
@@ -93,7 +93,7 @@
   (local-set-key (kbd "-") (smartchr '("-" " - " "--" " -= ")))
   (local-set-key (kbd "(") (smartchr '("(`!!')" "(")))
   (local-set-key (kbd "[") (smartchr '("[`!!']" "[[`!!']]" "[")))
-  (local-set-key (kbd "{") (smartchr '("{" "{`!!'}" my-smartchr-braces)))
+  (local-set-key (kbd "{") (smartchr '(my-smartchr-braces "{" "{`!!'}")))
   ;;バッククォート
   (local-set-key (kbd "`") (smartchr '("\``!!''" "\`")))
   ;;ダブルクォーテーション
@@ -124,23 +124,23 @@
   (local-set-key (kbd "@") (smartchr '("@\"`!!'\"" "@"))))
 
 (dolist (hook (list
-               'c-mode-common-hook    
-               'c++-mode-hook              
-               'php-mode-hook              
-               'ruby-mode-hook             
-               'cperl-mode-hook            
-               'javascript-mode-hook       
-               'js-mode-hook               
+               'c-mode-common-hook
+               'c++-mode-hook
+               'php-mode-hook
+               'ruby-mode-hook
+               'cperl-mode-hook
+               'javascript-mode-hook
+               'js-mode-hook
                'js2-mode-hook
                'text-mode-hook
                ))
   (add-hook hook 'my-smartchr-keybindings))
 
 (dolist (hook (list
-               'emacs-lisp-mode-hook       
-               'lisp-interaction-mode-hook 
+               'emacs-lisp-mode-hook
+               'lisp-interaction-mode-hook
                'inferior-gauche-mode-hook
-               'scheme-mode-hook  
+               'scheme-mode-hook
                ))
   (add-hook hook 'my-smartchr-keybindings-lisp))
 
@@ -167,7 +167,7 @@
   (local-set-key (kbd "/") (smartchr '("/" "/* `!!' */" my-smartchr-comment)))
   )
 (dolist (hook (list
-               'html-mode-hook 
+               'html-mode-hook
                'css-mode-hook
                ))
   (add-hook hook 'my-smartchr-keybindings-html))
