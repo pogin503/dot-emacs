@@ -27,8 +27,7 @@
 (yas/initialize)
 
 ;;複数のスニッペットディレクトリがある場合
-(setq yas/root-directory '("~/.emacs.d/etc/mysnippets"
-			   "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets"))
+(setq yas/root-directory '("~/.emacs.d/etc/snippets"))
 (mapc 'yas/load-directory  yas/root-directory)
 
 ;;一つしかディレクトリがない場合
@@ -52,10 +51,10 @@
   (let ((table (yas/get-snippet-tables major-mode)))
     (if table
       (let (candidates (list))
-            (mapcar (lambda (mode)          
-              (maphash (lambda (key value)    
-                (push key candidates))          
-              (yas/snippet-table-hash mode))) 
+            (mapcar (lambda (mode)
+              (maphash (lambda (key value)
+                (push key candidates))
+              (yas/snippet-table-hash mode)))
             table)
         (all-completions ac-prefix candidates)))))
 
@@ -64,7 +63,7 @@
   "Face for yasnippet candidate.")
 
 (defface ac-yasnippet-selection-face
-  '((t (:background "coral3" :foreground "white"))) 
+  '((t (:background "coral3" :foreground "white")))
   "Face for the yasnippet selected candidate.")
 
 (defvar ac-source-yasnippet
@@ -72,29 +71,5 @@
     (action . yas/expand)
     (limit . 3)
     (candidate-face . ac-yasnippet-candidate-face)
-    (selection-face . ac-yasnippet-selection-face)) 
+    (selection-face . ac-yasnippet-selection-face))
   "Source for Yasnippet.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
