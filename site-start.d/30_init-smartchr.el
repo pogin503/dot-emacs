@@ -72,6 +72,24 @@
      :cleanup-fn (lambda ()
                    (delete-region beg end))
      )))
+(defun my-smartchr-comment-doxygen ()
+  "Insert a multiline comment like below.
+\n/*\n * `!!'\n */"
+  ;; /*
+  ;;  * `!!'
+  ;;  */
+  (lexical-let (beg end)
+    (smartchr-make-struct
+     :insert-fn (lambda ()
+                  (setq beg (point))
+                  (insert "/**\n* \n*/")
+                  (indent-region beg (point))
+                  (setq end (point))
+                  (forward-line -1)
+                  (goto-char (point-at-eol)))
+     :cleanup-fn (lambda ()
+                   (delete-region beg end))
+     )))
 
 (defun my-smartchr-semicolon ()
   "Insert a semicolon at end of line."
@@ -111,6 +129,31 @@
   (local-set-key (kbd "/") (smartchr '("/" "/* `!!' */" my-smartchr-comment)))
   (local-set-key (kbd ";") (smartchr '(";" my-smartchr-semicolon)))
   )
+(defun my-smartchr-keybindings-cpp ()
+  ;; !! がカーソルの位置
+  (local-set-key (kbd "=") (smartchr '("=" " = " " == ")))
+  (local-set-key (kbd "+") (smartchr '("+" " + " "++" " += ")))
+  (local-set-key (kbd "-") (smartchr '("-" " - " "--" " -= ")))
+  (local-set-key (kbd "(") (smartchr '("(`!!')" "(")))
+  (local-set-key (kbd "[") (smartchr '("[`!!']" "[[`!!']]" "[")))
+  (local-set-key (kbd "{") (smartchr '(my-smartchr-braces "{" "{`!!'}")))
+  ;;バッククォート
+  (local-set-key (kbd "`") (smartchr '("\``!!''" "\`")))
+  ;;ダブルクォーテーション
+  (local-set-key (kbd "\"") (smartchr '("\"`!!'\"" "\"")))
+  ;;シングルクォート
+  (local-set-key (kbd "\'") (smartchr '("\'`!!'\'" "\'")))
+  (local-set-key (kbd ">") (smartchr '(">" " > " " => " " >> ")))
+  (local-set-key (kbd "<") (smartchr '("<" " < " " << " "<`!!'>")))
+  (local-set-key (kbd ",") (smartchr '(", " ",")))
+  (local-set-key (kbd ".") (smartchr '("." " . ")))
+  (local-set-key (kbd "?") (smartchr '("?" "? `!!' " "<?`!!'?>")))
+  (local-set-key (kbd "!") (smartchr '("!" " != ")))
+  (local-set-key (kbd "&") (smartchr '("&" " && ")))
+  (local-set-key (kbd "|") (smartchr '("|" " || ")))
+  (local-set-key (kbd "/") (smartchr '("/" "/** `!!' */" my-smartchr-comment-doxygen)))
+  (local-set-key (kbd ";") (smartchr '(";" my-smartchr-semicolon)))
+  )
 
 (defun my-smartchr-keybindings-lisp ()
   (local-set-key (kbd "(") (smartchr '("(`!!')" "(")))
@@ -125,7 +168,6 @@
 
 (dolist (hook (list
                'c-mode-common-hook
-               'c++-mode-hook
                'php-mode-hook
                'ruby-mode-hook
                'cperl-mode-hook
@@ -135,6 +177,8 @@
                'text-mode-hook
                ))
   (add-hook hook 'my-smartchr-keybindings))
+
+(add-hook 'c++-mode-hook 'my-smartchr-keybindings-cpp)
 
 (dolist (hook (list
                'emacs-lisp-mode-hook

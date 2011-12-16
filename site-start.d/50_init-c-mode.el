@@ -1,6 +1,6 @@
 (defun labo-indent ()
-  (setq c-basic-offset 2
-        tab-width 2
+  (setq c-basic-offset 4
+        tab-width 4
         indent-tabs-mode nil)
   )
 
@@ -14,6 +14,7 @@
   (flyspell-prog-mode)                        ;;flyspell-prog-mode(自動ispell機能)
   (show-paren-mode t)                         ;;カッコを強調表示する
   (labo-indent)
+  (auto-revert-mode)
   )
 
 (add-hook 'c-mode-common-hook 'add-c-mode-common-conf)

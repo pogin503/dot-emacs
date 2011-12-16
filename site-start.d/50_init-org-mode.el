@@ -1,12 +1,15 @@
 ;;org-modeを使用しないとき
-;;(defvar org-directory "")
+;; (defvar org-directory "")
+
+
 
 (require 'org-install)
 (setq org-startup-truncated nil)
 (setq org-return-follows-link t)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (org-remember-insinuate)
-(setq org-directory "~/memo/")
+(if (boundp 'dropbox-directory)
+    (setq org-directory (concat dropbox-directory "/Document/org/")))
 (setq org-default-notes-file (concat org-directory "agenda.org"))
 (setq org-remember-templates
       '(("Todo" ?t "** TODO %?\n   %i\n   %a\n   %t" nil "Inbox")
@@ -19,7 +22,7 @@
 (defvar org-code-reading-file "code-reading.org")
 (defun org-code-reading-read-software-name ()
   (set (make-local-variable 'org-code-reading-software-name)
-       (read-string "Code Reading Software: " 
+       (read-string "Code Reading Software: "
                     (or org-code-reading-software-name
                         (file-name-nondirectory
                          (buffer-file-name))))))
