@@ -1,11 +1,12 @@
 ;;; ob-lisp.el --- org-babel functions for common lisp evaluation
 
-;; Copyright (C) 2009, 2010, 2011  Free Software Foundation, Inc.
+;; Copyright (C) 2009-2011  Free Software Foundation, Inc.
 
-;; Author: Joel Boehland, Eric Schulte, David T. O'Toole <dto@gnu.org>
+;; Author: Joel Boehland
+;;	Eric Schulte
+;;	David T. O'Toole <dto@gnu.org>
 ;; Keywords: literate programming, reproducible research
 ;; Homepage: http://orgmode.org
-;; Version: 7.5
 
 ;; This file is part of GNU Emacs.
 
@@ -36,6 +37,7 @@
 
 (declare-function slime-eval "ext:slime" (sexp &optional package))
 
+(defvar org-babel-tangle-lang-exts)
 (add-to-list 'org-babel-tangle-lang-exts '("lisp" . "lisp"))
 
 (defvar org-babel-default-header-args:lisp '())
@@ -45,7 +47,9 @@
   "(let ((*default-pathname-defaults* #P%S)) %%s)"
   "Format string used to wrap code bodies to set the current directory.
 For example a value of \"(progn ;; %s\\n   %%s)\" would ignore the
-current directory string.")
+current directory string."
+  :group 'org-babel
+  :type 'string)
 
 (defun org-babel-expand-body:lisp (body params)
   "Expand BODY according to PARAMS, return the expanded body."
@@ -74,7 +78,7 @@ current directory string.")
       (if (member "output" (cdr (assoc :result-params params)))
 	  (car result)
 	(condition-case nil
-	    (read (org-bable-lisp-vector-to-list (cadr result)))
+	    (read (org-babel-lisp-vector-to-list (cadr result)))
 	  (error (cadr result)))))
     (with-temp-buffer
       (insert (org-babel-expand-body:lisp body params))
@@ -92,12 +96,12 @@ current directory string.")
    (org-babel-pick-name (cdr (assoc :rowname-names params))
 			(cdr (assoc :rownames params)))))
 
-(defun org-bable-lisp-vector-to-list (results)
+(defun org-babel-lisp-vector-to-list (results)
   ;; TODO: better would be to replace #(...) with [...]
   (replace-regexp-in-string "#(" "(" results))
 
 (provide 'ob-lisp)
 
-;; arch-tag: 18086168-009f-4947-bbb5-3532375d851d
+
 
 ;;; ob-lisp.el ends here

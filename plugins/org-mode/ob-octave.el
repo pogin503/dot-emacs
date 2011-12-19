@@ -1,11 +1,10 @@
 ;;; ob-octave.el --- org-babel functions for octave and matlab evaluation
 
-;; Copyright (C) 2010  Free Software Foundation, Inc.
+;; Copyright (C) 2010-2011  Free Software Foundation, Inc.
 
 ;; Author: Dan Davison
 ;; Keywords: literate programming, reproducible research
 ;; Homepage: http://orgmode.org
-;; Version: 7.5
 
 ;; This file is part of GNU Emacs.
 
@@ -118,7 +117,11 @@ specifying a variable of the same value."
   (if (listp var)
       (concat "[" (mapconcat #'org-babel-octave-var-to-octave var
 			     (if (listp (car var)) "; " ",")) "]")
-    (format "%s" (or var "nil"))))
+    (cond
+     ((stringp var)
+      (format "\'%s\'" var))
+     (t
+      (format "%s" var)))))
 
 (defun org-babel-prep-session:octave (session params &optional matlabp)
   "Prepare SESSION according to the header arguments specified in PARAMS."
@@ -258,6 +261,6 @@ This removes initial blank and comment lines and then calls
 
 (provide 'ob-octave)
 
-;; arch-tag: d8e5f68b-ba13-440a-a495-b653e989e704
+
 
 ;;; ob-octave.el ends here

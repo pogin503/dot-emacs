@@ -1,11 +1,11 @@
 ;;; ob-python.el --- org-babel functions for python evaluation
 
-;; Copyright (C) 2009, 2010  Free Software Foundation
+;; Copyright (C) 2009-2011  Free Software Foundation
 
-;; Author: Eric Schulte, Dan Davison
+;; Author: Eric Schulte
+;;	Dan Davison
 ;; Keywords: literate programming, reproducible research
 ;; Homepage: http://orgmode.org
-;; Version: 7.5
 
 ;; This file is part of GNU Emacs.
 
@@ -38,6 +38,7 @@
 (declare-function py-toggle-shells "ext:python-mode" (arg))
 (declare-function run-python "ext:python" (&optional cmd noshow new))
 
+(defvar org-babel-tangle-lang-exts)
 (add-to-list 'org-babel-tangle-lang-exts '("python" . "py"))
 
 (defvar org-babel-default-header-args:python '())
@@ -237,10 +238,11 @@ last statement in BODY, as elisp."
 If RESULT-TYPE equals 'output then return standard output as a
 string. If RESULT-TYPE equals 'value then return the value of the
 last statement in BODY, as elisp."
-  (flet ((dump-last-value
+  (flet ((send-wait () (comint-send-input nil t) (sleep-for 0 5))
+	 (dump-last-value
 	  (tmp-file pp)
 	  (mapc
-	   (lambda (statement) (insert statement) (comint-send-input))
+	   (lambda (statement) (insert statement) (send-wait))
 	   (if pp
 	       (list
 		"import pprint"
@@ -249,16 +251,17 @@ last statement in BODY, as elisp."
 	     (list (format "open('%s', 'w').write(str(_))"
 			   (org-babel-process-file-name tmp-file 'noquote))))))
 	 (input-body (body)
-		     (mapc (lambda (statement) (insert statement) (comint-send-input))
-			   (split-string (org-babel-trim body) "[\r\n]+"))
-		     (comint-send-input) (comint-send-input)))
+		     (mapc (lambda (line) (insert line) (send-wait))
+			   (split-string body "[\r\n]"))
+		     (send-wait)))
     ((lambda (results)
-       (if (or (member "code" result-params)
-	       (member "pp" result-params)
-	       (and (member "output" result-params)
-		    (not (member "table" result-params))))
-	   results
-	 (org-babel-python-table-or-string results)))
+       (unless (string= (substring org-babel-python-eoe-indicator 1 -1) results)
+	 (if (or (member "code" result-params)
+		 (member "pp" result-params)
+		 (and (member "output" result-params)
+		      (not (member "table" result-params))))
+	     results
+	   (org-babel-python-table-or-string results))))
      (case result-type
        (output
 	(mapconcat
@@ -266,10 +269,11 @@ last statement in BODY, as elisp."
 	 (butlast
 	  (org-babel-comint-with-output
 	      (session org-babel-python-eoe-indicator t body)
-	    (let ((comint-process-echoes nil))
-	      (input-body body)
-	      (insert org-babel-python-eoe-indicator)
-	      (comint-send-input))) 2) "\n"))
+	    (input-body body)
+	    (send-wait) (send-wait)
+	    (insert org-babel-python-eoe-indicator)
+	    (send-wait))
+	  2) "\n"))
        (value
 	(let ((tmp-file (org-babel-temp-file "python-")))
 	  (org-babel-comint-with-output
@@ -277,9 +281,9 @@ last statement in BODY, as elisp."
 	    (let ((comint-process-echoes nil))
 	      (input-body body)
 	      (dump-last-value tmp-file (member "pp" result-params))
-	      (comint-send-input) (comint-send-input)
+	      (send-wait) (send-wait)
 	      (insert org-babel-python-eoe-indicator)
-	      (comint-send-input)))
+	      (send-wait)))
 	  (org-babel-eval-read-file tmp-file)))))))
 
 (defun org-babel-python-read-string (string)
@@ -290,6 +294,6 @@ last statement in BODY, as elisp."
 
 (provide 'ob-python)
 
-;; arch-tag: f19b6c3d-dfcb-4a1a-9ce0-45ade1ebc212
+
 
 ;;; ob-python.el ends here

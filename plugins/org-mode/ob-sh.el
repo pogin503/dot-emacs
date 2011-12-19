@@ -1,11 +1,10 @@
 ;;; ob-sh.el --- org-babel functions for shell evaluation
 
-;; Copyright (C) 2009, 2010  Free Software Foundation, Inc.
+;; Copyright (C) 2009-2011  Free Software Foundation, Inc.
 
 ;; Author: Eric Schulte
 ;; Keywords: literate programming, reproducible research
 ;; Homepage: http://orgmode.org
-;; Version: 7.5
 
 ;; This file is part of GNU Emacs.
 
@@ -143,6 +142,7 @@ return the value of the last statement in BODY."
   ((lambda (results)
      (when results
        (if (or (member "scalar" result-params)
+	       (member "verbatim" result-params)
 	       (member "output" result-params))
 	   results
 	 (let ((tmp-file (org-babel-temp-file "sh-")))
@@ -192,6 +192,6 @@ return the value of the last statement in BODY."
 
 (provide 'ob-sh)
 
-;; arch-tag: 416dd531-c230-4b0a-a5bf-8d948f990f2d
+
 
 ;;; ob-sh.el ends here

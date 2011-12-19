@@ -1,10 +1,9 @@
 ;;; org-mobile.el --- Code for asymmetric sync with a mobile device
-;; Copyright (C) 2009, 2010 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2011 Free Software Foundation, Inc.
 ;;
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
 ;; Homepage: http://orgmode.org
-;; Version: 7.5
 ;;
 ;; This file is part of GNU Emacs.
 ;;
@@ -37,6 +36,9 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
+
+(declare-function org-pop-to-buffer-same-window 
+		  "org-compat" (&optional buffer-or-name norecord label))
 
 (defgroup org-mobile nil
   "Options concerning support for a viewer/editor on a mobile device."
@@ -575,8 +577,9 @@ The table of checksums is written to the file mobile-checksums."
 				  " " match "</after>"))
 		    settings))
 	(push (list type match settings) new))
-       ((symbolp (nth 2 e))
-	;; A user-defined function, not sure how to handle that yet
+       ((or (functionp (nth 2 e)) (symbolp (nth 2 e)))
+	;; A user-defined function, which can do anything, so simply
+	;; ignore it.
 	)
        (t
 	;; a block agenda
@@ -908,7 +911,7 @@ If BEG and END are given, only do this in that region."
 				   (buffer-file-name (current-buffer))))))
 		(error (setq org-mobile-error msg))))
 	    (when org-mobile-error
-	      (switch-to-buffer (marker-buffer marker))
+	      (org-pop-to-buffer-same-window (marker-buffer marker))
 	      (goto-char marker)
 	      (incf cnt-error)
 	      (insert (if (stringp (nth 1 org-mobile-error))
@@ -1094,8 +1097,6 @@ A and B must be strings or nil."
       (equal a b))))
 
 (provide 'org-mobile)
-
-;; arch-tag: ace0e26c-58f2-4309-8a61-05ec1535f658
 
 ;;; org-mobile.el ends here
 

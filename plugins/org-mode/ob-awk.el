@@ -5,7 +5,6 @@
 ;; Author: Eric Schulte
 ;; Keywords: literate programming, reproducible research
 ;; Homepage: http://orgmode.org
-;; Version: 7.5
 
 ;; This file is part of GNU Emacs.
 
@@ -24,10 +23,7 @@
 
 ;;; Commentary:
 
-;;; Commentary:
-
-;; Babel's awk support relies on two special header argument one of
-;; which is required to pass data to the awk process.
+;; Babel's awk can use special header argument:
 ;; 
 ;; - :in-file takes a path to a file of data to be processed by awk
 ;;   
@@ -42,6 +38,7 @@
 (declare-function org-babel-ref-resolve "ob-ref" (ref))
 (declare-function orgtbl-to-generic "org-table" (table params))
 
+(defvar org-babel-tangle-lang-exts)
 (add-to-list 'org-babel-tangle-lang-exts '("awk" . "awk"))
 
 (defvar org-babel-awk-command "awk"
@@ -51,7 +48,7 @@
   "Expand BODY according to PARAMS, return the expanded body."
   (dolist (pair (mapcar #'cdr (org-babel-get-header params :var)))
     (setf body (replace-regexp-in-string
-                (regexp-quote (concat "$" (car pair))) (cdr pair) body)))
+                (regexp-quote (format "$%s" (car pair))) (cdr pair) body)))
   body)
 
 (defun org-babel-execute:awk (body params)
@@ -81,17 +78,17 @@ called by `org-babel-execute-src-block'"
      ((lambda (results)
 	(when results
 	  (if (or (member "scalar" result-params)
+		  (member "verbatim" result-params)
 		  (member "output" result-params))
 	      results
 	    (let ((tmp (org-babel-temp-file "awk-results-")))
 	      (with-temp-file tmp (insert results))
 	      (org-babel-import-elisp-from-file tmp)))))
       (cond
-       (in-file (org-babel-eval cmd ""))
        (stdin (with-temp-buffer
 		(call-process-shell-command cmd stdin (current-buffer))
 		(buffer-string)))
-       (t (error "ob-awk: must specify either :in-file or :stdin"))))
+       (t (org-babel-eval cmd ""))))
      (org-babel-pick-name
       (cdr (assoc :colname-names params)) (cdr (assoc :colnames params)))
      (org-babel-pick-name
@@ -114,6 +111,6 @@ Emacs-lisp table, otherwise return the results as a string."
 
 (provide 'ob-awk)
 
-;; arch-tag: 844e2c88-6aad-4018-868d-a2df6bcdf68f
+
 
 ;;; ob-awk.el ends here
