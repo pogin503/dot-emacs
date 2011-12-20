@@ -16,7 +16,7 @@
 ;; (global-set-key "\M-w" 'clipboard-kill-ring-save)  ; クリップボードにコピー
 ;; (global-set-key "\C-w" 'clipboard-kill-region)     ; 切り取ってクリップボードへ
 
-(global-set-key (kbd "C-M-k") 
+(global-set-key (kbd "C-M-k")
   (lambda ()
     (interactive)
     (kill-buffer (current-buffer))))
@@ -27,3 +27,5 @@
 (global-set-key (kbd "C-h") 'delete-backward-char)
 ;; (keyboard-translate ?\C-h ?\C-?)
 (global-set-key (kbd "C-m") 'newline-and-indent)
+
+(global-set-key (kbd "C-<tab>") 'indent-for-tab-command)

@@ -181,6 +181,7 @@
 (add-hook 'c++-mode-hook 'my-smartchr-keybindings-cpp)
 
 (dolist (hook (list
+               'lisp-mode-hook
                'emacs-lisp-mode-hook
                'lisp-interaction-mode-hook
                'inferior-gauche-mode-hook
