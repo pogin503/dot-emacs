@@ -89,3 +89,11 @@ If the link is in hidden text, expose it."
 (define-key org-mode-map [(control down)] 'outline-next-visible-heading)
 (define-key org-mode-map [(control shift up)] 'outline-backward-same-level)
 (define-key org-mode-map [(control shift down)] 'outline-forward-same-level)
+
+(global-set-key (kbd "<f8>") 'org-tree-slide-mode)
+(global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
+
+(lazyload (org-mode) "org-mode"
+          (req org-tree-slide))
+
+(push '("\\.txt\\'" . org-mode) auto-mode-alist)
