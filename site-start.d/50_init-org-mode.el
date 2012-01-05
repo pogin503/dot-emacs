@@ -2,20 +2,32 @@
 ;; (defvar org-directory "")
 
 
-
+;;@see http://d.hatena.ne.jp/rubikitch/20090121/1232468026
 (require 'org-install)
 (setq org-startup-truncated nil)
 (setq org-return-follows-link t)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(org-remember-insinuate)
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode)
+                                '("\\.txt$" . org-mode))
+
+
 (if (boundp 'dropbox-directory)
     (setq org-directory (concat dropbox-directory "/Document/org/")))
 (setq org-default-notes-file (concat org-directory "agenda.org"))
+(setq org-agenda-files
+ (mapcar #'(lambda (x) (concat org-directory x))
+         '("work.org" "school.org" "home.org"))
+(org-remember-insinuate)
+
+;; C-c r でorg-remember起動 キーバインドの設定
+(define-key global-map (kbd "C-c r") 'org-remember)
+
 (setq org-remember-templates
       '(("Todo" ?t "** TODO %?\n   %i\n   %a\n   %t" nil "Inbox")
         ("Bug" ?b "** TODO %?   :bug:\n   %i\n   %a\n   %t" nil "Inbox")
         ("Idea" ?i "** %?\n   %i\n   %a\n   %t" nil "New Ideas")
         ))
+
+
 
 (defvar org-code-reading-software-name nil)
 ;; ~/memo/code-reading.org に記録する
@@ -93,7 +105,7 @@ If the link is in hidden text, expose it."
 (global-set-key (kbd "<f8>") 'org-tree-slide-mode)
 (global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
 
-(lazyload (org-mode) "org-mode"
-          (req org-tree-slide))
+;; (lazyload (org-tree-slide-mode) "org-tree-slide-mode"
+;;           (req org-tree-slide))
 
-(push '("\\.txt\\'" . org-mode) auto-mode-alist)
+(req org-tree-slide)

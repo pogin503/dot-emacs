@@ -1,4 +1,4 @@
-;; 常時デバッグ状態
+; 常時デバッグ状態
 (setq debug-on-error t)
 
 ;;@see http://e-arrows.sakura.ne.jp/2010/03/macros-in-emacs-el.html
@@ -222,7 +222,7 @@
             (normal-top-level-add-subdirs-to-load-path))))))
 
 ;; Emacs Lisp のPathを通す
-(add-to-load-path 
+(add-to-load-path
  ;; 初期設定ファイル
  "site-start.d"
  "plugins"
