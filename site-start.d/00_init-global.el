@@ -57,7 +57,7 @@
 
 ;;@see http://sites.google.com/site/shidoinfo/Home/開発環境/emacs/emacsの基本
 ;;カーソルが行頭にある場合も行全体を削除
-(setq kill-whole-line t)                  
+(setq kill-whole-line t)
 
 
 ; スクリプトを保存する時、自動的に chmod +x を行うようにする
@@ -114,7 +114,7 @@
 
 
 
-(cond (window-system 
+(cond (window-system
        (setq x-select-enable-clipboard t)))
 
 
@@ -161,7 +161,7 @@
   (let ((dir-name ".backup"))
     (if (not (file-exists-p (concat user-emacs-directory dir-name)))
         (make-directory dir-name user-emacs-directory))
-    (add-to-list 'backup-directory-alist 
+    (add-to-list 'backup-directory-alist
                  `("\\.*$" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
 (my-define-backup-directory)
 
@@ -198,3 +198,6 @@
       (delete-blank-lines))))
 
 (add-hook 'before-save-hook 'my-delete-trailing-blank-lines)
+
+;; save-buffer 時、buffer 末尾に空行が常にあるように
+(setq require-final-newline t)

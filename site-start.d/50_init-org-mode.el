@@ -15,7 +15,7 @@
 (setq org-default-notes-file (concat org-directory "agenda.org"))
 (setq org-agenda-files
  (mapcar #'(lambda (x) (concat org-directory x))
-         '("work.org" "school.org" "home.org"))
+         '("work.org" "school.org" "home.org")))
 (org-remember-insinuate)
 
 ;; C-c r でorg-remember起動 キーバインドの設定
