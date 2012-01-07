@@ -57,7 +57,7 @@
 
 ;;@see http://sites.google.com/site/shidoinfo/Home/開発環境/emacs/emacsの基本
 ;;カーソルが行頭にある場合も行全体を削除
-(setq kill-whole-line t)                  
+(setq kill-whole-line t)
 
 
 ; スクリプトを保存する時、自動的に chmod +x を行うようにする
@@ -104,17 +104,17 @@
 ;; 終了時バイトコンパイル
 (add-hook 'kill-emacs-query-functions
           (lambda ()
-	    (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
-					(concat user-emacs-directory "init.elc"))
+            (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
+                                        (concat user-emacs-directory "init.elc"))
                 (byte-compile-file (concat user-emacs-directory "init.el")))
-;;            (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
-;;            (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
+            ;; (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
+            ;; (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
             (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
             ))
 
 
 
-(cond (window-system 
+(cond (window-system
        (setq x-select-enable-clipboard t)))
 
 
@@ -161,7 +161,7 @@
   (let ((dir-name ".backup"))
     (if (not (file-exists-p (concat user-emacs-directory dir-name)))
         (make-directory dir-name user-emacs-directory))
-    (add-to-list 'backup-directory-alist 
+    (add-to-list 'backup-directory-alist
                  `("\\.*$" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
 (my-define-backup-directory)
 
