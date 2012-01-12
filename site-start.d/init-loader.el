@@ -36,8 +36,8 @@
 ;; ファイルロード後,変数`init-loader-show-log-after-init'の値がnon-nilなら,ログバッファを表示する関数を`after-init-hook'へ追加する.
 ;; ログの表示は, M-x init-loader-show-log でも可能.
 
-(eval-when-compile (req cl))
-(req benchmark)
+(eval-when-compile (require 'cl))
+(require 'benchmark)
 
 ;;; customize-variables
 (defgroup init-loader nil
@@ -184,7 +184,7 @@ e.x, 00_hoge.el, 01_huga.el ... 99_keybind.el"
 
 (dont-compile
   (when (fboundp 'expectations)
-    (expectations 
+    (expectations
       (desc "init-loader--re-load-files")
       (expect  '("00_utils.el" "01_ik-cmd.el" "20_elisp.el" "21_javascript.el" "23_yaml.el" "25_perl.el" "96_color.el" "98_emacs-config.el" "99_global-keys.el")
         (stub directory-files => init-loader-test-files)
