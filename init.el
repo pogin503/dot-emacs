@@ -141,13 +141,6 @@
 ;(flymake-mode)
 
 
-;;tabbar (tabberじゃなかった...)
-(require 'tabbar)
-(tabbar-mode)
-
-
-
-
 ;;highlight-cl
 (require 'highlight-cl)
 (add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)

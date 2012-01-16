@@ -32,14 +32,14 @@
 (add-to-list 'load-path "~/plugins/slime/")  ; your SLIME directory
 (add-to-list 'load-path "~/plugins/slime/contrib/")  ; your SLIME directory
 
-(add-hook 'inferior-lisp-mode-hook 
-	  (lambda () 
+(add-hook 'inferior-lisp-mode-hook
+	  (lambda ()
 	    (inferior-slime-mode t)))
 
 
 
-;(custom-set-variables  
-; '(slime-backend 
+;(custom-set-variables
+; '(slime-backend
 ;   (expand-file-name "~/.emacs.d/plugins/slime/swank-loader.lisp")))
 
 
@@ -54,9 +54,9 @@
   (setq slime-net-coding-system 'utf-8-unix)
   (setq inferior-lisp-program "sbcl") ; your Lisp system
   (eval-after-load "slime"
-    (progn 
-      (slime-setup '(slime-repl slime-fancy slime-banner))
+    (progn
       (req slime-autoloads)
+      (slime-setup '(slime-repl slime-fancy slime-banner))
       (set-language-environment "utf-8")
       ;;ac-slime
       (req ac-slime))))
@@ -152,4 +152,3 @@
 ;                   (set-window-configuration ,window-configuration)))
 ;               (use-local-map hs-map)))))
 ;    ad-do-it))
-

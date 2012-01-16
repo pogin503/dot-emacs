@@ -1,12 +1,12 @@
 ;(add-to-list 'load-path "~/.emacs.d/elisp/howm-1.3.9.1/howm/")
 (add-to-list 'load-path "~/.emacs.d/plugins/howm-1.3.9.2rc4/")
 
-(req howm-mode)
+(req howm)
 ;;はじめて C-c , , した時に読み込む
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/howm/")
 
-(setq dropbox-directory 
-	  (cond 
+(setq dropbox-directory
+	  (cond
 	   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
 	   ((eq run-linux t) "~/Dropbox")))
 

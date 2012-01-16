@@ -4,4 +4,4 @@
    (require 'tabbar)
    ;;tabbar (tabberじゃなかった...)
    (req tabbar)
-   (tabbar-mode)
+   (tabbar-mode 1)
