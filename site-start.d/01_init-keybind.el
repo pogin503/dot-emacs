@@ -31,3 +31,7 @@
 (global-set-key (kbd "C-m") 'newline-and-indent)
 
 ;; (global-set-key (kbd "C-<tab>") 'indent-for-tab-command)
+
+;; Font size
+(define-key global-map (kbd "C-+") 'text-scale-increase)
+(define-key global-map (kbd "C--") 'text-scale-decrease)

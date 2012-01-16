@@ -186,10 +186,10 @@
     (if (not (file-exists-p (concat user-emacs-directory dir-name)))
         (make-directory dir-name user-emacs-directory))
     (add-to-list 'backup-directory-alist
-                 `("\\.*$" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
+                 `("" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
 (my-define-backup-directory)
 
-(setq version-control t)     ; 複数のバックアップを残します。世代。
+(setq version-control t)        ; 複数のバックアップを残します。世代。
 (setq kept-new-versions 5)   ; 新しいものをいくつ残すか
 (setq kept-old-versions 5)   ; 古いものをいくつ残すか
 (setq delete-old-versions t) ; 確認せずに古いものを消す。
@@ -225,3 +225,18 @@
 
 ;; save-buffer 時、buffer 末尾に空行が常にあるように
 (setq require-final-newline t)
+
+;; ------------------------------------------------------------------------
+;; @ image-library
+(if run-windows
+    (setq image-library-alist
+          '((xpm "libxpm.dll")
+            (png "libpng14.dll")
+            (jpeg "libjpeg.dll")
+            (tiff "libtiff3.dll")
+            (gif "libungif4.dll")
+            (svg "librsvg-2-2.dll")
+            (gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
+            (glib "libglib-2.0-0.dll")
+            (gobject "libgobject-2.0-0.dll"))
+          ))

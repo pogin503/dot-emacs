@@ -3,21 +3,34 @@
 (add-to-list 'load-path "~/.emacs.d/plugins/ruby/")
 
 ;; ruby-mode
-(autoload 'ruby-mode "ruby-mode"
-  "Mode for editing ruby source files" t)
-(setq auto-mode-alist
-      (append '(("\\.rb$" . ruby-mode)) auto-mode-alist))
-(setq interpreter-mode-alist (append '(("ruby" . ruby-mode))
-                                     interpreter-mode-alist))
-(autoload 'run-ruby "inf-ruby"
-  "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-  "Set local key defs for inf-ruby in ruby-mode")
-(add-hook 'ruby-mode-hook
-          '(lambda () (inf-ruby-keys)))
+(when (autoload-if-found 'ruby-mode "ruby-mode"
+                         "Mode for editing ruby source files" t)
+  (setq auto-mode-alist
+        (cons '("\\.rb$" . ruby-mode) auto-mode-alist)
+        interpreter-mode-alist
+        (cons '("ruby" . ruby-mode) interpreter-mode-alist))
+  (eval-after-load 'ruby-mode
+    (autoload 'run-ruby "inf-ruby"
+      "Run an inferior Ruby process")
+    (autoload 'inf-ruby-keys "inf-ruby"
+      "Set local key defs for inf-ruby in ruby-mode")
+    ;; ruby-block
+    (req ruby-block)
+    (ruby-block-mode t)
+    ;; ミニバッファに表示し, かつ, オーバレイする.
+    (setq ruby-block-highlight-toggle t)
+    (defun ruby-mode-hook-ruby-block()
+      (ruby-block-mode t))
+    (req ruby-electric)
+    ;; set ruby-mode indent
+    (setq ruby-indent-level 2)
+    (setq ruby-indent-tabs-mode nil)
+    ))
 
+    (add-hook 'ruby-mode-hook
+              '(lambda () (inf-ruby-keys)))
+  
 ;; ruby-electric
-(req ruby-electric)
 (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
 
 ;; ;;;; rubydb
@@ -37,14 +50,7 @@
 ;; (req cl)
 ;; (req rails)
 
-;; ruby-block
-(req ruby-block)
-(ruby-block-mode t)
-;; ミニバッファに表示し, かつ, オーバレイする.
-(setq ruby-block-highlight-toggle t)
-(defun ruby-mode-hook-ruby-block()
-  (ruby-block-mode t))
-(add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
+add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
 
 (defun execute-ruby ()
   (interactive)
@@ -57,6 +63,3 @@
 
 (define-key ruby-mode-map (kbd "C-7")'execute-ruby)
 
-;; set ruby-mode indent
-(setq ruby-indent-level 2)
-(setq ruby-indent-tabs-mode nil)
