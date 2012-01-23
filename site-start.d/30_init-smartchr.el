@@ -101,7 +101,7 @@
    :cleanup-fn (lambda ()
                  (save-excursion
                    (goto-char (point-at-eol))
-                   (delete-backward-char 1)))
+                   (backward-delete-char 1)))
    ))
 
 (defun my-smartchr-keybindings ()
@@ -151,7 +151,7 @@
   (local-set-key (kbd "!") (smartchr '("!" " != ")))
   (local-set-key (kbd "&") (smartchr '("&" " && ")))
   (local-set-key (kbd "|") (smartchr '("|" " || ")))
-  (local-set-key (kbd "/") (smartchr '("/" "/** `!!' */" my-smartchr-comment-doxygen)))
+  (local-set-key (kbd "/") (smartchr '("/" "// `!!'" "/** `!!' */" my-smartchr-comment-doxygen)))
   (local-set-key (kbd ";") (smartchr '(";" my-smartchr-semicolon)))
   )
 

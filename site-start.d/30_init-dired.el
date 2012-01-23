@@ -126,7 +126,7 @@ Creates a buffer if necessary."
 (defun my-dired-this-week-search (arg)
   "Fontlock search function for dired."
   (let ((youbi
-         (string-to-int
+         (string-to-number
           (format-time-string "%w" (current-time))))
         this-week-start this-week-end day ;;regexp
         (flg nil))
@@ -157,7 +157,7 @@ Creates a buffer if necessary."
 (defun my-dired-last-week-search (arg)
   "Fontlock search function for dired."
   (let ((youbi
-         (string-to-int
+         (string-to-number
           (format-time-string "%w" (current-time))))
         this-week-start this-week-end day ;;regexp
         lyoubi

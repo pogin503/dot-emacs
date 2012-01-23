@@ -10,26 +10,26 @@
         interpreter-mode-alist
         (cons '("ruby" . ruby-mode) interpreter-mode-alist))
   (eval-after-load 'ruby-mode
-    (autoload 'run-ruby "inf-ruby"
-      "Run an inferior Ruby process")
-    (autoload 'inf-ruby-keys "inf-ruby"
-      "Set local key defs for inf-ruby in ruby-mode")
-    ;; ruby-block
-    (req ruby-block)
-    (ruby-block-mode t)
-    ;; ミニバッファに表示し, かつ, オーバレイする.
-    (setq ruby-block-highlight-toggle t)
-    (defun ruby-mode-hook-ruby-block()
-      (ruby-block-mode t))
-    (req ruby-electric)
-    ;; set ruby-mode indent
-    (setq ruby-indent-level 2)
-    (setq ruby-indent-tabs-mode nil)
-    ))
+    (progn
+      (autoload 'run-ruby "inf-ruby"
+        "Run an inferior Ruby process")
+      (autoload 'inf-ruby-keys "inf-ruby"
+        "Set local key defs for inf-ruby in ruby-mode")
+      ;; ruby-block
+      (req ruby-block)
+      (ruby-block-mode t)
+      ;; ミニバッファに表示し, かつ, オーバレイする.
+      (setq ruby-block-highlight-toggle t)
+      (defun ruby-mode-hook-ruby-block()
+        (ruby-block-mode t))
+      (req ruby-electric)
+      ;; set ruby-mode indent
+      (setq ruby-indent-level 2)
+      (setq ruby-indent-tabs-mode nil)
+      )))
+(add-hook 'ruby-mode-hook
+          '(lambda () (inf-ruby-keys)))
 
-    (add-hook 'ruby-mode-hook
-              '(lambda () (inf-ruby-keys)))
-  
 ;; ruby-electric
 (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
 
@@ -50,7 +50,7 @@
 ;; (req cl)
 ;; (req rails)
 
-add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
+(add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
 
 (defun execute-ruby ()
   (interactive)
@@ -62,4 +62,3 @@ add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
       (display-buffer buf))))
 
 (define-key ruby-mode-map (kbd "C-7")'execute-ruby)
-
