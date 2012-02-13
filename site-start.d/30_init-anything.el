@@ -1,4 +1,5 @@
 ;;anything
+(setq org-directory "")
 (req anything-startup)
 ;(req anything-config)
 ;(req recentf)

@@ -198,7 +198,7 @@
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
 
 ;; 行末のwhitespaceを削除
-(setq delete-trailing-whitespace-exclude-patterns (list "\\.md$" "\\.markdown$"))
+(setq delete-trailing-whitespace-exclude-patterns (list "\\.md$" "\\.markdown$" "\\.org$"))
 
 (require 'cl)
 (defun delete-trailing-whitespace-with-exclude-pattern ()
@@ -240,3 +240,11 @@
             (glib "libglib-2.0-0.dll")
             (gobject "libgobject-2.0-0.dll"))
           ))
+
+(defun toggle-truncate-lines ()
+  "折り返し表示をトグル動作します."
+  (interactive)
+  (if truncate-lines
+      (setq truncate-lines nil)
+    (setq truncate-lines t))
+  (recenter))
