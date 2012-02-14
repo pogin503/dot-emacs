@@ -28,7 +28,7 @@
 ;; (global-set-key (kbd "C-h") 'delete-backward-char)
 (keyboard-translate ?\C-h ?\C-?)
 
-(global-set-key (kbd "C-m") 'newline-and-indent)
+;; (global-set-key (kbd "C-m") 'newline-and-indent)
 
 ;; (global-set-key (kbd "C-<tab>") 'indent-for-tab-command)
 

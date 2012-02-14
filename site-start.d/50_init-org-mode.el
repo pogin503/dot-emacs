@@ -102,7 +102,7 @@ If the link is in hidden text, expose it."
 (define-key org-mode-map [(control shift up)] 'outline-backward-same-level)
 (define-key org-mode-map [(control shift down)] 'outline-forward-same-level)
 
-(define-key org-mode-map (kbd "C-m") 'org-return-indent)
+;; (define-key org-mode-map (kbd "C-m") 'org-return-indent)
 (global-set-key (kbd "<f8>") 'org-tree-slide-mode)
 (global-set-key (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
 
