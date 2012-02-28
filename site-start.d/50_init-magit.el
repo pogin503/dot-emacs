@@ -1,7 +1,10 @@
 (add-to-list 'load-path "~/.emacs.d/plugins/magit/share/emacs/site-lisp/")
-(req magit)
+;; (req magit)
+(autoload 'magit-status "magit" nil t)
 (if run-windows
-    (setq magit-git-executable "C:/Program Files (x86)/Git/bin/git.exe"))
+    (if (file-exists-p "C:/Program Files (x86)/Git/bin/git.exe")
+        (setq magit-git-executable "C:/Program Files (x86)/Git/bin/git.exe")
+      (setq magit-git-executable "C:/Program Files/Git/bin/git.exe")))
   ;; (setq magit-git-executable "C:/Program Files/Git/bin/git.exe"))
 
 ;;;
