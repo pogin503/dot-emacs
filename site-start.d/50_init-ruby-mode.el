@@ -54,11 +54,11 @@
 
 (defun execute-ruby ()
   (interactive)
-  (let (buf)
-    (save-excursion
-      (setq buf (get-buffer-create "*result ruby execution*"))
+  (save-excursion
+    (let ((buf (get-buffer-create "*result ruby execution*")))
       (mark-whole-buffer)
-      (call-process-region (region-beginning) (region-end) "ruby" nil buf nil)
+      (call-process-region
+       (region-beginning) (region-end) "ruby" nil buf nil)
       (display-buffer buf))))
 
 (define-key ruby-mode-map (kbd "C-7")'execute-ruby)
