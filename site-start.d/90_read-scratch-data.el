@@ -1,13 +1,13 @@
 ;;; auto save and restore scratch buffer
 (defun save-scratch-data ()
-  (let ((str (progn
+  (let* ((str (progn
                (set-buffer (get-buffer "*scratch*"))
                (buffer-substring-no-properties
                 (point-min) (point-max))))
-        (file "~/.emacs.d/.scratch"))
-    (if (get-file-buffer (expand-file-name file))
-        (setq buf (get-file-buffer (expand-file-name file)))
-      (setq buf (find-file-noselect file)))
+        (file "~/.emacs.d/.scratch")
+        (buf (if (get-file-buffer (expand-file-name file))
+                 (get-file-buffer (expand-file-name file))
+               (find-file-noselect file))))
     (set-buffer buf)
     (erase-buffer)
     (insert str)

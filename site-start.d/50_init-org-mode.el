@@ -21,6 +21,13 @@
 ;; C-c r でorg-remember起動 キーバインドの設定
 (define-key global-map (kbd "C-c r") 'org-remember)
 
+;; TODO状態
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "WAIT(w)" "|" "DONE(d)" "SOMEDAY(s)")))
+
+;; DONEの時刻を記録
+(setq org-log-done 'time)
+
 (setq org-remember-templates
       '(("Todo" ?t "** TODO %?\n   %i\n   %a\n   %t" nil "Inbox")
         ("Bug" ?b "** TODO %?   :bug:\n   %i\n   %a\n   %t" nil "Inbox")

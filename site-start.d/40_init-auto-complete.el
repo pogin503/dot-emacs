@@ -8,3 +8,10 @@
 (setq ac-use-comphist t)
 (define-key ac-mode-map (kbd "M-i") 'auto-complete)
 (ac-flyspell-workaround)
+
+(dolist (hook (list
+               'html-mode-hook
+               'sgml-mode-hook
+               'nxml-mode-hook
+               ))
+  (add-hook hook 'auto-complete-mode))

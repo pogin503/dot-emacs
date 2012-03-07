@@ -3,8 +3,8 @@
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-hook-fn 'js2-mode-hook
 			 (setq c-auto-newline 1)
-			 (setq c-auto-state 1)
-			 (setq c-auto-hungry-state 1)
+			 ;; (setq c-auto-state 1)
+			 ;; (setq c-auto-hungry-state 1)
 			 ;; (require 'flymake-jsl)
 			 ;; (setq flymake-check-was-interrupted t)
 			 (when (req org nil t)

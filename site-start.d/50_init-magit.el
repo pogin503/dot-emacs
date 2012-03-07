@@ -1,7 +1,9 @@
 (add-to-list 'load-path "~/.emacs.d/plugins/magit/share/emacs/site-lisp/")
 (req magit)
 (if run-windows
-    (setq magit-git-executable "C:/Program Files (x86)/Git/bin/git.exe"))
+    (if run-windows-x64
+        (setq magit-git-executable "C:/Program Files (x86)/Git/bin/git.exe")
+      (setq magit-git-executable "C:/Program Files/Git/bin/git.exe")))
   ;; (setq magit-git-executable "C:/Program Files/Git/bin/git.exe"))
 
 ;;;
@@ -20,7 +22,8 @@
      :background "LightGoldenRod")
     (((class color) (background dark))
      :background "DarkGoldenRod"))
-  "選択中のファイルを表すフェイス。")
+  "選択中のファイルを表すフェイス。"
+  :group 'magit)
 
 (defun my-magit-valid-buffer-p ()
   "操作可能な Magit のバッファかどうか。"

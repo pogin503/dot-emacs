@@ -12,7 +12,7 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)
+;; (setq default-buffer-file-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (setq file-name-coding-system 'utf-8)
@@ -23,7 +23,7 @@
 (mw32-ime-initialize)
 (setq default-input-method "MW32-IME")
 (setq-default mw32-ime-mode-line-state-indicator "[--]")
-(setq mw32-ime-mode-line-state-indicator-list '("[--]" "[あ]" "[--]"))
+;; (setq mw32-ime-mode-line-state-indicator-list '("[--]" "[あ]" "[--]"))
 (add-hook 'mw32-ime-on-hook
 	  (function (lambda () (set-cursor-height 2))))
 (add-hook 'mw32-ime-off-hook

@@ -48,20 +48,20 @@ Creates a buffer if necessary."
      ())) nil)
 (defvar face-file-edited-today
   'face-file-edited-today)
-(defun my-dired-today-search (arg)
-  "Fontlock search function for dired."
-  (search-forward-regexp
-   (concat "\\(" (format-time-string
-                  "%b %e" (current-time))
-           "\\|"(format-time-string
-                 "%m-%d" (current-time))
-           "\\)"
-           " [0-9]....") arg t))
-(font-lock-add-keywords
- major-mode
- (list
-  '(my-dired-today-search . face-file-edited-today)
-  ))
+;; (defun my-dired-today-search (arg)
+;;   "Fontlock search function for dired."
+;;   (search-forward-regexp
+;;    (concat "\\(" (format-time-string
+;;                   "%b %e" (current-time))
+;;            "\\|"(format-time-string
+;;                  "%m-%d" (current-time))
+;;            "\\)"
+;;            " [0-9]....") arg t))
+;; (font-lock-add-keywords
+;;  major-mode
+;;  (list
+;;   '(my-dired-today-search . face-file-edited-today)
+;;   ))
 
 (defface face-file-edited-today
   '((((class color)
