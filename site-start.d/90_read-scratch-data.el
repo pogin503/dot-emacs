@@ -4,9 +4,9 @@
                (set-buffer (get-buffer "*scratch*"))
                (buffer-substring-no-properties
                 (point-min) (point-max))))
-        (file "~/.emacs.d/.scratch")
-        (buf (if (get-file-buffer (expand-file-name file))
-                 (get-file-buffer (expand-file-name file))
+        (file (expand-file-name "~/.emacs.d/.scratch"))
+        (buf (if (get-file-buffer file)
+                 (get-file-buffer file)
                (find-file-noselect file))))
     (set-buffer buf)
     (erase-buffer)
