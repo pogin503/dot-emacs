@@ -1,0 +1,3 @@
+[submodule "plugins/multi-web-mode"]
+	path = plugins/multi-web-mode
+	url = git://github.com/fgallina/multi-web-mode.git
