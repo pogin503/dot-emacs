@@ -4,6 +4,7 @@
 .#*
 \#*\#
 session.*
+*.elc
 
 #Backup dir
 .backup/
@@ -18,4 +19,5 @@ TAGS
 init.elc
 .framesize
 .session
+.scratch
 plugins/taihi/

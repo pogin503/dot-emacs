@@ -1,20 +1,3 @@
-(add-hook 'lisp-mode-hook
-          (lambda ()
-            (show-paren-mode t)))
-(add-hook 'after-change-major-mode-hook
-          (lambda ()
-            (show-paren-mode t)))
-(add-hook 'lisp-mode-hook
-          (lambda ()
-            (set (make-local-variable 'lisp-indent-function)
-                 'common-lisp-indent-function)))
-
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
-            ;; (set (make-local-variable 'lisp-indent-function)
-            ;;  'common-lisp-indent-function)
-            (show-paren-mode t)))
 (defun esk-remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
   (make-local-variable 'after-save-hook)
@@ -24,19 +7,39 @@
                   (delete-file (concat buffer-file-name "c"))))))
 (esk-remove-elc-on-save)
 
-(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
-(define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+
 ;; ------------------------------------------------------------------
-;; @ slime
-;(add-to-list 'load-path  "~/.emacs.d/plugins/slime/swank-loader.lisp")
-(add-to-list 'load-path "~/plugins/slime/")  ; your SLIME directory
-(add-to-list 'load-path "~/plugins/slime/contrib/")  ; your SLIME directory
+;; @ key-bind
+(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
+;; (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+
+
+;; ------------------------------------------------------------------
+(add-hook 'lisp-mode-hook
+          (lambda ()
+            (set (make-local-variable 'lisp-indent-function)
+                 'common-lisp-indent-function)))
+            (show-paren-mode t)))
+(add-hook 'after-change-major-mode-hook
+          (lambda ()
+            (show-paren-mode t)))
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
+            ;; (set (make-local-variable 'lisp-indent-function)
+            ;;  'common-lisp-indent-function)
+            (show-paren-mode t)))
 
 (add-hook 'inferior-lisp-mode-hook
 	  (lambda ()
 	    (inferior-slime-mode t)))
 
-
+;; ------------------------------------------------------------------
+;; @ slime
+;(add-to-list 'load-path  "~/.emacs.d/plugins/slime/swank-loader.lisp")
+(add-to-list 'load-path "~/plugins/slime/")  ; your SLIME directory
+(add-to-list 'load-path "~/plugins/slime/contrib/")  ; your SLIME directory
 
 ;(custom-set-variables
 ; '(slime-backend
@@ -50,22 +53,24 @@
 ;	(sbcl ("sbcl") :coding-system utf-8-unix)
 ;	(clisp ("clisp") :coding-system euc-jp-unix)
 ;	))
-(when (autoload-if-found 'slime "slime" "slimeの呼び出し")
-  (setq slime-net-coding-system 'utf-8-unix)
-  (setq inferior-lisp-program "sbcl") ; your Lisp system
-  (eval-after-load "slime"
+(if run-linux
     (progn
-      (req slime-autoloads)
-      (slime-setup '(slime-repl slime-fancy slime-banner))
-      (set-language-environment "utf-8")
-      ;;ac-slime
-      (req ac-slime))))
+      (when (autoload-if-found 'slime "slime" "slimeの呼び出し")
+        (progn
+          (req slime)
+          (setq slime-net-coding-system 'utf-8-unix)
+          (setq inferior-lisp-program "sbcl") ; your Lisp system
+          (req slime-autoloads)
+          (slime-setup '(slime-repl slime-fancy slime-banner))
+          (set-language-environment "utf-8")
+          ;;ac-slime
+          (req ac-slime)))
 
-(add-hook 'slime-mode-hook 'set-up-slime-ac)
-(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-(add-hook 'lisp-mode-hook (lambda ()
-                            (slime-mode t)
-                            (show-paren-mode t)))
+      (add-hook 'slime-mode-hook 'set-up-slime-ac)
+      (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+      (add-hook 'lisp-mode-hook (lambda ()
+                                  (slime-mode t)
+                                  (show-paren-mode t)))))
 
 ;(eval-when (:compile-toplevel :load-toplevel)
 ;	 (sb-ext:unlock-package 'sb-impl))
@@ -130,25 +135,26 @@
 ;  ("\C-c\C- "  . slime-next-location)               ;; ？
 ;  ("\C-c~"     . slime-sync-package-and-default-directory) ;; パッケージとディレクトリをファイルに合わせる
 
-
-;;hyperspec
+;; ------------------------------------------------------------------
+;; @ hyperspec
 (setq common-lisp-hyperspec-root
       (concat "file://" (expand-file-name "~/.emacs.d/etc/HyperSpec/"))
       common-lisp-hyperspec-symbol-table
       (expand-file-name (expand-file-name "~/.emacs.d/etc/HyperSpec/Data/Map_Sym.txt")))
 
 ;; HyperSpecをw3mで見る
-;(defadvice common-lisp-hyperspec
-;  (around hyperspec-lookup-w3m () activate)
-;  (let* ((window-configuration (current-window-configuration))
-;         (browse-url-browser-function
-;          `(lambda (url new-window)
-;             (w3m-browse-url url nil)
-;             (let ((hs-map (copy-keymap w3m-mode-map)))
-;               (define-key hs-map (kbd "q")
-;                 (lambda ()
-;                   (interactive)
-;                   (kill-buffer nil)
-;                   (set-window-configuration ,window-configuration)))
-;               (use-local-map hs-map)))))
-;    ad-do-it))
+;; (when (autoload-if-found 'w3m-mode "w3m")
+;;   (defadvice common-lisp-hyperspec
+;;     (around hyperspec-lookup-w3m () activate)
+;;     (let* ((window-configuration (current-window-configuration))
+;;            (browse-url-browser-function
+;;             `(lambda (url new-window)
+;;                (w3m-browse-url url nil)
+;;                (let ((hs-map (copy-keymap w3m-mode-map)))
+;;                  (define-key hs-map (kbd "q")
+;;                    (lambda ()
+;;                      (interactive)
+;;                      (kill-buffer nil)
+;;                      (set-window-configuration ,window-configuration)))
+;;                  (use-local-map hs-map)))))
+;;       ad-do-it))

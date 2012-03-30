@@ -102,3 +102,14 @@
 ;;   ;; when の条件部に置くことで、依存関係にある設定項目を自然に表現できます。
 ;;   (global-set-key [(control x) (control b)] 'bs-show)
 ;;   (setq bs-max-window-height 10))
+
+(defmacro defun-add-hook (hookname &rest sexplist)
+  "add-hook のエイリアス。引数を関数にパックして hook に追加する。"
+  `(add-hook ,hookname
+             (function (lambda () ,@sexplist))))
+;; 使い方
+;; 名前を defun で始めたのは、標準状態の Emacs-Lisp モードだと def? く
+;; らいで始まるものは関数定義のスタイルでインデントされるからです。つ
+;; まり、こんな感じ（何と2カラム目!）
+;; (defun-add-hook 'perl-mode-hook
+;;   (exec-if-bound (set-buffer-file-coding-system 'euc-japan-unix)))
