@@ -9,11 +9,11 @@ session.*
 #Backup dir
 .backup/
 
-#private dir
-private/
-
 # TAGS
 TAGS
+GTAGS
+GRTAGS
+GPATH
 
 #etc
 init.elc
