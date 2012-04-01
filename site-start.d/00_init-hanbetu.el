@@ -24,8 +24,8 @@
            (equal system-type 'ms-dos))))
 (if run-windows
     (if (file-exists-p "C:/Program Files (x86)")
-        (setq run-windows-x64 t)
-      (setq run-windows-x64 nil)))
+        (defvar run-windows-x64 t)
+      (defvar run-windows-x64 nil)))
 
 (defvar run-darwin (equal system-type 'darwin))
 
