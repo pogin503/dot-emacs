@@ -5,16 +5,18 @@
 ;; ruby-mode
 (when (autoload-if-found 'ruby-mode "ruby-mode"
                          "Mode for editing ruby source files" t)
-  (setq auto-mode-alist
-        (cons '("\\.rb$" . ruby-mode) auto-mode-alist)
-        interpreter-mode-alist
-        (cons '("ruby" . ruby-mode) interpreter-mode-alist))
+  (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+  (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+
+  (when (and (autoload-if-found 'run-ruby "inf-ruby"
+                                "Run an inferior Ruby process" t)
+             (autoload-if-found 'inf-ruby-keys "inf-ruby"
+                       "Set local key defs for inf-ruby in ruby-mode" t))
+    (add-hook 'ruby-mode-hook
+              '(lambda () (inf-ruby-keys))))
+
   (eval-after-load 'ruby-mode
     (progn
-      (autoload 'run-ruby "inf-ruby"
-        "Run an inferior Ruby process")
-      (autoload 'inf-ruby-keys "inf-ruby"
-        "Set local key defs for inf-ruby in ruby-mode")
       ;; ruby-block
       (req ruby-block)
       (ruby-block-mode t)
@@ -26,9 +28,18 @@
       ;; set ruby-mode indent
       (setq ruby-indent-level 2)
       (setq ruby-indent-tabs-mode nil)
+      ;; (defun execute-ruby ()
+      ;;   (interactive)
+      ;;   (save-excursion
+      ;;     (let ((buf (get-buffer-create "*result ruby execution*")))
+      ;;       (mark-whole-buffer)
+      ;;       (call-process-region
+      ;;        (region-beginning) (region-end) "ruby" nil buf nil)
+      ;;       (display-buffer buf))))
+
+      ;; (define-key ruby-mode-map (kbd "C-7")'execute-ruby)
+
       )))
-(add-hook 'ruby-mode-hook
-          '(lambda () (inf-ruby-keys)))
 
 ;; ruby-electric
 (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
@@ -51,14 +62,3 @@
 ;; (req rails)
 
 (add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
-
-(defun execute-ruby ()
-  (interactive)
-  (save-excursion
-    (let ((buf (get-buffer-create "*result ruby execution*")))
-      (mark-whole-buffer)
-      (call-process-region
-       (region-beginning) (region-end) "ruby" nil buf nil)
-      (display-buffer buf))))
-
-(define-key ruby-mode-map (kbd "C-7")'execute-ruby)
