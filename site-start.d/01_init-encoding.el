@@ -6,6 +6,7 @@
 ;;(setq default-buffer-file-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
+;; ミニバッファの文字化け対策
 (if (eq run-windows t)
     (setq file-name-coding-system 'sjis-dos)
   (setq file-name-coding-system 'utf-8))

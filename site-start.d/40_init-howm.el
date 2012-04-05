@@ -3,14 +3,14 @@
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/howm/")
 
+(defvar dropbox-directory
+      (cond
+       ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
+       ((eq run-linux t) "~/Dropbox")))
+
 (lazyload (howm-menu) "howm"
           (req howm)
           ;;はじめて C-c , , した時に読み込む
-
-          (setq dropbox-directory
-                (cond
-                 ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
-                 ((eq run-linux t) "~/Dropbox")))
 
           (setq howm-directory (concat dropbox-directory "/Document/howm/"))
 
