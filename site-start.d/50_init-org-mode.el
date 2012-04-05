@@ -6,14 +6,15 @@
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode)
                                 '("\\.txt$" . org-mode))
 
+(autoload-if-found 'org-directory "org" nil t)
+(if (boundp 'dropbox-directory)
+    (setq org-directory (concat dropbox-directory "/Document/org/")))
 (lazyload (org-mode) "org-install"
           (require 'org-install)
           (setq org-startup-truncated nil)
           (setq org-return-follows-link t)
 
 
-          (if (boundp 'dropbox-directory)
-              (setq org-directory (concat dropbox-directory "/Document/org/")))
           (setq org-default-notes-file (concat org-directory "agenda.org"))
           (setq org-agenda-files
                 (mapcar #'(lambda (x) (concat org-directory x))
