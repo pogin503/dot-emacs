@@ -26,7 +26,7 @@
 ;; Author: Yuuki Arisawa <yuuki.ari@gmail.com>
 ;; URL: https://github.com/uk-ar/key-combo
 ;; Created: 30 November 2011
-;; Version: 1.4
+;; Version: 1.4.1
 ;; Keywords: keyboard input
 
 ;;; Commentary:
@@ -53,6 +53,9 @@
 
 ;;; History:
 
+;; Revision 1.4.1 2012/04/04 21:05:48
+;; * Bug fix for first key in c-mode and other modes.
+;;
 ;; Revision 1.4 2012/04/03 20:15:21
 ;; * Regard first key as key-combo-execute-original when first key is not assigned
 ;; * Auto indent when inserting string have new line
@@ -230,12 +233,11 @@ If COMMANDS is list, treated as sequential commands.
     (unless (key-combo-elementp commands)
       (error "%s is not command" commands))
     ;; regard first key as key-combo-execute-orignal
-    (let ((first (lookup-key ;; lookup-key returns nil at first
-                  keymap
+    (let ((first (key-binding
                   (vector 'key-combo (intern (key-description base-key))))))
       (when
           (and (eq (safe-length (listify-key-sequence key)) 2)
-               (or (numberp first) (null first)))
+               (null first))
         (define-key keymap
           (vector 'key-combo (intern (key-description base-key)))
           'key-combo-execute-orignal)))
@@ -323,7 +325,7 @@ which in most cases is shared with all other buffers in the same major mode.
     ("-"  . (" - " "--"))
     ("-=" . " -= ")
     ("->" . "->")
-    (">"  . (" > " " >> "))
+    (">"  . (key-combo-execute-orignal " >> "))
     (">=" . " >= ")
     ("=~" . " =~ ");;for ruby regexp
     ("%"  . " % ")
@@ -360,10 +362,13 @@ which in most cases is shared with all other buffers in the same major mode.
 
 (defvar key-combo-html-mode-hooks
   '(html-mode-hook
+    sgml-mode-hook
+    nxml-mode-hook
     css-mode-hook))
 
 (defvar key-combo-html-default
   '((":"  . ": ")
+    ("=" . "=")
     ))
 
 (define-key-combo-load "html")
@@ -382,6 +387,11 @@ which in most cases is shared with all other buffers in the same major mode.
 Note: This overwrite `key-combo-c-default'")
 
 (define-key-combo-load "functional")
+
+(defvar key-combo-sh-default
+  '(("=" . "=")))
+
+(define-key-combo-load "sh")
 
 (defvar key-combo-org-default
   '(("C-a" . (org-beginning-of-line
@@ -411,6 +421,8 @@ Note: This overwrite `key-combo-c-default'")
                            'key-combo-load-org-default)
   (key-combo-load-by-hooks key-combo-functional-mode-hooks
                            'key-combo-load-functional-default)
+  (key-combo-load-by-hooks '(sh-mode-hook)
+                           'key-combo-load-sh-default)
   )
 
 (defun key-combo-load-by-hooks (hooks func)
@@ -685,6 +697,15 @@ Note: This overwrite `key-combo-c-default'")
           ))
       (expect " = "
         (with-temp-buffer
+          (buffer-enable-undo)
+          (setq unread-command-events (listify-key-sequence
+                                       (kbd "=")))
+          (key-combo-test-command-loop)
+          (buffer-substring-no-properties (point-min) (point-max))
+          ))
+      (expect " = "
+        (with-temp-buffer
+          (c-mode)
           (buffer-enable-undo)
           (setq unread-command-events (listify-key-sequence
                                        (kbd "=")))
