@@ -8,6 +8,7 @@
   ("\\.tex\\'"        . (tex-file))
   ("\\.pl\\'"         . "perl -cw %f")
   (emacs-lisp-mode    . (emacs-lisp-byte-compile))
+  ("\\.hs\\'"         . "ghc -o %n %f")
 ) "...")
 
 (global-set-key "\C-cc" 'smart-compile)

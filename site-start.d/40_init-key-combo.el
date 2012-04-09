@@ -46,6 +46,8 @@
           #'(lambda ()
               ;; (key-combo-define-local (kbd "--") "-- ")
               (key-combo-define-local (kbd "," ) ", ")
+              (key-combo-define-local (kbd "::" ) " :: ")
+              (key-combo-define-local (kbd "+") '(" + " " ++ "))
               ;; (key-combo-define-local (kbd "-") 'key-combo-execute-orignal)
               ;; (key-combo-define-local (kbd "<") 'key-combo-execute-orignal)
               ;; (key-combo-define-local (kbd "->") " -> ")

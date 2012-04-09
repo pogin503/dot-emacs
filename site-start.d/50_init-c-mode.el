@@ -4,12 +4,14 @@
         indent-tabs-mode nil)
   )
 
+
 (defun add-c-mode-common-conf ()
-  ;; センテンスの終了である ';' を入力したら、自動改行+インデント
-  ;;カーソルの左側を一気に削除する
-  (c-toggle-auto-hungry-state 1)
-  (setq c-auto-newline t)                     ;;全自動インデント
-  (define-key c-mode-base-map "\C-m" 'newline-and-indent)
+  ;; (c-toggle-auto-hungry-state 1)     ;; (electricモード + 自動インデント + 欲張り削除)
+  ;; (c-toggle-electric-state -1)        ;; (electric-mode) ";"などをを入力すると自動インデントを有功にする
+  (c-toggle-hungry-state 1)             ;; (欲張り削除)スペースを一気に消す欲張り削除を有功にする)
+  ;; obsoleted (c-toggle-auto-state 1)  ;; この関数は廃れた機能 (obsoleteされた)ものなので使わないこと
+  (c-toggle-auto-newline 1)            ;; (自動インデント) 改行をしたら次の行を自動でインデントしてくれる
+  ;; (define-key c-mode-base-map ""\C-m" 'newline-and-indent)
   (c-set-style "stroustrup")                  ;;スタイルはストラウストラップ
   (flyspell-prog-mode)                        ;;flyspell-prog-mode(自動ispell機能)
   (show-paren-mode t)                         ;;カッコを強調表示する
@@ -18,7 +20,6 @@
   )
 
 (add-hook 'c-mode-common-hook 'add-c-mode-common-conf)
-;;(pop c-mode-common-hook)
 
 ;; C++
 ; ヘッダファイル(.h)をc++モードで開く
