@@ -126,15 +126,16 @@
 
 ;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
 ;; 終了時バイトコンパイル
-(add-hook 'kill-emacs-query-functions
-          (lambda ()
-            (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
-                                        (concat user-emacs-directory "init.elc"))
-                (byte-compile-file (concat user-emacs-directory "init.el")))
-            ;;            (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
-            ;;            (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
-            (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
-            ))
+
+(defun my-byte-compile-func ()
+  (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
+                              (concat user-emacs-directory "init.elc"))
+      (byte-compile-file (concat user-emacs-directory "init.el")))
+  (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
+  ;;            (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
+  (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
+)
+(add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
 
 
 

@@ -166,7 +166,7 @@ This can be convenient for people who find it easier to hit ) than C-f."
   '(((and (eq last-command-event ?<)
           (memq major-mode flex-autopair-c-modes)
           (flex-autopair-match-linep
-           "#include\\|#import|static_cast|dynamic_cast")) . pair)
+           "#include\\|#import|static_cast|dynamic_cast|template")) . pair)
     ;; work with key-combo
     ((and (eq last-command-event ?<)
           (boundp key-combo-mode)
@@ -174,6 +174,16 @@ This can be convenient for people who find it easier to hit ) than C-f."
           (memq major-mode flex-autopair-c-modes)) . space-self-space)
     ((and (eq last-command-event ?<)
           (memq major-mode flex-autopair-c-modes)) . self)
+    )
+  "")
+
+(defcustom flex-autopair-functional-conditions
+  '(((and
+      (eq last-command-event ?`)
+      (memq major-mode flex-autopair-functional-modes)) . pair)
+    ((and
+      (eq last-command-event ?')
+      (memq major-mode flex-autopair-functional-modes)) . pair)
     )
   "")
 
@@ -198,6 +208,19 @@ This can be convenient for people who find it easier to hit ) than C-f."
            objc-mode-hook))
   (add-hook hook 'flex-autopair-c-hook-function))
 
+(defcustom flex-autopair-functional-modes
+  '(coffee-mode-hook
+    haskell-mode-hook)
+  "")
+
+(defun flex-autopair-functional-hook-function ()
+  (add-to-list 'flex-autopair-pairs '(?\` . ?\`)))
+
+(dolist (hook
+         '(coffee-mode-hook
+           haskell-mode-hook))
+  (add-hook hook 'flex-autopair-functional-hook-function))
+
 (defcustom flex-autopair-user-conditions-high nil
   "Alist of conditions")
 
@@ -217,6 +240,7 @@ This can be convenient for people who find it easier to hit ) than C-f."
     ,@flex-autopair-lisp-conditions
     ;; for c
     ,@flex-autopair-c-conditions
+    ,@flex-autopair-functional-conditions ;; add
     ,@flex-autopair-user-conditions-low
     ((and openp (flex-autopair-beginning-of-boundsp 'sexp)) . bounds)
     ;; Insert matching pair.
