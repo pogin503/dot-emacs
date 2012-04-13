@@ -5,12 +5,27 @@
   )
 
 
-(defun add-c-mode-common-conf ()
-  ;; (c-toggle-auto-hungry-state 1)     ;; (electricモード + 自動インデント + 欲張り削除)
-  ;; (c-toggle-electric-state -1)        ;; (electric-mode) ";"などをを入力すると自動インデントを有功にする
-  (c-toggle-hungry-state 1)             ;; (欲張り削除)スペースを一気に消す欲張り削除を有功にする)
-  ;; obsoleted (c-toggle-auto-state 1)  ;; この関数は廃れた機能 (obsoleteされた)ものなので使わないこと
-  (c-toggle-auto-newline 1)            ;; (自動インデント) 改行をしたら次の行を自動でインデントしてくれる
+(defun set-c-mode-common-conf ()
+  ;; (electric-mode + 自動インデント + 欲張り削除) ";"を押すと現在の行を
+  ;; 再インデントして自動的に改行をするモードのなる設定。これは強力すぎて扱いづらい。
+  ;; (c-toggle-auto-hungry-state 1)
+  
+  ;; (electric-mode) ";"や"{"などをを入力した場合現在の行を自動インデントを有功にする
+  ;; (c-toggle-electric-state 1)
+  
+  ;; (欲張り削除 + electric-mode)バックスペースなどの削除するキーを押すと
+  ;; スペースを一気に消す欲張り削除機能とelecetic-modeをを有功にする
+  (c-toggle-hungry-state 1)
+
+  ;; この関数は廃れた機能 (obsoleteされた)ものなので、emacsのバージョンが22.1以上なら使わないこと
+  ;; (c-toggle-auto-state 1)　obsoleted 
+
+  ;; (自動インデント) 改行をしたら次の行を自動でインデントしてくれる
+  ;; (c-toggle-auto-newline 1)
+
+  ;; C-m を newline-and-indentに設定する
+  ;; しかしこれをするとEnterのキーマップまで影響するので
+  ;; 大人しくC-jを使ったnewline-and-indentを使うほうが
   ;; (define-key c-mode-base-map ""\C-m" 'newline-and-indent)
   (c-set-style "stroustrup")                  ;;スタイルはストラウストラップ
   (flyspell-prog-mode)                        ;;flyspell-prog-mode(自動ispell機能)
@@ -19,7 +34,7 @@
   (auto-revert-mode)
   )
 
-(add-hook 'c-mode-common-hook 'add-c-mode-common-conf)
+(add-hook 'c-mode-common-hook 'set-c-mode-common-conf)
 
 ;; C++
 ; ヘッダファイル(.h)をc++モードで開く
