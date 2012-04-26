@@ -80,6 +80,6 @@
 ;;   (if (not (null buffer-file-name)) (flymake-mode))
 ;;   )
 
-(add-hook 'haskell-mode-hook 'define-haskell-mode-conf)
+;; (add-hook 'haskell-mode-hook 'define-haskell-mode-conf)
 (add-hook 'haskell-mode-hook 'auto-complete-mode)
 
