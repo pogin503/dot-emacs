@@ -20,44 +20,44 @@
 ;;              '((openp . \`)
 ;;                (closep . \`)))
 
-(setq flex-autopair-user-conditions-high
-      `(((and
-          (eq major-mode 'c-mode)
-          (eq last-command-event ?<)
-          (save-excursion
-            (re-search-backward "#include" (point-at-bol) t)))
-         . pair)
-        ;; ((and
-        ;;   (eq major-mode 'c-mode)
-        ;;   (eq last-command-event ?<))
-        ;;  . self)
-        ((and
-           (eq major-mode 'c++-mode)
-           (eq last-command-event ?<)
-           (save-excursion
-             (re-search-backward "#include" (point-at-bol) t)))
-          . pair)
-        ;; ((and
-        ;;    (eq major-mode 'c++-mode)
-        ;;    (eq last-command-event ?<)
-        ;;    (save-excursion
-        ;;      (re-search-backward "template" (point-at-bol) t)))
-        ;;   . pair)
-        ;; ((and
-        ;;    (eq major-mode 'haskell-mode)
-        ;;    (eq last-command-event ?'))
-        ;;   . pair)
+;; (setq flex-autopair-user-conditions-high
+;;       `(((and
+;;           (eq major-mode 'c-mode)
+;;           (eq last-command-event ?<)
+;;           (save-excursion
+;;             (re-search-backward "#include\\|template" (point-at-bol) t)))
+;;          . pair)
+;;         ;; ((and
+;;         ;;   (eq major-mode 'c-mode)
+;;         ;;   (eq last-command-event ?<))
+;;         ;;  . self)
+;;         ((and
+;;            (eq major-mode 'c++-mode)
+;;            (eq last-command-event ?<)
+;;            (save-excursion
+;;              (re-search-backward "#include\\|" (point-at-bol) t)))
+;;           . pair)
+;;         ;; ((and
+;;         ;;    (eq major-mode 'c++-mode)
+;;         ;;    (eq last-command-event ?<)
+;;         ;;    (save-excursion
+;;         ;;      (re-search-backward "template" (point-at-bol) t)))
+;;         ;;   . pair)
+;;         ;; ((and
+;;         ;;    (eq major-mode 'haskell-mode)
+;;         ;;    (eq last-command-event ?'))
+;;         ;;   . pair)
 
-        ((and
-          (eq major-mode 'c++-mode)
-          (eq last-command-event ?<))
-         . self)
-        ;; ((and
-        ;;   (eq major-mode 'c++-mode)
-        ;;   (eq last-command-event ?>)
-        ;;   (save-excursion
-        ;;     (re-search-backward "<" (point-at-bol) t)))
-        ;;  . self)
-        ))
+;;         ((and
+;;           (eq major-mode 'c++-mode)
+;;           (eq last-command-event ?<))
+;;          . self)
+;;         ;; ((and
+;;         ;;   (eq major-mode 'c++-mode)
+;;         ;;   (eq last-command-event ?>)
+;;         ;;   (save-excursion
+;;         ;;     (re-search-backward "<" (point-at-bol) t)))
+;;         ;;  . self)
+;;         ))
 
-(flex-autopair-reload-conditions)
+;; (flex-autopair-reload-conditions)

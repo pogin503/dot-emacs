@@ -124,9 +124,11 @@
  ;; 初期設定ファイル
  "site-start.d"
  "plugins"
- "elisp/color-themes"
  "elisp"
- "plugins/slime")
+ "etc/HyperSpec"
+ "share"
+ "private"
+ )
 
 ;;from sakito's config end
 

@@ -7,6 +7,7 @@
       (cond
        ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
        ((eq run-linux t) "~/Dropbox")))
+(define-key global-map (kbd "C-c , ,") 'howm-menu)
 
 (lazyload (howm-menu) "howm"
           (req howm)
@@ -15,7 +16,6 @@
           (setq howm-directory (concat dropbox-directory "/Document/howm/"))
 
           (setq howm-menu-lang 'ja)
-          (define-key global-map (kbd "C-c , ,") 'howm-menu)
                                         ;(autoload 'howm-menu "howm-mode" "Hitori Otegaru Wiki Modoki" t)
 
           ;;@see http://www.bookshelf.jp/soft/meadow_38.html#SEC563

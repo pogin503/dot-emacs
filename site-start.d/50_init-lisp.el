@@ -57,20 +57,23 @@
     (progn
       (when (autoload-if-found 'slime "slime" "slimeの呼び出し")
         (progn
-          (req slime)
           (setq slime-net-coding-system 'utf-8-unix)
-          (setq inferior-lisp-program "sbcl") ; your Lisp system
-          (req slime-autoloads)
-          (slime-setup '(slime-repl slime-fancy slime-banner))
           (set-language-environment "utf-8")
+          (setq inferior-lisp-program "/usr/bin/sbcl") ; your Lisp system
+          (when (file-exists-p "/usr/share/emacs/site-lisp/slime/")
+            (add-to-list 'load-path "/usr/share/emacs/site-lisp/slime/"))
+          (require 'slime)
+          (slime-setup)
+          ;; (req slime-autoloads)
+          ;; (slime-setup '(slime-repl slime-fancy slime-banner))
           ;;ac-slime
-          (req ac-slime)))
-
-      (add-hook 'slime-mode-hook 'set-up-slime-ac)
-      (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-      (add-hook 'lisp-mode-hook (lambda ()
-                                  (slime-mode t)
-                                  (show-paren-mode t)))))
+          (require 'ac-slime)))
+      ))
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+(add-hook 'lisp-mode-hook (lambda ()
+                            (slime-mode t)
+                            (show-paren-mode t)))
 
 ;(eval-when (:compile-toplevel :load-toplevel)
 ;	 (sb-ext:unlock-package 'sb-impl))
@@ -137,6 +140,7 @@
 
 ;; ------------------------------------------------------------------
 ;; @ hyperspec
+(require 'hyperspec)
 (setq common-lisp-hyperspec-root
       (concat "file://" (expand-file-name "~/.emacs.d/etc/HyperSpec/"))
       common-lisp-hyperspec-symbol-table
@@ -158,3 +162,31 @@
 ;;                      (set-window-configuration ,window-configuration)))
 ;;                  (use-local-map hs-map)))))
 ;;       ad-do-it))
+
+;; @see http://aikotobaha.blogspot.jp/2011/05/emacs-anythig-hyperspec-cltl2.html
+;; Hyperspec と cltl2 を anything で引けるようにする
+(eval-after-load "anything"
+  '(progn
+     (setq anything-c-source-hyperspec
+           `((name . "Lookup Hyperspec")
+             (candidates . (lambda ()
+                             (let ((symbols nil))
+                               (mapatoms #'(lambda (sym) (push (symbol-name sym) symbols))
+                                         common-lisp-hyperspec-symbols)
+                               symbols)))
+             (action . (("Show Hyperspec" . hyperspec-lookup)))))
+
+     (setq anything-c-source-cltl2
+           `((name . "Lookup CLTL2")
+             (candidates . (lambda ()
+                             (let ((symbols nil))
+                               (mapatoms #'(lambda (sym) (push (symbol-name sym) symbols))
+                                         cltl2-symbols)
+                               symbols)))
+             (action . (("Show CLTL2" . cltl2-lookup)))))
+
+     (defun anything-hyperspec-and-cltl2 ()
+       (interactive)
+       (anything (list anything-c-source-hyperspec anything-c-source-cltl2) (thing-at-point 'symbol)))))
+
+(global-set-key "\C-cH" 'anything-hyperspec-and-cltl2)
