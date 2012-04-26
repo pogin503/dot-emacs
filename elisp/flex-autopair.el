@@ -56,10 +56,7 @@
 (defcustom flex-autopair-pairs
   '((nil . nil))
   "Alist of pairs that should be used each major mode."
-  :type '(repeat (cons character character))
-  :group 'flex-autopair
-
-  )
+  :type '(repeat (cons character character)))
 ;; '((?\" . ?\"))
 (make-variable-buffer-local 'flex-autopair-pairs)
 
@@ -69,9 +66,7 @@ When inserting a closing paren character right before the same character,
 just skip that character instead, so that hitting ( followed by ) results
 in \"()\" rather than \"())\".
 This can be convenient for people who find it easier to hit ) than C-f."
-  :type 'boolean
-  :group 'flex-autopair
-)
+  :type 'boolean)
 
 (defun flex-autopair-wrap-region (beg end opener closer)
   (let ((marker (copy-marker end)))
@@ -144,7 +139,6 @@ This can be convenient for people who find it easier to hit ) than C-f."
 (defcustom flex-autopair-lisp-modes
   '(lisp-mode emacs-lisp-mode lisp-interaction-mode
               inferior-gauche-mode scheme-mode)
-  :group 'flex-autopair
   "Major modes `flex-autopair-mode' treat ` as pair.")
 
 (defun flex-autopair-match-linep (regexp)
@@ -166,7 +160,6 @@ This can be convenient for people who find it easier to hit ) than C-f."
     ((and (eq last-command-event ?`)
           (memq major-mode flex-autopair-lisp-modes)) . self)
     )
-  :group 'flex-autopair
   "")
 
 (defcustom flex-autopair-c-conditions
@@ -184,7 +177,6 @@ This can be convenient for people who find it easier to hit ) than C-f."
     ((and (eq last-command-event ?{)
           (memq major-mode flex-autopair-c-modes)) . pair-and-new-line)
     )
-  :group 'flex-autopair
   "")
 
 (defcustom flex-autopair-functional-conditions
@@ -195,7 +187,6 @@ This can be convenient for people who find it easier to hit ) than C-f."
       (eq last-command-event ?')
       (memq major-mode flex-autopair-functional-modes)) . pair)
     )
-  :group 'flex-autopair
   "")
 
 (defun flex-autopair-lisp-hook-function ()
@@ -208,7 +199,6 @@ This can be convenient for people who find it easier to hit ) than C-f."
 
 (defcustom flex-autopair-c-modes
   '(c-mode c++mode objc-mode)
-  :group 'flex-autopair
   "Major modes `flex-autopair-mode' treat < as pair.")
 
 (defun flex-autopair-c-hook-function ()
@@ -224,7 +214,6 @@ This can be convenient for people who find it easier to hit ) than C-f."
 (defcustom flex-autopair-functional-modes
   '(coffee-mode-hook
     haskell-mode-hook)
-  :group 'flex-autopair
   "")
 
 (defun flex-autopair-functional-hook-function ()
@@ -237,11 +226,9 @@ This can be convenient for people who find it easier to hit ) than C-f."
   (add-hook hook 'flex-autopair-functional-hook-function))
 
 (defcustom flex-autopair-user-conditions-high nil
-  :group 'flex-autopair
   "Alist of conditions")
 
 (defcustom flex-autopair-user-conditions-low nil
-  :group 'flex-autopair
   "Alist of conditions")
 
 (defun flex-autopair-execute-macro (string)
@@ -291,7 +278,6 @@ This can be convenient for people who find it easier to hit ) than C-f."
 
 (defcustom flex-autopair-conditions
   (flex-autopair-gen-conditions)
-  :group 'flex-autopair
   "Alist of conditions")
 
 (defun flex-autopair-reload-conditions ()
@@ -334,11 +320,9 @@ This can be convenient for people who find it easier to hit ) than C-f."
     (pair-and-new-line . (flex-autopair-execute-macro
                           (format "%c\n`!!'\n%c" opener closer)))
     )
-  :group 'flex-autopair
   "Alist of actions")
 
 (defcustom flex-autopair-echo-actionp t
-  :group 'flex-autopair
   "If t, echo which action was executed")
 
 (defun flex-autopair (syntax)
@@ -407,7 +391,6 @@ closing parenthesis.  \(Likewise for brackets, etc.)"
                    #'flex-autopair-post-command-function))))
 
 (defcustom flex-autopair-disable-modes nil
-  :group 'flex-autopair
   "Major modes `flex-autopair-mode' can not run on.")
 
 ;; copy from auto-complete-mode-maybe
@@ -422,9 +405,8 @@ closing parenthesis.  \(Likewise for brackets, etc.)"
 ;;;###autoload
 (define-global-minor-mode global-flex-autopair-mode
   flex-autopair-mode flex-autopair-mode-maybe
-  ;;   :init-value t bug?
-  :group 'flex-autopair
-)
+  ;; :init-value t bug?
+  :group 'flex-autopair)
 
 (global-flex-autopair-mode t)
 
