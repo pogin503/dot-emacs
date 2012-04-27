@@ -51,6 +51,9 @@
 (add-hook 'haskell-mode-hook
           #'(lambda ()
               (key-combo-define-local (kbd "," ) ", ")
+              ;; (key-combo-define-local (kbd "!") 'key-combo-execute-orignal)
+              ;; (key-combo-define-local (kbd "$" ) '(" $ " " $! "))
+
               ;; bind function, Eq
               (key-combo-define-local (kbd "=" ) '(" = " " == "))
               (key-combo-define-local (kbd "::" ) " :: ")
@@ -58,7 +61,7 @@
               (key-combo-define-local (kbd "+") '(" + " " ++ " " +++ "))
 
               ;; Num, comment
-              (key-combo-define-local (kbd "-") (" - " "-- "))
+              (key-combo-define-local (kbd "-") '(" - " "-- "))
               ;; comment
               (key-combo-define-local (kbd "{-") "{- `!!' -}")
               ;; これはまだhaskell-mode1が対応していないようなので無理。

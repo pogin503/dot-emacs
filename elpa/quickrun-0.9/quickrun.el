@@ -4,7 +4,7 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-quickrun
-;; Version: 0.7
+;; Version: 0.9
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -35,6 +35,12 @@
 ;;
 
 ;;; History:
+
+;; Version 0.9  2012/04/08 syohex
+;; Fix problem of not removing temporary file on Windows.
+
+;; Version 0.8  2012/03/19 syohex
+;; Support Dart and Elixir
 
 ;; Version 0.7  2012/02/14 syohex
 ;; Support Mozilla Rust language(Thanks to koko1000ban).
@@ -91,15 +97,15 @@
 
 (defvar quickrun/language-alist
   '(("c/gcc" . ((:command . "gcc")
-                (:exec    . ("%c %o -o %n %s" "%n %a"))
-                (:compile-only . "%c -Wall -Werror %o -o %n %s")
-                (:remove . ("%n"))
+                (:exec    . ("%c %o -o %e %s" "%e %a"))
+                (:compile-only . "%c -Wall -Werror %o -o %e %s")
+                (:remove . ("%e"))
                 (:description . "Compile C file with gcc and execute")))
 
     ("c/clang" . ((:command . "clang")
-                  (:exec    . ("%c %o -o %n %s" "%n %a"))
-                  (:compile-only . "%c -Wall -Werror %o -o %n %s")
-                  (:remove  . ("%n"))
+                  (:exec    . ("%c %o -o %e %s" "%e %a"))
+                  (:compile-only . "%c -Wall -Werror %o -o %e %s")
+                  (:remove  . ("%e"))
                   (:description . "Compile C file with llvm/clang and execute")))
 
     ("c/cl" . ((:command . "cl")
@@ -110,15 +116,15 @@
                (:description . "Compile C file with VC++/cl and execute")))
 
     ("c++/g++" . ((:command . "g++")
-                  (:exec    . ("%c %o -o %n %s" "%n %a"))
-                  (:compile-only . "%c -Wall -Werror %o -o %n %s")
-                  (:remove  . ("%n"))
+                  (:exec    . ("%c %o -o %e %s" "%e %a"))
+                  (:compile-only . "%c -Wall -Werror %o -o %e %s")
+                  (:remove  . ("%e"))
                   (:description . "Compile C++ file with g++ and execute")))
 
     ("c++/clang++" . ((:command . "clang++")
-                      (:exec    . ("%c %o -o %n %s" "%n %a"))
-                      (:compile-only . "%c -Wall -Werror %o -o %n %s")
-                      (:remove  . ("%n"))
+                      (:exec    . ("%c %o -o %e %s" "%e %a"))
+                      (:compile-only . "%c -Wall -Werror %o -o %e %s")
+                      (:remove  . ("%e"))
                       (:description . "Compile C++ file with llvm/clang++ and execute")))
 
     ("c++/cl" . ((:command . "cl")
@@ -131,15 +137,15 @@
     ("objc" . ((:command . "gcc")
                (:exec    . ((lambda ()
                               (cond ((string= system-type "darwin")
-                                     "%c %o -o %n %s -framework foundation")
-                                    (t "%c %o -o %n %s -lobjc")))
-                            "%n %a"))
-               (:remove  . ("%n"))
+                                     "%c %o -o %e %s -framework foundation")
+                                    (t "%c %o -o %e %s -lobjc")))
+                            "%e %a"))
+               (:remove  . ("%e"))
                (:description . "Compile Objective-C file with gcc and execute")))
 
     ("d" . ((:command . "dmd")
-            (:exec    . ("%c %o %s" "%n %a"))
-            (:remove  . ("%n" "%n.o"))
+            (:exec    . ("%c %o -of%e %s" "%e %a"))
+            (:remove  . ("%e" "%n.o"))
             (:description . "Compile D language file and execute")))
 
     ("java" . ((:command . "java")
@@ -246,9 +252,9 @@
     ("erlang" . ((:command . "escript")
                  (:description . "Run Erlang file with escript")))
     ("ocaml" . ((:command . "ocamlc")
-                (:exec    . ("%c %o -o %n %s"
-                             "%n %a"))
-                (:remove  . ("%n" "%n.cmi" "%n.cmo"))
+                (:exec    . ("%c %o -o %e %s"
+                             "%e %a"))
+                (:remove  . ("%e" "%n.cmi" "%n.cmo"))
                 (:description . "Compile Ocaml file with ocamlc and execute")))
 
     ("shellscript" . ((:command . (lambda () sh-shell))
@@ -258,10 +264,19 @@
               (:description . "Run AWK script")))
 
     ("rust" . ((:command . "rustc")
-               (:exec . ("%c %o -o %n %s" "%n %a"))
-               (:compile-only . "%c --no-trans --warn-unused-imports %o -o %n %s")
-               (:remove . ("%n"))
+               (:exec . ("%c %o -o %e %s" "%e %a"))
+               (:compile-only . "%c --no-trans --warn-unused-imports %o -o %e %s")
+               (:remove . ("%e"))
                (:description . "Compile rust and execute")))
+
+    ("dart/checked" . ((:command . "dart")
+                       (:cmdopt  . "--enable-type-checks")
+                       (:description . "Run dart with '--enable-type-checks' option")))
+    ("dart/production" . ((:command . "dart")
+                          (:description . "Run dart as without '--enable-type-checks' option")))
+
+    ("elixir" . ((:command . "elixir")
+                 (:description . "Run Elixir script")))
     )
   "List of each programming languages information.
 Parameter form is (\"language\" . parameter-alist). parameter-alist has
@@ -312,7 +327,9 @@ if you set your own language configuration.
     ("\\.less$" . "less")
     ("\\.\\(sh\\|bash\\|zsh\\|csh\\|csh\\)$" . "shellscript")
     ("\\.awk$" . "awk")
-    ("\\.rs$" . "rust"))
+    ("\\.rs$" . "rust")
+    ("\\.dart$" . "dart/checked")
+    ("\\.exs?$" . "elixir"))
   "Alist of (file-regexp . key)")
 
 (defvar quickrun/major-mode-alist
@@ -344,7 +361,9 @@ if you set your own language configuration.
     ((less-mode less-css-mode) . "less")
     (sh-mode . "shellscript")
     (awk-mode . "awk")
-    (rust-mode . "rust"))
+    (rust-mode . "rust")
+    (dart-mode . "dart/checked")
+    (elixir-mode . "elixir"))
   "Alist of major-mode and langkey")
 
 (defun quickrun/decide-file-type (filename)
@@ -673,13 +692,14 @@ Place holders are beginning with '%' and replaced by:
 ;;
 (defun quickrun/windows-p ()
   (or (string= system-type "ms-dos")
-      (string= system-type "windows-nt")))
+      (string= system-type "windows-nt")
+      (string= system-type "cygwin")))
 
 (defconst quickrun/support-languages
   '("c" "c++" "objc" "perl" "ruby" "python" "php" "emacs" "lisp" "scheme"
     "javascript" "clojure" "erlang" "ocaml" "go" "io" "haskell" "java" "d"
     "markdown" "coffee" "scala" "groovy" "sass" "less" "shellscript" "awk"
-    "lua" "rust")
+    "lua" "rust" "dart" "elixir")
   "Programming languages and Markup languages supported as default
 by quickrun.el. But you can register your own command for some languages")
 
@@ -717,14 +737,14 @@ by quickrun.el. But you can register your own command for some languages")
       (let ((cmd-key (concat lang "/" executable)))
         (puthash lang cmd-key quickrun/command-key-table)))))
 
-(defun quickrun/add-command-if-windows (cmd lst)
+(defun quickrun/append-commands-if-windows (cmds lst)
   (if (quickrun/windows-p)
-      (cons cmd lst)
+      (append lst cmds)
     lst))
 
 (defconst quicklang/lang-candidates
-  `(("c" . ,(quickrun/add-command-if-windows "cl" '("gcc" "clang")))
-    ("c++" . ,(quickrun/add-command-if-windows "cl" '("g++" "clang++")))
+  `(("c" . ,(quickrun/append-commands-if-windows '("cl") '("gcc" "clang")))
+    ("c++" . ,(quickrun/append-commands-if-windows '("cl") '("g++" "clang++")))
     ("javascript" . ("node" "v8" "js" "jrunscript" "cscript"))
     ("lisp" . ("clisp" "sbcl" "ccl"))
     ("scheme" . ("gosh"))
@@ -746,6 +766,7 @@ by quickrun.el. But you can register your own command for some languages")
 ;;
 ;; main
 ;;
+;;;###autoload
 (defun quickrun (&optional start end)
   "Run commands quickly for current buffer"
   (interactive)
@@ -874,6 +895,7 @@ by quickrun.el. But you can register your own command for some languages")
   (let ((quickrun-option-cmdkey cmd-key))
     (quickrun)))
 
+;;;###autoload
 (defun anything-quickrun ()
   (interactive)
   (unless (featurep 'anything)
