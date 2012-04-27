@@ -125,6 +125,7 @@
  "site-start.d"
  "plugins"
  "elisp"
+ "elpa"
  "etc/HyperSpec"
  "share"
  "private"
