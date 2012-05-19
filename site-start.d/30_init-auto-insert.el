@@ -1,12 +1,13 @@
 ;;@see http://ja.green.xrea.jp/emacs/autoinsert-mode
 ;;@see 
-;;(req autoinsert)
-;;(req cl)
-;;(add-hook 'before-save-hook 'time-stamp)
-;;(auto-insert-mode t)
-;;(setq auto-insert-directory "~/etc/autoinsert/")
-;; (setq auto-insert-alist
-;;       (nconc '(("\\.lisp$" . ["template.lisp" my-template])
+(require 'autoinsert)
+(require 'cl)
+(add-hook 'before-save-hook 'time-stamp)
+(auto-insert-mode 1)
+(setq auto-insert-directory (concat user-emacs-directory "etc/autoinsert"))
+(setq auto-insert-alist
+      (nconc '(
+               ("\\.lisp$" . ["template.lisp" my-template])
 ;; 		("\\.asd$" . ["template.asd" "template.lisp"
 ;; 			      (lambda () (my-template-package
 ;; 					  (my-file-body-name
@@ -18,31 +19,42 @@
 ;; 		("\\.scm" . ["template.scm"
 ;; 			     (lambda() (my-template-exec "/usr/local/bin/gosh"))
 ;; 			     my-template])
-;; 		("\\.sh$" . ["template.sh"
-;; 			     (lambda() (my-template-exec "/bin/sh"))
-;; 			     my-template])
+		("\\.sh$" . ["template.sh"
+			     (lambda() (my-template-exec "/bin/sh"))
+			     my-template])
 ;; 		("\\.py$" . ["template.sh"
 ;; 			     (lambda() (my-template-exec "/usr/bin/python"))
 ;; 			     my-template])
 ;; 		("\\.rb$" . ["template.sh"
 ;; 			     (lambda() (my-template-exec "/usr/bin/ruby"))
 ;; 			     my-template])
-;; 		("\\.cpp$" . ["template.cpp" my-template])
-;; 		("\\.h$"   . ["template.h" my-template])
+		("\\.c$" . ["template.c" my-template])
+		("\\.cpp$" . ["template.cpp" my-template])
+		("\\.h$"   . ["template.h" my-template])
 ;; 		(xml-mode . "xml-insert.xml")
 ;;                 (texinfo-mode . "texinfo.texi")
-;; 		)
-;; 	     auto-insert-alist))
+		)
+	     auto-insert-alist))
 
 ;(add-hook ‘find-file-hooks ‘auto-insert)
 
-;; (defvar template-replacements-alists
-;;   ‘(("%file%" . (lambda()(file-name-nondirectory (buffer-file-name))))
-;;     ("%name%" . user-full-name)
-;;     ("%mail%" . (lambda()(identity user-mail-address)))
-;;     ("%cyear%" . (lambda()(substring (current-time-string) -4)))
-;;     ("%license%" . (lambda()(read-from-minibuffer "License: ")))
-;;     ("%bdesc%" . (lambda()(read-from-minibuffer "Brief dscription: ")))))
+(defvar template-replacements-alists
+  '(
+    ("%file%" . (lambda()(file-name-nondirectory (buffer-file-name))))
+    ("%name%" . user-full-name)
+    ("%mail%" . (lambda()(identity user-mail-address)))
+    ;; ("%cyear%" . (lambda()(substring (current-time-string) -4)))
+    ;; ("%license%" . (lambda()(read-from-minibuffer "License: ")))
+    ;; ("%bdesc%" . (lambda()(read-from-minibuffer "Brief dscription: ")))
+    ("%file-without-ext%" . (lambda ()
+                              (file-name-sans-extension 
+                               (file-name-nondirectory (buffer-file-name)))))
+    ("%include-guard%"    . (lambda ()
+                              (format "__%s__" 
+                                      (upcase 
+                                       (file-name-sans-extension 
+                                        (file-name-nondirectory buffer-file-name))))))
+    ))
 
 ;; (defun my-file-body-name (file-name)
 ;;   (substring file-name 0 (position 46 file-name)))
@@ -55,14 +67,14 @@
 ;; (defreplace my-template-exec "%exec%")
 ;; (defreplace my-template-package "%package%")
 
-;; (defun my-template ()
-;;   (time-stamp)
-;;   (mapc #’(lambda(c)
-;; 	    (progn
-;; 	      (goto-char (point-min))
-;; 	      (replace-string (car c) (funcall (cdr c)) nil)))
-;; 	template-replacements-alists)
-;;   (goto-char (point-max))
-;;   (message "done."))
+(defun my-template ()
+  (time-stamp)
+  (mapc #'(lambda(c)
+	    (progn
+	      (goto-char (point-min))
+	      (replace-string (car c) (funcall (cdr c)) nil)))
+	template-replacements-alists)
+  (goto-char (point-max))
+  (message "done."))
 
-;(add-hook 'find-file-not-found-hooks 'auto-insert)
+(add-hook 'find-file-not-found-hooks 'auto-insert)
