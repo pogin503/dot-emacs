@@ -20,8 +20,8 @@
 
 ;;shell-command*******************
 ;;auto-install-from emacswiki shell-command.el
-(req shell-command)
-(shell-command-completion-mode)
+;; (req shell-command)
+;; (shell-command-completion-mode)
 
 
 
