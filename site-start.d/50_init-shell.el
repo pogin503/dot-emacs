@@ -25,24 +25,6 @@
 
 
 
-;;@see http://d.hatena.ne.jp/tomoya/20090601/1243817036
-;; eshell
-(when (req eshell-auto nil t)
-  (add-hook 'eshell-mode-hook
-	    (lambda () 
-	      (define-key eshell-mode-map (kbd "C-a") 'eshell-bol)
-	      (define-key eshell-mode-map (kbd "C-r") 'eshell-isearch-backward)))
-
-  (when (req pcmpl-auto nil t)
-    (when (req pcmpl-ssh nil t)
-      (add-hook 'eshell-mode-hook 'pcomplete-shell-setup)))
-
-  (setq eshell-cmpl-ignore-case t)	; 補完時に大文字小文字を区別しない
-  (setq eshell-glob-include-dot-dot nil) ; ../ を * でマッチさせない
-  (setq eshell-ask-to-save-history (quote always)) ; 確認なしでヒストリ保存
-  (setq eshell-history-file-name "~/.zsh_history") ; zsh のヒストリと共有
-  (setq eshell-history-size 100000)				   ; ヒストリサイズ
-  (setq eshell-hist-ignoredups t))		; ヒストリの重複を無視
 
 ;; shell
 (when (req shell-history nil t)
