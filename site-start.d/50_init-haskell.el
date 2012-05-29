@@ -5,6 +5,12 @@
 (add-to-list 'interpreter-mode-alist '("runghc" . haskell-mode))     ;; #!/usr/bin/env runghc 用
 (add-to-list 'interpreter-mode-alist '("runhaskell" . haskell-mode)) ;; #!/usr/bin/env runhaskell 用
 
+(defun my-haskell-ac-init ()
+  (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
+    (auto-complete-mode t)
+    (setq ac-sources '(ac-source-words-in-same-mode-buffers
+                       ac-source-dictionary
+                       ac-source-ghc-mod))))
 (lazyload (haskell-mode) "haskell-mode"
           (require 'haskell-mode)
           (require 'anything)
@@ -47,12 +53,6 @@
             (setq ac-sources '(ac-source-words-in-same-mode-buffers
                                ac-source-dictionary
                                ac-source-ghc-mod)))
-          (defun my-haskell-ac-init ()
-            (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
-              (auto-complete-mode t)
-              (setq ac-sources '(ac-source-words-in-same-mode-buffers
-                                 ac-source-dictionary
-                                 ac-source-ghc-mod))))
           (require 'anything-hasktags)
 
           ;; M-x anything-ghc-browse-document() に対応するキーの割り当て
