@@ -9,6 +9,13 @@
 (autoload-if-found 'org-directory "org" nil t)
 (if (boundp 'dropbox-directory)
     (setq org-directory (concat dropbox-directory "/Document/org/")))
+(setq org-default-notes-file (concat org-directory "agenda.org"))
+(setq org-mobile-directory (concat dropbox-directory "/MobileOrg"))
+(setq org-mobile-inbox-for-pull (concat dropbox-directory "/flagged.org"))
+(setq org-agenda-files
+      (mapcar #'(lambda (x) (concat org-directory x))
+              '("work.org" "school.org" "home.org")))
+
 (lazyload (org-mode org-todo-list org-agenda org-store-link) "org-install"
           (require 'org-install)
           (setq org-startup-truncated nil)
@@ -21,10 +28,6 @@
 
           (setq org-log-done t)
 
-          (setq org-default-notes-file (concat org-directory "agenda.org"))
-          (setq org-agenda-files
-                (mapcar #'(lambda (x) (concat org-directory x))
-                        '("work.org" "school.org" "home.org")))
           (org-remember-insinuate)
 
           ;; C-c r でorg-remember起動 キーバインドの設定

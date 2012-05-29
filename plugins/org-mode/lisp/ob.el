@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2009-2012  Free Software Foundation, Inc.
 
-;; Author: Eric Schulte
+;; Authors: Eric Schulte
 ;;	Dan Davison
 ;; Keywords: literate programming, reproducible research
 ;; Homepage: http://orgmode.org
@@ -79,6 +79,7 @@
 (declare-function org-list-struct "org-list" ())
 (declare-function org-list-prevs-alist "org-list" (struct))
 (declare-function org-list-get-list-end "org-list" (item struct prevs))
+(declare-function org-strip-protective-commas "org" (beg end))
 
 (defgroup org-babel nil
   "Code block evaluation and management in `org-mode' documents."
@@ -104,6 +105,7 @@ against accidental code block evaluation.  The
 `org-babel-no-eval-on-ctrl-c-ctrl-c' variable can be used to
 remove code block execution from the C-c C-c keybinding."
     :group 'org-babel
+    :version "24.1"
     :type '(choice boolean function))
 ;; don't allow this variable to be changed through file settings
 (put 'org-confirm-babel-evaluate 'safe-local-variable (lambda (x) (eq x t)))
@@ -111,6 +113,7 @@ remove code block execution from the C-c C-c keybinding."
 (defcustom org-babel-no-eval-on-ctrl-c-ctrl-c nil
   "Remove code block evaluation from the C-c C-c key binding."
   :group 'org-babel
+  :version "24.1"
   :type 'boolean)
 
 (defcustom org-babel-results-keyword "RESULTS"
@@ -1156,12 +1159,13 @@ may be specified in the properties of the current outline entry."
 		      (substring body 0 sub-length)
 		    (or body "")))))
 	 (preserve-indentation (or org-src-preserve-indentation
-				   (string-match "-i\\>" switches))))
+				   (save-match-data
+				     (string-match "-i\\>" switches)))))
     (list lang
           ;; get block body less properties, protective commas, and indentation
           (with-temp-buffer
             (save-match-data
-              (insert (org-babel-strip-protective-commas body))
+              (insert (org-babel-strip-protective-commas body lang))
 	      (unless preserve-indentation (org-do-remove-indentation))
               (buffer-string)))
 	  (org-babel-merge-params
@@ -1179,7 +1183,7 @@ may be specified in the properties of the current outline entry."
          (lang-headers (intern (concat "org-babel-default-header-args:" lang))))
     (list lang
           (org-babel-strip-protective-commas
-           (org-babel-clean-text-properties (match-string 5)))
+           (org-babel-clean-text-properties (match-string 5)) lang)
           (org-babel-merge-params
            org-babel-default-inline-header-args
            (org-babel-params-from-properties lang)
@@ -1495,7 +1499,7 @@ buffer or nil if no such result exists."
     (catch 'is-a-code-block
       (when (re-search-forward
 	     (concat org-babel-result-regexp
-		     "[ \t]" (regexp-quote name) "[ \t\n\f\v\r]+") nil t)
+		     "[ \t]" (regexp-quote name) "[ \t]*[\n\f\v\r]") nil t)
 	(when (and (string= "name" (downcase (match-string 1)))
 		   (or (beginning-of-line 1)
 		       (looking-at org-babel-src-block-regexp)
@@ -1611,7 +1615,7 @@ following the source block."
 	   (inlinep (when (org-babel-get-inline-src-block-matches)
 			(match-end 0)))
 	   (name (if on-lob-line
-		     (nth 0 (org-babel-lob-get-info))
+		     (mapconcat #'identity (butlast (org-babel-lob-get-info)) "")
 		   (nth 4 (or info (org-babel-get-src-block-info 'light)))))
 	   (head (unless on-lob-line (org-babel-where-is-src-block-head)))
 	   found beg end)
@@ -1837,7 +1841,8 @@ code ---- the results are extracted in the syntax of the source
 	(flet ((wrap (start finish)
 		     (goto-char end) (insert (concat finish "\n"))
 		     (goto-char beg) (insert (concat start "\n"))
-		     (goto-char end) (setq end (point-marker)))
+		     (goto-char end) (goto-char (point-at-eol))
+		     (setq end (point-marker)))
 	       (proper-list-p (it) (and (listp it) (null (cdr (last it))))))
 	  ;; insert results based on type
 	  (cond
@@ -1953,11 +1958,16 @@ file's directory then expand relative links."
 		 (stringp (car result)) (stringp (cadr result)))
 	(format "[[file:%s][%s]]" (car result) (cadr result))))))
 
+(defvar org-babel-capitalize-examplize-region-markers nil
+  "Make true to capitalize begin/end example markers inserted by code blocks.")
+
 (defun org-babel-examplize-region (beg end &optional results-switches)
   "Comment out region using the inline '==' or ': ' org example quote."
   (interactive "*r")
   (flet ((chars-between (b e)
-			(not (string-match "^[\\s]*$" (buffer-substring b e)))))
+			(not (string-match "^[\\s]*$" (buffer-substring b e))))
+	 (maybe-cap (str) (if org-babel-capitalize-examplize-region-markers
+			      (upcase str) str)))
     (if (or (chars-between (save-excursion (goto-char beg) (point-at-bol)) beg)
 	    (chars-between end (save-excursion (goto-char end) (point-at-eol))))
 	(save-excursion
@@ -1974,10 +1984,12 @@ file's directory then expand relative links."
 		(t
 		 (goto-char beg)
 		 (insert (if results-switches
-			     (format "#+begin_example%s\n" results-switches)
-			   "#+begin_example\n"))
+			     (format "%s%s\n"
+				     (maybe-cap "#+begin_example")
+				     results-switches)
+			   (maybe-cap "#+begin_example\n")))
 		 (if (markerp end) (goto-char end) (forward-char (- end beg)))
-		 (insert "#+end_example\n"))))))))
+		 (insert (maybe-cap "#+end_example\n")))))))))
 
 (defun org-babel-update-block-body (new-body)
   "Update the body of the current code block to NEW-BODY."
@@ -2186,7 +2198,7 @@ block but are passed literally to the \"example-block\"."
 		    (when (org-babel-ref-goto-headline-id source-name)
 		      (org-babel-ref-headline-body)))
 		  ;; find the expansion of reference in this buffer
-		  (let ((rx (concat rx-prefix source-name))
+		  (let ((rx (concat rx-prefix source-name "[ \t\n]"))
 			expansion)
 		    (save-excursion
 		      (goto-char (point-min))
@@ -2239,11 +2251,15 @@ block but are passed literally to the \"example-block\"."
   (when text
     (set-text-properties 0 (length text) nil text) text))
 
-(defun org-babel-strip-protective-commas (body)
+(defun org-babel-strip-protective-commas (body &optional lang)
   "Strip protective commas from bodies of source blocks."
   (with-temp-buffer
     (insert body)
-    (org-strip-protective-commas (point-min) (point-max))
+    (if (and lang (string= lang "org"))
+	(progn (goto-char (point-min))
+	       (while (re-search-forward "^[ \t]*\\(,\\)" nil t)
+		 (replace-match "" nil nil nil 1)))
+      (org-strip-protective-commas (point-min) (point-max)))
     (buffer-string)))
 
 (defun org-babel-script-escape (str &optional force)

@@ -58,6 +58,7 @@
 (declare-function org-show-context "org" (&optional key))
 (declare-function org-trim "org" (s))
 (declare-function outline-next-heading "outline")
+(declare-function org-skip-whitespace "org" ())
 
 (defvar org-outline-regexp-bol)		; defined in org.el
 (defvar org-odd-levels-only)		; defined in org.el
@@ -703,7 +704,7 @@ Additional note on `org-footnote-insert-pos-for-preprocessor':
 				     (org-combine-plists
 				      export-props
 				      '(:todo-keywords t :tags t :priority t))))
-				(org-export-preprocess-string def parameters))
+				(apply #'org-export-preprocess-string def parameters))
 			    def)
 			  ;; Reference beginning position is a marker
 			  ;; to preserve it during further buffer
@@ -715,8 +716,8 @@ Additional note on `org-footnote-insert-pos-for-preprocessor':
        ((and org-footnote-section (eq major-mode 'org-mode))
 	(goto-char (point-min))
 	(if (re-search-forward
-	      (concat "^\\*[ \t]+" (regexp-quote org-footnote-section)
-		      "[ \t]*$") nil t)
+	     (concat "^\\*[ \t]+" (regexp-quote org-footnote-section)
+		     "[ \t]*$") nil t)
 	    (delete-region (match-beginning 0) (org-end-of-subtree t t)))
 	;; A new footnote section is inserted by default at the end of
 	;; the buffer.
@@ -726,7 +727,14 @@ Additional note on `org-footnote-insert-pos-for-preprocessor':
 	(unless (bolp) (newline)))
        ;; No footnote section set: Footnotes will be added at the end
        ;; of the section containing their first reference.
-       ((eq major-mode 'org-mode))
+       ;; Nevertheless, in an export situation, set insertion point to
+       ;; `point-max' by default.
+       ((eq major-mode 'org-mode)
+	(when export-props
+	  (goto-char (point-max))
+	  (skip-chars-backward " \r\t\n")
+	  (forward-line)
+	  (delete-region (point) (point-max))))
        (t
 	;; Remove any left-over tag in the buffer, if one is set up.
 	(when org-footnote-tag-for-non-org-mode-files
@@ -863,8 +871,9 @@ Return the number of footnotes removed."
 	  (ndef 0))
       (while (re-search-forward def-re nil t)
 	(let ((full-def (org-footnote-at-definition-p)))
-	  (delete-region (nth 1 full-def) (nth 2 full-def)))
-	(incf ndef))
+	  (when full-def
+	    (delete-region (nth 1 full-def) (nth 2 full-def))
+	    (incf ndef))))
       ndef)))
 
 (defun org-footnote-delete (&optional label)
