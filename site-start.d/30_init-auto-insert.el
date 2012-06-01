@@ -7,7 +7,7 @@
 (setq auto-insert-directory (concat user-emacs-directory "etc/autoinsert"))
 (setq auto-insert-alist
       (nconc '(
-               ("\\.lisp$" . ["template.lisp" my-template])
+               ;; ("\\.lisp$" . ["template.lisp" my-template])
 ;; 		("\\.asd$" . ["template.asd" "template.lisp"
 ;; 			      (lambda () (my-template-package
 ;; 					  (my-file-body-name
