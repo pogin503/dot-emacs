@@ -115,7 +115,7 @@
     ad-do-it))
 
 
-;;config warnig-suppress-types
+;;config warning-suppress-types
 ;;@see http://d.hatena.ne.jp/fu7mu4/20101027/1288191419
 (setq warning-suppress-types nil)
 
@@ -132,9 +132,9 @@
                               (concat user-emacs-directory "init.elc"))
       (byte-compile-file (concat user-emacs-directory "init.el")))
   (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
-  ;;            (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
+  (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
   (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
-)
+  )
 (add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
 
 
@@ -249,3 +249,5 @@
       (setq truncate-lines nil)
     (setq truncate-lines t))
   (recenter))
+
+(setq completion-ignore-case t)
