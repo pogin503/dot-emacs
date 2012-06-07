@@ -250,4 +250,8 @@
     (setq truncate-lines t))
   (recenter))
 
-(setq completion-ignore-case t)
+;; @see http://trey-jackson.blogspot.jp/2009/08/emacs-tip-32-completion-ignore-case-and.html
+;; (setq completion-ignore-case t)
+
+(setq read-buffer-completion-ignore-case t)
+(setq read-file-name-completion-ignore-case t)
