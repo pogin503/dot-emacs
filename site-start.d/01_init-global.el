@@ -255,3 +255,9 @@
 
 (setq read-buffer-completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
+
+;; tool-barを使うか使わないか
+(tool-bar-mode -1)
+
+;; menu-barを使うかどうか
+(menu-bar-mode -1)

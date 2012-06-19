@@ -7,6 +7,7 @@
                                 '("\\.txt$" . org-mode))
 
 (autoload-if-found 'org-directory "org" nil t)
+
 (if (boundp 'dropbox-directory)
     (setq org-directory (concat dropbox-directory "/Document/org/")))
 (setq org-default-notes-file (concat org-directory "agenda.org"))
@@ -22,9 +23,9 @@
           (setq org-return-follows-link t)
 
           (global-set-key "\C-cl" 'org-store-link)
-          (global-set-key "\C-cc" 'org-capture)
+          ;; (global-set-key "\C-cc" 'org-capture)
           (global-set-key "\C-ca" 'org-agenda)
-          (global-set-key "\C-cb" 'org-iswitchb)       
+          (global-set-key "\C-cb" 'org-iswitchb)
 
           (setq org-log-done t)
 

@@ -53,6 +53,7 @@
             (setq ac-sources '(ac-source-words-in-same-mode-buffers
                                ac-source-dictionary
                                ac-source-ghc-mod)))
+
           (require 'anything-hasktags)
 
           ;; M-x anything-ghc-browse-document() に対応するキーの割り当て
@@ -137,9 +138,21 @@
 
 ;; ghc-mod
 ;; cabal でインストールしたライブラリのコマンドが格納されている bin ディレクトリへのパスを exec-path に追加する
-(add-to-list 'exec-path (concat (getenv "HOME") "/.cabal/bin"))
+
+;; (add-to-list 'exec-path
+;;              (if run-linux
+;;                  (concat (getenv "HOME") "/.cabal/bin")
+;;                (if run-windows-x64
+;;                    "C:/Program Files (x86)/Haskell Platform/2011.4.0.0/lib/extralibs/bin/")
+;;                  "C:/Program Files/Haskell Platform/2011.4.0.0/lib/extralibs/bin/"))
+;; (add-to-list 'exec-path
+;;              (if run-windows-x64
+;;                  "C:/Program Files (x86)/Haskell Platform/2011.4.0.0/bin/"
+;;                "C:/Program Files/Haskell Platform/2011.4.0.0/bin/"))
+
+(add-to-list 'exec-path (if run-windows (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
 ;; ghc-flymake.el などがあるディレクトリ ghc-mod を ~/.emacs.d 以下で管理することにした
-;; (add-to-list 'load-path "~/.emacs.d/plugins/ghc-mod") 
+;; (add-to-list 'load-path "~/.emacs.d/plugins/ghc-mod")
 
 (autoload 'ghc-init "ghc" nil t)
 
@@ -153,7 +166,7 @@
 (add-hook 'haskell-mode-hook 'my-ac-haskell-mode)
 
 
-(add-hook 'find-file-hook 'my-haskell-ac-init)
+;; (add-hook 'find-file-hook 'my-haskell-ac-init)
 
 (add-hook 'haskell-mode-hook
           (lambda()
