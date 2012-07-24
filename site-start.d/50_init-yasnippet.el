@@ -1,31 +1,31 @@
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/plugins/yasnippet-0.6.1c")
+;; (add-to-list 'load-path "~/.emacs.d/plugins/yasnippet-0.6.1c")
 
 
-(req anything-c-yasnippet)
-(setq anything-c-yas-space-match-any-greedy t)
-(define-key yas/minor-mode-map (kbd "C-c y") 'anything-c-yas-complete)
-(setq anything-c-yas-space-match-any-greedy t) ;スペース区切りで絞り込めるようにする デフォルトは nil
+;; (req anything-c-yasnippet)
+;; (setq anything-c-yas-space-match-any-greedy t)
+;; ;; (define-key yas/minor-mode-map (kbd "C-c y") 'anything-c-yas-complete)
+;; (setq anything-c-yas-space-match-any-greedy t) ;スペース区切りで絞り込めるようにする デフォルトは nil
 
-(req yasnippet)
-
+(require 'yasnippet)
+(yas/global-mode 1)
 ;;@see http://emacs.g.hatena.ne.jp/Shinnya/20100805/1281034504
-(setq yas/next-field-key "TAB")
-(setq yas/prev-field-key "<S-tab>")
-(define-key yas/minor-mode-map (kbd "C-x i i") 'yas/insert-snippet)
-(define-key yas/minor-mode-map (kbd "C-x i f") 'yas/find-snippets)
-(define-key yas/minor-mode-map (kbd "C-x i n") 'yas/new-snippet)
-(define-key yas/minor-mode-map (kbd "C-x i v") 'yas/visit-snippet-file)
-(define-key yas/minor-mode-map (kbd "C-x i e") 'yas/expand)
-;; コメントやリテラルではスニペットを展開しない
-(setq yas/buffer-local-condition
-      '(or (not (or (string= "font-lock-comment-face"
-			     (get-char-property (point) 'face))
-		    (string= "font-lock-string-face"
-			     (get-char-property (point) 'face))))
-             '(require-snippet-condition . force-in-comment)))
-(yas/initialize)
+;; (setq yas/next-field-key "TAB")
+;; (setq yas/prev-field-key "<S-tab>")
+;; (define-key yas/minor-mode-map (kbd "C-x i i") 'yas/insert-snippet)
+;; (define-key yas/minor-mode-map (kbd "C-x i f") 'yas/find-snippets)
+;; (define-key yas/minor-mode-map (kbd "C-x i n") 'yas/new-snippet)
+;; (define-key yas/minor-mode-map (kbd "C-x i v") 'yas/visit-snippet-file)
+;; (define-key yas/minor-mode-map (kbd "C-x i e") 'yas/expand)
+;; ;; コメントやリテラルではスニペットを展開しない
+;; (setq yas/buffer-local-condition
+;;       '(or (not (or (string= "font-lock-comment-face"
+;; 			     (get-char-property (point) 'face))
+;; 		    (string= "font-lock-string-face"
+;; 			     (get-char-property (point) 'face))))
+;;              '(require-snippet-condition . force-in-comment)))
+;; (yas/initialize)
 
 ;;複数のスニッペットディレクトリがある場合
 (setq yas/root-directory '("~/.emacs.d/etc/snippets"))
