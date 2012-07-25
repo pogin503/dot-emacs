@@ -11,18 +11,20 @@
 (key-combo-define-global (kbd "@see") "@see ")
 
 
-(add-hook 'c++-mode-hook
-          #'(lambda ()
-              ;; (key-combo-define-local (kbd "<>") "<`!!'>")
-              ;; (key-combo-define-local (kbd "[") "[`!!']")
-              ;; (key-combo-define-local (kbd "[]") "[]`!!'")
-              ;; (key-combo-define-local (kbd "()") "()`!!'")
-              (key-combo-define-local (kbd "//") "// ")
-              (key-combo-define-local (kbd "/**/") "/* `!!' */")
-              (key-combo-define-local (kbd "//") "// ")
-              ;; (key-combo-define-local (kbd ">") '(key-combo-execute-orignal " >> "))
-              ;; (key-combo-define-local (kbd "<") '(" < " " << "))
-              ))
+(defun my-c++-mode-key-combo ()
+  ;; (key-combo-define-local (kbd "<>") "<`!!'>")
+  ;; (key-combo-define-local (kbd "[") "[`!!']")
+  ;; (key-combo-define-local (kbd "[]") "[]`!!'")
+  ;; (key-combo-define-local (kbd "()") "()`!!'")
+  (key-combo-define-local (kbd "//") "// ")
+  (key-combo-define-local (kbd "/**/") "/* `!!' */")
+  (key-combo-define-local (kbd "//") "// ")
+  ;; (key-combo-define-local (kbd "< ") " < ")
+  ;; (key-combo-define-local (kbd ">") '(key-combo-execute-orignal " >> "))
+  ;; (key-combo-define-local (kbd "<") '(" < " " << "))
+  )
+
+(add-hook 'c++-mode-hook 'my-c++-mode-key-combo)
 
 (add-hook 'emacs-lisp-mode-hook
           #'(lambda ()
@@ -75,7 +77,7 @@
   (key-combo-define-local (kbd "<-") " <- ")
   (key-combo-define-local (kbd "=>") " => ")
 
-  ;; ;; Ord 
+  ;; ;; Ord
   ;; (key-combo-define-local (kbd ">") " > ") ;; Ord(>) or Sequence >
   (key-combo-define-local (kbd ">=") " >= ")
   ;; (key-combo-define-local (kbd "<") " < ") ;; Ord (<) or Sequence <
@@ -107,7 +109,7 @@
   ;; ;; Functor
   ;; (key-combo-define-local (kbd "<$") " <$ ")
   ;; (key-combo-define-local (kbd "<$>") " <$> ")
-  
+
   ;; ;; Monad
   ;; (key-combo-define-local (kbd "=<<") " =<< ")
   ;; (key-combo-define-local (kbd ">>") " >> ")
@@ -123,15 +125,15 @@
   ;; (key-combo-define-local (kbd "<+") " <+> ")
   ;; (key-combo-define-local (kbd "**") " ** ")
   ;; (key-combo-define-local (kbd "&&&") " &&& ")
-  
+
   ;; ;; Monoid
   ;; (key-combo-define-local (kbd "<#>") " <#> ")
-  
+
   ;; ;; Sequence
   ;; (key-combo-define-local (kbd "><") " >< ")
   ;; (key-combo-define-local (kbd ":<") " :< ")
   ;; (key-combo-define-local (kbd ":>") " :> ")
-  
+
   ;; ;; GraphRep
   ;; (key-combo-define-local (kbd "|*><*|") " |*><*| ")
   )
@@ -150,4 +152,3 @@
               (key-combo-define-local (kbd "$") '("$" "$(`!!')"))
               (key-combo-define-local (kbd ":") ": ")
               ))
-

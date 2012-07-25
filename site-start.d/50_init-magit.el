@@ -3,9 +3,14 @@
 (autoload 'magit-status "magit" nil t)
 (if run-windows
     (if run-windows-x64
-        (setq magit-git-executable "C:/Program Files (x86)/Git/bin/git.exe")
-      (setq magit-git-executable "C:/Program Files/Git/bin/git.exe")))
+        (progn
+          (setq magit-git-executable "C:/Program Files (x86)/Git/bin/git.exe")
+          (add-to-list 'exec-path "C:/Program Files (x86)/Git/bin/git.exe"))
+      (progn
+        (setq magit-git-executable "C:/Program Files/Git/bin/git.exe")
+        (add-to-list 'exec-path "C:/Program Files/Git/bin/git.exe"))))
   ;; (setq magit-git-executable "C:/Program Files/Git/bin/git.exe"))
+;; exec-path
 
 ;;;
 ;;; Magit のバッファからファイル名を抽出して利用
