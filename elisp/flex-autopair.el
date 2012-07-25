@@ -39,7 +39,7 @@
 ;;
 ;; Add to your ~/.emacs
 ;;
-;; (require 'flex-autopair.el)
+;; (require 'flex-autopair)
 ;; (flex-autopair-mode 1)
 
 ;;; History:
@@ -58,11 +58,13 @@
 ;; Revision 0.1 2012/03/22 06:18:19
 ;; * Initial revision
 
+(require 'cl)
 ;; Code goes here
 (defcustom flex-autopair-pairs
   '((nil . nil))
   "Alist of pairs that should be used each major mode."
-  :type '(repeat (cons character character)))
+  :type '(repeat (cons character character))
+  :group 'flex-autopair)
 ;; '((?\" . ?\"))
 (make-variable-buffer-local 'flex-autopair-pairs)
 
@@ -72,7 +74,8 @@ When inserting a closing paren character right before the same character,
 just skip that character instead, so that hitting ( followed by ) results
 in \"()\" rather than \"())\".
 This can be convenient for people who find it easier to hit ) than C-f."
-  :type 'boolean)
+  :type 'boolean
+  :group 'flex-autopair)
 
 (defun flex-autopair-wrap-region (beg end opener closer)
   (let ((marker (copy-marker end)))
@@ -87,18 +90,13 @@ This can be convenient for people who find it easier to hit ) than C-f."
     ))
 
 (defun flex-autopair-comment-or-stringp (&optional pos)
-  (setq pos (or pos (point)))
-  (memq (get-text-property pos 'face)
-        '(font-lock-comment-face font-lock-doc-face
-                                 font-lock-string-face
-                                 font-lock-comment-delimiter-face))
-  ;;(not (memq (char-syntax (following-char)) '(?\" ?\')))
+  (or (nth 3 (syntax-ppss))
+      (nth 4 (syntax-ppss)))
   )
 
 (defun flex-autopair-stringp (&optional pos)
-  (setq pos (or pos (point)))
-  (eq (get-text-property pos 'face)
-      font-lock-string-face))
+  (nth 3 (syntax-ppss))
+  )
 
 (defun flex-autopair-docp (&optional pos)
   (setq pos (or pos (point)))
@@ -132,7 +130,8 @@ This can be convenient for people who find it easier to hit ) than C-f."
   (and (not (eq syntax ?\)))
        (or (eq syntax ?\();; '(?\( ?\" ?\$)
            ;; FIXME: bug with temp buffer
-           (not (eq (get-text-property pos 'face) 'font-lock-string-face))
+           ;; in string?
+           (not (nth 3 (syntax-ppss)))
            )))
 
 (defun flex-autopair-need-spacep ()
@@ -155,7 +154,8 @@ This can be convenient for people who find it easier to hit ) than C-f."
           (flex-autopair-docp)) . pair)
     ((and (eq last-command-event ?`)) . self)
     )
-  "")
+  ""
+  :group 'flex-autopair)
 
 (defcustom flex-autopair-c-conditions
   '(((and (eq last-command-event ?<)
@@ -163,12 +163,13 @@ This can be convenient for people who find it easier to hit ) than C-f."
            "#include\\|#import|static_cast|dynamic_cast")) . pair)
     ;; work with key-combo
     ((and (eq last-command-event ?<)
-          (boundp key-combo-mode)
+          (boundp 'key-combo-mode)
           (eq key-combo-mode t)) . space-self-space)
     ((and (eq last-command-event ?<)) . self)
     ((and (eq last-command-event ?{)) . pair-and-new-line)
     )
-  "")
+  ""
+  :group 'flex-autopair)
 
 (defcustom flex-autopair-singlequote-conditions
   '(((and
@@ -177,18 +178,23 @@ This can be convenient for people who find it easier to hit ) than C-f."
     ((and
       (eq last-command-event ?')) . pair)
     )
-  "")
+  ""
+  :group 'flex-autopair)
 
 (defcustom flex-autopair-user-conditions-high nil
-  "Alist of conditions")
+  "Alist of conditions"
+  :group 'flex-autopair)
 (make-variable-buffer-local 'flex-autopair-user-conditions-high)
 
 (defcustom flex-autopair-user-conditions-low nil
-  "Alist of conditions")
+  "Alist of conditions"
+  :group 'flex-autopair)
 (make-variable-buffer-local 'flex-autopair-user-conditions-low)
 
 (defvar flex-autopair-default-conditions nil
   "")
+
+  ;; :group 'flex-autopair)
 (make-variable-buffer-local 'flex-autopair-default-conditions)
 
 (defun flex-autopair-haskell-mode-setup ()
@@ -297,10 +303,12 @@ This can be convenient for people who find it easier to hit ) than C-f."
     (pair-and-new-line . (flex-autopair-execute-macro
                           (format "%c\n`!!'\n%c" opener closer)))
     )
-  "Alist of actions")
+  "Alist of actions"
+  :group 'flex-autopair)
 
 (defcustom flex-autopair-echo-actionp t
-  "If t, echo which action was executed")
+  "If t, echo which action was executed"
+  :group 'flex-autopair)
 
 (defun flex-autopair (syntax)
   (let*
@@ -326,25 +334,6 @@ This can be convenient for people who find it easier to hit ) than C-f."
               ) flex-autopair-conditions)
       )))
 
-(defun flex-autopair-post-command-function ()
-  (let* ((syntax (and (eq (char-before) last-command-event) ; Sanity check.
-                      flex-autopair-mode
-                      (let ((x (assq last-command-event
-                                     flex-autopair-pairs)))
-                        (cond
-                         (x (if (eq (car x) (cdr x)) ?\" ?\())
-                         ((rassq last-command-event flex-autopair-pairs)
-                          ?\))
-                         (t (char-syntax last-command-event)))))))
-    (cond ((and (memq syntax '(?\) ?\( ?\" ?\$)) ;; . is for c <
-                (not isearch-mode))
-           (undo-boundary)
-           ;; for Emacs 24
-           (let ((delete-active-region nil))
-             (delete-backward-char 1))
-           (flex-autopair syntax)))
-    ))
-
 ;;;###autoload
 (define-minor-mode flex-autopair-mode
   "Toggle automatic parens pairing (Flex Autopair mode).
@@ -361,12 +350,32 @@ closing parenthesis.  \(Likewise for brackets, etc.)"
                   'post-self-insert-hook
                 'post-command-hook)))
     (if flex-autopair-mode
-        (add-hook hook #'flex-autopair-post-command-function)
-      (remove-hook hook #'flex-autopair-post-command-function)
+        (add-hook hook #'flex-autopair-post-command-function nil t)
+      (remove-hook hook #'flex-autopair-post-command-function t)
       )))
 
+(defun flex-autopair-post-command-function ()
+  (let* ((syntax (and (eq (char-before) last-command-event) ; Sanity check.
+                      flex-autopair-mode
+                      (let ((x (assq last-command-event
+                                     flex-autopair-pairs)))
+                        (cond
+                         (x (if (eq (car x) (cdr x)) ?\" ?\())
+                         ((rassq last-command-event flex-autopair-pairs)
+                          ?\))
+                         (t (char-syntax last-command-event)))))))
+    (cond ((and (memq syntax '(?\) ?\( ?\" ?\$)) ;; . is for c <
+                (not isearch-mode))
+           (undo-boundary)
+           ;; for Emacs 24
+           (let ((delete-active-region nil))
+             (delete-char -1))
+           (flex-autopair syntax)))
+    ))
+
 (defcustom flex-autopair-disable-modes nil
-  "Major modes `flex-autopair-mode' can not run on.")
+  "Major modes `flex-autopair-mode' can not run on."
+  :group 'flex-autopair)
 
 ;; copy from auto-complete-mode-maybe
 (defun flex-autopair-mode-maybe ()
@@ -417,6 +426,301 @@ closing parenthesis.  \(Likewise for brackets, etc.)"
      (buffer-substring-no-properties (point-min) (point-max))
      (point))
     ))
+
+(dont-compile
+  (when (fboundp 'describe)
+    (describe ("flex-autopair in temp-buffer" :vars ((mode)))
+      (shared-context ("execute" :vars (cmd))
+        (around
+          (key-combo-mode -1)
+          (flex-autopair-mode 1)
+          (if cmd (execute-kbd-macro (read-kbd-macro cmd)))
+          (funcall el-spec:example)))
+      (shared-context ("insert & execute" :vars (pre-string))
+        (before
+          (insert pre-string))
+        (include-context "execute"))
+      (shared-context ("insert & move & execute" :vars (pre-string pos))
+        (before
+          (insert pre-string)
+          (goto-char pos))
+        (include-context "execute"))
+      (around
+        (global-flex-autopair-mode 1)
+        (global-key-combo-mode -1)
+        (with-temp-buffer
+          (switch-to-buffer (current-buffer))
+          (if mode (funcall mode))
+          (funcall el-spec:example)))
+
+      (it ()
+        (should-not
+         (memq 'flex-autopair-post-command-function post-command-hook)))
+      (it ()
+        (c-mode)
+        (should
+         (memq 'flex-autopair-post-command-function post-command-hook)))
+      (it ()
+        (let ((flex-autopair-disable-modes '(c-mode)))
+          (c-mode))
+        (should-not
+         (memq 'flex-autopair-post-command-function post-command-hook)))
+      (context ("in default-mode" :vars ((mode)))
+        (it "isearch-mode"
+          (insert "(");; not to raise error from isearch-search
+          (isearch-mode nil);; backward search
+          (execute-kbd-macro "(")
+          (should (string= (buffer-string) "("))
+          (should (eq (point) 1)))
+        (context "execute"
+          (include-context "execute")
+          (it (:vars ((cmd "'")))
+            (should (string= (buffer-string) "'"))
+            (should (eq (point) 2))
+            )
+          (it (:vars ((cmd "(")))
+            (should (string= (buffer-string) "()"))
+            (should (eq (point) 2))
+            )
+          (it (:vars ((cmd "()")))
+            (should (string= (buffer-string) "()"))
+            (should (eq (point) 3))
+            )
+          (it (:vars ((cmd "（")))
+            (should (string= (buffer-string) "（）"))
+            (should (eq (point) 2))
+            )
+          )
+        (context ("insert & move & execute" :vars (pre-string pos))
+          (include-context "insert & move & execute")
+          (it (:vars ((cmd "（") (pre-string "あ") (pos 1)))
+            (should (string= (buffer-string) "（あ）"))
+            (should (eq (point) 2))
+            )
+          (it (:vars ((cmd "(") (pre-string "()") (pos 1)))
+            (should (string= (buffer-string) "(())"))
+            (should (eq (point) 2))
+            )
+          (it (:vars ((cmd "((") (pre-string "") (pos 2)))
+            (should (string= (buffer-string) "(())"))
+            (should (eq (point) 3))
+            )
+          (it (:vars ((cmd "(") (pre-string "(word)") (pos 1)))
+            (should (string= (buffer-string) "((word))"))
+            (should (eq (point) 2))
+            )
+          (it (:vars ((cmd "(") (pos 1) (pre-string "\"word\"")))
+            (should (string= (buffer-string) "(\"word\")"))
+            (should (eq (point) 2)))
+          (it (:vars ((cmd ")") (pos 2) (pre-string "()")))
+            ;; buffer-string is not () because last-command is not flex-autopair
+            (should (string= (buffer-string) "())"))
+            (should (eq (point) 3)))
+          ;;??
+          ;; (it (:vars ((cmd "(") (pre-string "()") (pos 2)))
+          ;;   (should (string= (buffer-string) "(())"))
+          ;;   (should (eq (point) 3))
+          ;;   )
+          )
+        (context ("insert & execute" :vars (pre-string))
+          (include-context "insert & execute")
+          (it (:vars ((cmd "(") (pre-string "a")))
+            (should (string= (buffer-string) "a()"))
+            (should (eq (point) 3))
+            )
+          (context "escape"
+            (it (:vars ((cmd "(") (pre-string "\\")))
+              (should (string= (buffer-string) "\\("))
+              (should (eq (point) 3)))
+            (it (:vars ((cmd "(") (pre-string "\\\\")))
+              (should (string= (buffer-string) "\\\\()"))
+              (should (eq (point) 4)))
+            )
+          )
+        (context ("region & execute" :vars (pre-string))
+          (before
+            (flex-autopair-mode 1)
+            (set-mark (point))
+            (insert "word")
+            )
+          (it ()
+            (execute-kbd-macro "(")
+            (should (string= (buffer-string) "(word)"))
+            (should (eq (point) 2))
+            )
+          (it ()
+            (exchange-point-and-mark)
+            (execute-kbd-macro "(")
+            (should (string= (buffer-string) "(word)"))
+            (should (eq (point) 2))
+            )
+          (it ()
+            (execute-kbd-macro ")")
+            (should (string= (buffer-string) "word)"))
+            (should (eq (point) 6))
+            )
+          (it ()
+            (execute-kbd-macro "\"")
+            (should (string= (buffer-string) "\"word\""))
+            (should (eq (point) 2))
+            )
+          )
+        )
+      (context ("in coffee-mode" :vars ((mode 'coffee-mode)))
+        (include-context "execute")
+        (it (:vars ((cmd "'")))
+          (should (string= (buffer-string) "''"))
+          (should (eq (point) 2))
+          )
+        (it (:vars ((cmd "`")))
+          (should (string= (buffer-string) "``"))
+          (should (eq (point) 2))
+          )
+        )
+      (context ("in haskell-mode" :vars ((mode 'haskell-mode)))
+        (context "execute"
+          (include-context "execute")
+          (it (:vars ((cmd "'")))
+            (should (string= (buffer-string) "''"))
+            (should (eq (point) 2))
+            )
+          (it (:vars ((cmd "`")))
+            (should (string= (buffer-string) "``"))
+            (should (eq (point) 2))
+            )
+          )
+        (context "insert & execute"
+          (include-context "insert & execute")
+          (it (:vars ((cmd "'") (pre-string "a")))
+            (should (string= (buffer-string) "a'"))
+            (should (eq (point) 3))
+            )
+          )
+        )
+      (context ("in emacs-lisp-mode" :vars ((mode 'emacs-lisp-mode)))
+        (it ()
+          (should (equal nil (assoc ?< flex-autopair-pairs))))
+        (it ()
+          (insert "a")
+          (should (flex-autopair-openp ?\")))
+        (it ()
+          (insert "\"a")
+          (should-not (flex-autopair-openp ?\")))
+        (it ()
+          (insert "\"a ")
+          (should-not (flex-autopair-openp ?\")))
+
+        (context "execute"
+          (include-context "execute")
+          (it (:vars ((cmd "<")))
+            (should (string= (buffer-string) "<"))
+            (should (eq (point) 2))
+            ))
+        (context "insert & execute"
+          (include-context "insert & execute")
+          (it (:vars ((cmd "\"") (pre-string "a")))
+            (should (string= (buffer-string) "a\"\""))
+            (should (eq (point) 3)))
+          (it (:vars ((cmd "(") (pre-string "a")))
+            (should (string= (buffer-string) "a ()"))
+            (should (eq (point) 4)))
+          (it (:vars ((cmd "(") (pre-string "'")))
+            (should (string= (buffer-string) "'()"))
+            (should (eq (point) 3)))
+          (it (:vars ((cmd "\"") (pre-string "\"a")))
+            (should (string= (buffer-string) "\"a\""))
+            (should (eq (point) 4)))
+          (context "escape"
+            (it (:vars ((cmd "(") (pre-string "\\")))
+              (should (string= (buffer-string) "\\("))
+              (should (eq (point) 3)))
+            (it (:vars ((cmd "(") (pre-string "\\\\")))
+              (should (string= (buffer-string) "\\\\ ()"))
+              (should (eq (point) 5)))
+            )
+          )
+        (context "insert & move & execute"
+          (include-context "insert & move & execute")
+          (it (:vars ((cmd "(") (pos 1) (pre-string "(word)")))
+            (should (string= (buffer-string) "( (word))"))
+            (should (eq (point) 2)))
+          (it (:vars ((cmd "(") (pos 1) (pre-string "\"word\"")))
+            (should (string= (buffer-string) "( \"word\")"))
+            (should (eq (point) 2)))
+          (it (:vars ((cmd "\"") (pos 1) (pre-string "(word)")))
+            (should (string= (buffer-string) "\"(word)\""))
+            (should (eq (point) 2)))
+          (it (:vars ((cmd "(") (pos 1)
+                      (pre-string "http://example.com/index.html")))
+            (should (string= (buffer-string) "(http://example.com/index.html)"))
+            (should (eq (point) 2)))
+          (it (:vars ((cmd "\"") (pos 1)
+                      (pre-string "(http://example.com/index.html)")))
+            (should (string= (buffer-string)
+                             "\"(http://example.com/index.html)\""))
+            (should (eq (point) 2)))
+          ;; (it (:vars ((cmd "\"") (pos 2)
+          ;;             (pre-string "(http://example.com/index.html)")))
+          ;;   (should (string= (buffer-string)
+          ;;                    "(\"http://example.com/index.html\")"))
+          ;;   (should (eq (point) 3)))
+          (it (:vars ((cmd "(") (pos 1)
+                      (pre-string "\"http://example.com/index.html\"")))
+            (should (string= (buffer-string)
+                             "( \"http://example.com/index.html\")"))
+            (should (eq (point) 2)))
+          )
+        )
+      (context ("in c-mode" :vars ((mode 'c-mode)))
+        (it ()
+          (should
+           (memq 'flex-autopair-post-command-function post-command-hook)))
+        (it ()
+          (should (equal '(?< . ?>) (assoc ?< flex-autopair-pairs))))
+        (context "execute"
+          (include-context "execute")
+
+          (it (:vars ((cmd "'")))
+            (should (string= (buffer-string) "''"))
+            (should (eq (point) 2))
+            )
+          (it (:vars ((cmd "(")))
+            (should (string= (buffer-string) "()"))
+            (should (eq (point) 2))
+            )
+          (it (:vars ((cmd "{")))
+            (should (string= (buffer-string) "{\n  \n}"))
+            (should (eq (point) 5))
+            )
+          (it (:vars ((cmd "()")))
+            (should (string= (buffer-string) "()"))
+            (should (eq (point) 3)))
+          )
+        (context "insert & execute"
+          (include-context "insert & execute")
+          (it (:vars ((cmd "<") (pre-string "#include")))
+            (should (string= (buffer-string) "#include<>"))
+            (should (eq (point) 10))
+            )
+          (it (:vars ((cmd "<") (pre-string "#dynamic_cast")))
+            (should (string= (buffer-string) "#dynamic_cast<>"))
+            (should (eq (point) 15))
+            )
+          (it (:vars ((cmd "<") (pre-string "foo")))
+            (should (eq key-combo-mode nil))
+            (should (string= (buffer-string) "foo<"))
+            (should (eq (point) 5))
+            )
+          )
+        (context "insert & move & execute"
+          (include-context "insert & move & execute")
+          (it (:vars ((cmd "(") (pos 1) (pre-string "()")))
+            (should (string= (buffer-string) "(())"))
+            (should (eq (point) 2))
+            )
+          )
+        )
+      )))
 
 (dont-compile
   (when(fboundp 'expectations)
