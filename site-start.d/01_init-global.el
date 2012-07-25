@@ -2,7 +2,7 @@
 ;; @ frame
 
 ;; フレームタイトルの設定
-(setq frame-title-format "%b")
+(setq frame-title-format (format "%%b - %s-%s@%s" (invocation-name) "23.4" (system-name)))
 
 ;; ------------------------------------------------------------------------
 ;; @ buffer
