@@ -1,4 +1,3 @@
-
 (when run-windows
   (progn
     (add-to-list 'exec-path "C:/Program Files (x86)/Coq/bin")

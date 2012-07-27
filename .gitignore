@@ -6,7 +6,7 @@
 session.*
 *.elc
 
-#Backup dir
+# Backup dir
 .backup/
 
 # TAGS
@@ -15,9 +15,17 @@ GTAGS
 GRTAGS
 GPATH
 
-#etc
+# etc
 init.elc
 .framesize
 .session
 .scratch
 plugins/taihi/
+
+# ignore diff files
+*.diff
+*.orig
+*.patch
+
+# ignore archive directory
+elpa/archives
