@@ -2,7 +2,7 @@
 ;; @ frame
 
 ;; フレームタイトルの設定
-(setq frame-title-format (format "%%b - %s-%s@%s" (invocation-name) "23.4" (system-name)))
+(setq frame-title-format (format "%%b - %s-%s@%s" (invocation-name) emacs-version (system-name)))
 
 ;; ------------------------------------------------------------------------
 ;; @ buffer
@@ -261,3 +261,19 @@
 
 ;; menu-barを使うかどうか
 (menu-bar-mode -1)
+
+
+;; automatically save buffers associated with files on buffer switch
+;; and on windows switch
+(defadvice switch-to-buffer (before save-buffer-now activate)
+  (when buffer-file-name (save-buffer)))
+(defadvice other-window (before other-window-now activate)
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-up (before other-window-now activate)
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-down (before other-window-now activate)
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-left (before other-window-now activate)
+  (when buffer-file-name (save-buffer)))
+(defadvice windmove-right (before other-window-now activate)
+  (when buffer-file-name (save-buffer)))
