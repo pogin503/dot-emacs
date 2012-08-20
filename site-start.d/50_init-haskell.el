@@ -11,6 +11,7 @@
     (setq ac-sources '(ac-source-words-in-same-mode-buffers
                        ac-source-dictionary
                        ac-source-ghc-mod))))
+
 (lazyload (haskell-mode) "haskell-mode"
           (require 'haskell-mode)
           (require 'anything)
@@ -92,7 +93,7 @@
 ;; (eval-after-load "~/plugins/haskell-mode/haskell-mode.el"
 ;;   )
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
 
@@ -149,15 +150,18 @@
 ;;              (if run-windows-x64
 ;;                  "C:/Program Files (x86)/Haskell Platform/2011.4.0.0/bin/"
 ;;                "C:/Program Files/Haskell Platform/2011.4.0.0/bin/"))
+(when run-linux
+  (add-to-list 'exec-path "~/.cabal/bin")
+  )
 
-(add-to-list 'exec-path (if run-windows (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
+(if run-windows
+    (add-to-list 'exec-path (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
 ;; ghc-flymake.el などがあるディレクトリ ghc-mod を ~/.emacs.d 以下で管理することにした
 ;; (add-to-list 'load-path "~/.emacs.d/plugins/ghc-mod")
 
 (autoload 'ghc-init "ghc" nil t)
-
 (add-hook 'haskell-mode-hook
-  (lambda () (ghc-init) (flymake-mode 1)))
+          (lambda () (ghc-init) (flymake-mode 1)))
 
 (add-hook 'haskell-mode-hook
           (lambda()
