@@ -42,6 +42,7 @@
   (delete-region (point-at-bol) (1+ (point-at-eol)))
   (insert key)
   (yas/expand))
+
 ;;; [2010/12/02]
 (defun yas/expand-link-choice (&rest keys)
   "Hyperlink to select yasnippet template."

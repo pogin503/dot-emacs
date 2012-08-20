@@ -38,3 +38,4 @@
 (push '("*init log*" :stick t) popwin:special-display-config)
 (push '("*magit" :stick t :regexp t) popwin:special-display-config)
 (push '("*compilation*" :regexp t) popwin:special-display-config)
+(push '("*ert*" :regexp t) popwin:special-display-config)
