@@ -1,7 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;
-;;; ghc.el
-;;;
+;;; ghc.el --- ghc-mod front-end for haskell-mode
 
 ;; Author:  Kazu Yamamoto <Kazu@Mew.org>
 ;; Created: Sep 25, 2009
@@ -16,7 +13,7 @@
 
 ;;; Code:
 
-(defconst ghc-version "1.10.15")
+(defconst ghc-version "1.11.1")
 
 ;; (eval-when-compile
 ;;  (require 'haskell-mode))
