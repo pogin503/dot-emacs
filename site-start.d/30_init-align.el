@@ -17,3 +17,10 @@
 ;;                                     "\\(^\\s-*\\(}\\|for\\|while\\|if\\|else\\|"
 ;;                                     "switch\\|case\\|break\\|continue\\|do\\)[ ;]\\)"
 ;; 									))
+
+;; Align for haskell-mode
+(add-to-list 'align-rules-list
+             '(haskell-arrow
+               (regexp . "\\(\\s-*\\)->\\(\\s-*\\)")
+               (repeat . t)
+               (modes . '(haskell-mode))))
