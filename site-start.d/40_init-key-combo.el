@@ -60,8 +60,9 @@
   ;; (key-combo-define-local (kbd "=" ) '(" = " " == "))
   (key-combo-define-local (kbd "=" ) " = ")
   (key-combo-define-local (kbd "==") " == ")
+  (key-combo-define-local (kbd "/=") " /= ")
 
-  ;; (key-combo-define-local (kbd "::" ) " :: ")
+  (key-combo-define-local (kbd "::" ) " :: ")
   ;; ;; Num, List, Arrow
   ;; (key-combo-define-local (kbd "+") '(" + " " ++ " " +++ "))
 
@@ -94,8 +95,6 @@
   ;; ;; (key-combo-define-local (kbd "&") '(" & " " && "))
   ;; ;; List
   ;; (key-combo-define-local (kbd "!!") " !! ")
-  ;; ;; Eq
-  ;; (key-combo-define-local (kbd "\=") " \= ")
 
   ;; ;; Applicative
   ;; (key-combo-define-local (kbd "<*>") " <*> ") ;; Applicative (<*>) or GraphRep <*
