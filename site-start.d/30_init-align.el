@@ -24,3 +24,8 @@
                (regexp . "\\(\\s-*\\)->\\(\\s-*\\)")
                (repeat . t)
                (modes . '(haskell-mode))))
+(add-to-list 'align-rules-list
+             '(haskell-bind
+               (regexp . "\\(\\s-*\\)=\\(\\s-*\\)")
+               (repeat . t)
+               (modes . '(haskell-mode))))
