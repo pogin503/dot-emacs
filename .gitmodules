@@ -7,3 +7,6 @@
 [submodule "haskell-mode"]
 	path = haskell-mode
 	url = git://github.com/haskell/haskell-mode.git
+[submodule "plugins/omm-mode"]
+	path = plugins/omm-mode
+	url = git://github.com/ogin503/omm-mode.git
