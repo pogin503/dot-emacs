@@ -1,48 +1,30 @@
 (require 'key-combo)
 
 (key-combo-load-default)
-;; (key-combo-define-global (kbd "\"") "\"`!!'\"")
-;; (key-combo-define-global (kbd "\"\"") "\"\"`!!'")
-;; (key-combo-define-global (kbd "(") "(`!!')")
-;; (key-combo-define-global (kbd "()") "(`!!')")
-;; (key-combo-define-global (kbd "`") '("``!!''" "`"))
-;; (key-combo-define-global (kbd "'") "'`!!''")
-;; (key-combo-define-global (kbd "''") "'`!!''")
+
 (key-combo-define-global (kbd "@see") "@see ")
 
 
 (defun my-c++-mode-key-combo ()
-  ;; (key-combo-define-local (kbd "<>") "<`!!'>")
-  ;; (key-combo-define-local (kbd "[") "[`!!']")
-  ;; (key-combo-define-local (kbd "[]") "[]`!!'")
-  ;; (key-combo-define-local (kbd "()") "()`!!'")
   (key-combo-define-local (kbd "//") "// ")
-  (key-combo-define-local (kbd "/**/") "/* `!!' */")
-  (key-combo-define-local (kbd "//") "// ")
-  ;; (key-combo-define-local (kbd "< ") " < ")
+  (key-combo-define-local (kbd "/*") "/* `!!' */")
+  (key-combo-define-local (kbd "/**") "/**\n*`!!'\n*/")
   ;; (key-combo-define-local (kbd ">") '(key-combo-execute-orignal " >> "))
   ;; (key-combo-define-local (kbd "<") '(" < " " << "))
   )
 
 (add-hook 'c++-mode-hook 'my-c++-mode-key-combo)
 
-(add-hook 'emacs-lisp-mode-hook
-          #'(lambda ()
-              ;; (key-combo-define-local (kbd ";") 'key-combo-execute-orignal)
-              (key-combo-define-local (kbd ";=") ";=> ")
-              (key-combo-define-local (kbd "\\#'") "\\#'()")
-              ;; (key-combo-define-local (kbd "\\#'") "\\#'()")
-              ;; (key-combo-define-local (kbd "()") "(`!!')"))
-              ;; (key-combo-define-local (kbd "''") "'`!!''"))
-              ;; (key-combo-define-local (kbd "\"\"") "[`!!']"))
-              ;; (key-combo-define-local (kbd "[]") "[`!!']"))
-              ))
+(defun my-lisp-mode-key-combo ()
+  ;; (key-combo-define-local (kbd ";") '(key-combo-execute-orignal ";=> "))
+  (key-combo-define-local (kbd ";=") ";=> ")
+  (key-combo-define-local (kbd "\\#'") "\\#'()")
+  ;; (key-combo-define-local (kbd "\\#'") "\\#'()")
+  )
 
-(add-hook 'lisp-interaction-mode-hook
-          #'(lambda ()
-              (key-combo-define-local (kbd ";=") ";=> ")
-              (key-combo-define-local (kbd "\\#'") "\\#'()")
-              ))
+(add-hook 'emacs-lisp-mode-hook 'my-lisp-mode-key-combo)
+
+(add-hook 'lisp-interaction-mode-hook 'my-lisp-mode-key-combo))
 
 ;; (key-combo-define-global (kbd "(") "(`!!')" ")")
 ;; (key-combo-define-global (kbd "\"") "(`!!')" "\"")
@@ -71,7 +53,7 @@
   (key-combo-define-local (kbd "--") "-- ")
   ;; ;; comment
   (key-combo-define-local (kbd "{-") "{- `!!' -}")
-  ;; ;; これはまだhaskell-mode1が対応していないようなので無理。
+  ;; ;; これはまだhaskell-modeが対応していないようなので無理。
   ;; ;; (key-combo-define-local (kbd "{- RET") "{-\n`!!'\n-}")
 
   (key-combo-define-local (kbd "->") " -> ")
@@ -137,9 +119,7 @@
   ;; (key-combo-define-local (kbd "|*><*|") " |*><*| ")
   )
 
-(add-hook 'haskell-mode-hook
-          'my-key-combo-haskell-conf
-          )
+(add-hook 'haskell-mode-hook 'my-key-combo-haskell-conf)
 
 ;; (add-hook 'sh-mode-hook
 ;;           #'(lambda ()

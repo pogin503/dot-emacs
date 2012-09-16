@@ -4,14 +4,14 @@
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/howm/")
 
 (defvar dropbox-directory
-      (cond
-       ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
-       ((eq run-linux t) "~/Dropbox")))
+  (cond
+   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
+   ((eq run-linux t) "~/Dropbox")))
 (define-key global-map (kbd "C-c , ,") 'howm-menu)
 
+;;はじめて C-c , , した時に読み込む
 (lazyload (howm-menu) "howm"
-          (req howm)
-          ;;はじめて C-c , , した時に読み込む
+          (require 'howm)
 
           (setq howm-directory (concat dropbox-directory "/Document/howm/"))
 

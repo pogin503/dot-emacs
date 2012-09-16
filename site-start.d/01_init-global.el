@@ -230,19 +230,21 @@
 ;; ------------------------------------------------------------------------
 ;; @ image-library
 (if run-windows
-    (setq image-library-alist
-          '((xpm "libxpm.dll")
-            (png "libpng14.dll")
-            (jpeg "libjpeg.dll")
-            (tiff "libtiff3.dll")
-            (gif "libungif4.dll")
-            (svg "librsvg-2-2.dll")
-            (gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
-            (glib "libglib-2.0-0.dll")
-            (gobject "libgobject-2.0-0.dll"))
-          ))
+    (let ((dll-list '((xpm "libxpm.dll")
+                      (png "libpng14.dll")
+                      (jpeg "libjpeg.dll")
+                      (tiff "libtiff3.dll")
+                      (gif "libungif4.dll")
+                      (svg "librsvg-2-2.dll")
+                      (gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
+                      (glib "libglib-2.0-0.dll")
+                      (gobject "libgobject-2.0-0.dll"))))
+      (if (< emacs-major-version 24)
+          (setq image-library-alist dll-list)
+        (setq dynamic-library-alist dll-list)
+        )))
 
-(defun toggle-truncate-lines ()
+(defun my-toggle-truncate-lines ()
   "折り返し表示をトグル動作します."
   (interactive)
   (if truncate-lines
@@ -253,7 +255,9 @@
 ;; @see http://trey-jackson.blogspot.jp/2009/08/emacs-tip-32-completion-ignore-case-and.html
 ;; (setq completion-ignore-case t)
 
+;; 大文字小文字を無視した補完をするかどうか
 (setq read-buffer-completion-ignore-case t)
+;; ミニバッファでファイル名補完の時、大文字・小文字を無視するかどうか
 (setq read-file-name-completion-ignore-case t)
 
 ;; tool-barを使うか使わないか
