@@ -24,7 +24,7 @@
                (regexp . ,(concat "\\(\\s-*\\)->\\(\\s-*\\)"
                                  "\\([^= \t\n]\\|$\\)"))
                (group . (1 2))
-               ;; (justify . t)
+               (justify . t)
                ;; (repeat . t)
                ;; (tab-stop . nil)
                (modes . '(haskell-mode))))
@@ -32,7 +32,7 @@
              '(haskell-assignment
                (regexp . "\\(\\s-*\\)=\\(\\s-*\\)[a-zA-Z]")
                (group . (1 2))
-               ;; (justify . t)
+               (justify . t)
                (repeat . t)
                (tab-stop . nil)
                (modes . '(haskell-mode))))

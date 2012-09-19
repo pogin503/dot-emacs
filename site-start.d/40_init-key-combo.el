@@ -131,3 +131,13 @@
               (key-combo-define-local (kbd "$") '("$" "$(`!!')"))
               (key-combo-define-local (kbd ":") ": ")
               ))
+
+(defun my-coq-mode-key-combo ()
+  (key-combo-define-local (kbd ",") ", ")
+  (key-combo-define-local (kbd ":") " : ")
+  (key-combo-define-local (kbd "->") " -> ")
+  (key-combo-define-local (kbd ":=") " := ")
+  (key-combo-define-local (kbd "=>") " => ")
+  )
+
+(add-hook 'coq-mode-hook 'my-coq-mode-key-combo)

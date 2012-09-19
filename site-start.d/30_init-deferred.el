@@ -2,7 +2,7 @@
 ;(auto-install-from-url "http://github.com/kiwanami/emacs-inertial-scroll/raw/master/inertial-scroll.el")
 
 (req inertial-scroll)
-(setq inertias-global-minor-mode-map 
+(setq inertias-global-minor-mode-map
       (inertias-define-keymap
        '(
          ("<wheel-up>"   . inertias-down-wheel)
