@@ -24,7 +24,7 @@
 
 (add-hook 'emacs-lisp-mode-hook 'my-lisp-mode-key-combo)
 
-(add-hook 'lisp-interaction-mode-hook 'my-lisp-mode-key-combo))
+(add-hook 'lisp-interaction-mode-hook 'my-lisp-mode-key-combo)
 
 ;; (key-combo-define-global (kbd "(") "(`!!')" ")")
 ;; (key-combo-define-global (kbd "\"") "(`!!')" "\"")

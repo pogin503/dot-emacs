@@ -8,15 +8,16 @@
    ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
    ((eq run-linux t) "~/Dropbox")))
 (define-key global-map (kbd "C-c , ,") 'howm-menu)
+(add-to-list 'auto-mode-alist '("\\.howm$'" . howm-mode))
 
 ;;はじめて C-c , , した時に読み込む
-(lazyload (howm-menu) "howm"
+(lazyload (howm-menu howm-mode) "howm"
           (require 'howm)
 
-          (setq howm-directory (concat dropbox-directory "/Document/howm/"))
+          (setq howm-directory (concat dropbox-directory "/Documents/howm/"))
 
           (setq howm-menu-lang 'ja)
-                                        ;(autoload 'howm-menu "howm-mode" "Hitori Otegaru Wiki Modoki" t)
+          ;; (autoload 'howm-menu "howm-mode" "Hitori Otegaru Wiki Modoki" t)
 
           ;;@see http://www.bookshelf.jp/soft/meadow_38.html#SEC563
           (mapc

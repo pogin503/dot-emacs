@@ -29,3 +29,6 @@ plugins/taihi/
 
 # ignore archive directory
 elpa/archives
+
+# quickrun temporary file
+qr_*.el
