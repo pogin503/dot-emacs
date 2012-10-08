@@ -20,6 +20,6 @@
                                ac-source-dictionary)))
           (add-to-list 'ac-modes 'coq-mode)
           )
-
+;; coq-mode-hook
 (add-hook 'coq-mode-hook 'auto-complete-mode)
 (add-hook 'coq-mode-hook 'my-ac-coq-mode)

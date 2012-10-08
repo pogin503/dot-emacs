@@ -29,6 +29,15 @@
                ;; (tab-stop . nil)
                (modes . '(haskell-mode))))
 (add-to-list 'align-rules-list
+             `(haskell-left-arrow
+               (regexp . ,(concat "\\(\\s-*\\)<-\\(\\s-*\\)"
+                                 "\\([^= \t\n]\\|$\\)"))
+               (group . (1 2))
+               (justify . t)
+               ;; (repeat . t)
+               ;; (tab-stop . nil)
+               (modes . '(haskell-mode))))
+(add-to-list 'align-rules-list
              '(haskell-assignment
                (regexp . "\\(\\s-*\\)=\\(\\s-*\\)[a-zA-Z]")
                (group . (1 2))

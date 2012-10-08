@@ -117,6 +117,9 @@
 
   ;; ;; GraphRep
   ;; (key-combo-define-local (kbd "|*><*|") " |*><*| ")
+
+  ;; Yesod
+  (key-combo-define-local (kbd "{-#") "{-# `!!' #-}")
   )
 
 (add-hook 'haskell-mode-hook 'my-key-combo-haskell-conf)
@@ -138,6 +141,13 @@
   (key-combo-define-local (kbd "->") " -> ")
   (key-combo-define-local (kbd ":=") " := ")
   (key-combo-define-local (kbd "=>") " => ")
+  (key-combo-define-local (kbd "(*") "(* `!!' *)")
+  (key-combo-define-local (kbd "|") " | ")
   )
 
 (add-hook 'coq-mode-hook 'my-coq-mode-key-combo)
+(add-hook 'proof-activate-scripting-hook 'my-coq-mode-key-combo)
+(dont-compile
+  (when (fboundp 'describe)
+    (describe ("align test in temp-buffer" :vars ((mode)))
+      ())))
