@@ -66,6 +66,8 @@
   ;; (key-combo-define-local (kbd "<") " < ") ;; Ord (<) or Sequence <
   (key-combo-define-local (kbd "<=") " <= ")
 
+  (key-combo-define-local (kbd "=<<") " =<< ")
+
   ;; ;; Fractional, Array
   ;; (key-combo-define-local (kbd "/") '(" / " " // "))
 

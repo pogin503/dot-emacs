@@ -9,7 +9,7 @@
 (autoload-if-found 'org-directory "org" nil t)
 
 (if (boundp 'dropbox-directory)
-    (setq org-directory (concat dropbox-directory "/Document/org/")))
+    (setq org-directory (concat dropbox-directory "/Documents/org/")))
 (setq org-default-notes-file (concat org-directory "agenda.org"))
 (setq org-mobile-directory (concat dropbox-directory "/MobileOrg"))
 (setq org-mobile-inbox-for-pull (concat dropbox-directory "/flagged.org"))
@@ -129,4 +129,6 @@ If the link is in hidden text, expose it."
           ;; (lazyload (org-tree-slide-mode) "org-tree-slide-mode"
           ;;           (req org-tree-slide))
 
-          (req org-tree-slide))
+          (req org-tree-slide)
+          (require 'org-export-generic)
+          )
