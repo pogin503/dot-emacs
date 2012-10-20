@@ -1,15 +1,15 @@
 ;; 文字コード
 (set-language-environment "Japanese")
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-buffer-file-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8-unix)
+(set-terminal-coding-system 'utf-8-unix)
+(set-keyboard-coding-system 'utf-8-unix)
+(set-buffer-file-coding-system 'utf-8-unix)
 ;;(setq default-buffer-file-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
+(prefer-coding-system 'utf-8-unix)
 ;; ミニバッファの文字化け対策
-(if (eq run-windows t)
+(if run-windows
     (setq file-name-coding-system 'sjis-dos)
-  (setq file-name-coding-system 'utf-8))
+  (setq file-name-coding-system 'utf-8-unix))
 
 ;;改行コード表示
 (setq eol-mnemonic-dos "(CRLF)")
