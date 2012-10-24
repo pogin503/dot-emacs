@@ -26,7 +26,7 @@
 ;; Author: Yuuki Arisawa <yuuki.ari@gmail.com>
 ;; URL: https://github.com/uk-ar/key-combo
 ;; Created: 30 November 2011
-;; Version: 1.5
+;; Version: 1.5.1
 ;; Keywords: keyboard input
 
 ;;; Commentary:
@@ -53,6 +53,9 @@
 
 ;;; History:
 
+;; Revision 1.5.1 2012/06/06 21:36:28
+;; * Bug fix which use flex-autopair by mistake.
+;;
 ;; Revision 1.5 2012/04/20 22:24:26
 ;; * Bug fix when just after string.
 ;; * Change some default settings.
@@ -121,18 +124,32 @@
   (interactive)
   (describe-bindings [key-combo]))
 
-(defun key-combo-lookup (key)
+(defun key-combo-make-key-vector (key)
+  (vector 'key-combo
+          ;; "_" is for error when key is " "
+          (intern (concat "_" (key-description (vconcat key))))))
+
+;; key-combo-key-binding
+(defun key-combo-key-binding (key)
   ;; copy from `key-binding'
   "Return the binding for command KEY in key-combo keymaps.
 KEY is a string or vector, a sequence of keystrokes.
 The binding is probably a symbol with a function definition."
-  (let ((string (key-description (vconcat key))))
-    (key-binding (vector 'key-combo (intern string)))))
+  (key-binding (key-combo-make-key-vector (vconcat key))))
 
-(defun key-combo-execute-orignal ()
+(defun key-combo-lookup-key (keymap key)
+  ;; copy from `key-binding'
+  "Return the binding for command KEY in key-combo keymaps.
+KEY is a string or vector, a sequence of keystrokes.
+The binding is probably a symbol with a function definition."
+    (lookup-key keymap (key-combo-make-key-vector (vconcat key))))
+
+(defun key-combo-execute-original ()
   (interactive)
-  (call-interactively (key-binding (vector last-input-event)))
+  (call-interactively (key-binding (this-command-keys-vector)))
   )
+
+(defalias 'key-combo-execute-orignal 'key-combo-execute-original)
 
 ;; should be replace by union
 (defun key-combo-memq (a b)
@@ -149,10 +166,10 @@ The binding is probably a symbol with a function definition."
 ;; From context-skk.el
 ;; http://openlab.ring.gr.jp/skk/skk/main/context-skk.el
 (defun key-combo-in-stringp ()
-  (nth 3 (parse-partial-sexp (point) (point-min))))
+  (nth 3 (syntax-ppss)))
 
 (defun key-combo-in-commentp ()
-  (nth 4 (parse-partial-sexp (point) (point-min))))
+  (nth 4 (syntax-ppss)))
 
 (defun key-combo-comment-or-stringp ()
   (if (or (key-combo-in-stringp) (key-combo-in-commentp))
@@ -167,22 +184,21 @@ The binding is probably a symbol with a function definition."
   (cond
    ((string-match "`!!'" string)
     (destructuring-bind (pre post) (split-string string "`!!'")
-      (flex-autopair-execute-macro pre)
+      (key-combo-execute-macro pre)
       (save-excursion
-        (flex-autopair-execute-macro post))
+        (key-combo-execute-macro post))
       ))
    (t
     (let ((p (point)))
+      (if (and (eq ?  (char-before))
+               (eq ?  (aref string 0)))
+          (delete-char -1))
       (insert string)
-      (if (eq ?  (aref string 0))
-          (save-excursion
-            (goto-char p)
-            (just-one-space)))
       (when (string-match "\n" string)
         (indent-according-to-mode)
         (indent-region p (point)))))))
 
-(defun key-combo-get-command(command)
+(defun key-combo-get-command (command)
   (unless (key-combo-elementp command)
     (error "%s is not command" command))
   (cond
@@ -190,10 +206,7 @@ The binding is probably a symbol with a function definition."
    ((listp command) command)
    ((not (stringp command)) nil)
    (t
-    (lexical-let ((command command))
-      (lambda()
-        (key-combo-execute-macro command)
-        )))
+    command)
    );;end cond
   )
 
@@ -216,32 +229,33 @@ If COMMANDS is list, treated as sequential commands.
 "
   ;;copy from key-chord-define
   (let ((base-key (list (car (listify-key-sequence key)))))
-  (cond
-   ;;for sequence '(" = " " == ")
-   ((and (not (key-combo-elementp commands))
-         (key-combo-elementp (car-safe commands)))
+    (cond
+     ;;for sequence '(" = " " == ")
+     ((and (not (key-combo-elementp commands))
+           (key-combo-elementp (car-safe commands)))
       (let ((seq-keys base-key));;list
-      (mapc '(lambda(command)
-               (key-combo-define keymap (vconcat seq-keys) command)
-               (setq seq-keys
-                     (append seq-keys base-key)))
-            commands)))
-   (t
-    (unless (key-combo-elementp commands)
-      (error "%s is not command" commands))
-    ;; regard first key as key-combo-execute-orignal
-    (let ((first (key-binding
-                  (vector 'key-combo (intern (key-description base-key))))))
-      (when
-          (and (eq (safe-length (listify-key-sequence key)) 2)
-               (null first))
-        (define-key keymap
-          (vector 'key-combo (intern (key-description base-key)))
-          'key-combo-execute-orignal)))
-    (define-key keymap
-      (vector 'key-combo (intern (key-description key)))
-      (key-combo-get-command commands))
-    ))))
+        (mapc #'(lambda(command)
+                  (key-combo-define keymap (vconcat seq-keys) command)
+                  (setq seq-keys
+                        (append seq-keys base-key)))
+              commands)))
+     (t
+      (unless (key-combo-elementp commands)
+        (error "%s is not command" commands))
+      ;; regard first key as key-combo-execute-original
+      (let ((first (lookup-key keymap
+                               (key-combo-make-key-vector base-key))))
+        (when
+            (and (eq (safe-length (listify-key-sequence key)) 2)
+                 (null first))
+          (define-key keymap
+            (key-combo-make-key-vector base-key)
+            'key-combo-execute-original))
+        )
+      (define-key keymap
+        (key-combo-make-key-vector key)
+        (key-combo-get-command commands))
+      ))))
 
 (defun key-combo-define-global (keys command)
   "Give KEY a global binding as COMMAND.\n
@@ -267,23 +281,27 @@ which in most cases is shared with all other buffers in the same major mode.
   '(;; instead of using (goto-char (point-min))
     ;; use beginning-of-buffer for keydescription
     ("C-a"   . (back-to-indentation move-beginning-of-line
-                                  beginning-of-buffer key-combo-return))
+                                    beginning-of-buffer key-combo-return))
     ("C-e"   . (move-end-of-line end-of-buffer key-combo-return))
     ))
 
 (defvar key-combo-lisp-default
-  '(("."  . " . ")
-    (","  . (key-combo-execute-orignal))
+  '(("."  . (key-combo-execute-original))
+    (". SPC" . " . ")
+    ("SPC"  . (key-combo-execute-original))
+    ("SPC ." . " . ")
+    (","  . (key-combo-execute-original))
     (",@" . " ,@");; for macro
-    (";"  . (";; " ";;; " "; "))
+    (";"  . ";; ")
+    ;; (";"  . (";; " ";;; " "; ")) ;cannot use because of comment
     (";=" . ";=> ")
     ("="  . ("= " "eq " "equal "))
     (">=" . ">= ")
-    ("C-M-x" . (key-combo-execute-orignal
+    ("C-M-x" . (key-combo-execute-original
                 (lambda ()
                   (let ((current-prefix-arg '(4)))
                     (call-interactively 'eval-defun)))));; lamda for message
-    ("-"  . (key-combo-execute-orignal));; for symbol name
+    ("-"  . (key-combo-execute-original));; for symbol name
     ;; ("/" . ("/`!!'/" "/* `!!' */") );;for regexp, comment
     ))
 
@@ -294,11 +312,18 @@ which in most cases is shared with all other buffers in the same major mode.
     inferior-gauche-mode-hook
     scheme-mode-hook))
 
+(defun key-combo-read-kbd-macro (start)
+  (when (or (equal (elt start 0) ?\ )
+            (equal (elt start (1- (length start))) ?\ ))
+    ;; (error "To bind the key SPC, use \" \", not [SPC]")
+    (error "To bind the key SPC, use SPC, not \" \""))
+  (read-kbd-macro start))
+
 (defmacro define-key-combo-load (name)
   "define-key-combo-load is deprecated"
   `(defun ,(intern (concat "key-combo-load-" name "-default")) ()
      (dolist (key ,(intern (concat "key-combo-" name "-default")))
-       (key-combo-define-local (read-kbd-macro (car key)) (cdr key)))
+       (key-combo-define-local (key-combo-read-kbd-macro (car key)) (cdr key)))
      ))
 
 ;; for algol like language
@@ -311,38 +336,50 @@ which in most cases is shared with all other buffers in the same major mode.
     js-mode-hook
     js2-mode-hook
     )
-  "Hooks that enable `key-combo-common-default' setting")
+  "Hooks that enable `key-combo-common-default' setting"
+  :group 'key-combo)
 
+;; (browse-url "http://bojovs.github.com/2012/04/24/ruby-coding-style/")
 (defcustom key-combo-common-default
   '((","  . ", ")
     ("="  . (" = " " == " " === " ));;" === " for js
     ("=>" . " => ")
+    ("=~" . " =~ ");;for ruby regexp
+    ("=*" . " =* ")                     ;for c
     ("+"  . (" + " "++"))
     ("+=" . " += ")
-    ("-"  . (" - " "--"))
+    ("-"  . (" - " "--"))               ;undo when unary operator
     ("-=" . " -= ")
     ("->" . " -> ");; for haskell,coffee script. overwrite in c
-    (">"  . (key-combo-execute-orignal " >> "))
+    (">"  . (key-combo-execute-original " >> "))
     ;; " > " should be bind in flex-autopair
     (">=" . " >= ")
-    ("=~" . " =~ ");;for ruby regexp
+    (">>=" . " >>= ")
     ("%"  . " % ")
+    ("%="  . " %= ")
     ("^"  . " ^ ");; XOR for c
     ("^="  . " ^= ");; for c
-    ("!" . key-combo-execute-orignal)
+    ("!" . key-combo-execute-original)
     ;; NOT for c
     ;; don't use " !" because of ruby symbol
-    ("!=" . (" != " " !== ")) ;;" !== " for js and php
+    ;; and unary operator
+    ("!="  . " != " ) ;;" !== " for js and php
     ("!==" . " !== ") ;;" !== " for js and php
+    ("!~" . " !~ ")   ; for ruby
+    ("~" . key-combo-execute-original)
+    ;; for unary operator
     ("::" . " :: ") ;; for haskell
     ;; (":" . ":");;for ruby symbol
     ("&"  . (" & " " && "))             ;overwrite in c
     ("&=" . " &= ");; for c
+    ("&&=" . " &&= ")                   ; for ruby
     ("*"  . " * " )                     ;overwrite in c
     ("*="  . " *= " )
+    ("**"  . "**" )                     ;for power
+    ("**=" . " **=" )                     ;for power
     ;; ("?" . "? `!!' :"); ternary operator should be bound in yasnippet?
     ;; ("?=");; for coffeescript?
-    ("<" . (key-combo-execute-orignal " << "))
+    ("<" . (key-combo-execute-original " << "))
     ;; " < " should be bound in flex-autopair
     ("<=" . " <= ")
     ;; ("<?" . "<?`!!'?>");; for what?
@@ -352,55 +389,60 @@ which in most cases is shared with all other buffers in the same major mode.
     ("|"  . (" | " " || "));; bit OR and OR for c
     ;;ToDo: ruby block
     ("|=" . " |= ");; for c
+    ("||=" . " ||= ")                   ; for ruby
     ;; ("/" . (" / " "// " "/`!!'/")) ;; devision,comment start or regexp
-    ("/" . (" / " "// "))
+    ("/" . (key-combo-execute-original))
+    ("/ SPC" . " / ")
     ("/=" . " /= ")
     ("*/" . "*/")
     ("/*" . "/* `!!' */")
     ("/* RET" . "/*\n`!!'\n*/");; add *? m-j
     ;; ("/* RET" . "/*\n*`!!'\n*/");; ToDo:change style by valiable
-    ("{" . (key-combo-execute-orignal))
+    ("{" . (key-combo-execute-original))
     ("{ RET" . "{\n`!!'\n}")
     )
-  "Default binding which enabled by `key-combo-common-mode-hooks'")
+  "Default binding which enabled by `key-combo-common-mode-hooks'"
+  :group 'key-combo)
 
-(defvar key-combo-org-default
+(defcustom key-combo-org-default
   '(("C-a" . (org-beginning-of-line
-             beginning-of-buffer
-             key-combo-return));;back-to-indentation
+              beginning-of-buffer
+              key-combo-return));;back-to-indentation
     ("C-e" . (org-end-of-line
               end-of-buffer
               key-combo-return))
-    ))
+    )
+  "Default binding which enabled by `org-mode-hook'"
+  :group 'key-combo)
 
 (defcustom key-combo-pointer-default
   '(("*" . ("*" "**" "***"))
     ("&" . ("&" "&&" "&&&"))
     ("->" . "->"))
   "Default binding for c-mode,c++-mode,objc-mode"
-  )
+  :group 'key-combo)
 
 ;;;###autoload
 (defmacro key-combo-define-hook (hooks name keys)
-    `(progn
-       (defun ,(nth 1 name) ()
-         (key-combo-load-default-1 (current-local-map) ,keys)
-         )
-       (key-combo-load-by-hooks ,hooks ,name)
-       ))
+  `(progn
+     (defun ,(nth 1 name) ()
+       (key-combo-load-default-1 (current-local-map) ,keys)
+       )
+     (key-combo-load-by-hooks ,hooks ,name)
+     ))
 
 ;;;###autoload
 (defun key-combo-load-default ()
   (interactive)
-  (key-combo-mode 1)
+  (global-key-combo-mode t)
   (key-combo-load-default-1 (current-global-map)
                             key-combo-global-default)
   (key-combo-define-hook key-combo-common-mode-hooks
                          'key-combo-common-load-default
                          key-combo-common-default)
   (key-combo-define-hook key-combo-lisp-mode-hooks
-                           'key-combo-lisp-load-default
-                           key-combo-lisp-default)
+                         'key-combo-lisp-load-default
+                         key-combo-lisp-default)
   (key-combo-define-hook '(c-mode-hook c++-mode-hook)
                          'key-combo-pointer-load-default
                          key-combo-pointer-default)
@@ -427,675 +469,26 @@ which in most cases is shared with all other buffers in the same major mode.
   (let ((hooks (if (consp hooks) hooks (list hooks))))
     (dolist (hook hooks)
       (add-hook hook func t))
-      ))
+    ))
 
 (defun key-combo-load-default-1 (map keys)
   (dolist (key keys)
-    (key-combo-define map (read-kbd-macro (car key)) (cdr key))))
+    (key-combo-define map (key-combo-read-kbd-macro (car key)) (cdr key))))
 
+(declare-function key-combo-set-start-position "key-combo")
+(declare-function key-combo-return "key-combo")
 ;;(declare-function key-combo-return "")
 (lexical-let ((key-combo-start-position nil))
-  (defun key-combo-set-start-position(pos)
+  (defun key-combo-set-start-position (pos)
     (setq key-combo-start-position pos))
   (defun key-combo-return ()
     "Return to the position when sequence of calls of the same command was started."
     (unless (eq key-combo-start-position nil)
       (progn
         (goto-char (car key-combo-start-position))
-        (set-window-start (selected-window) (cdr key-combo-start-position)))))
+        ;; (set-window-start (selected-window) (cdr key-combo-start-position))
+        )))
   )
-
-(defun test1()
-  (interactive)
-  (message "test1")
-  )
-(defun test2()
-  (interactive)
-  (message "test2")
-  )
-
-(defun key-combo-test-command-loop ()
-  ;; (key-combo-finalize)
-  (font-lock-fontify-buffer)
-  (setq last-command nil)
-  ;; (setq last-command 'self-insert-command)
-  (while unread-command-events
-    ;; (setq last-command-event (read-event))
-    (let ;((key (read-event)))
-      ((key (read-key-sequence-vector "a")))
-      (font-lock-fontify-buffer)
-      (flet ((this-command-keys-vector () key))
-        (setq this-command (key-binding key))
-        (setq last-command-event (aref key (1- (length key))))
-        (funcall 'key-combo-pre-command-function)
-        ;; (message "%S:%S" unread-command-events (this-command-keys-vector))
-        (call-interactively this-command)
-        (undo-boundary)
-        (setq last-command this-command)
-        ;; (message "th:%S k:%s nu:%s" this-command key key-combo-need-undop)
-        )
-      )
-    ;; (message "%S:%S" unread-command-events last-command-event)
-    )
-  ;;(key-binding "C-M-x")
-  (setq key-combo-command-keys nil)
-  )
-
-(dont-compile
-  (when(fboundp 'expectations)
-    (expectations
-      (expect "\"\" . \n"
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert "\"\"\n")
-          (goto-char 3)
-          (setq unread-command-events (listify-key-sequence (kbd ".")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect "\"\" . a"
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert "\"\"a")
-          (goto-char 3)
-          (setq unread-command-events (listify-key-sequence (kbd ".")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect "\"\" . "
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert "\"\"")
-          (setq unread-command-events (listify-key-sequence (kbd ".")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect "\".\""
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert "\"\"")
-          (goto-char 2)
-          (setq unread-command-events (listify-key-sequence (kbd ".")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect "a . \"\""
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert "a\"\"")
-          (goto-char 2)
-          (setq unread-command-events (listify-key-sequence (kbd ".")))
-          (key-combo-test-command-loop)
-          (buffer-string)
-          ))
-      (expect "*"
-        (with-temp-buffer
-          (c-mode)
-          (setq unread-command-events (listify-key-sequence (kbd "*")))
-          (key-combo-test-command-loop)
-          (buffer-string)
-          ))
-      (expect "->"
-        (with-temp-buffer
-          (c-mode)
-          (setq unread-command-events (listify-key-sequence (kbd "->")))
-          (key-combo-test-command-loop)
-          (buffer-string)
-          ))
-    (desc "RET")
-      (expect "/*\n  \n */"
-        (with-temp-buffer
-          ;; (buffer-enable-undo);;
-          (c-mode)
-          (setq unread-command-events (listify-key-sequence (kbd "/* RET")))
-          (key-combo-test-command-loop)
-          (buffer-string)
-          ))
-      (expect "{\n  \n}"
-        (with-temp-buffer
-          ;; (buffer-enable-undo);;
-          (c-mode)
-          (setq unread-command-events (listify-key-sequence (kbd "{ RET")))
-          (key-combo-test-command-loop)
-          (buffer-string)
-          ))
-      (desc "key-combo")
-      (expect nil
-        (with-temp-buffer
-          (key-combo-mode -1)
-          (if (memq 'key-combo-pre-command-function pre-command-hook) t nil)
-          ))
-      (expect t
-        (with-temp-buffer
-          (key-combo-mode 1)
-          (if (memq 'key-combo-pre-command-function pre-command-hook) t nil)
-          ))
-      (expect nil
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          ;; (insert "\"")
-          (font-lock-fontify-buffer)
-          (key-combo-comment-or-stringp)
-          ))
-      (expect t
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert "\"")
-          (font-lock-fontify-buffer)
-          (key-combo-comment-or-stringp)
-          ))
-      (expect t
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert ";")
-          (font-lock-fontify-buffer)
-          (key-combo-comment-or-stringp)
-          ))
-      (expect nil
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert ";\n")
-          (font-lock-fontify-buffer)
-          (key-combo-comment-or-stringp)
-          ))
-      (expect "= "
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (font-lock-fontify-buffer)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (desc "isearch-mode")
-      (expect "";;bug? "="
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (isearch-mode t)
-          (font-lock-fontify-buffer)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=")))
-          (key-combo-test-command-loop)
-          (isearch-done)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ;; (setq isearch-mode nil)
-          ))
-      (expect "\"="
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert "\"")
-          (font-lock-fontify-buffer)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ";="
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (insert ";")
-          (font-lock-fontify-buffer)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect "= "
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (setq key-combo-command-keys nil)
-          (font-lock-fontify-buffer)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ","
-        (with-temp-buffer
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ",")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ",,"
-        (with-temp-buffer
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ",,")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect " . "
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ".")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ";; ."
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ";.")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ";; ,"
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (buffer-enable-undo)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ";,")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (desc "for skk")
-      (expect ";,"
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (setq this-command 'self-insert-command)
-          (insert ";")
-          (font-lock-fontify-buffer)
-          (setq last-command-event ?,)
-          (key-combo-pre-command-function)
-          (call-interactively this-command)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ";、"
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (skk-mode 1)
-          (setq this-command 'skk-insert)
-          (insert ";")
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ",")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ";。"
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (skk-mode 1)
-          (setq this-command 'skk-insert)
-          (insert ";")
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ".")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (desc "comment or string")
-      (expect ";."
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (setq this-command 'self-insert-command)
-          (insert ";")
-          (font-lock-fontify-buffer)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ".")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ";\n;; "
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (setq this-command 'self-insert-command)
-          (insert ";\n")
-          (font-lock-fontify-buffer)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ";")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect ">"
-        (with-temp-buffer
-          (setq this-command 'self-insert-command)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd ">")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect "="
-        (with-temp-buffer
-          (buffer-enable-undo)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect " = "
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect " = *"
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=*")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (desc "sequence")
-      (expect " == "
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "==")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect " => "
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo);;todo remove
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "=>")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect " === "
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo);;todo remove
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "===")))
-          (key-combo-test-command-loop)
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (expect 'eval-last-sexp
-        (with-temp-buffer
-          (key-combo-finalize)
-          (insert "\"a\"")
-          (setq this-command 'eval-last-sexp)
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "C-x C-e")))
-          (key-combo-test-command-loop)
-          this-command
-          ))
-      (expect "I"
-        (with-temp-buffer
-          (key-combo-finalize)
-          (insert "B\n IP")
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "C-a")))
-          (key-combo-test-command-loop)
-          (char-to-string(following-char))
-          ))
-      (expect "I"
-        (with-temp-buffer
-          (emacs-lisp-mode)
-          (font-lock-fontify-buffer)
-          (key-combo-finalize)
-          (insert "B\n I;P")
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "C-a")))
-          (key-combo-test-command-loop)
-          (char-to-string(following-char))
-          ))
-      (expect " "
-        (with-temp-buffer
-          (key-combo-finalize)
-          (insert "B\n IP")
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "C-a C-a")))
-          (key-combo-test-command-loop)
-          (char-to-string(following-char))
-          ))
-      (expect "B"
-        (with-temp-buffer
-          (key-combo-finalize)
-          (insert "B\n IP")
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "C-a C-a C-a")))
-          (key-combo-test-command-loop)
-          (char-to-string(following-char))
-          ))
-      (expect "P"
-        (with-temp-buffer
-          (key-combo-finalize)
-          (insert "B\n IP")
-          (backward-char)
-
-          (char-to-string(following-char))
-          ))
-      ;;(mock (edebug-defun) :times 1);;=> nil
-      ;;(mock (expectations-eval-defun) :times 1);;=> nil
-      (expect (mock (test1 *) :times 1);;=> nil
-        (with-temp-buffer
-          (key-combo-define-global (kbd "M-C-d") '(test1 test2))
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "M-C-d")))
-          (key-combo-test-command-loop)
-          ))
-      ;; "\M-\C-d"
-      (expect (mock (test2 *) :times 1);;=> nil
-        (with-temp-buffer
-          ;; (message "execute mock")
-          (key-combo-define-global (kbd "M-C-d") '(test1 test2))
-          (setq unread-command-events (listify-key-sequence
-                                       (kbd "M-C-d M-C-d")))
-          (key-combo-test-command-loop)
-          ))
-      (desc "key-combo-command-execute")
-      (expect "a"
-        (with-temp-buffer
-          (buffer-enable-undo)
-          (key-combo-command-execute (lambda() (insert "a")))
-          (buffer-string)
-          ))
-      (expect (error)
-        (with-temp-buffer
-          (buffer-enable-undo)
-          (key-combo-command-execute 'wrong-command)
-          (buffer-string)
-          ))
-      (expect "b"
-        (with-temp-buffer
-          (buffer-enable-undo)
-          (let ((last-command-event ?b))
-            (key-combo-command-execute 'self-insert-command))
-          (buffer-string)
-          ))
-      (desc "key-combo-get-command")
-      (expect "a"
-        (with-temp-buffer
-          (funcall (key-combo-get-command "a"))
-          (buffer-string)
-          ))
-      (expect '("aa" 2)
-        (with-temp-buffer
-          (funcall (key-combo-get-command "a`!!'a"))
-          (list (buffer-string) (point))
-          ))
-      (desc "key-combo-undo")
-      (expect ""
-        (with-temp-buffer
-          (buffer-enable-undo)
-          (let((key-combo-undo-list))
-            (key-combo-command-execute (lambda() (insert "a")))
-            (key-combo-undo)
-            )
-          (buffer-string)
-          ))
-      (expect ""
-        (with-temp-buffer
-          (buffer-enable-undo)
-          (let((key-combo-undo-list))
-            (key-combo-command-execute (key-combo-get-command "a`!!'a"))
-            (key-combo-undo)
-            )
-          (buffer-string)
-          ))
-      (desc "key-combo-define")
-      (expect (error)
-        (key-combo-define-global "a" 'wrong-command))
-      (expect (no-error)
-        (key-combo-define-global "a" 'self-insert-command))
-      (expect (no-error)
-        (key-combo-define-global "a" nil))
-      (expect (no-error)
-        (key-combo-define-global (kbd "C-M-g") 'self-insert-command))
-      (expect (mock (define-key * * *) :times 1);;=> nil
-        (stub key-binding => nil)
-        (key-combo-define-local "a" "a")
-        )
-      (expect (mock (define-key * * *) :times 1);;=> nil
-        ;;(not-called define-key)
-        (stub key-binding =>'key-combo)
-        (key-combo-define-local "a" '("a"))
-        )
-      ;; (expect (mock (define-key * * *) :times 2);;(not-called define-key)
-      ;;   ;;(mock   (define-key * * *) :times 0);;=> nil
-      ;;   (stub key-binding =>'key-combo)
-      ;;   (key-combo-define-local "a" '("a" "bb"))
-      ;;   )
-      (desc "undo")
-      (expect "="
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo)
-          (setq this-command 'self-insert-command)
-          (setq unread-command-events (listify-key-sequence "="))
-          (key-combo-test-command-loop)
-          (undo);;
-          (buffer-string)
-          ))
-      (expect " = "
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo);;
-          (setq unread-command-events (listify-key-sequence "=="))
-          (setq this-command 'self-insert-command)
-          (key-combo-test-command-loop)
-          (undo);;
-          (buffer-substring-no-properties (point-min) (point-max))
-          ))
-      (desc "loop")
-      (expect " = "
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo);;
-          (setq unread-command-events (listify-key-sequence "===="))
-          (key-combo-test-command-loop)
-          (buffer-string)
-          ))
-      (expect " => = "
-        (with-temp-buffer
-          (c-mode)
-          (buffer-enable-undo);;
-          (setq unread-command-events (listify-key-sequence "=>="))
-          (key-combo-test-command-loop)
-          (buffer-string)
-          ))
-      (desc "key-combo-lookup")
-      (expect " = "
-        (with-temp-buffer
-          (c-mode)
-          (funcall
-           (key-combo-lookup "="))
-          (buffer-string)))
-      (expect " == "
-        (with-temp-buffer
-          (c-mode)
-          (funcall
-           (key-combo-lookup "=="))
-          (buffer-string)))
-      (expect " == "
-        (with-temp-buffer
-          (c-mode)
-          (key-combo-define-global (kbd "C-M-h") " == ")
-          (funcall
-           (key-combo-lookup (kbd "C-M-h")))
-          (buffer-string)))
-      (expect " === "
-        (with-temp-buffer
-          (c-mode)
-          (key-combo-define-global (kbd "C-M-h C-M-h") " === ")
-          (buffer-enable-undo)
-          (setq unread-command-events
-                (listify-key-sequence "\C-\M-h\C-\M-h"))
-          (key-combo-test-command-loop)
-          (buffer-string)))
-      (expect " === "
-        (with-temp-buffer
-          (c-mode)
-          (key-combo-define-global (kbd "C-M-h C-M-h") " === ")
-          (funcall
-           (key-combo-lookup (kbd "C-M-h C-M-h")))
-          (buffer-string)))
-      (expect " = "
-        (with-temp-buffer
-          (c-mode)
-          (funcall
-           (key-combo-lookup [?=]))
-          (buffer-string)))
-      (expect " == "
-        (with-temp-buffer
-          (c-mode)
-          (funcall
-           (key-combo-lookup [?= ?=]))
-          (buffer-string)))
-      (expect " => "
-        (with-temp-buffer
-          (c-mode)
-          (funcall
-           (key-combo-lookup [?= ?>]))
-          (buffer-string)))
-      (expect " === "
-        (with-temp-buffer
-          (c-mode)
-          (funcall
-           (key-combo-lookup [?= ?= ?=]))
-          (buffer-string)))
-      (expect nil
-        (key-combo-lookup [?= ?= ?= ?=]))
-      (desc "key-combo-elementp")
-      (expect t
-        (every 'identity
-        ;; (identity
-               (mapcar (lambda(command)
-                         (progn (key-combo-define-global ">>" command)
-                                (identity (key-combo-lookup ">>"))))
-                       '((lambda()())
-                         ">"
-                         ;;nil
-                         self-insert-command
-                         ((lambda()()))
-                         (">")
-                         ;;(nil)
-                         (self-insert-command)
-                         (">" ">")
-                         (">" (lambda()()))
-                         ((lambda()()) ">")
-                         ((lambda()()) (lambda()()))
-                         (">" self-insert-command)
-                         (self-insert-command ">")
-                         (self-insert-command self-insert-command)
-                         ))))
-      (expect t
-        (every 'identity
-               (mapcar (lambda(x) (key-combo-elementp x))
-                       '((lambda()())
-                         ">"
-                         nil
-                         self-insert-command
-                         ))))
-      (expect t
-        (every 'null
-               (mapcar (lambda(x) (key-combo-elementp x))
-                       '((">")
-                         ((lambda()()))
-                         (nil)
-                         (self-insert-command)
-                         wrong-command
-                        ))))
-      )))
 
 (defun key-combo-undo ()
   "returns buffer undo list"
@@ -1106,11 +499,16 @@ which in most cases is shared with all other buffers in the same major mode.
 
 (defun key-combo-command-execute (command)
   "returns buffer undo list"
-    (cond
-     ((commandp command)
-      (call-interactively command))
-     (t (funcall command)))
-    (undo-boundary)
+  (cond
+   ((stringp command)
+    (key-combo-execute-macro command))
+   ((commandp command)
+    (call-interactively command))
+   ((functionp command)
+    (funcall command))
+   (t (error "%s is not command" command))
+   )
+  (undo-boundary)
   )
 
 (defvar key-combo-command-keys nil)
@@ -1119,7 +517,7 @@ which in most cases is shared with all other buffers in the same major mode.
 (defun key-combo ()
   ;; because of prefix arg
   (interactive)
-  (let ((command (key-combo-lookup key-combo-command-keys)))
+  (let ((command (key-combo-key-binding key-combo-command-keys)))
     (if (and key-combo-need-undop
              (not (eq buffer-undo-list t)))
         (key-combo-undo)
@@ -1138,13 +536,47 @@ which in most cases is shared with all other buffers in the same major mode.
   (setq key-combo-command-keys nil)
   )
 
+;;;###autoload
+(define-minor-mode key-combo-mode
+  "Toggle key combo."
+  :lighter " KC"
+  :group 'key-combo
+  :keymap (make-sparse-keymap)
+  (if key-combo-mode
+      (add-hook 'pre-command-hook
+                ;;post-self-insert-hook
+                #'key-combo-pre-command-function nil t)
+    (remove-hook 'pre-command-hook
+                 #'key-combo-pre-command-function t))
+  )
+
+(defcustom key-combo-disable-modes nil
+  "Major modes `key-combo-mode' can not run on."
+  :group 'key-combo)
+
+;; copy from auto-complete-mode-maybe
+(defun key-combo-mode-maybe ()
+  "What buffer `key-combo-mode' prefers."
+  (when (and (not (minibufferp (current-buffer)))
+             (not (memq major-mode key-combo-disable-modes))
+             (key-combo-mode 1)
+             ;; (key-combo-setup)
+             )))
+
+;; copy from global-auto-complete-mode
+;;;###autoload
+(define-global-minor-mode global-key-combo-mode
+  key-combo-mode key-combo-mode-maybe
+  ;; :init-value t bug?
+  :group 'key-combo)
+
 (defun key-combo-pre-command-function ()
   (let ((command-key-vector (this-command-keys-vector))
         (first-timep (not (eq last-command 'key-combo))))
     (setq key-combo-command-keys
           ;; use last-command-event becase of testability
           (vconcat key-combo-command-keys command-key-vector))
-    (unless (key-combo-lookup key-combo-command-keys);;retry
+    (unless (key-combo-key-binding key-combo-command-keys);;retry
       ;; need undo?
       (if (and (not (eq 2 (length key-combo-command-keys)))
                (equal [] (delete (aref key-combo-command-keys 0)
@@ -1158,25 +590,28 @@ which in most cases is shared with all other buffers in the same major mode.
             key-combo-mode
             (not (minibufferp))
             (not isearch-mode)
-            (key-combo-lookup key-combo-command-keys)
+            (key-combo-key-binding key-combo-command-keys)
             (not (and (key-combo-comment-or-stringp)
                       (memq (key-binding command-key-vector)
                             '(self-insert-command skk-insert))))
             )
            (setq this-command 'key-combo)
            (cond (first-timep
+                  ;; for test
+                  ;; (setq key-combo-command-keys nil)
+                  ;; (key-combo-finalize)
                   ;; first time
                   (setq key-combo-original-undo-list buffer-undo-list
                         buffer-undo-list nil)
                   (key-combo-set-start-position (cons (point) (window-start)))
                   (cond ((memq (key-binding command-key-vector)
                                '(self-insert-command skk-insert))
-                           (undo-boundary)
-                           (key-combo-command-execute
-                            (key-binding
-                             command-key-vector))
-                           (setq key-combo-need-undop t)
-                           ;; )
+                         (undo-boundary)
+                         (key-combo-command-execute
+                          (key-binding
+                           command-key-vector))
+                         (setq key-combo-need-undop t)
+                         ;; )
                          ));;;
                   )
                  ;; continue
@@ -1196,20 +631,6 @@ which in most cases is shared with all other buffers in the same major mode.
              ))
           )))
 
-;;;###autoload
-(define-minor-mode key-combo-mode
-  "Toggle key combo."
-  :lighter " KC"
-  :global t
-  :group 'key-combo
-  (if key-combo-mode
-      (add-hook 'pre-command-hook
-                ;;post-self-insert-hook
-                #'key-combo-pre-command-function)
-    (remove-hook 'pre-command-hook
-                 #'key-combo-pre-command-function))
-  )
-
 ;; (listify-key-sequence
 ;;  (kbd "M-C-d M-C-d"))
 ;; (listify-key-sequence
@@ -1227,6 +648,15 @@ which in most cases is shared with all other buffers in the same major mode.
 ;; filter for mode
 ;; filter for inside string ""
 ;; filter for inside comment ;;
+
+;; copy from terminal
+;; xterm
+;; http://ttssh2.sourceforge.jp/manual/ja/usage/tips/vim.html
+;; http://d.hatena.ne.jp/guyon/20090224/1235485381
+;; Bracketed Paste Mode
+;; http://togetter.com/li/289305
+;; http://www.bookshelf.jp/texi/elisp-manual/21-2-8/jp/elisp_40.html#SEC654
+;; http://shyouhei.tumblr.com/post/63240207/pos-command-hook
 
 ;; support lamda func
 (provide 'key-combo)

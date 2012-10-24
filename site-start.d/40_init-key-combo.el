@@ -157,6 +157,7 @@
 (defun my-prolog-mode-key-combo ()
   (key-combo-define-local (kbd ",") ", ")
   (key-combo-define-local (kbd ":-") " :- ")
+  (key-combo-define-local (kbd "/*") "/* `!!' */")
   )
 
 (add-hook 'prolog-mode-hook 'my-prolog-mode-key-combo)
