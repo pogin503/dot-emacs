@@ -112,3 +112,5 @@ PREFIX が t の場合 (前置引数がある場合) は、これまでの選択
           (lambda ()
             (local-set-key (kbd "@") 'my-magit-select-files)
             (local-set-key (kbd "`") 'my-magit-clear-selected-files)))
+
+(global-set-key (kbd "C-c i") 'my-magit-insert-selected-files)

@@ -5,7 +5,9 @@
       (set-face-attribute 'default nil
                           :family "Meiryo"
                           :height 100
-                          :weight 'bold)
+                          :weight 'bold
+                          ;; :weight 'normal
+                          )
       (set-fontset-font nil 'japanese-jisx0208
                         (font-spec :family "Meiryo")))
   (progn
