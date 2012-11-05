@@ -3,10 +3,12 @@
 ;; Windows Setting
 (when run-windows
   (progn
-    (add-to-list 'exec-path "C:/Program Files (x86)/Coq/bin")
+    (if run-windows-x64
+        (add-to-list 'exec-path "C:/Program Files (x86)/Coq/bin")
+      (add-to-list 'exec-path "C:/Program Files/Coq/bin"))
     (load-file
      (concat dropbox-directory
-             "/プログラミング/ProofGeneral-4.1/ProofGeneral-4.1/generic/proof-site.el"))))
+             "/eworkspace/ProofGeneral-4.1/ProofGeneral-4.1/generic/proof-site.el"))))
 
 ;; 要 $ yaourt -S proofgeneral
 (when (file-exists-p
@@ -20,6 +22,7 @@
                                ac-source-dictionary)))
           (add-to-list 'ac-modes 'coq-mode)
           )
+
 ;; coq-mode-hook
 (add-hook 'coq-mode-hook 'auto-complete-mode)
 (add-hook 'coq-mode-hook 'my-ac-coq-mode)
