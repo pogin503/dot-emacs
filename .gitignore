@@ -21,6 +21,10 @@ init.elc
 .session
 .scratch
 plugins/taihi/
+diff
+history
+test
+url/
 
 # ignore diff files
 *.diff

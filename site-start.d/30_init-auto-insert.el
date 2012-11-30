@@ -1,5 +1,4 @@
 ;;@see http://ja.green.xrea.jp/emacs/autoinsert-mode
-;;@see 
 (require 'autoinsert)
 (require 'cl)
 (add-hook 'before-save-hook 'time-stamp)
@@ -20,7 +19,7 @@
 ;; 			     (lambda() (my-template-exec "/usr/local/bin/gosh"))
 ;; 			     my-template])
 		("\\.sh$" . ["template.sh"
-			     (lambda() (my-template-exec "/bin/sh"))
+			     (lambda() (my-template-exec "#!/bin/sh"))
 			     my-template])
 ;; 		("\\.py$" . ["template.sh"
 ;; 			     (lambda() (my-template-exec "/usr/bin/python"))
@@ -47,24 +46,24 @@
     ;; ("%license%" . (lambda()(read-from-minibuffer "License: ")))
     ;; ("%bdesc%" . (lambda()(read-from-minibuffer "Brief dscription: ")))
     ("%file-without-ext%" . (lambda ()
-                              (file-name-sans-extension 
+                              (file-name-sans-extension
                                (file-name-nondirectory (buffer-file-name)))))
     ("%include-guard%"    . (lambda ()
-                              (format "__%s__" 
-                                      (upcase 
-                                       (file-name-sans-extension 
+                              (format "__%s__"
+                                      (upcase
+                                       (file-name-sans-extension
                                         (file-name-nondirectory buffer-file-name))))))
     ))
 
-;; (defun my-file-body-name (file-name)
-;;   (substring file-name 0 (position 46 file-name)))
+(defun my-file-body-name (file-name)
+  (substring file-name 0 (position 46 file-name)))
 
-;; (defmacro defreplace (name replace-string)
-;;   `(defun ,name (str)
-;;      (goto-char (point-min))
-;;      (replace-string ,replace-string str)))
+(defmacro defreplace (name replace-string)
+  `(defun ,name (str)
+     (goto-char (point-min))
+     (replace-string ,replace-string str)))
 
-;; (defreplace my-template-exec "%exec%")
+(defreplace my-template-exec "%exec%")
 ;; (defreplace my-template-package "%package%")
 
 (defun my-template ()
