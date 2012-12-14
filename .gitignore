@@ -25,6 +25,7 @@ diff
 history
 test
 url/
+plugins/twittering-mode/cert/
 
 # ignore diff files
 *.diff

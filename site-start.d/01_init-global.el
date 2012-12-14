@@ -104,7 +104,7 @@
 
 ;;ガベージコレクションの頻度を下げる 初期設定は4000000
 ;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html
-(setq gc-cons-threshold 5242880)
+(setq gc-cons-threshold 524288000)
 
 ;;regionの選択中にBackspaceを押すと消せるようにする
 ;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html#ys:backward-delete-region
@@ -289,7 +289,7 @@
 (setq history-length 3000)
 
 ;; 行間
-(setq-default line-spacing 0)
+;; (setq-default line-spacing 0)
 
 (defun esk-pretty-lambdas ()
   (font-lock-add-keywords

@@ -5,6 +5,10 @@
 (add-to-list 'interpreter-mode-alist '("runghc" . haskell-mode))     ;; #!/usr/bin/env runghc 用
 (add-to-list 'interpreter-mode-alist '("runhaskell" . haskell-mode)) ;; #!/usr/bin/env runhaskell 用
 
+(add-to-list 'auto-mode-alist '("\\.hamlet$" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.lucius$" . css-mode))
+(add-to-list 'auto-mode-alist '("\\.julius$" . js2-mode))
+
 (defun my-haskell-ac-init ()
   (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
     (auto-complete-mode t)
@@ -12,8 +16,9 @@
                        ac-source-dictionary
                        ac-source-ghc-mod))))
 
-(lazyload (haskell-mode) "haskell-mode"
+(lazyload (haskell-mode literate-haskell-mode haskell-cabal-mode) "haskell-mode"
           (require 'haskell-mode)
+          (require 'haskell-cabal)
           (require 'anything)
           (require 'anything-config)
           (require 'anything-match-plugin)

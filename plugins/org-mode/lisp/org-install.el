@@ -96,12 +96,12 @@ exported source code blocks by language.
 ;;; Generated autoloads from ob.el
 
 (autoload 'org-babel-execute-safely-maybe "ob" "\
-Not documented
+
 
 \(fn)" nil nil)
 
 (autoload 'org-babel-execute-maybe "ob" "\
-Not documented
+
 
 \(fn)" t nil)
 
@@ -229,12 +229,16 @@ end-body --------- point at the end of the body
 
 \(fn FILE &rest BODY)" nil (quote macro))
 
+(put 'org-babel-map-src-blocks 'lisp-indent-function '1)
+
 (autoload 'org-babel-map-inline-src-blocks "ob" "\
 Evaluate BODY forms on each inline source-block in FILE.
 If FILE is nil evaluate BODY forms on source blocks in current
 buffer.
 
 \(fn FILE &rest BODY)" nil (quote macro))
+
+(put 'org-babel-map-inline-src-blocks 'lisp-indent-function '1)
 
 (autoload 'org-babel-map-call-lines "ob" "\
 Evaluate BODY forms on each call line in FILE.
@@ -243,10 +247,14 @@ buffer.
 
 \(fn FILE &rest BODY)" nil (quote macro))
 
+(put 'org-babel-map-call-lines 'lisp-indent-function '1)
+
 (autoload 'org-babel-map-executables "ob" "\
-Not documented
+
 
 \(fn FILE &rest BODY)" nil (quote macro))
+
+(put 'org-babel-map-executables 'lisp-indent-function '1)
 
 (autoload 'org-babel-execute-buffer "ob" "\
 Execute source code blocks in a buffer.
@@ -404,7 +412,7 @@ agenda-day   The day in the agenda where this is listed
 \(fn CMD-KEY &rest PARAMETERS)" nil (quote macro))
 
 (autoload 'org-store-agenda-views "org-agenda" "\
-Not documented
+
 
 \(fn &rest PARAMETERS)" t nil)
 
@@ -722,7 +730,7 @@ agenda will use the date at point as the default date.
 \(fn &optional GOTO KEYS)" t nil)
 
 (autoload 'org-capture-insert-template-here "org-capture" "\
-Not documented
+
 
 \(fn)" nil nil)
 
@@ -1845,7 +1853,7 @@ replace any running timer.
 ;;;***
 
 ;;;### (autoloads (org-git-version org-release) "org-version" "org-version.el"
-;;;;;;  (20583 29615))
+;;;;;;  (20676 42368))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -2106,7 +2114,7 @@ information about your Org-mode version and configuration.
 \(fn)" t nil)
 
 (autoload 'org-require-autoloaded-modules "org" "\
-Not documented
+
 
 \(fn)" t nil)
 

@@ -11,11 +11,11 @@
              "/eworkspace/ProofGeneral-4.1/ProofGeneral-4.1/generic/proof-site.el"))))
 
 ;; 要 $ yaourt -S proofgeneral
-(when (file-exists-p
-       "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
-  (load-file "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el"))
+;; (when (file-exists-p
+;;        "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
+;;   (load-file "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el"))
 
-(lazyload (coq-mode) "coq"
+(lazyload (coq-mode) "proof-site"
           ;; set auto-complete-mode
           (defun my-ac-coq-mode ()
             (setq ac-sources '(ac-source-words-in-same-mode-buffers
