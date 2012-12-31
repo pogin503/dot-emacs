@@ -6,33 +6,33 @@
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode)
                                 '("\\.txt$" . org-mode))
 
-(autoload-if-found 'org-directory "org" nil t)
+;; (autoload-if-found 'org-directory "org" nil t)
 
-(if (boundp 'dropbox-directory)
-    (setq org-directory (concat dropbox-directory "/Documents/org/")))
-(setq org-default-notes-file (concat org-directory "agenda.org"))
-(setq org-mobile-directory (concat dropbox-directory "/MobileOrg"))
-(setq org-mobile-inbox-for-pull (concat dropbox-directory "/flagged.org"))
-(setq org-agenda-files
-      (mapcar #'(lambda (x) (concat org-directory x))
-              '("work.org" "school.org" "home.org")))
+(global-set-key "\C-cl" 'org-store-link)
+;; (global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+;; C-c r でorg-remember起動 キーバインドの設定
+(define-key global-map (kbd "C-c r") 'org-remember)
 
 (lazyload (org-mode org-todo-list org-agenda org-store-link) "org-install"
           (require 'org-install)
+          (if (boundp 'dropbox-directory)
+              (setq org-directory (concat dropbox-directory "/Documents/org/")))
+          (setq org-default-notes-file (concat org-directory "agenda.org"))
+          (setq org-mobile-directory (concat dropbox-directory "/MobileOrg"))
+          (setq org-mobile-inbox-for-pull (concat dropbox-directory "/flagged.org"))
+          (setq org-agenda-files
+                (mapcar #'(lambda (x) (concat org-directory x))
+                        '("work.org" "school.org" "home.org")))
+
           (setq org-startup-truncated nil)
           (setq org-return-follows-link t)
-
-          (global-set-key "\C-cl" 'org-store-link)
-          ;; (global-set-key "\C-cc" 'org-capture)
-          (global-set-key "\C-ca" 'org-agenda)
-          (global-set-key "\C-cb" 'org-iswitchb)
 
           (setq org-log-done t)
 
           (org-remember-insinuate)
-
-          ;; C-c r でorg-remember起動 キーバインドの設定
-          (define-key global-map (kbd "C-c r") 'org-remember)
 
           ;; TODO状態
           (setq org-todo-keywords
@@ -128,7 +128,11 @@ If the link is in hidden text, expose it."
 
           ;; (lazyload (org-tree-slide-mode) "org-tree-slide-mode"
           ;;           (req org-tree-slide))
+          (defun test-org-func ()
+            (interactive)
+            (message "t"))
 
+          (define-key org-mode-map (kbd "s-9") 'test-org-func)
           (req org-tree-slide)
           (require 'org-export-generic)
           )

@@ -17,6 +17,7 @@
 
 (lazyload (coq-mode) "proof-site"
           ;; set auto-complete-mode
+          (require 'proof-site)
           (defun my-ac-coq-mode ()
             (setq ac-sources '(ac-source-words-in-same-mode-buffers
                                ac-source-dictionary)))
