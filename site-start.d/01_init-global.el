@@ -108,7 +108,7 @@
 
 ;;ガベージコレクションの頻度を下げる 初期設定は4000000
 ;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html
-(setq gc-cons-threshold 40000000)
+(setq gc-cons-threshold 4000000)
 
 ;;regionの選択中にBackspaceを押すと消せるようにする
 ;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html#ys:backward-delete-region
@@ -310,7 +310,7 @@
           1 font-lock-warning-face t))))
 
 
-;; (add-hook 'prog-mode-hook 'esk-pretty-lambdas)
+(add-hook 'prog-mode-hook 'esk-pretty-lambdas)
 ;; (add-hook 'prog-mode-hook 'esk-add-watchwords)
 
 ;; (set-default 'indicate-empty-lines nil)

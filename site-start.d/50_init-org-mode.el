@@ -30,7 +30,7 @@
           (setq org-startup-truncated nil)
           (setq org-return-follows-link t)
 
-          (setq org-log-done t)
+          (setq org-log-done 'time)
 
           (org-remember-insinuate)
 

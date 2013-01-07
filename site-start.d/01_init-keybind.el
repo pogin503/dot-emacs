@@ -85,3 +85,8 @@
 
 (global-set-key (kbd "M-l") 'forward-match-char)
 (global-set-key (kbd "M-L") 'backward-match-char)
+
+(global-set-key (kbd "C-x C-c") 'anything-execute-extended-command)
+
+;; I never use C-x C-c
+(defalias 'exit 'save-buffers-kill-emacs)
