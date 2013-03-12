@@ -91,16 +91,34 @@
 ;;
 ;;; Bug:
 ;; (shared-examples ("examples for quote" :vars ((quote)))
+;; (should (eq 1) 2)
 
 (require 'ert)
 (require 'cl)
 
+(defconst el-spec:separator "\n")
+
+;; internal variables
+(defvar el-spec:vars nil)
+(defvar el-spec:full-context nil)
+(defvar el-spec:descriptions nil)
+(defvar el-spec:example nil)
+(defvar el-spec:load-history nil)
+(defvar el-spec:is-set-up nil)
+
+(defvar el-spec:selection 'all
+  ;; all or context
+  )
+(defvar el-spec:example-tag nil)
+;; Do not use buffer local variable.
+;; Because find-definition-noselect can not find definition.
+
 (defmacro el-spec:around (&rest body)
-  (push
-   `(lambda (el-spec:example)
+  `(push
+    (lambda (el-spec:example)
       ,@body)
-   el-spec:full-context)
-  nil)
+    el-spec:full-context)
+  )
 
 (defmacro el-spec:before (&rest body)
   `(el-spec:around
@@ -143,8 +161,6 @@
 (defun el-spec:compose (f g)
   `(lambda () (funcall (function ,g) (function ,f))))
 
-(defconst el-spec:separator "\n")
-
 (defmacro el-spec:it (arglist &rest body)
   (declare (indent 1))
   (destructuring-bind (&optional desc &key vars)
@@ -170,13 +186,8 @@
                (funcall ,(reduce #'el-spec:compose
                                  el-spec:full-context))
                )
-             ;; This hack allows `symbol-file' to associate `ert-deftest'
-             ;; forms with files, and therefore enables `find-function' to
-             ;; work with tests.  However, it leads to warnings in
-             ;; `unload-feature', which doesn't know how to undefine tests
-             ;; and has no mechanism for extension.
-             ;; (push '(ert-deftest . ,name) current-load-list)
-             ;; ',name))))
+             ;; '(ert-deftest . ,test-symbol) is pushed in current-load-list
+             ;; when ert-deftest called.
              )
            )
         ))))
@@ -202,36 +213,71 @@
        )
     ))
 
+(defun el-spec:clean-up ()
+  (setq el-spec:load-history
+        (delq (assoc (current-buffer) el-spec:load-history)
+              el-spec:load-history)))
+
+;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls
 (defmacro describe (arglist &rest body)
-  (declare (indent 1))
-  ;; for failed test
-  (makunbound 'el-spec:full-context)
-  (makunbound 'el-spec:descriptions)
-  (makunbound 'el-spec:vars)
-  (el-spec:parse)
-  `(let ((el-spec:full-context nil)
-         (el-spec:descriptions nil)
-         (el-spec:vars nil))
-     ;; macrolet
-     (letf (((symbol-function 'around) (symbol-function 'el-spec:around))
-            ((symbol-function 'after) (symbol-function 'el-spec:after))
-            ((symbol-function 'before) (symbol-function 'el-spec:before))
-            ((symbol-function 'it) (symbol-function 'el-spec:it))
-            ((symbol-function 'context) (symbol-function 'el-spec:context))
-            ((symbol-function 'shared-context)
-             (symbol-function 'el-spec:shared-context))
-            ((symbol-function 'include-context)
-             (symbol-function 'el-spec:include-context))
-            ((symbol-function 'shared-examples)
-             (symbol-function 'el-spec:shared-examples))
-            ((symbol-function 'include-examples)
-             (symbol-function 'el-spec:include-examples))
-            )
-       (el-spec:context ,arglist
-         ,@body
-         ))
-     )
-  )
+  (declare (indent 1) (debug t))
+
+  (if el-spec:is-set-up
+      `(el-spec:context ,arglist
+         ,@body)
+
+    ;; el-spec needs to be set up
+
+    ;; makunbound for tests
+    (makunbound 'el-spec:full-context)
+    (makunbound 'el-spec:descriptions)
+    (makunbound 'el-spec:vars)
+
+    (add-hook
+     'kill-buffer-hook
+     'el-spec:clean-up nil t)
+    (el-spec:parse)
+    `(let ((el-spec:full-context nil)
+           (el-spec:descriptions nil)
+           (el-spec:vars nil))
+       ;; macrolet
+       (letf (((symbol-function 'around) (symbol-function 'el-spec:around))
+              ((symbol-function 'after) (symbol-function 'el-spec:after))
+              ((symbol-function 'before) (symbol-function 'el-spec:before))
+              ((symbol-function 'it) (symbol-function 'el-spec:it))
+              ((symbol-function 'context) (symbol-function 'el-spec:context))
+              ((symbol-function 'shared-context)
+               (symbol-function 'el-spec:shared-context))
+              ((symbol-function 'include-context)
+               (symbol-function 'el-spec:include-context))
+              ((symbol-function 'shared-examples)
+               (symbol-function 'el-spec:shared-examples))
+              ((symbol-function 'include-examples)
+               (symbol-function 'el-spec:include-examples)))
+
+         (let ((el-spec:is-set-up t))
+           (el-spec:context ,arglist ,@body)))
+
+       (let ((current-history (assoc (current-buffer) el-spec:load-history))
+             ;; for delete-dups
+             (current-load-list current-load-list))
+         (when current-history
+           (setq el-spec:load-history
+                 (delq current-history el-spec:load-history)))
+         (push (append (list (current-buffer))
+                       (delete-dups current-load-list))
+               el-spec:load-history)
+         nil)
+       )))
+
+
+
+
+
+
+
+
+
 
 (put 'it 'lisp-indent-function 1)
 (put 'context 'lisp-indent-function 1)
@@ -255,16 +301,20 @@
 ;; copy from el-expectations
 (defun el-sepc:current-form-is-describe ()
   (save-excursion
-    (forward-char)
-    (beginning-of-defun)
-    (looking-at "(describe\\|(.+(fboundp 'describe)\\|(dont-compile\n.*describe")))
+    (let ((limit (progn (end-of-defun) (point))))
+      (unless (eobp) (forward-char))
+      (beginning-of-defun)
+      (condition-case err
+          (progn
+            (while (not (and (re-search-forward "describe" limit)
+                             (not (el-spec:string-or-comment-p))
+                             (string= (el-spec:first-element) "describe"))))
+            t)
+        (search-failed
+         nil)))))
 
 (substitute-key-definition 'expectations-eval-defun 'eval-defun emacs-lisp-mode-map)
 (substitute-key-definition 'expectations-eval-defun 'eval-defun lisp-interaction-mode-map)
-
-(defvar el-spec:selection 'all
-  ;; all or context
-  )
 
 (defun el-spec:toggle-selection ()
   (interactive)
@@ -280,7 +330,7 @@
 
 (defadvice ert (around el-spec:ert-advice activate)
   (if (and (fboundp 'popwin:popup-buffer-tail)
-           (not (interactive-p)))
+           (not (called-interactively-p 'interactive)))
       (let ((special-display-function 'popwin:popup-buffer-tail))
         ad-do-it
         (popwin:popup-buffer-tail "*ert*"))
@@ -296,22 +346,53 @@
     (find-function-do-it test-name 'ert-deftest 'pop-to-buffer))
   );; 'switch-to-buffer-other-window
 
-(defvar el-spec:first-time-p t)
 (make-variable-buffer-local 'el-spec:first-time-p)
 
+(defun el-spec:execute-examples ()
+  (save-excursion
+    (let ((test-name
+           (save-excursion
+             (forward-char)
+             (let ((symbol (substring-no-properties
+                            (or (thing-at-point 'symbol) ""))))
+               ;; (let ((symbol (or (el-spec:first-element) "")))
+               (if (or (string= symbol "it")
+                       (string= symbol "context")
+                       (string= symbol "describe"))
+                   (car-safe (rassoc (point) el-spec:example-tag)) nil)
+               ))))
+      (backward-char)
+      (el-spec:re-position)
+      (unless test-name
+        (condition-case err
+            (while (null test-name)
+              (backward-up-list)
+              (save-excursion
+                (el-spec:down-list)
+                (let ((symbol (substring-no-properties
+                               (or (thing-at-point 'symbol) ""))))
+                  ;; ((symbol (or (el-spec:first-element) "")))
+                  (if (or (string= symbol "it")
+                          (string= symbol "context")
+                          (string= symbol "describe"))
+                      (setq test-name
+                            (car-safe (rassoc (point) el-spec:example-tag)))))
+                ))
+          (scan-error
+           ;;top level
+           )))
+      (if test-name
+          (ert (concat "\\`" (regexp-quote (symbol-name test-name))))
+        (message "no example")
+        ))
+    ))
+
 (defadvice eval-defun (around el-spec:eval-defun-advice activate)
-  (if (not (and (interactive-p)
+  (if (not (and (called-interactively-p 'interactive)
                 (el-sepc:current-form-is-describe)))
       ad-do-it
     (ert-delete-all-tests)
-    ;; for find-func
-    ;; (assoc buffer-file-name load-history) is too slow...
-    (if el-spec:first-time-p
-        (progn
-        (eval-buffer)
-          (setq el-spec:first-time-p nil))
-      ad-do-it
-      )
+          ad-do-it
     (case el-spec:selection
       ((all)
        (ert t))
@@ -359,48 +440,7 @@
 (defun el-spec:string-or-comment-p ()
   (or (nth 3 (syntax-ppss));string
       (nth 4 (syntax-ppss)));comment
-    )
-
-(defvar el-spec:example-tag nil)
-;; Do not use buffer local variable.
-;; Because find-definition-noselect can not find definition.
-
-(defun el-spec:execute-examples ()
-  (save-excursion
-    (let ((test-name
-           (save-excursion
-             (forward-char)
-             (let ((symbol (substring-no-properties
-                            (or (thing-at-point 'symbol) ""))))
-               (if (or (string= symbol "it")
-                       (string= symbol "context")
-                       (string= symbol "describe"))
-                   (car-safe (rassoc (point) el-spec:example-tag)) nil)
-               ))))
-      (backward-char)
-      (el-spec:re-position)
-      (unless test-name
-        (condition-case err
-            (while (null test-name)
-              (backward-up-list)
-              (save-excursion
-                (el-spec:down-list)
-                (let ((symbol (substring-no-properties
-                               (or (thing-at-point 'symbol) ""))))
-                  (if (or (string= symbol "it")
-                          (string= symbol "context")
-                          (string= symbol "describe"))
-                      (setq test-name
-                            (car-safe (rassoc (point) el-spec:example-tag)))))
-                ))
-          (scan-error
-           ;;top level
-           )))
-        (if test-name
-            (ert (symbol-name test-name))
-        (message "no example")
-        ))
-      ))
+  )
 
 (defmacro el-spec:shared-context (arglist &rest body)
   (declare (indent 1))
@@ -485,13 +525,15 @@
 (defun el-spec:parse ()
   (save-excursion
     (goto-char (point-min))
-    (while (and (re-search-forward "describe" (point-max) t)
-                (not (el-spec:string-or-comment-p)))
+    (while (re-search-forward "describe" (point-max) t)
       ;; in case for
       ;; (;; comment
       ;;  describe
-      (when (string= (el-spec:first-element) "describe")
+      (when (and (not (el-spec:string-or-comment-p))
+                 (string= (el-spec:first-element) "describe"))
         (backward-sexp)
+        ;; create el-spec:example-tag when parse.
+        ;; Because point is not correct when define.
         (push (cons (intern (apply 'concat (reverse (el-spec:get-description))))
                     (point))
               el-spec:example-tag)
@@ -572,16 +614,20 @@
   (ert t)
   )
 
-(defadvice find-definition-noselect
-  (after el-spec:find-definition-noselect-advice activate)
-  (destructuring-bind (symbol type &optional file) (ad-get-args 0)
-    (when (and (null (cdr-safe ad-return-value))
+(defadvice find-function-search-for-symbol
+  (around el-spec:find-function-search-for-symbol activate)
+  ;; return a cons cell (BUFFER . POSITION),
+  (destructuring-bind (symbol type library) (ad-get-args 0)
+    (if (and (null library)
                (eq type 'ert-deftest))
-      (let ((pos (assoc-default symbol el-spec:example-tag)))
+        (let ((buffer (let ((load-history el-spec:load-history))
+                        (symbol-file symbol)))
+              (pos (assoc-default symbol el-spec:example-tag)))
         (if pos
-            (setq ad-return-value
-                  (cons (car-safe ad-return-value) pos))
-          (error "Can not find function. shared-example?"))))))
+              (setq ad-return-value (cons buffer pos))
+            (error "Can not find function. shared-example or removed?")))
+      ad-do-it
+      )))
 
 ;;print test name
 (defun ert-insert-test-name-button (test-name)

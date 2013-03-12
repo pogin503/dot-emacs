@@ -19,7 +19,8 @@
 (lazyload (org-mode org-todo-list org-agenda org-store-link) "org-install"
           (require 'org-install)
           (if (boundp 'dropbox-directory)
-              (setq org-directory (concat dropbox-directory "/Documents/org/")))
+              (setq org-directory (concat dropbox-directory "/Documents/"))
+            (setq org-directory "~/Documents/"))
           (setq org-default-notes-file (concat org-directory "agenda.org"))
           (setq org-mobile-directory (concat dropbox-directory "/MobileOrg"))
           (setq org-mobile-inbox-for-pull (concat dropbox-directory "/flagged.org"))
@@ -135,4 +136,7 @@ If the link is in hidden text, expose it."
           (define-key org-mode-map (kbd "s-9") 'test-org-func)
           (req org-tree-slide)
           (require 'org-export-generic)
+          (require 'org-bullets)
           )
+
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))

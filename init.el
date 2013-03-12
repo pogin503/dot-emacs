@@ -1,4 +1,4 @@
-; 常時デバッグ状態
+; 常時デバッグ状態
 (setq debug-on-error t)
 
 
@@ -12,6 +12,46 @@
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)             ; 互換性確保
 
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+;; (require 'el-get)
+;; (setq el-get-dir "~/.emacs.d/elisp/el-get/")
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+;; レシピ置き場
+(add-to-list 'el-get-recipe-path
+             (concat default-directory "elisp/el-get/recipes"))
+;; 追加のレシピ置き場
+(add-to-list 'el-get-recipe-path
+             "~/.emacs.d/elisp/el-get/local-recipes")
+;; (setq el-get-user-package-directory "~/.emacs.d/elisp/el-get/local-recipes")
+;; (el-get 'sync)
+
+(setq el-get-sources
+      '(hatena-diary))
+
+;; my packages
+(setq dim-packages
+      (append
+       ;; list of packages we use straight from official recipes
+       '(
+         ;; gnus
+         ;; bbdb switch-window vkill google-maps pgdevenv-el
+         ;; mbsync asciidoc smex geiser xcscope multiple-cursors
+         ;; anything descbinds-anything pcmpl-git magit-view-file
+         ;; emacs-goodies-el sicp auto-dictionnary keywiz pandoc-mode
+         ;; pgsql-linum-format psvn rect-mark crontab-mode icomplete+
+         ;; php-mode-improved rainbow-delimiters muse deft dpans2texi
+         ;; markdown-mode color-theme-solarized protobuf-mode paredit
+         hatena-diary
+         )
+
+         (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
+
+(el-get 'sync dim-packages)
 
 ;;open-junk-file
 (require 'open-junk-file)
@@ -100,7 +140,7 @@
 (defadvice save-buffers-kill-emacs
   (before save-frame-size activate)
   (my-window-size-save))
-;;; ウィンドウのサイズを閉じる前に記憶しておく ここまで
+;;; ウィンドウのサイズを閉じる前に記憶しておく ここまで
 
 ;;from ALICE meadow code end.
 
@@ -108,9 +148,9 @@
 ;;reference from sakito's config
 
 ;; 引数を load-path へ追加
-;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
-;; [A-Za-z] で開始する物だけ追加するので、追加したくない物は . や _ を先頭に付与しておけばロードしない
-;; dolist は Emacs 21 から標準関数なので積極的に利用して良い
+;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
+;; [A-Za-z] で開始する物だけ追加するので、追加したくない物は . や _ を先頭に付与しておけばロードしない
+;; dolist は Emacs 21 から標準関数なので積極的に利用して良い
 (defun add-to-load-path (&rest paths)
   (let (path)
     (dolist (path paths paths)
