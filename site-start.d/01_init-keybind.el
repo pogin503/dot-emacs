@@ -90,3 +90,5 @@
 
 ;; I never use C-x C-c
 (defalias 'exit 'save-buffers-kill-emacs)
+
+(global-set-key (kbd "C-x C-z") 'nil)

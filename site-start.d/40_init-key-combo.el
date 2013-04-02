@@ -53,7 +53,7 @@
   (key-combo-define-local (kbd "--") "-- ")
   ;; ;; comment
   (key-combo-define-local (kbd "{-") "{- `!!' -}")
-  ;; ;; これはまだhaskell-modeが対応していないようなので無理。
+  ;; ;; これはまだhaskell-modeが対応していないようなので無理。
   (key-combo-define-local (kbd "{-RET") "{-\n`!!'\n-}")
 
   (key-combo-define-local (kbd "->") " -> ")

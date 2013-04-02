@@ -20,7 +20,7 @@
       ;; ruby-block
       (req ruby-block)
       (ruby-block-mode t)
-      ;; ミニバッファに表示し, かつ, オーバレイする.
+      ;; ミニバッファに表示し, かつ, オーバレイする.
       (setq ruby-block-highlight-toggle t)
       (defun ruby-mode-hook-ruby-block()
         (ruby-block-mode t))
@@ -44,6 +44,13 @@
 ;; ruby-electric
 (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
 
+(defun ruby-insert-end ()
+  "Insert \"end\" at point and reindent current line."
+  (interactive)
+  (insert "end")
+  (ruby-indent-line t)
+  (end-of-line))
+
 ;; ;;;; rubydb
 ;; (autoload 'rubydb "rubydb3x"
 ;;   "run rubydb on program file in buffer *gud-file*.
@@ -62,3 +69,13 @@
 ;; (req rails)
 
 (add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
+
+(add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode))
+(defun html-setting ()
+  (setq c-basic-offset 1
+        tab-width 1))
+(add-hook 'rhtml-mode-hook 'html-setting)
+(require 'rhtml-mode)
+(require 'rinari)
+(add-hook 'rhtml-mode-hook
+    (lambda () (rinari-launch)))

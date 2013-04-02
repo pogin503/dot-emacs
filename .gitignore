@@ -37,3 +37,6 @@ elpa/archives
 
 # quickrun temporary file
 qr_*.el
+
+# elpa
+elpa/

@@ -46,10 +46,9 @@
   (or run-nt run-cygwin run-ms-dos run-meadow))
 
 ;; OSの64bit判定
-(if run-windows
-    (if (file-exists-p "C:/Program Files (x86)")
-        (defvar run-windows-x64 t)
-      (defvar run-windows-x64 nil)))
+(if (and run-windows (file-exists-p "C:/Program Files (x86)"))
+    (defvar run-windows-x64 t)
+  (defvar run-windows-x64 nil))
 
 ;; Macの判定
 (defvar run-darwin (equal system-type 'darwin))
@@ -61,6 +60,6 @@
 (defvar run-carbon-emacs (and run-darwin window-system))
 
 ;; window-system: ターミナルかどうかを判定する
-;; 
+;;
 
 ;;from from murasesyuka's dotemacs end

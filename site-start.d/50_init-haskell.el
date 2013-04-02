@@ -19,6 +19,7 @@
 (lazyload (haskell-mode literate-haskell-mode haskell-cabal-mode) "haskell-mode"
           (require 'haskell-mode)
           (require 'haskell-cabal)
+          (require 'inf-haskell)
           (require 'anything)
           (require 'anything-config)
           (require 'anything-match-plugin)
@@ -32,7 +33,7 @@
 
           (defun anything-c-source-ghc-mod ()
             (unless (executable-find "ghc-mod")
-              (error "ghc-mod を利用できません。ターミナルで which したり、*scratch* で exec-path を確認したりしましょう"))
+              (error "ghc-mod を利用できません。ターミナルで which したり、*scratch* で exec-path を確認したりしましょう"))
             (let ((buffer (anything-candidate-buffer 'global)))
               (with-current-buffer buffer
                 (call-process "ghc-mod" nil t t "list"))))
@@ -61,9 +62,8 @@
                                ac-source-ghc-mod)))
 
           (require 'anything-hasktags)
-
           ;; M-x anything-ghc-browse-document() に対応するキーの割り当て
-          ;; ghc-mod の設定のあとに書いた方がよいかもしれません
+          ;; ghc-mod の設定のあとに書いた方がよいかもしれません
           ;; @see http://d.hatena.ne.jp/mizchi/20120426/1335409088
           ;; (require 'flymake)
           ;; (define-key haskell-mode-map (kbd "M-n") 'flymake-goto-next-error)
@@ -143,7 +143,7 @@
 
 
 ;; ghc-mod
-;; cabal でインストールしたライブラリのコマンドが格納されている bin ディレクトリへのパスを exec-path に追加する
+;; cabal でインストールしたライブラリのコマンドが格納されている bin ディレクトリへのパスを exec-path に追加する
 
 ;; (add-to-list 'exec-path
 ;;              (if run-linux
@@ -155,13 +155,15 @@
 ;;              (if run-windows-x64
 ;;                  "C:/Program Files (x86)/Haskell Platform/2011.4.0.0/bin/"
 ;;                "C:/Program Files/Haskell Platform/2011.4.0.0/bin/"))
-(when run-linux
+(when (or run-linux run-darwin)
   (add-to-list 'exec-path "~/.cabal/bin")
+  ;; (add-to-list 'exec-path "~/cabal-dev/bin")
+  (if run-darwin (add-to-list 'exec-path "~/Library/Haskell/bin"))
   )
 
 (if run-windows
     (add-to-list 'exec-path (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
-;; ghc-flymake.el などがあるディレクトリ ghc-mod を ~/.emacs.d 以下で管理することにした
+;; ghc-flymake.el などがあるディレクトリ ghc-mod を ~/.emacs.d 以下で管理することにした
 ;; (add-to-list 'load-path "~/.emacs.d/plugins/ghc-mod")
 
 (autoload 'ghc-init "ghc" nil t)
@@ -180,3 +182,6 @@
 (add-hook 'haskell-mode-hook
           (lambda()
             (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select)))
+
+(load "~/.emacs.d/plugins/haskell-mode/haskell-site-file.el")
+(setq haskell-program-name "/usr/bin/ghci")

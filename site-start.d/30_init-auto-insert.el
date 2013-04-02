@@ -1,7 +1,7 @@
 ;;@see http://ja.green.xrea.jp/emacs/autoinsert-mode
 (require 'autoinsert)
 (require 'cl)
-(add-hook 'before-save-hook 'time-stamp)
+;; (add-hook 'before-save-hook 'time-stamp)
 (auto-insert-mode 1)
 (setq auto-insert-directory (concat user-emacs-directory "etc/autoinsert"))
 (setq auto-insert-alist

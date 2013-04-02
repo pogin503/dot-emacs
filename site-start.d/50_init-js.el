@@ -149,4 +149,4 @@
       (ac-my-completion-list-in-files --files --ac-source-keywords))))
 
 ;; 以下をモード毎に設定
-(ac-my-completion-files "~/.emacs.d/plugins/ac-dict/javascript+DOM" "js2" t)
+;; (ac-my-completion-files "~/.emacs.d/plugins/ac-dict/javascript+DOM" "js2" t)

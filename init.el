@@ -13,46 +13,6 @@
 (auto-install-compatibility-setup)             ; 互換性確保
 
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-;; (require 'el-get)
-;; (setq el-get-dir "~/.emacs.d/elisp/el-get/")
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-;; レシピ置き場
-(add-to-list 'el-get-recipe-path
-             (concat default-directory "elisp/el-get/recipes"))
-;; 追加のレシピ置き場
-(add-to-list 'el-get-recipe-path
-             "~/.emacs.d/elisp/el-get/local-recipes")
-;; (setq el-get-user-package-directory "~/.emacs.d/elisp/el-get/local-recipes")
-;; (el-get 'sync)
-
-(setq el-get-sources
-      '(hatena-diary))
-
-;; my packages
-(setq dim-packages
-      (append
-       ;; list of packages we use straight from official recipes
-       '(
-         ;; gnus
-         ;; bbdb switch-window vkill google-maps pgdevenv-el
-         ;; mbsync asciidoc smex geiser xcscope multiple-cursors
-         ;; anything descbinds-anything pcmpl-git magit-view-file
-         ;; emacs-goodies-el sicp auto-dictionnary keywiz pandoc-mode
-         ;; pgsql-linum-format psvn rect-mark crontab-mode icomplete+
-         ;; php-mode-improved rainbow-delimiters muse deft dpans2texi
-         ;; markdown-mode color-theme-solarized protobuf-mode paredit
-         hatena-diary
-         )
-
-         (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
-
-(el-get 'sync dim-packages)
-
 ;;open-junk-file
 (require 'open-junk-file)
 
@@ -80,20 +40,20 @@
           ((= arg 1) (message "another *scratch* is created")))))
 
 (add-hook 'kill-buffer-query-functions
-          ;; *scratch* バッファで kill-buffer したら内容を消去するだけにする
+          ;; *scratch* バッファで kill-buffer したら内容を消去するだけにする
           (lambda ()
             (if (string= "*scratch*" (buffer-name))
                 (progn (my-make-scratch 0) nil)
               t)))
 
 (add-hook 'after-save-hook
-          ;; *scratch* バッファの内容を保存したら *scratch* バッファを新しく作る
+          ;; *scratch* バッファの内容を保存したら *scratch* バッファを新しく作る
           (lambda ()
             (unless (member (get-buffer "*scratch*") (buffer-list))
               (my-make-scratch 1))))
-;;; *scrach*をkill-bufferしたら自動復活させる ここまで
+;;; *scrach*をkill-bufferしたら自動復活させる ここまで
 
-;;; ウィンドウのサイズを閉じる前に記憶しておく
+;;; ウィンドウのサイズを閉じる前に記憶しておく
 (defun my-window-size-save ()
   (let* ((rlist (frame-parameters (selected-frame)))
          (ilist initial-frame-alist)
@@ -111,8 +71,8 @@
     (set-buffer buf)
     (erase-buffer)
     (insert (concat
-             ;; 初期値をいじるよりも modify-frame-parameters
-             ;; で変えるだけの方がいい?
+             ;; 初期値をいじるよりも modify-frame-parameters
+             ;; で変えるだけの方がいい?
              "(delete 'width initial-frame-alist)\n"
              "(delete 'height initial-frame-alist)\n"
              "(delete 'top initial-frame-alist)\n"
@@ -166,9 +126,10 @@
  "plugins"
  "elisp"
  "elpa"
- "etc/HyperSpec"
+ "etc"
  "share"
  "private"
+ "el-get"
  )
 
 ;;from sakito's config end
@@ -199,7 +160,7 @@
 ;; 10 起動前実行系
 ;; 20 関数定義
 ;; 30 追加機能系
-;; 40 マイナーモード
-;; 50 メジャーモード
+;; 40 マイナーモード
+;; 50 メジャーモード
 ;; 60
 ;; 90 起動後実行系

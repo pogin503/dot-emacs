@@ -1,4 +1,4 @@
-;; 文字コード
+;; 文字コード
 (set-language-environment "Japanese")
 (let ((ws window-system))
   (cond ((eq ws 'w32)
@@ -8,15 +8,20 @@
          (setq locale-coding-system 'utf-8))
         ((eq ws 'ns)
          (require 'ucs-normalize)
-         (prefer-coding-system 'utf-8-hfs)
+         (prefer-coding-system 'utf-8)
          (setq file-name-coding-system 'utf-8-hfs)
          (setq locale-coding-system 'utf-8-hfs))))
-;; ミニバッファの文字化け対策
+(defun ucs-normalize-NFC-buffer ()
+  (interactive)
+  (ucs-normalize-NFC-region (point-min) (point-max))
+  )
+(global-set-key (kbd "C-x RET u") 'ucs-normalize-NFC-buffer)
+;; ミニバッファの文字化け対策
 ;; (if run-windows
 ;;     (setq file-name-coding-system 'sjis-dos)
 ;;   (setq file-name-coding-system 'utf-8-unix))
 
-;;改行コード表示
+;;改行コード表示
 (setq eol-mnemonic-dos "(CRLF)")
 (setq eol-mnemonic-mac "(CR)")
 (setq eol-mnemonic-unix "(LF)")
@@ -75,7 +80,7 @@
            (add-to-list 'mime-charset-coding-system-alist
                         '(iso-2022-jp . cp50220))))
 
-      ;; 全角チルダ/波ダッシュをWindowsスタイルにする
+      ;; 全角チルダ/波ダッシュをWindowsスタイルにする
       (let ((table (make-translation-table-from-alist '((#x301c . #xff5e))) ))
         (mapc
          (lambda (coding-system)

@@ -7,13 +7,13 @@
 ;; ------------------------------------------------------------------------
 ;; @ buffer
 
-;; バッファ画面外文字の切り詰め表示
+;; バッファ画面外文字の切り詰め表示
 (setq truncate-lines nil)
 
-;; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
+;; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
 (setq truncate-partial-width-windows t)
 
-;; 同一バッファ名にディレクトリ付与
+;; 同一バッファ名にディレクトリ付与
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
@@ -39,16 +39,16 @@
 ;; ------------------------------------------------------------------------
 ;; @ default setting
 
-;; 起動メッセージの非表示
+;; 起動メッセージの非表示
 (setq inhibit-startup-message t)
 
-;; スタートアップ時のエコー領域メッセージの非表示
+;; スタートアップ時のエコー領域メッセージの非表示
 (setq inhibit-startup-echo-area-message -1)
 
 ;; ------------------------------------------------------------------------
 
 
-;;; 対応する括弧をブリンク ()
+;;; 対応する括弧をブリンク ()
 (setq blink-matching-paren t)
 (setq blink-matching-delay 1000)
 
@@ -65,7 +65,7 @@
 
 ;;line-number's format
 (set-face-attribute 'linum nil :foreground "red" :height 0.8)
-;; (setq linum-format "%4d")
+(setq linum-format "%4d")
 (setq linum-delay t)
 (defadvice linum-schedule (around my-linum-schedule () activate)
   (run-with-idle-timer 0.2 nil #'linum-update-current))
@@ -80,15 +80,15 @@
 ;; スクロール時のカーソル位置の維持
 (setq scroll-preserve-screen-position t)
 
-;; C-x C-f での意味の無いパス表示をグレーアウトする
+;; C-x C-f での意味の無いパス表示をグレーアウトする
 (file-name-shadow-mode t)
 
 ;;@see http://sites.google.com/site/shidoinfo/Home/開発環境/emacs/emacsの基本
-;;カーソルが行頭にある場合も行全体を削除
+;;カーソルが行頭にある場合も行全体を削除
 (setq kill-whole-line t)
 
 
-;; スクリプトを保存する時、自動的に chmod +x を行うようにする
+;; スクリプトを保存する時、自動的に chmod +x を行うようにする
 (defun make-file-executable ()
   "Make the file of this buffer executable, when it is a script source."
   (save-restriction
@@ -106,7 +106,7 @@
 (add-hook 'after-save-hook 'make-file-executable)
 
 
-;;ガベージコレクションの頻度を下げる 初期設定は4000000
+;;ガベージコレクションの頻度を下げる 初期設定は4000000
 ;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html
 (setq gc-cons-threshold 4000000)
 
@@ -123,13 +123,13 @@
 ;;@see http://d.hatena.ne.jp/fu7mu4/20101027/1288191419
 (setq warning-suppress-types nil)
 
-;; Emacs 設定ディレクトリを設定。Emacs 22以下用
-;; Emacs 23.1 以上では user-emacs-directory 変数が用意されているのでそれを利用
+;; Emacs 設定ディレクトリを設定。Emacs 22以下用
+;; Emacs 23.1 以上では user-emacs-directory 変数が用意されているのでそれを利用
 (unless (boundp 'user-emacs-directory)
   (defvar user-emacs-directory (expand-file-name "~/.emacs.d/")))
 
 ;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
-;; 終了時バイトコンパイル
+;; 終了時バイトコンパイル
 
 (defun my-byte-compile-func ()
   (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
@@ -153,7 +153,7 @@
 ;; (setq next-screen-context-lines 1)
 
 
-;; ;; マウスホイールでスクロール
+;; ;; マウスホイールでスクロール
 ;; (defun scroll-down-with-lines ()
 ;;   "" (interactive) (scroll-down 5))
 ;; (defun scroll-up-with-lines ()
@@ -162,7 +162,7 @@
 ;; (global-set-key [mouse-5] 'scroll-up-with-lines)
 
 
-;;スクロールバーの場所
+;;スクロールバーの場所
 ;;(set-scroll-bar-mode 'left) ;; 左側
 (set-scroll-bar-mode nil) ;; なし
 ;;(set-scroll-bar-mode 'right) ;; 右側
@@ -176,7 +176,7 @@
 ;;@see http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
 ;;cua-mode
 (cua-mode t)
-(setq cua-enable-cua-keys nil) ;; 変なキーバインド禁止
+(setq cua-enable-cua-keys nil) ;; 変なキーバインド禁止
 
 
 ;;msb-mode
@@ -194,11 +194,11 @@
                  `("" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
 (my-define-backup-directory)
 
-(setq version-control t)        ; 複数のバックアップを残します。世代。
+(setq version-control t)        ; 複数のバックアップを残します。世代。
 (setq kept-new-versions 5)   ; 新しいものをいくつ残すか
 (setq kept-old-versions 5)   ; 古いものをいくつ残すか
-(setq delete-old-versions t) ; 確認せずに古いものを消す。
-(setq vc-make-backup-files t) ; バージョン管理下のファイルもバックアップを作る。
+(setq delete-old-versions t) ; 確認せずに古いものを消す。
+(setq vc-make-backup-files t) ; バージョン管理下のファイルもバックアップを作る。
 
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
 
@@ -228,9 +228,11 @@
 
 (add-hook 'before-save-hook 'my-delete-trailing-blank-lines)
 
-;; save-buffer 時、buffer 末尾に空行が常にあるように
-(setq require-final-newline t)
+;; save-buffer 時、buffer 末尾に空行が常にあるように
+(setq-default require-final-newline t)
 
+;;; バッファの最後でnewlineで新規行を追加するのかどうか
+(setq next-line-add-newlines t)
 ;; ------------------------------------------------------------------------
 ;; @ image-library
 (if run-windows
@@ -249,7 +251,7 @@
         )))
 
 (defun my-toggle-truncate-lines ()
-  "折り返し表示をトグル動作します."
+  "折り返し表示をトグル動作します."
   (interactive)
   (if truncate-lines
       (setq truncate-lines nil)
@@ -259,15 +261,15 @@
 ;; @see http://trey-jackson.blogspot.jp/2009/08/emacs-tip-32-completion-ignore-case-and.html
 ;; (setq completion-ignore-case t)
 
-;; 大文字小文字を無視した補完をするかどうか
+;; 大文字小文字を無視した補完をするかどうか
 (setq read-buffer-completion-ignore-case t)
-;; ミニバッファでファイル名補完の時、大文字・小文字を無視するかどうか
+;; ミニバッファでファイル名補完の時、大文字・小文字を無視するかどうか
 (setq read-file-name-completion-ignore-case t)
 
 ;; tool-barを使うか使わないか
 (tool-bar-mode -1)
 
-;; menu-barを使うかどうか
+;; menu-barを使うかどうか
 (if run-darwin
     (menu-bar-mode 1)
   (menu-bar-mode -1))
@@ -288,10 +290,12 @@
 (defadvice windmove-right (before other-window-now activate)
   (when buffer-file-name (save-buffer)))
 
-;; ミニバッファの履歴を保存する
+(defalias 'deactivate-advice 'ad-deactivate-all)
+
+;; ミニバッファの履歴を保存する
 (savehist-mode 1)
 
-;; ミニバッファの履歴の保存数を増やす
+;; ミニバッファの履歴の保存数を増やす
 (setq history-length 3000)
 
 ;; 行間
@@ -308,7 +312,6 @@
   (font-lock-add-keywords
    nil '(("\\<\\(FIX\\(ME\\)?\\|TODO\\|HACK\\|REFACTOR\\|NOCOMMIT\\)"
           1 font-lock-warning-face t))))
-
 
 (add-hook 'prog-mode-hook 'esk-pretty-lambdas)
 ;; (add-hook 'prog-mode-hook 'esk-add-watchwords)
