@@ -150,3 +150,16 @@
 
 ;; 以下をモード毎に設定
 ;; (ac-my-completion-files "~/.emacs.d/plugins/ac-dict/javascript+DOM" "js2" t)
+
+(defun code-golf-for-js ()
+   "thisandthat."
+   (interactive)
+   (mapcar (lambda (x)
+             (replace-regexp (concat " *\\(" x "\\) *") "\\1" nil (point-min) (point-max)))
+           '("-" "=" "\\+" "\\*" "/" "<" ">" "%"))
+   (replace-regexp "[ ]*\\([[:digit:]]+\\)[ ]*" "\\1" nil (point-min) (point-max))
+   (replace-regexp "for " "for" nil (point-min) (point-max))
+   (replace-regexp "var " "" nil (point-min) (point-max))
+   (replace-regexp "{ " "{" nil (point-min) (point-max))
+   (replace-regexp "^[[:space:]]* " "for" nil (point-min) (point-max))
+   )

@@ -26,6 +26,8 @@ history
 test
 url/
 plugins/twittering-mode/cert/
+.mc-lists.el
+eshell/
 
 # ignore diff files
 *.diff

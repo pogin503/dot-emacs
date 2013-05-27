@@ -64,11 +64,11 @@
 (global-linum-mode t)
 
 ;;line-number's format
-(set-face-attribute 'linum nil :foreground "red" :height 0.8)
-(setq linum-format "%4d")
-(setq linum-delay t)
-(defadvice linum-schedule (around my-linum-schedule () activate)
-  (run-with-idle-timer 0.2 nil #'linum-update-current))
+;; (set-face-attribute 'linum nil :foreground "red" :height 0.8)
+;; (setq linum-format "%4d")
+;; (setq linum-delay t)
+;; (defadvice linum-schedule (around my-linum-schedule () activate)
+;;   (run-with-idle-timer 0.2 nil #'linum-update-current))
 
 ;; ------------------------------------------------------------------------
 ;; @ misc

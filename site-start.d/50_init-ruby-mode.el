@@ -8,19 +8,20 @@
   (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
   (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
 
-  (when (and (autoload-if-found 'run-ruby "inf-ruby"
-                                "Run an inferior Ruby process" t)
-             (autoload-if-found 'inf-ruby-keys "inf-ruby"
-                       "Set local key defs for inf-ruby in ruby-mode" t))
-    (add-hook 'ruby-mode-hook
-              '(lambda () (inf-ruby-keys))))
+  ;; (when (and (autoload-if-found 'run-ruby "inf-ruby"
+  ;;                               "Run an inferior Ruby process" t)
+  ;;            (autoload-if-found 'inf-ruby-keys "inf-ruby"
+  ;;                      "Set local key defs for inf-ruby in ruby-mode" t))
+  ;;   (add-hook 'ruby-mode-hook
+  ;;             '(lambda () (inf-ruby-keys))))
+  (pop ruby-mode-hook)
 
   (eval-after-load 'ruby-mode
     (progn
       ;; ruby-block
       (req ruby-block)
       (ruby-block-mode t)
-      ;; ミニバッファに表示し, かつ, オーバレイする.
+      ;; ミニバッファに表示し, かつ, オーバレイする.
       (setq ruby-block-highlight-toggle t)
       (defun ruby-mode-hook-ruby-block()
         (ruby-block-mode t))
@@ -28,21 +29,10 @@
       ;; set ruby-mode indent
       (setq ruby-indent-level 2)
       (setq ruby-indent-tabs-mode nil)
-      ;; (defun execute-ruby ()
-      ;;   (interactive)
-      ;;   (save-excursion
-      ;;     (let ((buf (get-buffer-create "*result ruby execution*")))
-      ;;       (mark-whole-buffer)
-      ;;       (call-process-region
-      ;;        (region-beginning) (region-end) "ruby" nil buf nil)
-      ;;       (display-buffer buf))))
-
-      ;; (define-key ruby-mode-map (kbd "C-7")'execute-ruby)
-
       )))
 
 ;; ruby-electric
-(add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
+(add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode 1)))
 
 (defun ruby-insert-end ()
   "Insert \"end\" at point and reindent current line."
@@ -69,6 +59,8 @@
 ;; (req rails)
 
 (add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
+
+(require 'ruby-end)
 
 (add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode))
 (defun html-setting ()

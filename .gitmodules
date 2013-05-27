@@ -8,3 +8,6 @@
 [submodule "plugins/omm-mode"]
 	path = plugins/omm-mode
 	url = git://github.com/ogin503/omm-mode.git
+[submodule "plugins/r-like-example"]
+	path = plugins/r-like-example
+	url = git://github.com.com/pogin503/r-like-example.git
