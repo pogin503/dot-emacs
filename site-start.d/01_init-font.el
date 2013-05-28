@@ -21,7 +21,7 @@
 
 (when run-darwin
   ;;; フレームのフォントを設定
-  (let* ((size 12) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
+  (let* ((size 10) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
          (asciifont "Menlo") ; ASCIIフォント
          (jpfont "Hiragino Maru Gothic ProN") ; 日本語フォント
          (h (* size 10))
@@ -32,9 +32,9 @@
     (set-fontset-font nil 'japanese-jisx0213-2 jp-fontspec)
     (set-fontset-font nil 'katakana-jisx0201 jp-fontspec) ; 半角カナ
     (set-fontset-font nil '(#x0080 . #x024F) fontspec) ; 分音符付きラテン
-    (set-fontset-font nil '(#x0370 . #x03FF) fontspec) ; ギリシャ文字
+    (set-fontset-font nil '(#x0370 . #x03FF) fontspec) ; ギリシャ文字
     )
-  ;;; フォントサイズの比を設定
+  ;;; フォントサイズの比を設定
   (dolist (elt '(("^-apple-hiragino.*" . 1.2)
                  (".*osaka-bold.*" . 1.2)
                  (".*osaka-medium.*" . 1.2)
