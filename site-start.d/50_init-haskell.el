@@ -183,5 +183,5 @@
           (lambda()
             (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select)))
 
-(load "~/.emacs.d/plugins/haskell-mode/haskell-site-file.el")
+(load "~/.emacs.d/plugins/haskell-site-file.el")
 (setq haskell-program-name "/usr/bin/ghci")

@@ -313,7 +313,7 @@
    nil '(("\\<\\(FIX\\(ME\\)?\\|TODO\\|HACK\\|REFACTOR\\|NOCOMMIT\\)"
           1 font-lock-warning-face t))))
 
-(add-hook 'prog-mode-hook 'esk-pretty-lambdas)
+;; (add-hook 'prog-mode-hook 'esk-pretty-lambdas)
 ;; (add-hook 'prog-mode-hook 'esk-add-watchwords)
 
 ;; (set-default 'indicate-empty-lines nil)
