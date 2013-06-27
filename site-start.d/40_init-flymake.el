@@ -40,6 +40,7 @@
 (defun flymake-ruby-init ()
   (flymake-simple-make-or-generic-init
    "ruby" '("-c")))
+
 (defun flymake-ruby-init ()
   (let* ((temp-file   (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))
@@ -49,9 +50,11 @@
     (list "ruby" (list "-c" local-file))))
 
 (add-hook 'ruby-mode-hook '(lambda () (flymake-mode 1)))
+(require 'flymake-ruby)
+(add-hook 'ruby-mode-hook 'flymake-ruby-load)
 
-(push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+;; (push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
+;; (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
 
 (push '("\\.[cC]\\'" flymake-c-init) flymake-allowed-file-name-masks)
