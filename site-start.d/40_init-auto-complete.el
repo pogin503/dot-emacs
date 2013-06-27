@@ -5,8 +5,10 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/plugins/auto-complete/ac-dict/")
 (ac-config-default)
 (global-auto-complete-mode t)
-(setq ac-use-comphist t)
+(setq-default ac-use-comphist t)
 (define-key ac-mode-map (kbd "M-i") 'auto-complete)
+(define-key ac-completing-map "\t" 'ac-complete)
+(define-key ac-completing-map "\r" nil)
 (ac-flyspell-workaround)
 
 (dolist (hook (list
