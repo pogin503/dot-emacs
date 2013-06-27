@@ -17,7 +17,7 @@
 
 (defun my-lisp-mode-key-combo ()
   ;; (key-combo-define-local (kbd ";") '(key-combo-execute-orignal ";=> "))
-  (key-combo-define-local (kbd ";=") ";=> ")
+  (key-combo-define-local (kbd ";=") "; => ")
   (key-combo-define-local (kbd "\\#'") "\\#'()")
   ;; (key-combo-define-local (kbd "\\#'") "\\#'()")
   )
