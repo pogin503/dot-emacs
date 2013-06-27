@@ -33,7 +33,7 @@
 
           (defun anything-c-source-ghc-mod ()
             (unless (executable-find "ghc-mod")
-              (error "ghc-mod を利用できません。ターミナルで which したり、*scratch* で exec-path を確認したりしましょう"))
+              (error "ghc-mod を利用できません。ターミナルで which したり、*scratch* で exec-path を確認したりしましょう"))
             (let ((buffer (anything-candidate-buffer 'global)))
               (with-current-buffer buffer
                 (call-process "ghc-mod" nil t t "list"))))
@@ -63,7 +63,7 @@
 
           (require 'anything-hasktags)
           ;; M-x anything-ghc-browse-document() に対応するキーの割り当て
-          ;; ghc-mod の設定のあとに書いた方がよいかもしれません
+          ;; ghc-mod の設定のあとに書いた方がよいかもしれません
           ;; @see http://d.hatena.ne.jp/mizchi/20120426/1335409088
           ;; (require 'flymake)
           ;; (define-key haskell-mode-map (kbd "M-n") 'flymake-goto-next-error)
@@ -143,7 +143,7 @@
 
 
 ;; ghc-mod
-;; cabal でインストールしたライブラリのコマンドが格納されている bin ディレクトリへのパスを exec-path に追加する
+;; cabal でインストールしたライブラリのコマンドが格納されている bin ディレクトリへのパスを exec-path に追加する
 
 ;; (add-to-list 'exec-path
 ;;              (if run-linux
@@ -163,7 +163,7 @@
 
 (if run-windows
     (add-to-list 'exec-path (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
-;; ghc-flymake.el などがあるディレクトリ ghc-mod を ~/.emacs.d 以下で管理することにした
+;; ghc-flymake.el などがあるディレクトリ ghc-mod を ~/.emacs.d 以下で管理することにした
 ;; (add-to-list 'load-path "~/.emacs.d/plugins/ghc-mod")
 
 (autoload 'ghc-init "ghc" nil t)
