@@ -8,6 +8,7 @@
 ;; (add-to-list 'package-archives
 ;; 			   '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 ;;(pop package-archives)
 ;;インストールするディレクトリを指定
@@ -30,6 +31,7 @@
    dash
    e2wm
    flymake-easy
+   flymake-ruby
    git-gutter
    haskell-mode
    helm
@@ -38,13 +40,14 @@
    helm-c-yasnippet
    helm-ls-git
    ht
+   inf-ruby
    js2-mode
    magit
    markdown-mode
    mmm-mode
    multiple-cursors
    nginx-mode
-   org
+   org-bullets
    php-mode
    popwin
    powerline
