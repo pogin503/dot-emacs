@@ -16,7 +16,8 @@
 ;; C-c r でorg-remember起動 キーバインドの設定
 (define-key global-map (kbd "C-c r") 'org-remember)
 
-(lazyload (org-mode org-todo-list org-agenda org-store-link) "org-install"
+(lazyload (org-mode org-todo-list org-agenda org-store-link) "org"
+          (require 'org)
           (require 'org-install)
           (if (boundp 'dropbox-directory)
               (setq org-directory (concat dropbox-directory "/Documents/"))
@@ -32,8 +33,7 @@
           (setq org-return-follows-link t)
 
           (setq org-log-done 'time)
-
-          (org-remember-insinuate)
+          ;; (org-remember-insinuate)
 
           ;; TODO状態
           (setq org-todo-keywords
@@ -129,14 +129,12 @@ If the link is in hidden text, expose it."
 
           ;; (lazyload (org-tree-slide-mode) "org-tree-slide-mode"
           ;;           (req org-tree-slide))
-          (defun test-org-func ()
-            (interactive)
-            (message "t"))
-
-          (define-key org-mode-map (kbd "s-9") 'test-org-func)
           (req org-tree-slide)
-          (require 'org-export-generic)
-          (require 'org-bullets)
+          (req org-export-generic)
           )
 
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(require 'org-remember)
+(req org-bullets)
+
+(add-hook 'org-mode-hook (lambda () (if (locate-library "org-bullets")
+                                    (org-bullets-mode 1))))
