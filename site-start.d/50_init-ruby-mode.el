@@ -8,14 +8,9 @@
   (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
   (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
 
-  ;; (when (and (autoload-if-found 'run-ruby "inf-ruby"
-  ;;                               "Run an inferior Ruby process" t)
-  ;;            (autoload-if-found 'inf-ruby-keys "inf-ruby"
-  ;;                      "Set local key defs for inf-ruby in ruby-mode" t))
-  ;;   (add-hook 'ruby-mode-hook
-  ;;             '(lambda () (inf-ruby-keys))))
-  (pop ruby-mode-hook)
-
+  (defalias 'inf-ruby-keys 'inf-ruby-setup-keybindings)
+  (autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
+  (autoload 'inf-ruby-setup-keybindings "inf-ruby" "" t)
   (eval-after-load 'ruby-mode
     (progn
       ;; ruby-block
@@ -31,8 +26,11 @@
       (setq ruby-indent-tabs-mode nil)
       )))
 
+(add-hook 'ruby-mode-hook 'inf-ruby-setup-keybindings)
+
 ;; ruby-electric
 (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode 1)))
+(setq ruby-electric-expand-delimiters-list nil)
 
 (defun ruby-insert-end ()
   "Insert \"end\" at point and reindent current line."

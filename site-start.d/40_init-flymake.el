@@ -53,9 +53,32 @@
 (require 'flymake-ruby)
 (add-hook 'ruby-mode-hook 'flymake-ruby-load)
 
+;; flymakeがエラーになっても停止しないようにするための設定
+(defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
+  (setq flymake-check-was-interrupted t))
+(ad-activate 'flymake-post-syntax-check)
+
 ;; (push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
 ;; (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
 
 (push '("\\.[cC]\\'" flymake-c-init) flymake-allowed-file-name-masks)
 (push '("\\.\\(?:cc\|cpp\|CC\|CPP\\)\\'" flymake-cc-init) flymake-allowed-file-name-masks)
+
+(defun flymake-cc-init ()
+  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+         (local-file  (file-relative-name
+                       temp-file
+                       (file-name-directory buffer-file-name))))
+    (list "g++" (list "-Wall" "-Wextra" "-fsyntax-only" local-file))))
+
+(push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)
+
+;; (add-hook 'c++-mode-hook
+;;           '(lambda () (flymake-mode 1)))
+;; (add-hook 'c-mode-hook '(lambda () (flymake-mode 1)))
+;; (add-hook 'python-mode-hook 'flycheck-mode)
+;; (add-hook 'ruby-mode-hook 'flycheck-mode)
+
+(add-hook 'after-init-hook #'global-flycheck-mode)

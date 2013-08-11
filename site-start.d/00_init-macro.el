@@ -1,3 +1,7 @@
+;;; 00_init-macro.el --- macro conf
+;;; Commentary:
+;;; Code:
+
 ;; ------------------------------------------------------------------------
 ;; @ macro
 
@@ -113,3 +117,6 @@
 ;; まり、こんな感じ（何と2カラム目!）
 ;; (defun-add-hook 'perl-mode-hook
 ;;   (exec-if-bound (set-buffer-file-coding-system 'euc-japan-unix)))
+
+(provide '00_init-macro)
+;;; 00_init-macro.el ends here

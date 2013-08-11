@@ -1,3 +1,6 @@
+;;; 01_init-color.el --- color conf
+;;; Commentary:
+;;; Code:
 ;;@see
 
 ;; 背景の透過
@@ -17,7 +20,12 @@
 
 ;;color-theme***********************************
 
-(req color-theme)
+(load-theme 'solarized-dark t)
+
+;; (enable-theme 'solarized-light)
+
+;; (color-theme-solarized-light)
+;; (req color-theme)
 ;; (eval-after-load "color-theme"
 ;;   '(progn
 ;;      (color-theme-initialize)
@@ -26,9 +34,10 @@
 ;;      ))
 
 
-(req color-theme-solarized)
-(eval-after-load "color-theme"
-  '(progn
-     (color-theme-initialize)
-     (color-theme-solarized-light)
-     ))
+;; (req color-theme-solarized)
+;; (eval-after-load "color-theme"
+;;   '(progn
+;;      (color-theme-initialize)
+;;      (color-theme-solarized-light)
+;;      ))
+;;; 01_init-color.el ends here

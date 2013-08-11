@@ -76,18 +76,3 @@
 ;; c-brace-imaginary-offset      他のテキストの後ろにある開き中かっこが，この行の先頭からどれだけ右にある と考えるかを指定します．
 ;; c-argdecl-indent              Cの関数の引数宣言の字下げを指定します．
 ;; c-label-offset                ラベルやcase，defaultのある文に加える字下げの数を指定します．
-
-;; flymake
-(defun flymake-cc-init ()
-  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-         (local-file  (file-relative-name
-                       temp-file
-                       (file-name-directory buffer-file-name))))
-    (list "g++" (list "-Wall" "-Wextra" "-fsyntax-only" local-file))))
-
-(push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)
-
-(add-hook 'c++-mode-hook
-          '(lambda () (flymake-mode 1)))
-(add-hook 'c-mode-hook '(lambda () (flymake-mode 1)))

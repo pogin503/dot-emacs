@@ -32,7 +32,7 @@
     (add-hook 'shell-mode-hook
 	      (lambda ()
 		(define-key shell-mode-map (kbd "C-r") 'anything-complete-shell-history)))
-    
+
     (use-anything-show-completion 'anything-complete-shell-history
 				  '(length anything-c-source-complete-shell-history))))
 
@@ -57,3 +57,8 @@
 (global-set-key (kbd "C-c t") '(lambda ()
 				 (interactive)
 				 (multi-term)))
+
+(require 'shellenv)
+(shellenv/setpath 'zsh)
+(dolist (path (reverse (split-string (getenv "PATH") ":")))
+  (add-to-list 'exec-path path))

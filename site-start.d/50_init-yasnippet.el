@@ -1,5 +1,6 @@
+;;; 50_init-yasnippet.el --- yasnippet conf
+;;; Commentary:
 ;;; Code:
-
 ;; (add-to-list 'load-path "~/.emacs.d/plugins/yasnippet-0.6.1c")
 
 
@@ -9,10 +10,33 @@
 ;; (setq anything-c-yas-space-match-any-greedy t) ;スペース区切りで絞り込めるようにする デフォルトは nil
 
 (require 'yasnippet)
-(yas/global-mode 1)
+;;複数のスニッペットディレクトリがある場合
+;; (setq yas/root-directory `(,(expand-file-name "~/.emacs.d/etc/snippets")))
+;; (mapc 'yas/load-directory  yas/root-directory)
+(setq yas-snippet-dirs
+      `("~/.emacs.d/etc/snippets" ;; 作成するスニペットはここに入る
+        "~/.emacs.d/elisp/yasnippet/snippets" ;; 最初から入っていたスニペット(省略可能)
+        ))
+;; yas-snippet-dirs
+(mapc (lambda (x) (add-to-list 'yas-snippet-dirs x))
+               `(;; 作成するスニペットはここに入る
+                 ,(expand-file-name "~/.emacs.d/etc/snippets")
+                 ;; 最初から入っていたスニペット(省略可能)
+                 "~/.emacs.d/etc/snippets"
+                 ))
+(yas-global-mode 1)
+
+;; 既存スニペットを挿入する
+(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
+;; 新規スニペットを作成するバッファを用意する
+(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
+;; 既存スニペットを閲覧・編集する
+(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
+
 ;;@see http://emacs.g.hatena.ne.jp/Shinnya/20100805/1281034504
 ;; (setq yas/next-field-key "TAB")
 ;; (setq yas/prev-field-key "<S-tab>")
+
 ;; (define-key yas/minor-mode-map (kbd "C-x i i") 'yas/insert-snippet)
 ;; (define-key yas/minor-mode-map (kbd "C-x i f") 'yas/find-snippets)
 ;; (define-key yas/minor-mode-map (kbd "C-x i n") 'yas/new-snippet)
@@ -27,9 +51,6 @@
 ;;              '(require-snippet-condition . force-in-comment)))
 ;; (yas/initialize)
 
-;;複数のスニッペットディレクトリがある場合
-(setq yas/root-directory '("~/.emacs.d/etc/snippets"))
-(mapc 'yas/load-directory  yas/root-directory)
 
 ;;一つしかディレクトリがない場合
 ;(setq yas/root-directory '"~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
@@ -37,16 +58,18 @@
 
 ;;@see http://d.hatena.ne.jp/rubikitch/20101204/yasnippet
 ;;; [2010/07/13]
-(defun yas/expand-link (key)
-  "Hyperlink function for yasnippet expansion."
-  (delete-region (point-at-bol) (1+ (point-at-eol)))
-  (insert key)
-  (yas/expand))
+;; (defun yas/expand-link (key)
+;;   "Hyperlink function for yasnippet expansion."
+;;   (delete-region (point-at-bol) (1+ (point-at-eol)))
+;;   (insert key)
+;;   (yas/expand))
 
-;;; [2010/12/02]
-(defun yas/expand-link-choice (&rest keys)
-  "Hyperlink to select yasnippet template."
-  (yas/expand-link (completing-read "Select template: " keys nil t)))
+;; ;;; [2010/12/02]
+;; (defun yas/expand-link-choice (&rest keys)
+;;   "Hyperlink to select yasnippet template."
+;;   (yas/expand-link (completing-read "Select template: " keys nil
+;; t)))
+
 ;; (yas/expand-link-choice "defgp" "defcm")
 
 ;; (defun ac-yasnippet-candidate ()
@@ -75,3 +98,5 @@
 ;;     (candidate-face . ac-yasnippet-candidate-face)
 ;;     (selection-face . ac-yasnippet-selection-face))
 ;;   "Source for Yasnippet.")
+
+;;; 50_init-yasnippet.el ends here

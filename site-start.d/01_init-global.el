@@ -1,3 +1,10 @@
+;;; 01_init-global.el --- global setting
+;;; Commentary:
+;;; Code:
+
+(eval-when-compile
+  (require '00_init-hanbetu))
+
 ;; ------------------------------------------------------------------------
 ;; @ frame
 
@@ -64,8 +71,8 @@
 (global-linum-mode t)
 
 ;;line-number's format
-;; (set-face-attribute 'linum nil :foreground "red" :height 0.8)
-;; (setq linum-format "%4d")
+(set-face-attribute 'linum nil :foreground "red" :height 0.8)
+(setq linum-format "%4d")
 ;; (setq linum-delay t)
 ;; (defadvice linum-schedule (around my-linum-schedule () activate)
 ;;   (run-with-idle-timer 0.2 nil #'linum-update-current))
@@ -141,8 +148,6 @@
   )
 (add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
 
-
-
 (cond (window-system
        (setq x-select-enable-clipboard t)))
 
@@ -191,8 +196,15 @@
     (if (not (file-exists-p (concat user-emacs-directory dir-name)))
         (make-directory dir-name user-emacs-directory))
     (add-to-list 'backup-directory-alist
-                 `("" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
+                 `(".*" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
 (my-define-backup-directory)
+
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)
+        ("\#.*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,(expand-file-name "~/.emacs.d/.backup") t)
+        ("\#.*" ,(expand-file-name "~/.emacs.d/.backup") t)))
 
 (setq version-control t)        ; 複数のバックアップを残します。世代。
 (setq kept-new-versions 5)   ; 新しいものをいくつ残すか
@@ -318,3 +330,4 @@
 
 ;; (set-default 'indicate-empty-lines nil)
 (set-default 'imenu-auto-rescan t)
+;;; 01_init-global.el ends here

@@ -181,7 +181,34 @@
 
 (add-hook 'haskell-mode-hook
           (lambda()
-            (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select)))
+            (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select)
+            (setq c-basic-offset 2     ;;基本インデント量4
+                  tab-width 4          ;;タブ幅4
+                  indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
+            ))
 
 (load "~/.emacs.d/plugins/haskell-site-file.el")
 (setq haskell-program-name "/usr/bin/ghci")
+
+;; Haskell align setting
+(add-to-list 'align-rules-list
+             '(haskell-types
+               (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+               (modes quote (haskell-mode literate-haskell-mode))))
+(add-to-list 'align-rules-list
+             '(haskell-assignment
+               (regexp . "\\(\\s-+\\)=\\s-+")
+               (modes quote (haskell-mode literate-haskell-mode))))
+(add-to-list 'align-rules-list
+             '(haskell-arrows
+               (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+               (modes quote (haskell-mode literate-haskell-mode))))
+(add-to-list 'align-rules-list
+             '(haskell-left-arrows
+               (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+               (modes quote (haskell-mode literate-haskell-mode))))
+
+(defadvice inferior-haskell-load-file (after change-focus-after-load)
+  "Change focus to GHCi window after C-c C-l command"
+  (other-window 1))
+(ad-activate 'inferior-haskell-load-file)

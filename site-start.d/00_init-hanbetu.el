@@ -1,8 +1,9 @@
-;;reference from murasesyuka's dotemacs
+;;; 00_init-hanbetu.el --- environment variable
+;;; Commentary:
+;;; Code:
 ;; @see https://github.com/murasesyuka/dotemacs
 ;; @see http://d.hatena.ne.jp/tomoya/20090807/1249601308
-
-;; OSを判別、UNIX系？
+;;; OSを判別、UNIX系？:
 (defvar run-unix
   (or (equal system-type 'gnu/linux)
       (equal system-type 'usg-unix-v)
@@ -59,7 +60,7 @@
   (and run-xemacs (not (featurep 'mule))))
 (defvar run-carbon-emacs (and run-darwin window-system))
 
-;; window-system: ターミナルかどうかを判定する
-;;
+(defvar run-no-window (null window-system))
 
-;;from from murasesyuka's dotemacs end
+(provide '00_init-hanbetu)
+;;; 00_init-hanbetu.el ends here

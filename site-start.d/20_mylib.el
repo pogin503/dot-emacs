@@ -1,7 +1,0 @@
-(defun reopen-buffer ()
-  (interactive)
-  (let ((current-buf (buffer-file-name)))
-    (save-buffer)
-    (kill-buffer)
-    (find-file current-buf)
-    ))

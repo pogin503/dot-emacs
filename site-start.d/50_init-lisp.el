@@ -1,3 +1,15 @@
+;;; 50_init-lisp.el --- lisp conf
+;;; Commentary:
+;;; Code:
+
+(eval-when-compile
+  (require '00_init-macro)
+  (require '00_init-hanbetu))
+
+;; ------------------------------------------------------------------
+;; @ Emacs Lisp
+(add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
+
 (defun esk-remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
   (make-local-variable 'after-save-hook)
@@ -5,11 +17,16 @@
             (lambda ()
               (if (file-exists-p (concat buffer-file-name "c"))
                   (delete-file (concat buffer-file-name "c"))))))
-(esk-remove-elc-on-save)
 
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
+            ;; (set (make-local-variable 'lisp-indent-function)
+            ;;  'common-lisp-indent-function)
+            (show-paren-mode t)))
 
 ;; ------------------------------------------------------------------
-;; @ key-bind
+
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 ;; (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
 
@@ -22,13 +39,6 @@
             (show-paren-mode t)))
 (add-hook 'after-change-major-mode-hook
           (lambda ()
-            (show-paren-mode t)))
-
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
-            ;; (set (make-local-variable 'lisp-indent-function)
-            ;;  'common-lisp-indent-function)
             (show-paren-mode t)))
 
 (add-hook 'inferior-lisp-mode-hook
@@ -190,3 +200,5 @@
        (anything (list anything-c-source-hyperspec anything-c-source-cltl2) (thing-at-point 'symbol)))))
 
 (global-set-key "\C-cH" 'anything-hyperspec-and-cltl2)
+
+;;; 50_init-lisp.el ends here

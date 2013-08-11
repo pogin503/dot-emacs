@@ -1,6 +1,9 @@
-;;@see http://ja.green.xrea.jp/emacs/autoinsert-mode
+;;; 30_init-auto-insert.el --- for autoinsert conf
+;;; Commentary:
+;;; Code:
+;; @see http://ja.green.xrea.jp/emacs/autoinsert-mode
 (require 'autoinsert)
-(require 'cl)
+
 ;; (add-hook 'before-save-hook 'time-stamp)
 (auto-insert-mode 1)
 (setq auto-insert-directory (concat user-emacs-directory "etc/autoinsert"))
@@ -34,8 +37,6 @@
 ;;                 (texinfo-mode . "texinfo.texi")
 		)
 	     auto-insert-alist))
-
-;(add-hook ‘find-file-hooks ‘auto-insert)
 
 (defvar template-replacements-alists
   '(
@@ -77,3 +78,5 @@
   (message "done."))
 
 (add-hook 'find-file-not-found-hooks 'auto-insert)
+
+;;; 30_init-auto-insert.el ends here

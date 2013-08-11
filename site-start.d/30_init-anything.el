@@ -1,3 +1,7 @@
+;;; 30_init-anything.el --- anything conf
+;;; Commentary:
+;;; Code:
+
 (when (autoload-if-found 'anything-execute-extended-command "anything" nil t)
   (global-set-key (kbd "M-x") 'anything-execute-extended-command))
 
@@ -67,4 +71,9 @@
                   (insert candidate))))))
 
           (font-family-list))
-;;end anything-font-families
+
+(require 'helm-config)
+(require 'helm-descbinds)
+(helm-descbinds-mode)
+
+;;; 30_init-anything.el ends here

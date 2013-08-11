@@ -1,3 +1,6 @@
+;;; 00_init-package.el --- package conf
+;;; Commentary:
+;;; Code:
 (require 'package)
 
 ;;リポジトリにMarmaladeを追加
@@ -30,8 +33,7 @@
    color-moccur
    dash
    e2wm
-   flymake-easy
-   flymake-ruby
+   flycheck
    git-gutter
    haskell-mode
    helm
@@ -44,7 +46,7 @@
    js2-mode
    magit
    markdown-mode
-   mmm-mode
+   ;; mmm-mode
    multiple-cursors
    nginx-mode
    org-bullets
@@ -56,7 +58,7 @@
    rhtml-mode
    ruby-end
    s
-   session
+   ;; session
    slime
    solarized-theme
    starter-kit-ruby
@@ -64,3 +66,5 @@
    ))
 
 (require 'melpa)
+
+;;; 00_init-package.el ends here

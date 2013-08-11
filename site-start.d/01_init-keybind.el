@@ -1,4 +1,6 @@
-
+;;; 01_init-keybind.el --- keybind conf
+;;; Commentary:
+;;; Code:
 ;;original key-bind
 
 (defun my-load-current-buffer ()
@@ -16,8 +18,8 @@
 
 ;;original end
 
-;; (global-set-key "\M-w" 'clipboard-kill-ring-save)  ; クリップボードにコピー
-;; (global-set-key "\C-w" 'clipboard-kill-region)     ; 切り取ってクリップボードへ
+;; (global-set-key "\M-w" 'clipboard-kill-ring-save)  ; クリップボードにコピー
+;; (global-set-key "\C-w" 'clipboard-kill-region)     ; 切り取ってクリップボードへ
 
 (global-set-key (kbd "C-M-k")
   (lambda ()
@@ -33,7 +35,7 @@
 (global-set-key (kbd "s-<backspace>") 'backward-kill-word)
 (global-set-key (kbd "s-w") 'kill-ring-save)
 
-(define-key global-map [?¥] [?\\])  ;; ¥の代わりにバックスラッシュを入力する
+(define-key global-map [?¥] [?\\])  ;; ¥の代わりにバックスラッシュを入力する
 
 ;; (global-set-key (kbd "C-h") 'delete-backward-char)
 (keyboard-translate ?\C-h ?\C-?)
@@ -92,3 +94,6 @@
 (defalias 'exit 'save-buffers-kill-emacs)
 
 (global-set-key (kbd "C-x C-z") 'nil)
+
+(global-set-key (kbd "C-x C-o") 'other-window)
+;;; 01_init-keybind.el ends here
