@@ -1,4 +1,8 @@
+;;; 40_init-key-combo --- 40_init-key-combo
+;;; Commentary:
+;;; Code:
 (require 'key-combo)
+(key-combo-mode 1)
 
 (key-combo-load-default)
 
@@ -161,3 +165,5 @@
   )
 
 (add-hook 'prolog-mode-hook 'my-prolog-mode-key-combo)
+
+;;; 40_init-key-combo ends here

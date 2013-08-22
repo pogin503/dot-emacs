@@ -1,5 +1,8 @@
+;;; 40_init-auto-complete --- auto-complete conf
+;;; Commentary:
+;;; Code:
 ;;auto-complete******************************
-(add-to-list 'load-path "~/.emacs.d/plugins/auto-complete")
+;; (add-to-list 'load-path "~/.emacs.d/plugins/auto-complete")
 ;; (req auto-complete)
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/plugins/auto-complete/ac-dict/")
@@ -17,3 +20,5 @@
                'nxml-mode-hook
                ))
   (add-hook hook 'auto-complete-mode))
+(provide '40_init-auto-complete)
+;;; 40_init-auto-complete ends here

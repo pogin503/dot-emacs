@@ -91,7 +91,7 @@
     load-status))
 
 (defun autoload-if-found (functions file &optional docstring interactive type)
-  "set autoload iff. FILE has found."
+  "Set autoload iff. FILE has found."
   (if (not (listp functions))
       (setq functions (list functions)))
   (and (locate-library file)

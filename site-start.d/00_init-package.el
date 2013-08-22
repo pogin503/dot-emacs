@@ -56,6 +56,7 @@
    pretty-lambdada
    quickrun
    rhtml-mode
+   rinari
    ruby-end
    s
    ;; session

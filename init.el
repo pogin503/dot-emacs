@@ -1,4 +1,7 @@
-; 常時デバッグ状態
+;;; init.le --- init file
+;;; Commentary:
+;;; Code:
+; 常時デバッグ状態
 (setq debug-on-error t)
 
 
@@ -40,20 +43,20 @@
           ((= arg 1) (message "another *scratch* is created")))))
 
 (add-hook 'kill-buffer-query-functions
-          ;; *scratch* バッファで kill-buffer したら内容を消去するだけにする
+          ;; *scratch* バッファで kill-buffer したら内容を消去するだけにする
           (lambda ()
             (if (string= "*scratch*" (buffer-name))
                 (progn (my-make-scratch 0) nil)
               t)))
 
 (add-hook 'after-save-hook
-          ;; *scratch* バッファの内容を保存したら *scratch* バッファを新しく作る
+          ;; *scratch* バッファの内容を保存したら *scratch* バッファを新しく作る
           (lambda ()
             (unless (member (get-buffer "*scratch*") (buffer-list))
               (my-make-scratch 1))))
-;;; *scrach*をkill-bufferしたら自動復活させる ここまで
+;;; *scrach*をkill-bufferしたら自動復活させる ここまで
 
-;;; ウィンドウのサイズを閉じる前に記憶しておく
+;;; ウィンドウのサイズを閉じる前に記憶しておく
 (defun my-window-size-save ()
   (let* ((rlist (frame-parameters (selected-frame)))
          (ilist initial-frame-alist)
@@ -71,8 +74,8 @@
     (set-buffer buf)
     (erase-buffer)
     (insert (concat
-             ;; 初期値をいじるよりも modify-frame-parameters
-             ;; で変えるだけの方がいい?
+             ;; 初期値をいじるよりも modify-frame-parameters
+             ;; で変えるだけの方がいい?
              "(delete 'width initial-frame-alist)\n"
              "(delete 'height initial-frame-alist)\n"
              "(delete 'top initial-frame-alist)\n"
@@ -100,7 +103,7 @@
 (defadvice save-buffers-kill-emacs
   (before save-frame-size activate)
   (my-window-size-save))
-;;; ウィンドウのサイズを閉じる前に記憶しておく ここまで
+;;; ウィンドウのサイズを閉じる前に記憶しておく ここまで
 
 ;;from ALICE meadow code end.
 
@@ -108,9 +111,9 @@
 ;;reference from sakito's config
 
 ;; 引数を load-path へ追加
-;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
-;; [A-Za-z] で開始する物だけ追加するので、追加したくない物は . や _ を先頭に付与しておけばロードしない
-;; dolist は Emacs 21 から標準関数なので積極的に利用して良い
+;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
+;; [A-Za-z] で開始する物だけ追加するので、追加したくない物は . や _ を先頭に付与しておけばロードしない
+;; dolist は Emacs 21 から標準関数なので積極的に利用して良い
 (defun add-to-load-path (&rest paths)
   (let (path)
     (dolist (path paths paths)
@@ -160,7 +163,8 @@
 ;; 10 起動前実行系
 ;; 20 関数定義
 ;; 30 追加機能系
-;; 40 マイナーモード
-;; 50 メジャーモード
+;; 40 マイナーモード
+;; 50 メジャーモード
 ;; 60
 ;; 90 起動後実行系
+;;; init.el ends here
