@@ -28,6 +28,7 @@ url/
 plugins/twittering-mode/cert/
 .mc-lists.el
 eshell/
+.smex-items
 
 # ignore diff files
 *.diff

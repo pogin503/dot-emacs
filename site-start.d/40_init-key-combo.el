@@ -166,4 +166,6 @@
 
 (add-hook 'prolog-mode-hook 'my-prolog-mode-key-combo)
 
+(key-combo-mode 1)
+
 ;;; 40_init-key-combo ends here

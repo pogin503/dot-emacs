@@ -33,6 +33,8 @@
 ;; 既存スニペットを閲覧・編集する
 (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
 
+(custom-set-variables '(yas-trigger-key "TAB"))
+
 ;;@see http://emacs.g.hatena.ne.jp/Shinnya/20100805/1281034504
 ;; (setq yas/next-field-key "TAB")
 ;; (setq yas/prev-field-key "<S-tab>")

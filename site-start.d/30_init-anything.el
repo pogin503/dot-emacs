@@ -2,9 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 (eval-when-compile
+  (require '00_init-macro)
   (require 'cl))
-
-(require '00_init-macro)
 
 ;; (when (autoload-if-found 'anything-execute-extended-command "anything" nil t)
 ;;   (global-set-key (kbd "M-x") 'anything-execute-extended-command))
@@ -78,7 +77,7 @@
 
 (require 'helm-config)
 (require 'helm-descbinds)
-;; (helm-descbinds-mode)
+(helm-descbinds-mode)
 (helm-mode 1)
 
 ;;; 30_init-anything.el ends here

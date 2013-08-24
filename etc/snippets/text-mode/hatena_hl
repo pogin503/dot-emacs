@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: hatena_hl
-# key:
+# key: hatena
 # --
 >|$1|
 ${2: comment type} ${3: filename}

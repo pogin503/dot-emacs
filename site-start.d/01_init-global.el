@@ -217,7 +217,9 @@
 ;; 行末のwhitespaceを削除
 (defvar delete-trailing-whitespace-exclude-patterns (list "\\.md$" "\\.markdown$" "\\.org$"))
 
-(require 'cl)
+(eval-when-compile
+  (require 'cl))
+
 (defun delete-trailing-whitespace-with-exclude-pattern ()
   (interactive)
   (cond ((equal nil (loop for pattern in delete-trailing-whitespace-exclude-patterns
@@ -330,4 +332,6 @@
 
 ;; (set-default 'indicate-empty-lines nil)
 (set-default 'imenu-auto-rescan t)
+
+(require 'mylib)
 ;;; 01_init-global.el ends here

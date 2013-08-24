@@ -2,13 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+(require '00_init-macro)
+
 (eval-when-compile
-  (require '00_init-macro)
   (require '00_init-hanbetu))
 
-;; ------------------------------------------------------------------
-;; @ Emacs Lisp
-(add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 
 (defun esk-remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
@@ -18,32 +16,33 @@
               (if (file-exists-p (concat buffer-file-name "c"))
                   (delete-file (concat buffer-file-name "c"))))))
 
+(add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
-            ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
+            ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
             ;; (set (make-local-variable 'lisp-indent-function)
             ;;  'common-lisp-indent-function)
             (show-paren-mode t)))
-
-;; ------------------------------------------------------------------
 
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 ;; (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
 
 
-;; ------------------------------------------------------------------
 (add-hook 'lisp-mode-hook
-          (lambda ()
+          #'(lambda ()
+            (slime-mode t)
+            (show-paren-mode t)
             (set (make-local-variable 'lisp-indent-function)
                  'common-lisp-indent-function)
-            (show-paren-mode t)))
-(add-hook 'after-change-major-mode-hook
-          (lambda ()
             (show-paren-mode t)))
 
 (add-hook 'inferior-lisp-mode-hook
 	  (lambda ()
 	    (inferior-slime-mode t)))
+
+(add-hook 'after-change-major-mode-hook
+          (lambda ()
+            (show-paren-mode t)))
 
 ;; ------------------------------------------------------------------
 ;; @ slime
@@ -56,7 +55,7 @@
 ;   (expand-file-name "~/.emacs.d/plugins/slime/swank-loader.lisp")))
 
 
-;; 文字コードの設定
+;; 文字コードの設定
 ;(setq slime-lisp-implementations
 ;      '(
 ;	;(ccl (,(expand-file-name "~/opt/ccl/scripts/ccl64") "-K"  "utf-8"))
@@ -65,28 +64,23 @@
 ;	))
 (if run-linux
     (progn
-      (when (autoload-if-found 'slime "slime" "slimeの呼び出し")
+      (when (autoload-if-found 'slime "slime" "slimeの呼び出し")
         (progn
+          (require 'slime)
           (setq slime-net-coding-system 'utf-8-unix)
           (set-language-environment "utf-8")
           (setq inferior-lisp-program "/usr/bin/sbcl") ; your Lisp system
           (when (file-exists-p "/usr/share/emacs/site-lisp/slime/")
             (add-to-list 'load-path "/usr/share/emacs/site-lisp/slime/"))
-          (require 'slime)
           (slime-setup)
           ;; (req slime-autoloads)
           ;; (slime-setup '(slime-repl slime-fancy slime-banner))
           ;;ac-slime
           (require 'ac-slime)))
       ))
+
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-(add-hook 'lisp-mode-hook (lambda ()
-                            (slime-mode t)
-                            (show-paren-mode t)))
-
-;(eval-when (:compile-toplevel :load-toplevel)
-;	 (sb-ext:unlock-package 'sb-impl))
 
 ;;; start swank server in CL
 ;(load "swank-loader.lisp" :verbose t)  ; load swank definition files
@@ -103,35 +97,31 @@
 ;        (sbcl ("/opt/local/bin/sbcl"));
 ;	))
 
-;(slime-setup '(slime-fancy))
-;(setq slime-default-lisp 'clisp)
-
-
 ;;slimeのkey-bindのメモ
-;'((" "        . slime-space)         ;; 関数名の後等でミニバッファに情報を表示するためのもの．
-;  ("\M-p"     . slime-previous-note) ;; 注釈（コンパイル時等のエラーや警告）にジャンプできる．
-;  ("\M-n"     . slime-next-note)     ;; 次の注釈にジャンプできる．
+;'((" "        . slime-space)         ;; 関数名の後等でミニバッファに情報を表示するためのもの．
+;  ("\M-p"     . slime-previous-note) ;; 注釈（コンパイル時等のエラーや警告）にジャンプできる．
+;  ("\M-n"     . slime-next-note)     ;; 次の注釈にジャンプできる．
 ;  ("\C-c\M-c" . slime-remove-notes)  ;; 注釈を消す
-;  ("\C-c\C-k" . slime-compile-and-load-file) ;; カレントバッファと対応するファイルをコンパイルした後ロードする
-;  ("\C-c\M-k" . slime-compile-file)          ;; ファイルをコンパイル
-;  ("\C-c\C-c" . slime-compile-defun)         ;; 関数定義をコンパイル
-;  ("\C-c\C-l" . slime-load-file)             ;; ファイルをロード
+;  ("\C-c\C-k" . slime-compile-and-load-file) ;; カレントバッファと対応するファイルをコンパイルした後ロードする
+;  ("\C-c\M-k" . slime-compile-file)          ;; ファイルをコンパイル
+;  ("\C-c\C-c" . slime-compile-defun)         ;; 関数定義をコンパイル
+;  ("\C-c\C-l" . slime-load-file)             ;; ファイルをロード
 ;  ;; Multiple bindings for completion, since M-TAB is often taken by
 ;  ;; the window manager.
-;  ("\M-\C-i"  . slime-complete-symbol)  ;; シンボル補完
-;  ("\C-c\C-i" . slime-complete-symbol)  ;; シンボル補完（M-TAB が Window Manger に食われちゃってる場合）
-;  ("\M-."     . slime-edit-fdefinition) ;; 関数定義へジャンプ
-;  ("\M-,"     . slime-pop-find-definition-stack) ;; M-. の移動を逆にたどる
+;  ("\M-\C-i"  . slime-complete-symbol)  ;; シンボル補完
+;  ("\C-c\C-i" . slime-complete-symbol)  ;; シンボル補完（M-TAB が Window Manger に食われちゃってる場合）
+;  ("\M-."     . slime-edit-fdefinition) ;; 関数定義へジャンプ
+;  ("\M-,"     . slime-pop-find-definition-stack) ;; M-. の移動を逆にたどる
 ;  ("\C-x\C-e" . slime-eval-last-expression)      ;; 式を評価する
 ;  ("\C-c\C-p" . slime-pprint-eval-last-expression) ;; 式を評価して結果を表示
 ;  ("\M-\C-x"  . slime-eval-defun)                ;; 関数定義を評価する
-;  ("\C-c:"    . slime-interactive-eval)          ;; ミニバッファにプロンプトを出し，入力された式を評価
-;  ("\C-c\C-z" . slime-switch-to-output-buffer)   ;; slime の出力バッファに移動
-;  ("\C-c\C-d" . slime-describe-symbol)           ;; シンボルを describe した結果を表示
-;  ("\C-c\M-d" . slime-disassemble-symbol)        ;; シンボルを disassemble した結果を表示
+;  ("\C-c:"    . slime-interactive-eval)          ;; ミニバッファにプロンプトを出し，入力された式を評価
+;  ("\C-c\C-z" . slime-switch-to-output-buffer)   ;; slime の出力バッファに移動
+;  ("\C-c\C-d" . slime-describe-symbol)           ;; シンボルを describe した結果を表示
+;  ("\C-c\M-d" . slime-disassemble-symbol)        ;; シンボルを disassemble した結果を表示
 ;  ("\C-c\C-t" . slime-toggle-trace-fdefinition)  ;; 関数の TRACE を ON/OFF する
 ;  ("\C-c\C-a" . slime-apropos)                   ;; apropos
-;  ("\C-c\M-a" . slime-apropos-all)               ;; ↑との違いが？？
+;  ("\C-c\M-a" . slime-apropos-all)               ;; ↑との違いが？？
 ;  ([(control c) (control m)] . slime-macroexpand-1)    ;; マクロを展開 (macroexpand-1)
 ;  ([(control c) (meta m)]    . slime-macroexpand-all)  ;; マクロを展開 (macroexpand)
 ;  ("\C-c\C-g" . slime-interrupt)  ;; SLIME に割り込む
@@ -146,7 +136,7 @@
 ;  ;; Not sure which binding is best yet, so both for now.
 ;  ([(control meta ?\.)] . slime-next-location)      ;; ？
 ;  ("\C-c\C- "  . slime-next-location)               ;; ？
-;  ("\C-c~"     . slime-sync-package-and-default-directory) ;; パッケージとディレクトリをファイルに合わせる
+;  ("\C-c~"     . slime-sync-package-and-default-directory) ;; パッケージとディレクトリをファイルに合わせる
 
 ;; ------------------------------------------------------------------
 ;; @ hyperspec
@@ -156,7 +146,7 @@
 ;;       common-lisp-hyperspec-symbol-table
 ;;       (expand-file-name (expand-file-name "~/.emacs.d/etc/HyperSpec/Data/Map_Sym.txt")))
 
-;; HyperSpecをw3mで見る
+;; HyperSpecをw3mで見る
 ;; (when (autoload-if-found 'w3m-mode "w3m")
 ;;   (defadvice common-lisp-hyperspec
 ;;     (around hyperspec-lookup-w3m () activate)
@@ -174,7 +164,7 @@
 ;;       ad-do-it))
 
 ;; @see http://aikotobaha.blogspot.jp/2011/05/emacs-anythig-hyperspec-cltl2.html
-;; Hyperspec と cltl2 を anything で引けるようにする
+;; Hyperspec と cltl2 を anything で引けるようにする
 (eval-after-load "anything"
   '(progn
      (setq anything-c-source-hyperspec
