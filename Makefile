@@ -2,6 +2,7 @@ EMACS ?= "${HOME}/workspace/emacs/emacs-24.3/nextstep/Emacs.app/Contents/MacOS/E
 
 elpa:
 	@echo "  start elpa"
+	mkdir elpa
 	${EMACS} --batch -L . -l elisp/melpa.el -l site-start.d/00_init-package.el
 	@echo "  end elpa"
 
