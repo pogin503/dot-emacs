@@ -19,11 +19,14 @@
 
 ;;インストールしたパッケージにロードパスを通してロードする
 (package-initialize)
+
+(require 'melpa)
+
 ;; install packages by package.el
 (mapc
  (lambda (package)
-   (or (package-installed-p package)
-       (package-install package)))
+   (when (not (package-installed-p package))
+     (package-install package)))
  '(
    ;; starter-kit
    auto-complete
@@ -65,7 +68,5 @@
    starter-kit-ruby
    yasnippet
    ))
-
-(require 'melpa)
 
 ;;; 00_init-package.el ends here
