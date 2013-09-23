@@ -1,6 +1,10 @@
+;;; 50_init-html --- 50_init-html
+;;; Commentary:
+;;; Code:
 ;; @see http://d.hatena.ne.jp/tototoshi/20110127/1296132523
+(require '00_init-macro)
 
-(add-to-load-path "plugins/zencoding")
+;; (add-to-load-path "plugins/zencoding")
 (req zencoding-mode)
 (dolist (hook (list
 			   'nxml-mode-hook
@@ -18,3 +22,5 @@
 				  (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
 (setq mweb-filename-extensions '("htm" "html" "ctp" "phtml"))
 (multi-web-global-mode 1)
+(provide '50_init-html)
+;;; 50_init-html ends here
