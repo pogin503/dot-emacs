@@ -19,6 +19,7 @@
 ;;open-junk-file
 (require 'open-junk-file)
 
+
 ;;debug config
 ;(add-hook 'after-init-hook
 ;          '(lambda () (setq debug-on-error t)))
@@ -122,6 +123,35 @@
         (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
             (normal-top-level-add-subdirs-to-load-path))))))
 
+;; @ shell
+   (require 'shell)
+   (setq explicit-shell-file-name "bash.exe")
+   (setq shell-command-switch "-c")
+   (setq shell-file-name "bash.exe")
+
+   ;; (M-! and M-| and compile.el)
+   (setq shell-file-name "bash.exe")
+   (modify-coding-system-alist 'process ".*sh\\.exe" 'cp932)
+
+   ;; shellモードの時の^M抑制
+   (add-hook 'comint-output-filter-functions 'shell-strip-ctrl-m nil t)
+
+   ;; shell-modeでの補完 (for drive letter)
+   (setq shell-file-name-chars "~/A-Za-z0-9_^$!#%&{}@'`.,;()-")
+
+   ;; エスケープシーケンス処理の設定
+   (autoload 'ansi-color-for-comint-mode-on "ansi-color"
+             "Set `ansi-color-for-comint-mode' to t." t)
+
+   (setq shell-mode-hook
+         (function
+          (lambda ()
+
+            ;; シェルモードの入出力文字コード
+            (set-buffer-process-coding-system 'sjis-dos 'sjis-unix)
+            (set-buffer-file-coding-system    'sjis-unix)
+            )))
+
 ;; Emacs Lisp のPathを通す
 (add-to-load-path
  ;; 初期設定ファイル
@@ -136,7 +166,6 @@
  )
 
 ;;from sakito's config end
-
 
 ;;行番号表示のelisp
 ;;(require 'wb-line-number)
@@ -157,7 +186,7 @@
 
 ;;init-loader
 (require 'init-loader)
-(init-loader-load "~/.emacs.d/site-start.d/")
+(init-loader-load (concat user-emacs-directory "site-start.d/"))
 
 ;; 00 一般設定
 ;; 10 起動前実行系
@@ -167,4 +196,18 @@
 ;; 50 メジャーモード
 ;; 60
 ;; 90 起動後実行系
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
+ '(w32-symlinks-handle-shortcuts t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(eshell-prompt-face ((t (:foreground "maroon2" :bold nil))) t))
 ;;; init.el ends here

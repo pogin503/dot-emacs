@@ -6,12 +6,16 @@
 
 (if (not run-no-window)
     (if run-windows
+        ;; (set-face-attribute 'default nil
+        ;;                   :family "Meiryo"
+        ;;                   :height 100
+        ;;                   :weight 'bold
+        ;;                   ;; :weight 'normal
+        ;;                   )
         (set-face-attribute 'default nil
-                          :family "Meiryo"
-                          :height 100
-                          :weight 'bold
-                          ;; :weight 'normal
-                          )
+                    :family "Ricty Discord"
+                    :height 100
+                    :weight 'bold)
       (set-fontset-font nil 'japanese-jisx0208
                         (font-spec :family "Meiryo")))
   (if run-linux

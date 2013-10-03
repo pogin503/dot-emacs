@@ -58,6 +58,7 @@
    powerline
    pretty-lambdada
    quickrun
+   redo+
    rhtml-mode
    rinari
    ruby-end
