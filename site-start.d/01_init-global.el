@@ -132,8 +132,9 @@
 
 ;; Emacs 設定ディレクトリを設定。Emacs 22以下用
 ;; Emacs 23.1 以上では user-emacs-directory 変数が用意されているのでそれを利用
-(unless (boundp 'user-emacs-directory)
-  (defvar user-emacs-directory (expand-file-name "~/.emacs.d/")))
+(when load-file-name
+  (setq user-emacs-directory (file-name-directory load-file-name)))
+(add-to-list 'load-path user-emacs-directory)
 
 ;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
 ;; 終了時バイトコンパイル
@@ -151,12 +152,10 @@
 (cond (window-system
        (setq x-select-enable-clipboard t)))
 
-
 ;;スクロール量について
 ;; (setq scroll-conservatively 1)
 ;; (setq scroll-step 1)
 ;; (setq next-screen-context-lines 1)
-
 
 ;; ;; マウスホイールでスクロール
 ;; (defun scroll-down-with-lines ()
