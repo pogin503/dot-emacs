@@ -1,4 +1,5 @@
 ;;; 40_init-key-combo --- 40_init-key-combo
+;; This program is free software
 ;;; Commentary:
 ;;; Code:
 (require 'key-combo)
@@ -13,6 +14,7 @@
   (key-combo-define-local (kbd "//") "// ")
   (key-combo-define-local (kbd "/*") "/* `!!' */")
   (key-combo-define-local (kbd "/**") "/**\n*`!!'\n*/")
+  (key-combo-define-local (kbd "::") "::")
   ;; (key-combo-define-local (kbd ">") '(key-combo-execute-orignal " >> "))
   ;; (key-combo-define-local (kbd "<") '(" < " " << "))
   )
@@ -168,4 +170,5 @@
 
 (key-combo-mode 1)
 
+(provide '40_init-key-combo)
 ;;; 40_init-key-combo ends here

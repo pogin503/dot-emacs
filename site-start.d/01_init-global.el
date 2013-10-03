@@ -1,4 +1,5 @@
-;;; 01_init-global.el --- global setting
+;;; 01_init-global --- global setting
+;; This program is free software
 ;;; Commentary:
 ;;; Code:
 
@@ -198,12 +199,15 @@
                  `(".*" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
 (my-define-backup-directory)
 
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)
-        ("\#.*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "~/.emacs.d/.backup") t)
-        ("\#.*" ,(expand-file-name "~/.emacs.d/.backup") t)))
+;; ;; 編集中ファイルのバックアップ先
+;; (setq auto-save-file-name-transforms
+;;       `((".*" ,temporary-file-directory t)))
+;; (setq backup-directory-alist
+;;       `((".*" . ,temporary-file-directory)
+;;         ("\#.*" . ,temporary-file-directory)))
+;; (setq auto-save-file-name-transforms
+;;       `((".*" ,(expand-file-name "~/.emacs.d/.backup") t)
+;;         ("\#.*" ,(expand-file-name "~/.emacs.d/.backup") t)))
 
 (setq version-control t)        ; 複数のバックアップを残します。世代。
 (setq kept-new-versions 5)   ; 新しいものをいくつ残すか
@@ -333,4 +337,6 @@
 (set-default 'imenu-auto-rescan t)
 
 (require 'mylib)
-;;; 01_init-global.el ends here
+
+(provide '01_init-global)
+;;; 01_init-global ends here

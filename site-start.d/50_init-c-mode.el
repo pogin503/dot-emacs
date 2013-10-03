@@ -1,7 +1,12 @@
+;;; 50_init-c-mode --- 50_init-c-mode
+;; This program is free software
+;;; Commentary:
+;;; Code:
+
 (defun labo-indent ()
   (setq c-basic-offset 4
         tab-width 4
-        indent-tabs-mode nil)
+        indent-tabs-mode t)
   )
 
 
@@ -76,3 +81,6 @@
 ;; c-brace-imaginary-offset      他のテキストの後ろにある開き中かっこが，この行の先頭からどれだけ右にある と考えるかを指定します．
 ;; c-argdecl-indent              Cの関数の引数宣言の字下げを指定します．
 ;; c-label-offset                ラベルやcase，defaultのある文に加える字下げの数を指定します．
+
+(provide '50_init-c-mode)
+;;; 50_init-c-mode ends here
