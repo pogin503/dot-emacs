@@ -80,4 +80,5 @@
 (helm-descbinds-mode)
 (helm-mode 1)
 
+(provide '30_init-anything)
 ;;; 30_init-anything.el ends here

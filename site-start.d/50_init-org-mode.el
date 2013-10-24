@@ -1,6 +1,12 @@
+;;; 50_init-org-mode --- 50_init-org-mode
+;; This program is free software
+;;; Commentary:
+;;; Code:
+
 ;;org-modeを使用しないとき
 ;; (defvar org-directory "")
 
+(require '00_init-macro)
 
 ;;@see http://d.hatena.ne.jp/rubikitch/20090121/1232468026
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode)
@@ -13,7 +19,7 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-;; C-c r でorg-remember起動 キーバインドの設定
+;; C-c r でorg-remember起動 キーバインドの設定
 (define-key global-map (kbd "C-c r") 'org-remember)
 
 (lazyload (org-mode org-todo-list org-agenda org-store-link) "org"
@@ -134,7 +140,9 @@ If the link is in hidden text, expose it."
           )
 
 (require 'org-remember)
-(req org-bullets)
+(req org-bullets
+     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+     )
 
-(add-hook 'org-mode-hook (lambda () (if (locate-library "org-bullets")
-                                    (org-bullets-mode 1))))
+(provide '50_init-org-mode)
+;;; 50_init-org-mode ends here

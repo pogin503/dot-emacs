@@ -1,4 +1,4 @@
-;;;;  30_init-e2wm.el --
+;;;  30_init-e2wm.el -- 30_init-e2wm
 ;; -*- Mode: Emacs-Lisp -*-
 
 ;; Created: Tue Jul 19 03:56:19 2011
@@ -32,6 +32,7 @@
 
 ;;
 ;;; Code:
+(require '00_init-macro)
 (when (autoload-if-found 'e2wm:start-management "e2wm" nil t)
   (global-set-key (kbd "M-+") 'e2wm:start-management))
 
@@ -52,4 +53,6 @@
 
           (req e2wm-vcs)
           )
-          ;; 30_init-e2wm.el ends here
+
+(provide '30_init-e2wm)
+;;; 30_init-e2wm ends here

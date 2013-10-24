@@ -1,4 +1,11 @@
-;; 文字コード
+;;; 01_init-encoding --- 01_init-encoding
+;; This program is free software
+;;; Commentary:
+;;; Code:
+;; 文字コード
+
+(require '00_init-hanbetu)
+
 (set-language-environment "Japanese")
 (let ((ws window-system))
   (cond ((eq ws 'w32)
@@ -11,17 +18,19 @@
          (prefer-coding-system 'utf-8)
          (setq file-name-coding-system 'utf-8-hfs)
          (setq locale-coding-system 'utf-8-hfs))))
+
 (defun ucs-normalize-NFC-buffer ()
   (interactive)
   (ucs-normalize-NFC-region (point-min) (point-max))
   )
+
 (global-set-key (kbd "C-x RET u") 'ucs-normalize-NFC-buffer)
-;; ミニバッファの文字化け対策
+;; ミニバッファの文字化け対策
 ;; (if run-windows
 ;;     (setq file-name-coding-system 'sjis-dos)
 ;;   (setq file-name-coding-system 'utf-8-unix))
 
-;;改行コード表示
+;;改行コード表示
 (setq eol-mnemonic-dos "(CRLF)")
 (setq eol-mnemonic-mac "(CR)")
 (setq eol-mnemonic-unix "(LF)")
@@ -80,7 +89,7 @@
            (add-to-list 'mime-charset-coding-system-alist
                         '(iso-2022-jp . cp50220))))
 
-      ;; 全角チルダ/波ダッシュをWindowsスタイルにする
+      ;; 全角チルダ/波ダッシュをWindowsスタイルにする
       (let ((table (make-translation-table-from-alist '((#x301c . #xff5e))) ))
         (mapc
          (lambda (coding-system)
@@ -139,3 +148,5 @@
           (set-char-table-parent table char-width-table)
           (setq char-width-table table)))
       (set-east-asian-ambiguous-width 2)))
+(provide '01_init-encoding)
+;;; 01_init-encoding ends here

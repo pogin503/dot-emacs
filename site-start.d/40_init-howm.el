@@ -1,13 +1,19 @@
+;;; 40_init-howm --- 40_init-howm
+;; This program is free software
+;;; Commentary:
+;;; Code:
 ;(add-to-list 'load-path "~/.emacs.d/elisp/howm-1.3.9.1/howm/")
-(add-to-list 'load-path "~/.emacs.d/plugins/howm-1.3.9.2rc4/")
+;; (add-to-list 'load-path "~/.emacs.d/plugins/howm-1.3.9.2rc4/")
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/howm/")
-
+(require '00_init-macro)
 (defvar dropbox-directory
+  "Set Dropbox directory."
   (cond
    ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
    (t "~/Dropbox")
    ))
+
 (define-key global-map (kbd "C-c , ,") 'howm-menu)
 (add-to-list 'auto-mode-alist '("\\.howm$'" . howm-mode))
 
@@ -106,3 +112,6 @@
           (setq howm-menu-refresh-after-save nil)
           ;; 下線を引き直さない
           (setq howm-refresh-after-save nil))
+
+(provide '40_init-howm)
+;;; 40_init-howm ends here

@@ -1,3 +1,7 @@
+;;; 30_init-git-gutter --- 30_init-git-gutter
+;; This program is free software
+;;; Commentary:
+;;; Code:
 (require 'git-gutter)
 (global-git-gutter-mode t)
 
@@ -16,3 +20,5 @@
 (add-hook 'php-mode-hook   'git-gutter-mode)
 (add-hook 'ruby-mode-hook  'git-gutter-mode)
 (add-hook 'emacs-lisp-mode-hook  'git-gutter-mode)
+(provide '30_init-git-gutter)
+;;; 30_init-git-gutter ends here

@@ -24,12 +24,11 @@
 ;(add-hook 'after-init-hook
 ;          '(lambda () (setq debug-on-error t)))
 
-
 ;;reference from ALICE meadow
 ;;@see http://d.hatena.ne.jp/zqwell-ss/20100620/1277025809
 
-;;; *scrach*をkill-bufferしたら自動復活させる
 (defun my-make-scratch (&optional arg)
+  "*scrach*をkill-bufferしたら自動復活させる."
   (interactive)
   (progn
     ;; "*scratch*" を作成して buffer-list に放り込む
@@ -57,8 +56,8 @@
               (my-make-scratch 1))))
 ;;; *scrach*をkill-bufferしたら自動復活させる ここまで
 
-;;; ウィンドウのサイズを閉じる前に記憶しておく
 (defun my-window-size-save ()
+  "ウィンドウのサイズを閉じる前に記憶しておく"
   (let* ((rlist (frame-parameters (selected-frame)))
          (ilist initial-frame-alist)
          (nCHeight (frame-height))
@@ -124,33 +123,33 @@
             (normal-top-level-add-subdirs-to-load-path))))))
 
 ;; @ shell
-   (require 'shell)
-   (setq explicit-shell-file-name "bash.exe")
-   (setq shell-command-switch "-c")
-   (setq shell-file-name "bash.exe")
+(require 'shell)
+(setq explicit-shell-file-name "bash.exe")
+(setq shell-command-switch "-c")
+(setq shell-file-name "bash.exe")
 
-   ;; (M-! and M-| and compile.el)
-   (setq shell-file-name "bash.exe")
-   (modify-coding-system-alist 'process ".*sh\\.exe" 'cp932)
+;; (M-! and M-| and compile.el)
+(setq shell-file-name "bash.exe")
+(modify-coding-system-alist 'process ".*sh\\.exe" 'cp932)
 
-   ;; shellモードの時の^M抑制
-   (add-hook 'comint-output-filter-functions 'shell-strip-ctrl-m nil t)
+;; shellモードの時の^M抑制
+(add-hook 'comint-output-filter-functions 'shell-strip-ctrl-m nil t)
 
-   ;; shell-modeでの補完 (for drive letter)
-   (setq shell-file-name-chars "~/A-Za-z0-9_^$!#%&{}@'`.,;()-")
+;; shell-modeでの補完 (for drive letter)
+(setq shell-file-name-chars "~/A-Za-z0-9_^$!#%&{}@'`.,;()-")
 
-   ;; エスケープシーケンス処理の設定
-   (autoload 'ansi-color-for-comint-mode-on "ansi-color"
-             "Set `ansi-color-for-comint-mode' to t." t)
+;; エスケープシーケンス処理の設定
+(autoload 'ansi-color-for-comint-mode-on "ansi-color"
+  "Set `ansi-color-for-comint-mode' to t." t)
 
-   (setq shell-mode-hook
-         (function
-          (lambda ()
+(setq shell-mode-hook
+      (function
+       (lambda ()
 
-            ;; シェルモードの入出力文字コード
-            (set-buffer-process-coding-system 'sjis-dos 'sjis-unix)
-            (set-buffer-file-coding-system    'sjis-unix)
-            )))
+         ;; シェルモードの入出力文字コード
+         (set-buffer-process-coding-system 'sjis-dos 'sjis-unix)
+         (set-buffer-file-coding-system    'sjis-unix)
+         )))
 
 ;; Emacs Lisp のPathを通す
 (add-to-load-path

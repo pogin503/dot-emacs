@@ -1,3 +1,8 @@
+;;; 31_init-dired --- 31_init-dired
+;; This program is free software
+;;; Commentary:
+;;; Code:
+
 (add-hook 'dired-load-hook (lambda () (load "dired-x")))
 (add-hook 'dired-load-hook
           (lambda ()
@@ -6,9 +11,11 @@
             ))
 
 (require 'direx)
+(require 'popwin)
 (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory-other-window)
 (push '(direx:direx-mode :position left :width 30 :dedicated t)
       popwin:special-display-config)
+
 (setq direx:leaf-icon " "
       direx:open-icon "▾ "
       direx:closed-icon "▸ ")
@@ -268,3 +275,6 @@ Creates a buffer if necessary."
          (action . (("Set sort type" . (lambda (candidate)
                                          (dired-various-sort-change dired-various-sort-type candidate)))))
          ))))
+
+(provide '31_init-dired)
+;;; 31_init-dired ends here

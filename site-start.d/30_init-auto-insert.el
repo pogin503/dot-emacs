@@ -35,8 +35,9 @@
 		("\\.h$"   . ["template.h" my-template])
 ;; 		(xml-mode . "xml-insert.xml")
 ;;                 (texinfo-mode . "texinfo.texi")
+        ("\\.hs" . ["template.hs" my-template])
 		)
-	     auto-insert-alist))
+	    auto-insert-alist))
 
 (defvar template-replacements-alists
   '(
@@ -56,8 +57,9 @@
                                         (file-name-nondirectory buffer-file-name))))))
     ))
 
-(defun my-file-body-name (file-name)
-  (substring file-name 0 (position 46 file-name)))
+;; (defun my-file-body-name (file-name)
+;;   ""
+;;   (substring file-name 0 (position 46 file-name)))
 
 (defmacro defreplace (name replace-string)
   `(defun ,name (str)
@@ -68,12 +70,13 @@
 ;; (defreplace my-template-package "%package%")
 
 (defun my-template ()
+  "Templateの挿入."
   (time-stamp)
   (mapc #'(lambda(c)
-	    (progn
-	      (goto-char (point-min))
-	      (replace-string (car c) (funcall (cdr c)) nil)))
-	template-replacements-alists)
+            (progn
+              (goto-char (point-min))
+              (replace-string (car c) (funcall (cdr c)) nil)))
+        template-replacements-alists)
   (goto-char (point-max))
   (message "done."))
 
