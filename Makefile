@@ -14,6 +14,12 @@ build:
 		(batch-byte-compile))' ~/.emacs.d/site-start.d/*.el
 	@echo "  end build"
 
+init-load:build
+	$(EMACS) -batch -L .  -l tests/run-test -f add-to-load-path --eval \
+		'(progn \
+		(add-to-load-path "site-start.d" "elpa" "elisp" "plugins" "etc") \
+		(load "~/.emacs.d/init.el"))'
+
 build-strict:
 	-$(EMACS) --batch -L . -l tests/run-test --eval \
 		'(progn \
