@@ -1,28 +1,41 @@
 EMACS ?= "${HOME}/workspace/emacs/emacs-24.3/nextstep/Emacs.app/Contents/MacOS/Emacs"
 
+BATCH = $(EMACS) --batch -L .
+
+.PHONY: elpa build build-strict init-load clean-elpa
+
 elpa:
 	@echo "  start elpa"
-	mkdir elpa
-	${EMACS} --batch -L . -l elisp/melpa.el -l site-start.d/00_init-package.el
+	mkdir -p elpa
+	$(BATCH) -l elisp/melpa.el -l site-start.d/00_init-package.el --eval \
+		'(progn \
+		(load "~/.emacs.d/site-start.d/00_init-package.el") \
+		(my-install-package))'
 	@echo "  end elpa"
 
 build:
 	@echo "  start build"
-	-$(EMACS) --batch -L . -l tests/run-test -f add-to-load-path --eval \
-		'(progn \
-		(add-to-load-path "site-start.d" "elpa" "elisp" "plugins" "etc") \
-		(batch-byte-compile))' ~/.emacs.d/site-start.d/*.el
+	$(BATCH) -l tests/run-test --eval \
+		'(batch-byte-compile)' site-start.d/*.el
 	@echo "  end build"
 
 init-load:build
-	$(EMACS) -batch -L .  -l tests/run-test -f add-to-load-path --eval \
-		'(progn \
-		(add-to-load-path "site-start.d" "elpa" "elisp" "plugins" "etc") \
-		(load "~/.emacs.d/init.el"))'
+	$(BATCH)  -l tests/run-test --eval '(load (concat default-directory "init.el"))'
+# (mapcar #\'(lambda (x) (print x)) \'load-path) \
 
 build-strict:
-	-$(EMACS) --batch -L . -l tests/run-test --eval \
-		'(progn \
-		(add-to-load-path "site-start.d" "elpa" "elisp" "plugins" "etc") \
+	-$(BATCH) -l tests/run-test
+	-$(BATCH) -l tests/run-test \
+	--eval "(byte-compile-disable-warning 'cl-functions)" \
+	--eval 	'(progn \
+		(message default-directory) \
+		(message (concat default-directory "tests/run-test.el")) \
+		(load (concat user-emacs-directory "tests/run-test.el")) \
 		(setq byte-compile-error-on-warn t) \
 		(batch-byte-compile))' ~/.emacs.d/site-start.d/*.el
+
+# clean:
+# 	rm -rf site-start.d/*.elc
+
+clean-elpa:
+	rm -r elpa
