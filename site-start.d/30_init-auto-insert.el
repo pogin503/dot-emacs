@@ -5,8 +5,8 @@
 (require 'autoinsert)
 
 ;; (add-hook 'before-save-hook 'time-stamp)
-(auto-insert-mode 1)
-(setq auto-insert-directory (concat user-emacs-directory "etc/autoinsert"))
+(add-hook 'find-file-hook 'auto-insert)
+(setq auto-insert-directory  "~/.emacs.d/etc/autoinsert")
 (setq auto-insert-alist
       (nconc '(
                ;; ("\\.lisp$" . ["template.lisp" my-template])
@@ -22,8 +22,8 @@
 ;; 			     (lambda() (my-template-exec "/usr/local/bin/gosh"))
 ;; 			     my-template])
 		("\\.sh$" . ["template.sh"
-			     (lambda() (my-template-exec "#!/bin/sh"))
-			     my-template])
+                     (lambda() (my-template-exec "#!/bin/sh"))
+                     my-template])
 ;; 		("\\.py$" . ["template.sh"
 ;; 			     (lambda() (my-template-exec "/usr/bin/python"))
 ;; 			     my-template])
@@ -57,14 +57,16 @@
                                         (file-name-nondirectory buffer-file-name))))))
     ))
 
-;; (defun my-file-body-name (file-name)
-;;   ""
-;;   (substring file-name 0 (position 46 file-name)))
+(eval-when-compile
+  (require 'cl))
 
-(defmacro defreplace (name replace-string)
+(defun my-file-body-name (file-name)
+  (substring file-name 0 (position 46 file-name)))
+
+(defmacro defreplace (name arg_replace-string)
   `(defun ,name (str)
      (goto-char (point-min))
-     (replace-string ,replace-string str)))
+     (replace-string ,arg_replace-string str)))
 
 (defreplace my-template-exec "%exec%")
 ;; (defreplace my-template-package "%package%")
@@ -79,7 +81,5 @@
         template-replacements-alists)
   (goto-char (point-max))
   (message "done."))
-
-(add-hook 'find-file-not-found-hooks 'auto-insert)
 
 ;;; 30_init-auto-insert.el ends here

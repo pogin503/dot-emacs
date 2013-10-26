@@ -15,7 +15,7 @@
 ;; (mapc 'yas/load-directory  yas/root-directory)
 (setq yas-snippet-dirs
       `("~/.emacs.d/etc/snippets" ;; 作成するスニペットはここに入る
-        "~/.emacs.d/elisp/yasnippet/snippets" ;; 最初から入っていたスニペット(省略可能)
+        ;; "~/.emacs.d/elisp/yasnippet/snippets" ;; 最初から入っていたスニペット(省略可能)
         ))
 ;; yas-snippet-dirs
 (mapc (lambda (x) (add-to-list 'yas-snippet-dirs x))

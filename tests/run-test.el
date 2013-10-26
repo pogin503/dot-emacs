@@ -4,6 +4,8 @@
 
 ;;; Code:
 (defun add-to-load-path (&rest paths)
+  "Add to load path recursively.
+`PATHS' Directory you want to read recursively."
   (let (path)
     (dolist (path paths paths)
       (let ((default-directory
@@ -15,6 +17,10 @@
 
 (add-to-load-path
  "site-start.d"
- "plugins")
+ "plugins"
+ "elpa"
+ "elisp"
+ "plugins"
+ "etc")
 
 ;;; run-test ends here

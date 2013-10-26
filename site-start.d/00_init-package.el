@@ -34,6 +34,7 @@
    color-moccur
    dash
    e2wm
+   eldoc-extension
    flycheck
    git-gutter
    haskell-mode

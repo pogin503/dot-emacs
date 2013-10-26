@@ -8,11 +8,11 @@
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/howm/")
 (require '00_init-macro)
 (defvar dropbox-directory
-  "Set Dropbox directory."
   (cond
    ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
-   (t "~/Dropbox")
-   ))
+   (t "~/Dropbox"))
+  "Set Dropbox directory."
+  )
 
 (define-key global-map (kbd "C-c , ,") 'howm-menu)
 (add-to-list 'auto-mode-alist '("\\.howm$'" . howm-mode))

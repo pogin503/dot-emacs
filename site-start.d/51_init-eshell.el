@@ -3,7 +3,7 @@
 ;;; Code:
 
 ;;@see http://d.hatena.ne.jp/a666666/20110222/1298345699
-
+(require 'eshell)
 (require 'pcomplete)
 
 ;; 補完時に大文字小文字を区別しない
@@ -132,5 +132,6 @@
   ;; (setq eshell-history-size 100000)				   ; ヒストリサイズ
   ;; (setq eshell-hist-ignoredups t)                  ; ヒストリの重複を無視
 ;; )
+
 (provide '50_init-eshell)
 ;;; 50_init-eshell ends here
