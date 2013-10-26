@@ -21,11 +21,13 @@
 (package-initialize)
 
 ;; install packages by package.el
-(mapc
- (lambda (package)
-   (when (not (package-installed-p package))
-     (package-install package)))
- '(
+;; (mapc
+;;  (lambda (package)
+;;    (when (not (package-installed-p package))
+;;      (package-install package)))
+
+(defconst installing-package-list
+  '(
    ;; starter-kit
    auto-complete
    auto-install
@@ -33,6 +35,8 @@
    coffee-mode
    color-moccur
    dash
+   deferred
+   direx
    e2wm
    eldoc-extension
    flycheck
@@ -40,8 +44,8 @@
    haskell-mode
    helm
    helm-anything
-   helm-c-moccur
-   helm-c-yasnippet
+   helm-descbinds
+   ;; helm-c-moccur
    helm-ls-git
    ht
    inf-ruby
@@ -49,6 +53,7 @@
    magit
    markdown-mode
    ;; mmm-mode
+   multi-web-mode
    multiple-cursors
    nginx-mode
    org-bullets
@@ -62,13 +67,27 @@
    rinari
    ruby-end
    s
-   ;; session
+   session
    slime
    solarized-theme
    starter-kit-ruby
    yasnippet
+   helm-c-yasnippet
    ))
+(eval-when-compile
+  (require 'cl))
 
 (require 'melpa)
+
+
+(defun my-install-package ()
+  "Install my package."
+  (let ((not-installed (loop for x in installing-package-list
+                            when (not (package-installed-p x))
+                            collect x)))
+  (when not-installed
+    (package-refresh-contents)
+    (dolist (pkg not-installed)
+        (package-install pkg)))))
 
 ;;; 00_init-package.el ends here

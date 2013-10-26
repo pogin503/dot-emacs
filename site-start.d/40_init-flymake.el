@@ -37,21 +37,21 @@
   (flymake-simple-make-or-generic-init
    "g++" '("-Wall" "-Wextra" "-pedantic" "-fsyntax-only")))
 
-(defun flymake-ruby-init ()
-  (flymake-simple-make-or-generic-init
-   "ruby" '("-c")))
+;; (defun flymake-ruby-init ()
+;;   (flymake-simple-make-or-generic-init
+;;    "ruby" '("-c")))
 
-(defun flymake-ruby-init ()
-  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-         (local-file  (file-relative-name
-                       temp-file
-                       (file-name-directory buffer-file-name))))
-    (list "ruby" (list "-c" local-file))))
+;; (defun flymake-ruby-init ()
+;;   (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+;;                        'flymake-create-temp-inplace))
+;;          (local-file  (file-relative-name
+;;                        temp-file
+;;                        (file-name-directory buffer-file-name))))
+;;     (list "ruby" (list "-c" local-file))))
 
 (add-hook 'ruby-mode-hook '(lambda () (flymake-mode 1)))
-(require 'flymake-ruby)
-(add-hook 'ruby-mode-hook 'flymake-ruby-load)
+;; (require 'flymake-ruby)
+;; (add-hook 'ruby-mode-hook 'flymake-ruby-load)
 
 ;; flymakeがエラーになっても停止しないようにするための設定
 (defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
