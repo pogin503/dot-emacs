@@ -1,7 +1,12 @@
+;;; 30_init-popup --- 30_init-popup
+;; This program is free software
+;;; Commentary:
+;;; Code:
 ;(auto-install-from-url "https://github.com/m2ym/popwin-el/raw/master/popwin.el")
 ;(auto-install-from-url "http://www.emacswiki.org/emacs-en/PosTip")
 (add-to-list 'load-path "~/.emacs.d/elisp")
 
+(require '00_init-macro)
 (req popwin)
 (setq display-buffer-function 'popwin:display-buffer)
 
@@ -39,3 +44,6 @@
 (push '("\\*magit.*" :stick t :regexp t) popwin:special-display-config)
 (push '("*compilation*" :regexp t) popwin:special-display-config)
 (push '("*ert*" :regexp t) popwin:special-display-config)
+
+(provide '30_init-popup)
+;;; 30_init-popup ends here

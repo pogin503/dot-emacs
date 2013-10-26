@@ -43,3 +43,7 @@ qr_*.el
 
 # elpa
 elpa/
+
+# cask
+.cask
+*-pkg.el

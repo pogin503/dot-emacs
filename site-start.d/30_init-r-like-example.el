@@ -1,3 +1,7 @@
+;;; 30_init-r-like-example --- 30_init-r-like-example
+;; This program is free software
+;;; Commentary:
+;;; Code:
 (require 'r-like-example)
 (require 'elisp-examples)
 
@@ -17,3 +21,5 @@
 (global-set-key (kbd "C-c 0") 'ex-add-example)
 ;; (global-set-key (kbd "C-c 9") 'ex-deque-example)
 (global-set-key (kbd "C-c 9") 'ex-delete-last-elem)
+(provide '30_init-r-like-example)
+;;; 30_init-r-like-example ends here

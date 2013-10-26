@@ -3,6 +3,7 @@
 ;;; Code:
 ;(auto-install-from-url "http://tromey.com/elpa/package-install.el")
 
+(require '00_init-macro)
 (add-to-list 'load-path "~/.emacs.d/plugins/ruby/")
 
 ;; ruby-mode
