@@ -38,11 +38,10 @@
 (column-number-mode t)
 
 ;; 時刻の表示
-(require 'time)
-(setq display-time-24hr-format t)
-(setq display-time-string-forms '(24-hours ":" minutes))
-(display-time-mode t)
-
+;; (require 'time)
+;; (setq display-time-24hr-format t)
+;; (setq display-time-string-forms '(24-hours ":" minutes))
+;; (display-time-mode nil)
 
 ;; ------------------------------------------------------------------------
 ;; @ default setting

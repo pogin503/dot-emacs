@@ -38,7 +38,8 @@
 ;; coq-mode-hook
 (add-hook 'coq-mode-hook 'auto-complete-mode)
 (add-hook 'coq-mode-hook 'my-ac-coq-mode)
-(add-to-list 'auto-mode-alist '(".v$" . coq-mode))
+
+(setq coq-prog-name "/usr/local/bin/coqtop.opt")
 
 (provide '50_init-coq-mode)
 ;;; 50_init-coq-mode ends here

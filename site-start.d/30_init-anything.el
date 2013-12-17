@@ -76,9 +76,12 @@
           (font-family-list))
 
 (require 'helm-config)
+
+(global-set-key (kbd "C-c h") 'helm-mini)
+
 (require 'helm-descbinds)
 (helm-descbinds-mode)
-(helm-mode 1)
+;; (helm-mode 1)
 
 (provide '30_init-anything)
 ;;; 30_init-anything.el ends here

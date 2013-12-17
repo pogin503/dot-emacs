@@ -168,6 +168,13 @@
 
 (add-hook 'prolog-mode-hook 'my-prolog-mode-key-combo)
 
+(defun my-coffee-mode-key-combo ()
+  "Set coffee script key combo."
+  (key-combo-define-local (kbd "###") "###\n`!!'###")
+  (key-combo-define-local (kbd "=") " = ")
+  )
+(add-hook 'coffee-mode-hook 'my-coffee-mode-key-combo)
+
 (key-combo-mode 1)
 
 (provide '40_init-key-combo)
