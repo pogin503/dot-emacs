@@ -10,10 +10,14 @@
 (if run-windows
     (if run-windows-x64
         (add-to-list 'exec-path "C:/Program Files (x86)/Coq/bin")
-      (add-to-list 'exec-path "C:/Program Files/Coq/bin")))
-(load-file
- (concat dropbox-directory
-         "/eworkspace/ProofGeneral-4.1/ProofGeneral-4.1/generic/proof-site.el"))
+      (add-to-list 'exec-path "C:/Program Files/Coq/bin"))
+  (load-file
+   (concat dropbox-directory
+           "/eworkspace/ProofGeneral-4.2/ProofGeneral-4.2/generic/proof-site.el"))
+  (load-file
+   (concat dropbox-directory
+           "/eworkspace/ssreflect-1.4/pg-ssr.el"))
+  )
 
 ;; 要 $ yaourt -S proofgeneral
 ;; (when (file-exists-p

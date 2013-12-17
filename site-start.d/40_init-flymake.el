@@ -1,3 +1,8 @@
+;;; 40_init-flymake --- 40_init-flymake
+;; This program is free software
+;;; Commentary:
+;;; Code:
+
 ;; Let's run 8 checks at once instead.
 ;; (setq flymake-max-parallel-syntax-checks 8)
 ;; (require 'flymake)
@@ -82,3 +87,5 @@
 ;; (add-hook 'ruby-mode-hook 'flycheck-mode)
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
+(provide '40_init-flymake)
+;;; 40_init-flymake ends here

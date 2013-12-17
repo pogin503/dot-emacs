@@ -7,12 +7,16 @@
 (add-to-list 'load-path "~/.emacs.d/elisp")
 
 (require '00_init-macro)
-(req popwin)
-(setq display-buffer-function 'popwin:display-buffer)
+(req popwin
+     (setq display-buffer-function 'popwin:display-buffer)
+     )
 
 ;;anything
-(setq anything-samewindow nil)
-(push '("*anything*" :height 15) popwin:special-display-config)
+(req auto-complete
+     (setq anything-samewindow nil)
+     (push '("*anything*" :height 15) popwin:special-display-config)
+     )
+
 ;;dired
 (push '(dired-mode :position top) popwin:special-display-config)
 
@@ -44,6 +48,8 @@
 (push '("\\*magit.*" :stick t :regexp t) popwin:special-display-config)
 (push '("*compilation*" :regexp t) popwin:special-display-config)
 (push '("*ert*" :regexp t) popwin:special-display-config)
+
+(setq popwin:close-popup-window-timer-interval 0.7)
 
 (provide '30_init-popup)
 ;;; 30_init-popup ends here

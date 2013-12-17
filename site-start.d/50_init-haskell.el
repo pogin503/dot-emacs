@@ -1,3 +1,7 @@
+;;; 50_init-haskell --- 50_init-haskell
+;; This program is free software
+;;; Commentary:
+;;; Code:
 (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
 (add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
 (add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
@@ -10,12 +14,14 @@
 (add-to-list 'auto-mode-alist '("\\.julius$" . js2-mode))
 
 (defun my-haskell-ac-init ()
+  "Set AC-mode source."
   (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
     (auto-complete-mode t)
     (setq ac-sources '(ac-source-words-in-same-mode-buffers
                        ac-source-dictionary
                        ac-source-ghc-mod))))
 
+(require '00_init-macro)
 (lazyload (haskell-mode literate-haskell-mode haskell-cabal-mode) "haskell-mode"
           (require 'haskell-mode)
           (require 'haskell-cabal)
@@ -24,44 +30,44 @@
           (require 'anything-config)
           (require 'anything-match-plugin)
 
-          (defvar anything-c-source-ghc-mod
-            '((name . "ghc-browse-document")
-              (init . anything-c-source-ghc-mod)
-              (candidates-in-buffer)
-              (candidate-number-limit . 9999999)
-              (action ("Open" . anything-c-source-ghc-mod-action))))
+          ;; (defvar anything-c-source-ghc-mod
+          ;;   '((name . "ghc-browse-document")
+          ;;     (init . anything-c-source-ghc-mod)
+          ;;     (candidates-in-buffer)
+          ;;     (candidate-number-limit . 9999999)
+          ;;     (action ("Open" . anything-c-source-ghc-mod-action))))
 
-          (defun anything-c-source-ghc-mod ()
-            (unless (executable-find "ghc-mod")
-              (error "ghc-mod を利用できません。ターミナルで which したり、*scratch* で exec-path を確認したりしましょう"))
-            (let ((buffer (anything-candidate-buffer 'global)))
-              (with-current-buffer buffer
-                (call-process "ghc-mod" nil t t "list"))))
+          ;; (defun anything-c-source-ghc-mod ()
+          ;;   (unless (executable-find "ghc-mod")
+          ;;     (error "ghc-mod を利用できません。ターミナルで which したり、*scratch* で exec-path を確認したりしましょう"))
+          ;;   (let ((buffer (anything-candidate-buffer 'global)))
+          ;;     (with-current-buffer buffer
+          ;;       (call-process "ghc-mod" nil t t "list"))))
 
-          (defun anything-c-source-ghc-mod-action (candidate)
-            (interactive "P")
-            (let* ((pkg (ghc-resolve-package-name candidate)))
-              (anything-aif (and pkg candidate)
-                  (ghc-display-document pkg it nil)
-                (message "No document found"))))
+          ;; (defun anything-c-source-ghc-mod-action (candidate)
+          ;;   (interactive "P")
+          ;;   (let* ((pkg (ghc-resolve-package-name candidate)))
+          ;;     (anything-aif (and pkg candidate)
+          ;;         (ghc-display-document pkg it nil)
+          ;;       (message "No document found"))))
 
-          (defun anything-ghc-browse-document ()
-            (interactive)
-            (anything anything-c-source-ghc-mod))
+          ;; (defun anything-ghc-browse-document ()
+          ;;   (interactive)
+          ;;   (anything anything-c-source-ghc-mod))
 
-          ;; https://github.com/m2ym/auto-complete
-          (ac-define-source ghc-mod
-            '((depends ghc)
-              (candidates . (ghc-select-completion-symbol))
-              (symbol . "s")
-              (cache)))
+          ;; ;; https://github.com/m2ym/auto-complete
+          ;; (ac-define-source ghc-mod
+          ;;   '((depends ghc)
+          ;;     (candidates . (ghc-select-completion-symbol))
+          ;;     (symbol . "s")
+          ;;     (cache)))
 
-          (defun my-ac-haskell-mode ()
-            (setq ac-sources '(ac-source-words-in-same-mode-buffers
-                               ac-source-dictionary
-                               ac-source-ghc-mod)))
+          ;; (defun my-ac-haskell-mode ()
+          ;;   (setq ac-sources '(ac-source-words-in-same-mode-buffers
+          ;;                      ac-source-dictionary
+          ;;                      ac-source-ghc-mod)))
 
-          (require 'anything-hasktags)
+          ;; (require 'anything-hasktags)
           ;; M-x anything-ghc-browse-document() に対応するキーの割り当て
           ;; ghc-mod の設定のあとに書いた方がよいかもしれません
           ;; @see http://d.hatena.ne.jp/mizchi/20120426/1335409088
@@ -97,8 +103,12 @@
 
 ;; (eval-after-load "~/plugins/haskell-mode/haskell-mode.el"
 ;;   )
+
+;; エコーエリアに関数の型を表示するモードをオンにする
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 ;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+
+;; haskell-indentationモードを有向にする
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
 
@@ -158,7 +168,7 @@
 (when (or run-linux run-darwin)
   (add-to-list 'exec-path "~/.cabal/bin")
   ;; (add-to-list 'exec-path "~/cabal-dev/bin")
-  (if run-darwin (add-to-list 'exec-path "~/Library/Haskell/bin"))
+  (when run-darwin (add-to-list 'exec-path "~/Library/Haskell/bin"))
   )
 
 (if run-windows
@@ -208,7 +218,11 @@
                (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
                (modes quote (haskell-mode literate-haskell-mode))))
 
+;; @see http://karky7.blogspot.jp/2012/12/gentooemacshaskell.html
 (defadvice inferior-haskell-load-file (after change-focus-after-load)
-  "Change focus to GHCi window after C-c C-l command"
+  "Change focus to GHCi window after \\<haskell-mode-map>\\[inferior-haskell-load-file] command."
   (other-window 1))
 (ad-activate 'inferior-haskell-load-file)
+
+(provide '50_init-haskell)
+;;; 50_init-haskell ends here

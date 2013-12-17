@@ -13,7 +13,6 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
-;;(pop package-archives)
 ;;インストールするディレクトリを指定
 (setq package-user-dir (concat user-emacs-directory "elpa"))
 
@@ -65,29 +64,31 @@
    redo+
    rhtml-mode
    rinari
+   ruby-electric
    ruby-end
    s
    session
    slime
    solarized-theme
-   starter-kit-ruby
    yasnippet
    helm-c-yasnippet
    ))
+
 (eval-when-compile
   (require 'cl))
 
 (require 'melpa)
 
-
 (defun my-install-package ()
-  "Install my package."
+  "Install my packages."
   (let ((not-installed (loop for x in installing-package-list
-                            when (not (package-installed-p x))
-                            collect x)))
-  (when not-installed
-    (package-refresh-contents)
-    (dolist (pkg not-installed)
-        (package-install pkg)))))
+                             when (not (package-installed-p x))
+                             collect x)))
+    (when not-installed
+      (package-refresh-contents)
+      (dolist (pkg not-installed)
+        (package-install pkg))))
+  (message "done")
+  )
 
 ;;; 00_init-package.el ends here

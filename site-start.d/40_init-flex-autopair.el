@@ -1,3 +1,7 @@
+;;; 40_init-flex-autopair --- 40_init-flex-autopair
+;; This program is free software
+;;; Commentary:
+;;; Code:
 (require 'flex-autopair)
 (flex-autopair-mode 1)
 
@@ -38,12 +42,12 @@
           (save-excursion (re-search-backward "[^ ]" (- (point) 1) t))
           (memq major-mode flex-autopair-functional-modes))
          . self)
-;;      ((and
-;;           (eq major-mode 'c-mode)
-;;           (eq last-command-event ?<)
-;;           (save-excursion
-;;             (re-search-backward "#include\\|template" (point-at-bol) t)))
-;;          . pair)
+        ((and
+          (eq major-mode 'c-mode)
+          (eq last-command-event ?<)
+          (save-excursion
+            (re-search-backward "#include\\|template\\|vector" (point-at-bol) t)))
+         . pair)
 ;;         ;; ((and
 ;;         ;;   (eq major-mode 'c-mode)
 ;;         ;;   (eq last-command-event ?<))
@@ -84,5 +88,6 @@
         ))
 
 
-
 (flex-autopair-reload-conditions)
+(provide '40_init-flex-autopair)
+;;; 40_init-flex-autopair ends here

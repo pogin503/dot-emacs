@@ -1,3 +1,7 @@
+;;; 30_init-sdic --- 30_init-sdic
+;; This program is free software
+;;; Commentary:
+;;; Code:
 (add-to-list 'load-path "~/.emacs.d/plugins/sdic/")
 (add-to-list 'load-path "~/.emacs.d/etc/dict/")
 
@@ -24,7 +28,7 @@
 (setq sdic-face-color "pink")
 
 ;;./configure --with-emacs=emacs --with-dictdir=~/.emacs.d/etc/dict --with-dicttype=sdic --with-lispdir=~/.emacs.d/plugins/sdic
-;;sudo make install 
+;;sudo make install
 ;;sudo make install-info
 ;;make dict
 ;;sudo make install-dict
@@ -55,3 +59,5 @@
 (setq sdic-inline-search-func 'sdic-inline-search-word-with-stem)
 (setq sdic-inline-display-func 'sdic-inline-pos-tip-show-when-region-selected)
 (define-key sdic-inline-map "\C-c\C-p" 'sdic-inline-pos-tip-show)
+(provide '30_init-sdic)
+;;; 30_init-sdic ends here
