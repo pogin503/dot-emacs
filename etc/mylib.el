@@ -3,6 +3,7 @@
 ;;; Commentary:
 ;;; Code:
 (defun print-escaped-sexp ()
+  "Print escpaped s-expression."
   (interactive)
   (mark-defun)
   ;; (let ((beg (region-beginning)) (end (region-end)))
@@ -40,6 +41,18 @@ FILENAME defaults to `buffer-file-name'."
     (goto-char (point-max))
     (insert (format "(provide '%s)\n;;; %s ends here\n" f f))
   ))
+
+(defun my-set-dev-env ()
+  "For develop setting."
+  (interactive)
+  (custom-set-variables
+   '(debug-on-error t)))
+
+(defun my-unset-dev-env ()
+  "Unset develop setting."
+  (interactive)
+  (custom-set-variables
+   '(debug-on-error nil)))
 
 (provide 'mylib)
 ;;; mylib ends here
