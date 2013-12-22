@@ -38,12 +38,16 @@
    direx
    e2wm
    eldoc-extension
+   emmet-mode
+   f
    flycheck
    git-gutter
    haskell-mode
    helm
    helm-anything
+   helm-c-yasnippet
    helm-descbinds
+   helm-emmet
    ;; helm-c-moccur
    helm-ls-git
    ht
@@ -52,7 +56,6 @@
    magit
    markdown-mode
    ;; mmm-mode
-   multi-web-mode
    multiple-cursors
    nginx-mode
    org-bullets
@@ -70,8 +73,8 @@
    session
    slime
    solarized-theme
+   web-mode
    yasnippet
-   helm-c-yasnippet
    ))
 
 (eval-when-compile
@@ -90,5 +93,7 @@
         (package-install pkg))))
   (message "done")
   )
+
+(my-install-package)
 
 ;;; 00_init-package.el ends here
