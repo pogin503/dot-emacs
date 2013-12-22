@@ -13,6 +13,8 @@
 (add-to-list 'auto-mode-alist '("\\.lucius$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.julius$" . js2-mode))
 
+(require 'auto-complete)
+
 (defun my-haskell-ac-init ()
   "Set AC-mode source."
   (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
@@ -62,10 +64,10 @@
           ;;     (symbol . "s")
           ;;     (cache)))
 
-          ;; (defun my-ac-haskell-mode ()
-          ;;   (setq ac-sources '(ac-source-words-in-same-mode-buffers
-          ;;                      ac-source-dictionary
-          ;;                      ac-source-ghc-mod)))
+          (defun my-ac-haskell-mode ()
+            (setq ac-sources '(ac-source-words-in-same-mode-buffers
+                               ac-source-dictionary
+                               ac-source-ghc-mod)))
 
           ;; (require 'anything-hasktags)
           ;; M-x anything-ghc-browse-document() に対応するキーの割り当て
@@ -178,14 +180,13 @@
 
 (autoload 'ghc-init "ghc" nil t)
 (add-hook 'haskell-mode-hook
-          (lambda () (ghc-init) (flymake-mode 1)))
+          #'(lambda () (ghc-init) (flymake-mode 1)))
 
 (add-hook 'haskell-mode-hook
-          (lambda()
+          #'(lambda()
             (define-key haskell-mode-map (kbd "C-M-d") 'anything-ghc-browse-document)))
 
 (add-hook 'haskell-mode-hook 'my-ac-haskell-mode)
-
 
 ;; (add-hook 'find-file-hook 'my-haskell-ac-init)
 
@@ -197,7 +198,7 @@
                   indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
             ))
 
-(load "~/.emacs.d/plugins/haskell-site-file.el")
+;; (load "~/.emacs.d/plugins/haskell-site-file.el")
 (setq haskell-program-name "/usr/bin/ghci")
 
 ;; Haskell align setting
