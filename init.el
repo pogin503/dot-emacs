@@ -2,8 +2,20 @@
 ;;; Commentary:
 ;;; Code:
 ; 常時デバッグ状態
-(setq debug-on-error t)
-
+;; (setq debug-on-error t)
+;; (setq debug-on-error nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
+ '(column-number-mode t)
+ '(debug-on-error nil)
+ '(display-time-mode nil)
+ '(show-paren-mode t)
+ '(tool-bar-mode nil)
+ )
 
 ;;install elisp
 (setq load-path (cons "~/.emacs.d/elisp" load-path))
@@ -16,6 +28,55 @@
 (auto-install-compatibility-setup)             ; 互換性確保
 
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+;; 引数を load-path へ追加
+;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
+;; [A-Za-z] で開始する物だけ追加するので、追加したくない物は . や _ を先頭に付与しておけばロードしない
+;; dolist は Emacs 21 から標準関数なので積極的に利用して良い
+(defun add-to-load-path (&rest paths)
+  "Add to load path recursively.
+`PATHS' Directorys you want to read recursively."
+  (let (path)
+    (dolist (path paths paths)
+      (let ((default-directory (expand-file-name (concat user-emacs-directory path))))
+        (add-to-list 'load-path default-directory)
+        (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+            (normal-top-level-add-subdirs-to-load-path))))))
+
+;; Emacs Lisp のPathを通す
+(add-to-load-path
+ ;; 初期設定ファイル
+ "site-start.d"
+ "plugins"
+ "elisp"
+ "elpa"
+ "etc"
+ "share"
+ "private"
+ "el-get"
+ )
+
+
+;;init-loader
+(require 'init-loader)
+(init-loader-load (concat user-emacs-directory "site-start.d/"))
+
+;; 00 一般設定
+;; 10 起動前実行系
+;; 20 関数定義
+;; 30 追加機能系
+;; 40 マイナーモード
+;; 50 メジャーモード
+;; 60
+;; 90 起動後実行系
+
+
+;;highlight-cl
+(require 'highlight-cl)
+(add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
+(add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords)
+
+
 ;;open-junk-file
 (require 'open-junk-file)
 
@@ -105,75 +166,6 @@
   (my-window-size-save))
 ;;; ウィンドウのサイズを閉じる前に記憶しておく ここまで
 
-;;from ALICE meadow code end.
-
-
-;;reference from sakito's config
-
-;; 引数を load-path へ追加
-;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
-;; [A-Za-z] で開始する物だけ追加するので、追加したくない物は . や _ を先頭に付与しておけばロードしない
-;; dolist は Emacs 21 から標準関数なので積極的に利用して良い
-(defun add-to-load-path (&rest paths)
-  (let (path)
-    (dolist (path paths paths)
-      (let ((default-directory (expand-file-name (concat user-emacs-directory path))))
-        (add-to-list 'load-path default-directory)
-        (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-            (normal-top-level-add-subdirs-to-load-path))))))
-
-;; Emacs Lisp のPathを通す
-(add-to-load-path
- ;; 初期設定ファイル
- "site-start.d"
- "plugins"
- "elisp"
- "elpa"
- "etc"
- "share"
- "private"
- "el-get"
- )
-
-;;from sakito's config end
-
-;;行番号表示のelisp
-;;(require 'wb-line-number)
-;;(wb-line-number-toggle)
-
-
-;;flymake
-;(require 'flymake)
-;(flymake-mode)
-
-
-;;highlight-cl
-(require 'highlight-cl)
-(add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
-(add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords)
-
-
-
-;;init-loader
-(require 'init-loader)
-(init-loader-load (concat user-emacs-directory "site-start.d/"))
-
-;; 00 一般設定
-;; 10 起動前実行系
-;; 20 関数定義
-;; 30 追加機能系
-;; 40 マイナーモード
-;; 50 メジャーモード
-;; 60
-;; 90 起動後実行系
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
- '(w32-symlinks-handle-shortcuts t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
