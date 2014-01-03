@@ -13,6 +13,7 @@
               ac-auto-show-menu 1.0)
 
 (define-key ac-mode-map (kbd "M-i") 'auto-complete)
+(define-key ac-mode-map (kbd "H-i") 'auto-complete)
 (define-key ac-completing-map "\t" 'ac-complete)
 (define-key ac-completing-map "\r" nil)
 (ac-flyspell-workaround)
@@ -23,6 +24,8 @@
                'nxml-mode-hook
                ))
   (add-hook hook 'auto-complete-mode))
+
+(setq ac-comphist-file (concat user-emacs-directory  "cache/auto-complete/ac-comphist.dat"))
 
 (provide '40_init-auto-complete)
 ;;; 40_init-auto-complete ends here
