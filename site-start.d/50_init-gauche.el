@@ -1,3 +1,8 @@
+;;; 50_init-gauche --- 50_init-gauche
+;; This program is free software
+;;; Commentary:
+;;; Code:
+
 ;;@see http://d.hatena.ne.jp/YOMOGItaro/20100501/1272674144
 ;;gauche
 (modify-coding-system-alist 'process "gosh" '(utf-8 . utf-8))
@@ -6,6 +11,7 @@
 ;; (autoload 'scheme-mode "cmuscheme" "Major mode for Scheme." t)
 ;; (autoload 'run-scheme "cmuscheme" "Run an inferior Scheme process." t)
 
+(require '00_init-hanbetu)
 ;;inferior-gauche-mode
 (if (equal system-type run-linux)
 	(setq auto-mode-alist
@@ -23,3 +29,5 @@
             (run-scheme scheme-program-name))
           (define-key global-map "\C-cs" 'scheme-other-window)
           )
+(provide '50_init-gauche)
+;;; 50_init-gauche ends here

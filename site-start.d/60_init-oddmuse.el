@@ -1,3 +1,7 @@
+;;; 60_init-oddmuse --- 60_init-oddmuse
+;; This program is free software
+;;; Commentary:
+;;; Code:
 ;;INSTALL
 ;(install-elisp "http://www.emacswiki.org/cgi-bin/wiki/download/oddmuse.el")
 
@@ -19,3 +23,5 @@
 (req yaoddmuse)
 ;(yaoddmuse-update-pagename t)
 
+(provide '60_init-oddmuse)
+;;; 60_init-oddmuse ends here

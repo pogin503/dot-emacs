@@ -1,3 +1,7 @@
+;;; 20_init-isearch --- 20_init-isearch
+;; This program is free software
+;;; Commentary:
+;;; Code:
 (defvar my-igrep-buffer
   "*Incremental Grep*") ;; grep 結果を表示する window の名前
 (defvar my-igrep-window-height
@@ -161,3 +165,6 @@
                         `("%b" ,(format " - %d:%d matches"
                                         alinen my-igrep-match))))
                 (force-mode-line-update)))))))))
+
+(provide '20_init-isearch)
+;;; 20_init-isearch ends here

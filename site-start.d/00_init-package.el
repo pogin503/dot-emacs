@@ -96,4 +96,13 @@
 
 (my-install-package)
 
+;; cask setting
+
+;; .cask
+;; cask init
+(add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode))
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
+
+
 ;;; 00_init-package.el ends here

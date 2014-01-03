@@ -175,6 +175,12 @@
   )
 (add-hook 'coffee-mode-hook 'my-coffee-mode-key-combo)
 
+(defun my-ruby-mode-key-combo ()
+  "Set Ruby key combo."
+  (key-combo-define-local (kbd "::") 'key-combo-execute-original)
+  )
+(add-hook 'ruby-mode-hook 'my-ruby-mode-key-combo)
+
 (key-combo-mode 1)
 
 (provide '40_init-key-combo)

@@ -292,6 +292,9 @@
     (menu-bar-mode 1)
   (menu-bar-mode -1))
 
+;; オートフィルモードにはさせない
+(auto-fill-mode -1)
+
 
 ;; automatically save buffers associated with files on buffer switch
 ;; and on windows switch
@@ -338,6 +341,21 @@
 (set-default 'imenu-auto-rescan t)
 
 (require 'mylib)
+
+
+;; indent setting
+(setq-default c-basic-offset 4       ;;基本インデント量4
+              tab-width 4            ;;タブ幅4
+              indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
+
+(defun other-window-or-split ()
+  (interactive)
+  (when (one-window-p)
+    (split-window-horizontally))
+  (other-window 1))
+
+(global-set-key (kbd "C-t") 'other-window-or-split)
+
 
 (provide '01_init-global)
 ;;; 01_init-global ends here

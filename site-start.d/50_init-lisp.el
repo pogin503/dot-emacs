@@ -2,11 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-(require '00_init-macro)
-
 (eval-when-compile
-  (require '00_init-hanbetu))
-
+  (require '00_init-macro)
+  (require '00_init-hanbetu)
+)
 
 (defun esk-remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
@@ -190,5 +189,14 @@
        (anything (list anything-c-source-hyperspec anything-c-source-cltl2) (thing-at-point 'symbol)))))
 
 (global-set-key "\C-cH" 'anything-hyperspec-and-cltl2)
+
+;; eldoc setting
+(require 'eldoc)
+(req eldoc-extension)
+(setq eldoc-idle-delay 0.21)
+(setq eldoc-echo-area-use-multiline-p t)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
 ;;; 50_init-lisp.el ends here
