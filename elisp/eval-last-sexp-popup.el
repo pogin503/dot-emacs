@@ -1,10 +1,14 @@
+;;; eval-last-sexp-popup --- eval-last-sexp-popup
+;; This program is free software
+;;; Commentary:
+;;; Code:
 (require 'deferred)
 (require 'popup)
 (require 'pp)
 
-;; usage: 
+;; usage:
 ;; (global-set-key (kbd "C-x e") 'eval-last-sexp-popup)
-
+;; (global-set-key (kbd "C-x e") 'eval-last-sexp)
 
 (defvar eval-last-sexp-popup-timer   2000) ; timeout msec
 (defvar eval-last-sexp-popup-refresh 100)  ; refresh msec
@@ -53,11 +57,11 @@
                 :nowait t)))
           (setq eval-last-sexp-popup-state
                 (list deferred output-list
-                      (length output-list) 
+                      (length output-list)
                       next-popup)))))
       (when eval-last-sexp-popup-state
         (deferred:nextc (deferred:wait eval-last-sexp-popup-refresh)
-          (lambda (x) 
+          (lambda (x)
             (eval-last-sexp-popup-loop)))))))
 
 (defun eval-last-sexp-popup ()
@@ -70,7 +74,7 @@
           (list ; (deferred-cancel output-list show-num popup-instance)
            (deferred:nextc
              (deferred:wait eval-last-sexp-popup-timer)
-             (lambda (x) 
+             (lambda (x)
                (ad-deactivate-regexp "eval-last-sexp-override")))
            (list str) 0 nil)))
     (when cur-state
@@ -81,3 +85,4 @@
     (eval-last-sexp-popup-loop t)))
 
 (provide 'eval-last-sexp-popup)
+;;; eval-last-sexp-popup ends here
