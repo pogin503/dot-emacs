@@ -19,7 +19,7 @@
 ;                (setq oddmuse-post (concat "ham=1;" oddmuse-post))))))
 
 ;(auto-install-from-url http://www.emacswiki.org/emacs/download/yaoddmuse.el)
-
+(require '00_init-macro)
 (req yaoddmuse)
 ;(yaoddmuse-update-pagename t)
 

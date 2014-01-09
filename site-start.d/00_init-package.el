@@ -39,6 +39,7 @@
    e2wm
    eldoc-extension
    emmet-mode
+   expand-region
    f
    flycheck
    git-gutter
@@ -49,6 +50,7 @@
    helm-descbinds
    helm-emmet
    ;; helm-c-moccur
+   helm-gtags
    helm-ls-git
    ht
    inf-ruby

@@ -142,7 +142,8 @@ If the link is in hidden text, expose it."
 (require 'org-remember)
 (req org-bullets
      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-     )
 
+     )
+(add-hook 'org-mode-hook #'(lambda () (auto-fill-mode -1)))
 (provide '50_init-org-mode)
 ;;; 50_init-org-mode ends here

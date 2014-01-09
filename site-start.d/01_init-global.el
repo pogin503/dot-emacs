@@ -210,7 +210,7 @@
 ;;       `((".*" ,(expand-file-name "~/.emacs.d/.backup") t)
 ;;         ("\#.*" ,(expand-file-name "~/.emacs.d/.backup") t)))
 
-(setq version-control t)        ; 複数のバックアップを残します。世代。
+(setq version-control nil)        ; 複数のバックアップを残します。世代。
 (setq kept-new-versions 5)   ; 新しいものをいくつ残すか
 (setq kept-old-versions 5)   ; 古いものをいくつ残すか
 (setq delete-old-versions t) ; 確認せずに古いものを消す。
