@@ -43,6 +43,7 @@
    f
    flycheck
    git-gutter
+   haml-mode
    haskell-mode
    helm
    helm-anything
