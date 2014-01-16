@@ -67,12 +67,11 @@
 ;; @fringe
 
 ;;display line-number in buffer
-;; (when (or run-windows run-linux)
-(global-linum-mode t)
+;; (global-linum-mode t)
 
 ;;line-number's format
-(set-face-attribute 'linum nil :foreground "red" :height 0.8)
-(setq linum-format "%4d")
+;; (set-face-attribute 'linum nil :foreground "red" :height 0.8)
+;; (setq linum-format "%4d")
 ;; (setq linum-delay t)
 ;; (defadvice linum-schedule (around my-linum-schedule () activate)
 ;;   (run-with-idle-timer 0.2 nil #'linum-update-current))
@@ -356,6 +355,14 @@
 
 (global-set-key (kbd "C-t") 'other-window-or-split)
 
+;;highlight-cl
+(require 'highlight-cl)
+(add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
+(add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords)
+
+
+;;open-junk-file
+(require 'open-junk-file)
 
 (provide '01_init-global)
 ;;; 01_init-global ends here
