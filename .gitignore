@@ -6,6 +6,10 @@
 session.*
 *.elc
 
+/.emacs.desktop
+/.emacs.desktop.lock
+auto-save-list
+
 # Backup dir
 .backup/
 
@@ -23,6 +27,7 @@ init.elc
 plugins/taihi/
 diff
 history
+places
 test
 url/
 plugins/twittering-mode/cert/
@@ -47,3 +52,14 @@ elpa/
 # cask
 .cask
 *-pkg.el
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# flymake-mode
+*_flymake.*
+
+# Org-mode
+.org-id-locations
+*_archive
