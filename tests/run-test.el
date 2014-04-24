@@ -46,6 +46,10 @@
  "elpa"
  "elisp"
  "plugins"
- "etc")
+ "etc"
+ "tests")
 
+(require 'run-qmode-test)
+
+(provide 'run-test)
 ;;; run-test ends here

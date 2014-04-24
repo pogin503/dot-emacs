@@ -1,4 +1,6 @@
+import Control.Applicative
+
 main :: IO ()
 main = do
-  str <- getLine
+  let str = "123"
   print str

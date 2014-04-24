@@ -1,4 +1,4 @@
-;;; 50_init-ruby-mode.el --- ruby conf
+;; 50_init-ruby-mode.el --- ruby conf
 ;;; Commentary:
 ;;; Code:
 ;(auto-install-from-url "http://tromey.com/elpa/package-install.el")
@@ -48,5 +48,7 @@
 (require 'rinari)
 (add-hook 'rhtml-mode-hook
     (lambda () (rinari-launch)))
+
+(req haml-mode)
 
 ;;; 50_init-ruby-mode.el ends here

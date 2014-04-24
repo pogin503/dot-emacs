@@ -148,5 +148,11 @@
           (set-char-table-parent table char-width-table)
           (setq char-width-table table)))
       (set-east-asian-ambiguous-width 2)))
+
+;; ;; iso-2022-jpをcp50220として扱う。
+;; ;; SEMI (cf. http://d.hatena.ne.jp/kiwanami/20091103/1257243524)
+;; (add-to-list ‘mime-charset-coding-system-alist
+;;              ‘(iso-2022-jp . cp50220))
+
 (provide '01_init-encoding)
 ;;; 01_init-encoding ends here

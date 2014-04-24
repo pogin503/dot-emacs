@@ -1,4 +1,12 @@
 #!/bin/sh
-make elpa
-#make build
-make init-load
+# elcファイルの除去
+# make clean-elc
+
+# バイトコンパイル
+# make byte-compile
+
+# make elpa
+
+# make build
+
+# make init-load
