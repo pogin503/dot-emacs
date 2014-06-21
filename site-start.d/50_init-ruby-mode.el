@@ -5,6 +5,12 @@
 
 (require '00_init-macro)
 
+(autoload 'ruby-mode "ruby-mode"
+  "Mode for editing ruby source files" t)
+(add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
+(add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+
 (autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
 (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode)
 
@@ -40,9 +46,11 @@
 (require 'ruby-end)
 
 (add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode))
+
 (defun html-setting ()
   (setq c-basic-offset 1
         tab-width 1))
+
 (add-hook 'rhtml-mode-hook 'html-setting)
 (require 'rhtml-mode)
 (require 'rinari)
