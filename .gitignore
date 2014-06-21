@@ -24,6 +24,8 @@ init.elc
 .framesize
 .session
 .scratch
+.mc-lists.el
+.smex-items
 plugins/taihi/
 diff
 history
@@ -31,9 +33,6 @@ places
 test
 url/
 plugins/twittering-mode/cert/
-.mc-lists.el
-eshell/
-.smex-items
 
 # ignore diff files
 *.diff
@@ -48,6 +47,10 @@ qr_*.el
 
 # elpa
 elpa/
+
+# el-get
+el-get/
+dir
 
 # cask
 .cask
