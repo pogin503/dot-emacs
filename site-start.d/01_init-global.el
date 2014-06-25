@@ -91,7 +91,7 @@
 
 ;;@see http://sites.google.com/site/shidoinfo/Home/開発環境/emacs/emacsの基本
 ;;カーソルが行頭にある場合も行全体を削除
-(setq kill-whole-line t)
+(setq kill-whole-line nil)
 
 
 ;; スクリプトを保存する時、自動的に chmod +x を行うようにする
