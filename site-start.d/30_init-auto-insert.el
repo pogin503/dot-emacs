@@ -24,8 +24,7 @@
 		("\\.sh$" . ["template.sh"
                      (lambda() (my-template-exec "#!/bin/sh"))
                      my-template])
-;; 		("\\.py$" . ["template.sh"
-;; 			     (lambda() (my-template-exec "/usr/bin/python"))
+		("\\.py$" . ["template.py" my-template])
 ;; 			     my-template])
 ;; 		("\\.rb$" . ["template.sh"
 ;; 			     (lambda() (my-template-exec "/usr/bin/ruby"))
