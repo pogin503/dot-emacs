@@ -16,8 +16,9 @@
 ;; 					   (file-name-nondirectory
 ;; 					    (buffer-file-name)))))
 ;; 			      my-template])
-;; 		("\\.hs$" . ["template.hs" my-template])
-;; 		("\\.r$" . ["template.r" my-template])
+	        ("\\.hs" . ["template.hs" my-template])
+	        ("\\.rb" . ["template.rb" my-template])
+		;; 		("\\.r$" . ["template.r" my-template])
 ;; 		("\\.scm" . ["template.scm"
 ;; 			     (lambda() (my-template-exec "/usr/local/bin/gosh"))
 ;; 			     my-template])
@@ -34,7 +35,6 @@
 		("\\.h$"   . ["template.h" my-template])
 ;; 		(xml-mode . "xml-insert.xml")
 ;;                 (texinfo-mode . "texinfo.texi")
-        ("\\.hs" . ["template.hs" my-template])
 		)
 	    auto-insert-alist))
 
@@ -54,6 +54,9 @@
                                       (upcase
                                        (file-name-sans-extension
                                         (file-name-nondirectory buffer-file-name))))))
+    ("%rbclass%" . (lambda () (capitalize
+			   (file-name-sans-extension
+			    (file-name-nondirectory (buffer-file-name))))))
     ))
 
 (eval-when-compile
