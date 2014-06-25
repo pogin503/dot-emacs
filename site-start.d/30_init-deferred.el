@@ -33,6 +33,6 @@
 (req eval-last-sexp-popup)
 ;; (global-set-key (kbd "C-x C-e") 'eval-last-sexp)
 
-(global-set-key (kbd "C-x C-e") 'eval-last-sexp-popup)
+;; (global-set-key (kbd "C-x C-e") 'eval-last-sexp-popup)
 
 ;;; 30_init-deferred.el ends here
