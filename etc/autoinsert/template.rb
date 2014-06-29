@@ -10,6 +10,6 @@ class %rbclass%
   end
 end
 
-if %file-without-ext% == $PROGRAM_NAME
+if %rbclass% == $PROGRAM_NAME
   %rbclass%.new.start
 end
