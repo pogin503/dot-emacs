@@ -33,13 +33,14 @@ FILENAME defaults to `buffer-file-name'."
   "Insert Emacs Lisp header info."
   (interactive)
   (goto-char (point-min))
-  (let ((f (file-name-base)))
+  (let ((f (file-name-nondirectory (buffer-file-name)))
+        (f-noext (file-name-base)))
     (insert (format ";;; %s --- %s\n" f f))
     (insert ";; This program is free software\n")
     (insert ";;; Commentary:\n")
     (insert ";;; Code:\n")
     (goto-char (point-max))
-    (insert (format "(provide '%s)\n;;; %s ends here\n" f f))
+    (insert (format "(provide '%s)\n;;; %s ends here\n" f-noext f))
   ))
 
 (defun my-set-dev-env ()
