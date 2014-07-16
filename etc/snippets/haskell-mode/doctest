@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 # name: doctest
 # --
-{-| ${1:func-name} Test
+{-| ${1:$$ func-name)} Test
   >>> $0
 
 -}
