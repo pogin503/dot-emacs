@@ -54,6 +54,9 @@
  "el-get"
  )
 
+(let ((path "~/.emacs.d/site-start.d/00_init-macro.elc"))
+  (when (file-regular-p path)
+    (delete-file path)))
 
 ;;init-loader
 (require 'init-loader)
