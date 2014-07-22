@@ -23,6 +23,9 @@
 (auto-install-compatibility-setup)             ; 互換性確保
 
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(when (not (boundp 'user-emacs-directory))
+  (setq user-emacs-directory (expand-file-name "~/.emacs.d/"))
+  )
 
 ;; 引数を load-path へ追加
 ;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
