@@ -14,6 +14,15 @@
   (insert (format "%S" (substring-no-properties (get-register ?r))))
   )
 
+(defun print-escaped-string (s e)
+  "Print escaped string in region.
+
+`S' is (region-beginning)
+`E' is (region-end)"
+  (interactive "r")
+  (copy-to-register ?r s e)
+  (insert (format "%S" (substring-no-properties (get-register ?r)))))
+
 (defun reopen-buffer ()
   (interactive)
   (let ((current-buf (buffer-file-name)))
@@ -54,6 +63,43 @@ FILENAME defaults to `buffer-file-name'."
   (interactive)
   (custom-set-variables
    '(debug-on-error nil)))
+
+;; @see https://gist.github.com/syohex/5487731
+(defun parse-csv-file (file)
+  (interactive
+   (list (read-file-name "CSV file: ")))
+  (let ((buf (find-file-noselect file))
+        (result nil))
+    (with-current-buffer buf
+      (goto-char (point-min))
+      (while (not (eobp))
+        (let ((line (buffer-substring-no-properties
+                     (line-beginning-position) (line-end-position))))
+          (push (split-string line ",") result))
+        (forward-line 1)))
+    (reverse result)))
+
+(defun parse-csv-string (str)
+  (interactive)
+  (let (;; (buf (find-file-noselect file))
+        (result nil))
+    (with-temp-buffer
+      (insert str)
+      (goto-char (point-min))
+      (while (not (eobp))
+        (let ((line (buffer-substring-no-properties
+                     (line-beginning-position) (line-end-position))))
+          (push (progn
+                  (mapcar #'remove-dquote (split-string line ","))
+                  ) result))
+        (forward-line 1)))
+    (reverse result)))
+
+(defun remove-dquote (str)
+  (loop for i from 1 to (- (length str) 2)
+                    ;; collect (char-to-string (aref str i))
+                    concat (char-to-string (aref str i))
+                    ))
 
 (provide 'mylib)
 ;;; mylib ends here
