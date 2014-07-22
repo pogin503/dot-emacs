@@ -16,7 +16,7 @@
 ;; @ buffer
 
 ;; バッファ画面外文字の切り詰め表示
-(setq truncate-lines nil)
+(setq truncate-lines t)
 
 ;; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
 (setq truncate-partial-width-windows t)
