@@ -39,10 +39,9 @@
 
 (if (not run-no-window)
     (when run-darwin
-      ;;; フレームのフォントを設定
-      (let* ((size 10) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
+      (let* ((size 12) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
              (asciifont "Menlo") ; ASCIIフォント
-             (jpfont "Hiragino Maru Gothic ProN") ; 日本語フォント
+             (jpfont "Hiragino Kaku Gothic ProN") ; 日本語フォント
              (h (* size 10))
              (fontspec (font-spec :family asciifont))
              (jp-fontspec (font-spec :family jpfont)))
