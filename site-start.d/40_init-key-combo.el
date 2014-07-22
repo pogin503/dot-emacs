@@ -68,7 +68,7 @@
 
   ;; ;; Ord
   ;; (key-combo-define-local (kbd ">") " > ") ;; Ord(>) or Sequence >
-  (key-combo-define-local (kbd ">=") " >= ")
+  ;; (key-combo-define-local (kbd ">=") " >= ")
   ;; (key-combo-define-local (kbd "<") " < ") ;; Ord (<) or Sequence <
   (key-combo-define-local (kbd "<=") " <= ")
 
@@ -114,7 +114,7 @@
   ;; (key-combo-define-local (kbd "<+") " <+> ")
   ;; (key-combo-define-local (kbd "**") " ** ")
   ;; (key-combo-define-local (kbd "&&&") " &&& ")
-
+  (key-combo-define-local (kbd "-<") " -< ")
   ;; ;; Monoid
   ;; (key-combo-define-local (kbd "<#>") " <#> ")
 
