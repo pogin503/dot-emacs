@@ -10,20 +10,9 @@
 ;; (setq anything-c-yas-space-match-any-greedy t) ;スペース区切りで絞り込めるようにする デフォルトは nil
 
 (require 'yasnippet)
-;;複数のスニッペットディレクトリがある場合
-;; (setq yas/root-directory `(,(expand-file-name "~/.emacs.d/etc/snippets")))
-;; (mapc 'yas/load-directory  yas/root-directory)
 (setq yas-snippet-dirs
-      `("~/.emacs.d/etc/snippets" ;; 作成するスニペットはここに入る
-        ;; "~/.emacs.d/elisp/yasnippet/snippets" ;; 最初から入っていたスニペット(省略可能)
-        ))
-;; yas-snippet-dirs
-(mapc (lambda (x) (add-to-list 'yas-snippet-dirs x))
-               `(;; 作成するスニペットはここに入る
-                 ,(expand-file-name "~/.emacs.d/etc/snippets")
-                 ;; 最初から入っていたスニペット(省略可能)
-                 "~/.emacs.d/etc/snippets"
-                 ))
+      '("~/.emacs.d/etc/snippets"))
+
 (yas-global-mode 1)
 
 ;; 既存スニペットを挿入する
