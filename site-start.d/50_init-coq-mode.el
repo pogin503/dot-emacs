@@ -24,11 +24,6 @@
 ;;        "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
 ;;   (load-file "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el"))
 
-(defun my-ac-coq-mode ()
-  "Set coq ac-source."
-  (setq ac-sources '(ac-source-words-in-same-mode-buffers
-                     ac-source-dictionary)))
-
 ;; (lazyload (coq-mode) "proof-site"
 ;;           ;; set auto-complete-mode
 ;;           (require 'proof-site)

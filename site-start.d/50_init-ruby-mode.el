@@ -34,12 +34,6 @@
 
 ;; (setq ruby-electric-expand-delimiters-list nil)
 
-(defun ruby-insert-end ()
-  "Insert \"end\" at point and reindent current line."
-  (interactive)
-  (insert "end")
-  (ruby-indent-line t)
-  (end-of-line))
 
 (add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
 

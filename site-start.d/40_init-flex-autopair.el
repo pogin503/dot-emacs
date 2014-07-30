@@ -12,8 +12,7 @@
 ;; (add-hook 'c-mode-hook 'my-hook-function)
 ;; (add-hook 'c++-mode-hook 'my-hook-function)
 
-(defun my-haskell-hook-function1 ()
-  (add-to-list 'flex-autopair-pairs '(?\' . ?\')))
+(require 'mylib)
 
 (add-hook 'haskell-mode-hook 'my-haskell-hook-function1)
 
@@ -27,11 +26,9 @@
 ;; (add-to-list 'flex-autopair-user-conditions-high
 ;;              '((openp . \`)
 ;;                (closep . \`)))
-(defun my-flex-sh-pair ()
-  (add-to-list 'flex-autopair-pairs '(?\[ . ?\])))
+
 
 (add-hook 'sh-mode-hook 'my-flex-sh-pair)
-
 
 (setq flex-autopair-user-conditions-high
       `(

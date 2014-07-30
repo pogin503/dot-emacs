@@ -80,24 +80,10 @@
    yasnippet
    ))
 
-(eval-when-compile
-  (require 'cl))
-
 (require 'melpa)
 
-(defun my-install-package ()
-  "Install my packages."
-  (let ((not-installed (loop for x in installing-package-list
-                             when (not (package-installed-p x))
-                             collect x)))
-    (when not-installed
-      (package-refresh-contents)
-      (dolist (pkg not-installed)
-        (package-install pkg))))
-  (message "done")
-  )
-
-(my-install-package)
+;; (require 'mylib)
+;; (my-install-package installing-package-list)
 
 ;; cask setting
 
