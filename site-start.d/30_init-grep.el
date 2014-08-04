@@ -6,9 +6,9 @@
 (setq grep-template "lgrep <C> -n <R> <F> <N>")
 (setq grep-find-template "find . <X> -type f <F> -print0 | xargs -0 -e lgrep <C> -n <R> <N>")
 
-(defvar quote-argument-for-windows-p t "enables `shell-quote-argument' workaround for windows.")
+(defvar quote-argument-for-windows-p t "Enables `shell-quote-argument' workaround for windows.")
 (defadvice shell-quote-argument (around shell-quote-argument-for-win activate)
-  "workaround for windows."
+  "Workaround for windows."
   (if quote-argument-for-windows-p
       (let ((argument (ad-get-arg 0)))
 	(setq argument (replace-regexp-in-string "\\\\" "\\\\" argument nil t))
