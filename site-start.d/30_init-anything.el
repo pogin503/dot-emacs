@@ -34,8 +34,8 @@
           ;;         anything-c-source-emacs-functions
           ;;         anything-c-source-files-in-current-dir+
           ;;        ))
-	  (require 'mylib)
-	  (font-family-list)
+          (require 'mylib)
+          (font-family-list)
 	  )
 
 (require 'helm-config)
