@@ -34,6 +34,7 @@
 ;;   ...)
 
 (defmacro lazyload (func lib &rest body)
+  "Safe lazy load."
   `(when (locate-library ,lib)
      ,@(mapcar (lambda (f) `(autoload ',f ,lib nil t)) func)
      (eval-after-load ,lib
