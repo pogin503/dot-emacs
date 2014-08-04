@@ -93,28 +93,13 @@
 ;;カーソルが行頭にある場合も行全体を削除
 (setq kill-whole-line nil)
 
+(require 'mylib)
 
-;; スクリプトを保存する時、自動的に chmod +x を行うようにする
-(defun make-file-executable ()
-  "Make the file of this buffer executable, when it is a script source."
-  (save-restriction
-    (widen)
-    (if (string= "#!"
-                 (buffer-substring-no-properties 1
-                                                 (min 3 (point-max))))
-        (let ((name (buffer-file-name)))
-          (or (equal ?. (string-to-char
-                         (file-name-nondirectory name)))
-              (let ((mode (file-modes name)))
-                (set-file-modes name (logior mode (logand
-                                                   (/ mode 4) 73)))
-                (message (concat "Wrote " name " (+x)"))))))))
 (add-hook 'after-save-hook 'make-file-executable)
-
 
 ;;ガベージコレクションの頻度を下げる 初期設定は4000000
 ;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html
-(setq gc-cons-threshold 4000000)
+(setq gc-cons-threshold 40000000)
 
 ;;regionの選択中にBackspaceを押すと消せるようにする
 ;;@see http://www.fan.gr.jp/~ring/Meadow/meadow.html#ys:backward-delete-region
@@ -135,19 +120,6 @@
 ;;   (setq user-emacs-directory (file-name-directory load-file-name)))
 (add-to-list 'load-path user-emacs-directory)
 
-;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
-;; 終了時バイトコンパイル
-
-(defun my-byte-compile-func ()
-  "Byte-compile files in particular directory."
-  (interactive)
-  (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
-                              (concat user-emacs-directory "init.elc"))
-      (byte-compile-file (concat user-emacs-directory "init.el")))
-  (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
-  (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
-  (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
-  )
 (add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
 
 (cond (window-system
@@ -175,7 +147,14 @@
 
 ;;recentf-mode
 (setq recentf-auto-cleanup 'never)
-(recentf-mode 1)
+(when (require 'recentf nil t)
+  (require 'undo-tree)
+  (setq recentf-max-saved-items 1000)
+  (setq recentf-exclude '(".recentf"))
+  (setq recentf-auto-cleanup 10)
+  (setq recentf-auto-save-timer
+        (run-with-idle-timer 30 t 'recentf-save-list))
+  (recentf-mode 1))
 
 
 ;;@see http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
@@ -191,13 +170,11 @@
 ;; @backup file
 
 (setq backup-by-copying t)
-(defun my-define-backup-directory ()
-  (let ((dir-name ".backup"))
-    (if (not (file-exists-p (concat user-emacs-directory dir-name)))
-        (make-directory dir-name user-emacs-directory))
-    (add-to-list 'backup-directory-alist
-                 `(".*" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
-(my-define-backup-directory)
+
+;; (my-define-backup-directory)
+
+(setq backup-directory-alist `((".*" . ,temporary-file-directory))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 ;; ;; 編集中ファイルのバックアップ先
 ;; (setq auto-save-file-name-transforms
@@ -217,32 +194,11 @@
 
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
 
+(require 'mylib)
+
 ;; 行末のwhitespaceを削除
-(defvar delete-trailing-whitespace-exclude-patterns (list "\\.md$" "\\.markdown$" "\\.org$"))
-
-(eval-when-compile
-  (require 'cl))
-
-(defun delete-trailing-whitespace-with-exclude-pattern ()
-  (interactive)
-  (cond ((equal nil (loop for pattern in delete-trailing-whitespace-exclude-patterns
-                          thereis (string-match pattern buffer-file-name)))
-         (delete-trailing-whitespace))))
-
 (add-hook 'before-save-hook 'delete-trailing-whitespace-with-exclude-pattern)
-
-
 ;; ファイル末尾の改行を削除
-;; http://www.emacswiki.org/emacs/DeletingWhitespace
-(defun my-delete-trailing-blank-lines ()
-  "Deletes all blank lines at the end of the file."
-  (interactive)
-  (save-excursion
-    (save-restriction
-      (widen)
-      (goto-char (point-max))
-      (delete-blank-lines))))
-
 (add-hook 'before-save-hook 'my-delete-trailing-blank-lines)
 
 ;; save-buffer 時、buffer 末尾に空行が常にあるように
@@ -266,14 +222,6 @@
           (setq image-library-alist dll-list)
         (setq dynamic-library-alist dll-list)
         )))
-
-(defun my-toggle-truncate-lines ()
-  "折り返し表示をトグル動作します."
-  (interactive)
-  (if truncate-lines
-      (setq truncate-lines nil)
-    (setq truncate-lines t))
-  (recenter))
 
 ;; @see http://trey-jackson.blogspot.jp/2009/08/emacs-tip-32-completion-ignore-case-and.html
 ;; (setq completion-ignore-case t)
@@ -321,37 +269,16 @@
 ;; 行間
 ;; (setq-default line-spacing 0)
 
-(defun esk-pretty-lambdas ()
-  (font-lock-add-keywords
-   nil `(("(?\\(lambda\\>\\)"
-          (0 (progn (compose-region (match-beginning 1) (match-end 1)
-                                    ,(make-char 'greek-iso8859-7 107))
-                   nil))))))
-;; TODO
-(defun esk-add-watchwords ()
-  (font-lock-add-keywords
-   nil '(("\\<\\(FIX\\(ME\\)?\\|TODO\\|HACK\\|REFACTOR\\|NOCOMMIT\\)"
-          1 font-lock-warning-face t))))
-
 ;; (add-hook 'prog-mode-hook 'esk-pretty-lambdas)
 ;; (add-hook 'prog-mode-hook 'esk-add-watchwords)
 
 ;; (set-default 'indicate-empty-lines nil)
 (set-default 'imenu-auto-rescan t)
 
-(require 'mylib)
-
-
-;; indent setting
+;; @indent setting
 (setq-default c-basic-offset 4       ;;基本インデント量4
               tab-width 4            ;;タブ幅4
               indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
-
-(defun other-window-or-split ()
-  (interactive)
-  (when (one-window-p)
-    (split-window-horizontally))
-  (other-window 1))
 
 (global-set-key (kbd "C-t") 'other-window-or-split)
 
@@ -363,6 +290,22 @@
 
 ;;open-junk-file
 (require 'open-junk-file)
+
+;; windowを分割したときに折り返すときの値。
+;; 非nilだと、変数の値の文字幅のときtruncate-lineしても
+;; 折り返してしまう
+(setq truncate-partial-width-windows nil)
+
+;; path
+(req exec-path-from-shell
+    (exec-path-from-shell-initialize)
+    )
+
+;; rbenv path
+;; (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:"
+;;                        (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
+;; (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims")
+;;                       (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
 
 (provide '01_init-global)
 ;;; 01_init-global ends here
