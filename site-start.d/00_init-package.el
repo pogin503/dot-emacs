@@ -3,9 +3,13 @@
 ;;; Code:
 (require 'package)
 
+;; .cask
+;; cask init
+(add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode))
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
+
 ;;リポジトリにMarmaladeを追加
-(add-to-list 'package-archives
-			   '("marmalade" . "http://marmalade-repo.org/packages/"))
 ;; (add-to-list 'package-archives
 ;; 			 '("tromy" . "http://tromey.com/elpa/"))
 ;; (add-to-list 'package-archives
@@ -13,8 +17,11 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
-;;インストールするディレクトリを指定
-(setq package-user-dir (concat user-emacs-directory "elpa"))
+(add-to-list 'package-archives
+'("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+
+;; ;;インストールするディレクトリを指定
+;; (setq package-user-dir (concat user-emacs-directory "elpa"))
 
 ;;インストールしたパッケージにロードパスを通してロードする
 (package-initialize)
@@ -92,6 +99,5 @@
 (add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode))
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
-
 
 ;;; 00_init-package.el ends here
