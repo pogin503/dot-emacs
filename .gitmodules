@@ -10,4 +10,4 @@
 	url = git://github.com/pogin503/omm-mode.git
 [submodule "plugins/r-like-example"]
 	path = plugins/r-like-example
-	url = git://github.com.com/pogin503/r-like-example.git
+	url = git@github.com:pogin503/r-like-example.git
