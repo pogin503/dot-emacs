@@ -40,6 +40,7 @@
      )
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; マークアップ言語全部で使う
 (add-hook 'css-mode-hook  'emmet-mode) ;; CSSにも使う
+(add-hook 'nxml-mode-hook 'emmet-mode)
 (add-hook 'emmet-mode-hook
           (lambda () (setq emmet-indentation 2))) ;; indent はスペース2個
 
@@ -50,6 +51,28 @@
                        (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
      (setq mweb-filename-extensions '("htm" "html" "ctp" "phtml"))
      (multi-web-global-mode 1))
+
+;; hs-minor-mode
+;; @see http://lgfang.github.io/emacs/emacs-xml.html
+(add-hook 'nxml-mode-hook (lambda() (hs-minor-mode 1)))
+
+(add-to-list 'hs-special-modes-alist
+             '(nxml-mode
+               "<!--\\|<[^/>]*[^/]>" ;; regexp for start block
+               "-->\\|</[^/>]*[^/]>" ;; regexp for end block
+               "<!--"
+               nxml-forward-element
+               nil))
+
+(defun lgfang-toggle-level ()
+  "mainly to be used in nxml mode"
+  (interactive) (hs-show-block) (hs-hide-level 1))
+
+(eval-after-load "nxml-mode"
+  '(progn
+     (define-key nxml-mode-map (kbd "M-'") 'lgfang-toggle-level)
+     (define-key nxml-mode-map [mouse-3] 'lgfang-toggle-level)
+     (define-key nxml-mode-map (kbd "<backtab>") 'lgfang-toggle-level)))
 
 (provide '50_init-html)
 ;;; 50_init-html ends here
