@@ -3,7 +3,6 @@
 
 (depends-on "auto-async-byte-compile")
 (depends-on "auto-complete")
-(depends-on "clojure-mode")
 (depends-on "coffee-mode")
 (depends-on "color-moccur")
 (depends-on "dash")
@@ -23,6 +22,7 @@
 (depends-on "helm-descbinds")
 (depends-on "helm-gtags")
 (depends-on "helm-ls-git")
+(depends-on "helm-projectile")
 (depends-on "lispxmp")
 (depends-on "magit")
 (depends-on "markdown-mode")
@@ -32,7 +32,9 @@
 (depends-on "popup")
 (depends-on "popwin")
 (depends-on "pretty-lambdada")
+(depends-on "projectile")
 (depends-on "quickrun")
+(depends-on "rainbow-delimiters")
 (depends-on "redo+")
 (depends-on "s")
 (depends-on "smartparens")
@@ -41,6 +43,14 @@
 (depends-on "yasnippet")
 ;; (depends-on "ruby-end")
 ;; ;; (depends-on "ruby-electric")
+
+;; clojure
+(depends-on "clojure-mode")
+(depends-on "cider")
+(depends-on "ac-nrepl")
+(depends-on "clojure-cheatsheet")
+(depends-on "clojure-test-mode")
+(depends-on "slamhound")
 
 (development
  (depends-on "el-mock")
