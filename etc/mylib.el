@@ -1,7 +1,11 @@
-;;; mylib --- mylib
+;;; mylib.el --- mylib
 ;; This program is free software
 ;;; Commentary:
 ;;; Code:
+
+(eval-when-compile
+  (require 'cl))
+
 (defun print-escaped-sexp ()
   "Print escpaped s-expression."
   (interactive)
@@ -45,12 +49,17 @@ FILENAME defaults to `buffer-file-name'."
   (let ((f (file-name-nondirectory (buffer-file-name)))
         (f-noext (file-name-base)))
     (insert (format ";;; %s --- %s\n" f f))
-    (insert ";; This program is free software\n")
+    (insert (format ";; Author: %s\n" user-full-name))
+    (insert ";; Version: \n")
+    (insert ";; Package-Requires: ()\n")
     (insert ";;; Commentary:\n")
-    (insert ";;; Code:\n")
+    (insert ";; This program is free software\n")
+    (insert ";;; Code:\n\n")
     (goto-char (point-max))
-    (insert (format "(provide '%s)\n;;; %s ends here\n" f-noext f))
-  ))
+    (save-excursion
+      (insert (format "\n(provide '%s)\n" f-noext))
+      (insert (format ";;; %s ends here\n" f))
+    )))
 
 (defun my-set-dev-env ()
   "For develop setting."
@@ -102,6 +111,7 @@ FILENAME defaults to `buffer-file-name'."
                     ))
 
 (defun toggle-trancate-partial-width-windows ()
+  (interactive)
   (if (null truncate-partial-width-windows)
       (setq truncate-partial-width-windows nil)
     (setq truncate-partial-width-windows t)))
@@ -113,6 +123,27 @@ FILENAME defaults to `buffer-file-name'."
       (setq truncate-lines nil)
     (setq truncate-lines t))
   (recenter))
+
+(defconst my-truncate-t nil)
+(defun my-toggle-truncate-setting ()
+  (interactive)
+  (if (eq my-truncate-t nil)
+      (progn
+        (setq truncate-partial-width-windows t)
+        (setq truncate-lines t)
+        (setq my-truncate-t t)
+        (recenter)
+        (message "Set truncate-lines t")
+        )
+    (progn
+      (setq truncate-partial-width-windows nil)
+      (setq truncate-lines nil)
+      (setq my-truncate-t nil)
+      (recenter)
+      (message "Set truncate-lines nil")
+      )
+  ))
+
 ;; package
 (defun my-install-package (pkgs)
   "Install my packages."
@@ -188,15 +219,27 @@ FILENAME defaults to `buffer-file-name'."
 ;; (defun helm-ghc-browse-document ()
 ;;   (interactive)
 ;;   (helm helm-c-source-ghc-mod))
+(lazyload (haskell-mode) "hakskell-mode"
+          (defun my-haskell-ac-init ()
+            "Set AC-mode source."
+            (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
+              (auto-complete-mode t)
+              (setq ac-sources '(ac-source-words-in-same-mode-buffers
+                                 ac-source-dictionary
+                                 ac-source-ghc-mod)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; flycheck
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun my-set-flycheck-loadpath ()
-  "Set load-paht to `flycheck-emacs-lisp-load-path'."
-  (interactive)
-  (setq-default flycheck-emacs-lisp-load-path load-path))
+(eval-after-load "flycheck"
+  '(defun my-toggle-flycheck-loadpath ()
+    "Set load-paht to `flycheck-emacs-lisp-load-path'."
+    (interactive)
+    (if (null flycheck-emacs-lisp-load-path)
+        (setq-default flycheck-emacs-lisp-load-path load-path)
+      (setq-default flycheck-emacs-lisp-load-path nil))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc
@@ -307,7 +350,6 @@ FILENAME defaults to `buffer-file-name'."
       (skip-chars-backward (format "^%s" (char-to-string c)))
       (backward-char))))
 
-
 ;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
 ;; 終了時バイトコンパイル
 (defun my-byte-compile-func ()
@@ -316,7 +358,7 @@ FILENAME defaults to `buffer-file-name'."
   (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
                               (concat user-emacs-directory "init.elc"))
       (byte-compile-file (concat user-emacs-directory "init.el")))
-  ;; (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
+  (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
   (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
   (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
   )
@@ -332,42 +374,44 @@ FILENAME defaults to `buffer-file-name'."
 ;; anything or helm
 
 ;;anything-font-families
-(defun anything-font-families ()
-  "Preconfigured `anything' for font family."
-  (interactive)
-  (flet ((anything-mp-highlight-match () nil))
-    (anything-other-buffer
-     '(anything-c-source-font-families)
-     "*anything font families*")))
+(lazyload (anything-execute-extended-command
+           anything) "anything"
+           (defun anything-font-families ()
+             "Preconfigured `anything' for font family."
+             (interactive)
+             (flet ((anything-mp-highlight-match () nil))
+               (anything-other-buffer
+                '(anything-c-source-font-families)
+                "*anything font families*")))
 
-(defun anything-font-families-create-buffer ()
-  (with-current-buffer
-      (get-buffer-create "*Fonts*")
-    (loop for family in (sort (delete-duplicates (font-family-list)) 'string<)
-	  do (insert
-	      (propertize (concat family "\n")
-			  'font-lock-face
-			  (list :family family :height 2.0 :weight 'bold))))
-    (font-lock-mode 1)))
+           (defun anything-font-families-create-buffer ()
+             (with-current-buffer
+                 (get-buffer-create "*Fonts*")
+               (loop for family in (sort (delete-duplicates (font-family-list)) 'string<)
+                     do (insert
+                         (propertize (concat family "\n")
+                                     'font-lock-face
+                                     (list :family family :height 2.0 :weight 'bold))))
+               (font-lock-mode 1)))
 
-(defvar anything-c-source-font-families
-  '((name . "Fonts")
-    (init lambda ()
-	  (unless (anything-candidate-buffer)
-	    (save-window-excursion
-	      (anything-font-families-create-buffer))
-	    (anything-candidate-buffer
-	     (get-buffer "*Fonts*"))))
-    (candidates-in-buffer)
-    (get-line . buffer-substring)
-    (action
-     ("Copy Name" lambda
-      (candidate)
-      (kill-new candidate))
-     ("Insert Name" lambda
-      (candidate)
-      (with-current-buffer anything-current-buffer
-	(insert candidate))))))
+           (defvar anything-c-source-font-families
+             '((name . "Fonts")
+               (init lambda ()
+                     (unless (anything-candidate-buffer)
+                       (save-window-excursion
+                         (anything-font-families-create-buffer))
+                       (anything-candidate-buffer
+                        (get-buffer "*Fonts*"))))
+               (candidates-in-buffer)
+               (get-line . buffer-substring)
+               (action
+                ("Copy Name" lambda
+                 (candidate)
+                 (kill-new candidate))
+                ("Insert Name" lambda
+                 (candidate)
+                 (with-current-buffer anything-current-buffer
+                   (insert candidate)))))))
 
 (defun my-haskell-hook-function1 ()
   "Set haskell flex-autopair setting."
@@ -386,5 +430,64 @@ FILENAME defaults to `buffer-file-name'."
   (end-of-line))
 
 
+(defun my-ruby-resolve-warning ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (replace-regexp "\"" "'")
+    (goto-char (point-min))
+    (replace-regexp ":\\([a-zA-Z0-9]*\\)\s=>\s" "\\1: ")
+    (goto-char (point-min))
+    (replace-regexp "#\\([^ ]\\)" "# \\1")))
+
+(defun my-md-replace ()
+  (interactive)
+  (let ((beg (point)))
+    (save-excursion
+      (replace-regexp "[[:blank:]]+" "|")
+      (goto-char beg)
+      (replace-regexp "^\\(.\\)" "|\\1")
+      (goto-char beg)
+      (replace-regexp "\\(.\\)$" "\\1|")
+      )))
+
+(defun nisshi ()
+  (interactive)
+  (let ((file (concat "~/workspace/日誌/"
+                      (format-time-string "%Y-%m-%d.org" (current-time)))))
+    (if (null (f-exists? file))
+      (progn
+        (f-touch file)
+        (switch-to-buffer (find-file-noselect file))
+        ))
+    (switch-to-buffer (find-file-noselect file))))
+
+(defun my-display-hashtable-data (hashtbl)
+  (maphash #'(lambda (key val)
+               (insert (format "%s, %s\n" key val))) hashtbl))
+
+(defun my-ex-display-added-symbol ()
+  (interactive)
+  (mapconcat 'indentity
+             (save-excursion
+               (let (result)
+                 (while (null (eobp))
+                   (let ((q (re-search-forward "^(ex-put-example '" nil t))
+                         (str (thing-at-point 'symbol)))
+                     (if q
+                         (push (with-temp-buffer
+                                 (insert str)
+                                 (buffer-substring-no-properties (point-min) (point-max)))
+                               result)
+                       (goto-char (point-max)))))
+
+                 (reverse result))) "\n"))
+
+(defun my-remove-comment ()
+  (interactive)
+  (replace-regexp " *;;? ?=> ?.+" "" nil (region-beginning) (region-end))
+  (replace-regexp "^;;? ?.+" ""  nil (region-beginning) (region-end)))
+
+
 (provide 'mylib)
-;;; mylib ends here
+;;; mylib.el ends here
