@@ -2,9 +2,10 @@
 ;; This program is free software
 ;;; Commentary:
 ;;; Code:
-(add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
-(add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
-(add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
+
+;; (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
+;; (add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
+;; (add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
 
 ;; #!/usr/bin/env runghc 用
 (add-to-list 'interpreter-mode-alist '("runghc" . haskell-mode))
@@ -47,28 +48,20 @@
           ;;     (setq ac-sources '(ac-source-words-in-same-mode-buffers ac-source-dictionary ac-source-ghc-mod))))
           )
 
-;; (add-hook 'find-file-hook 'my-haskell-ac-init)
 ;; エコーエリアに関数の型を表示するモードをオンにする
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 ;; haskell-indentationモードを有効にする
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
 
 ;; flycheck-haskellのフック
 ;; cabal sandboxに対応している
 ;; (eval-after-load 'flycheck
 ;;   '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
 
-;; @see http://d.hatena.ne.jp/jeneshicc/20090309/1236584710
-;; (define-key haskell-mode-map "\C-cd" 'flymake-show-and-sit )
-
-
-;; (add-hook 'haskell-mode-hook 'define-haskell-mode-conf)
 (add-to-list 'ac-modes 'haskell-mode)
-;; (add-hook 'haskell-mode-hook 'auto-complete-mode)
-
 
 ;; ghc-mod
 ;; cabal でインストールしたライブラリのコマンドが格納されている bin ディレクトリへのパスを exec-path に追加する
@@ -83,38 +76,43 @@
 ;;              (if run-windows-x64
 ;;                  "C:/Program Files (x86)/Haskell Platform/2011.4.0.0/bin/"
 ;;                "C:/Program Files/Haskell Platform/2011.4.0.0/bin/"))
+
 (when (or run-linux run-darwin)
   (add-to-list 'exec-path (expand-file-name "~/.cabal/bin"))
-  ;; (add-to-list 'exec-path "~/cabal-dev/bin")
   (when run-darwin
-    (add-to-list 'exec-path "~/Library/Haskell/bin"))
-  )
+    (add-to-list 'exec-path "~/Library/Haskell/bin")))
 
 (if run-windows
-    (add-to-list 'exec-path (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
+    (add-to-list 'exec-path
+                 (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
+
 ;; ghc-flymake.el などがあるディレクトリ ghc-mod を ~/.emacs.d 以下で管理することにした
 ;; (add-to-list 'load-path "~/.emacs.d/plugins/ghc-mod")
 
 ;; ghc-mod setting
 (autoload 'ghc-init "ghc" nil t)
-(autoload 'ghc-debug "ghc" nil t)
-(add-hook 'haskell-mode-hook #'(lambda () (ghc-init)))
+;; (autoload 'ghc-debug "ghc" nil t)
 
-(add-hook 'haskell-mode-hook
-          #'(lambda()
-            (define-key haskell-mode-map (kbd "C-M-d") 'anything-ghc-browse-document)))
+(defun my-haskell-mode-keybinds ()
+  "Set haskell-mode keybindings."
+  (define-key haskell-mode-map (kbd "C-M-d") 'anything-ghc-browse-document)
+  (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select))
+
+(defun my-haskell-mode-conf ()
+  "Set haskell-mode config."
+  (ghc-init)
+  ;; (setq c-basic-offset 2       ;;基本インデント量4
+  ;;       tab-width 4            ;;タブ幅4
+  ;;       indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
+  ;; (make-local-variable 'kill-whole-line)
+  (setq kill-whole-line nil)
+  (my-ac-haskell-mode)
+  (interactive-haskell-mode))
+
+(add-hook 'haskell-mode-hook 'my-haskell-mode-keybinds)
+(add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
 
 ;; (add-hook 'haskell-mode-hook 'my-ac-haskell-mode)
-
-(add-hook 'haskell-mode-hook
-          (lambda()
-            (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select)
-            (setq c-basic-offset 2     ;;基本インデント量4
-                  tab-width 4          ;;タブ幅4
-                  indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
-	    (make-local-variable 'kill-whole-line)
-	    (setq kill-whole-line nil)
-            ))
 
 ;; (load "~/.emacs.d/plugins/haskell-site-file.el")
 (setq haskell-program-name "/usr/bin/ghci")
@@ -138,10 +136,10 @@
                (modes quote (haskell-mode literate-haskell-mode))))
 
 ;; @see http://karky7.blogspot.jp/2012/12/gentooemacshaskell.html
-(defadvice inferior-haskell-load-file (after change-focus-after-load)
-  "Change focus to GHCi window after \\<haskell-mode-map>\\[inferior-haskell-load-file] command."
-  (other-window 1))
-(ad-activate 'inferior-haskell-load-file)
+;; (defadvice inferior-haskell-load-file (after change-focus-after-load)
+;;   "Change focus to GHCi window after \\<haskell-mode-map>\\[inferior-haskell-load-file] command."
+;;   (other-window 1))
+;; (ad-activate 'inferior-haskell-load-file)
 
 ;; agda-mode
 (load-file
