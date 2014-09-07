@@ -199,4 +199,28 @@
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
+;; paredit
+(require 'paredit)
+(add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+(add-hook 'lisp-mode-hook 'enable-paredit-mode)
+(add-hook 'ielm-mode-hook 'enable-paredit-mode)
+
+(define-key paredit-mode-map (kbd "C-j") 'eval-print-last-sexp)
+
+;; | コマンド | 解説 |
+;; |----------+--------------------|
+;; | C-M-f | 次のS式へ移動する |
+;; | C-M-b | 前のS式へ移動する |
+;; | C-M-d | リストの内側へ入る |
+;; | C-M-u | リストの外側へ出る |
+;; | C-M-SPC | S式をマークする |
+;; | C-M-k | S式をカットする |
+;; | C-M-t | S式を入れ替える |
+
+;; | コマンド | 解説 |
+;; |----------+------------|
+;; | M-( | 括弧で囲む |
+;; | M-s | 括弧を外す |
+
 ;;; 50_init-lisp.el ends here
