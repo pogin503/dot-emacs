@@ -4,8 +4,7 @@
 
 (eval-when-compile
   (require '00_init-macro)
-  (require '00_init-hanbetu)
-)
+  (require '00_init-hanbetu))
 
 (defun esk-remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
@@ -81,7 +80,7 @@
 (add-hook 'slime-mode-hook 'set-up-slime-ac)
 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
 
-;;; start swank server in CL
+;;; start swank server ixn CL
 ;(load "swank-loader.lisp" :verbose t)  ; load swank definition files
 ;(swank:create-server :port 4005)       ; swank connect waiting port 4005
 
@@ -210,17 +209,36 @@
 
 ;; | コマンド | 解説 |
 ;; |----------+--------------------|
-;; | C-M-f | 次のS式へ移動する |
-;; | C-M-b | 前のS式へ移動する |
-;; | C-M-d | リストの内側へ入る |
-;; | C-M-u | リストの外側へ出る |
-;; | C-M-SPC | S式をマークする |
-;; | C-M-k | S式をカットする |
-;; | C-M-t | S式を入れ替える |
+;; | C-M-f    | 次のS式へ移動する |
+;; | C-M-b    | 前のS式へ移動する |
+;; | C-M-d    | リストの内側へ入る |
+;; | C-M-u    | リストの外側へ出る |
+;; | C-M-SPC  | S式をマークする |
+;; | C-M-k    | S式をカットする |
+;; | C-M-t    | S式を入れ替える |
 
 ;; | コマンド | 解説 |
 ;; |----------+------------|
-;; | M-( | 括弧で囲む |
-;; | M-s | 括弧を外す |
+;; | M-(      | 括弧で囲む |
+;; | M-s      | 括弧を外す |
+;; | M-<up>   | カーソルの左側をkillして、括弧を一段階外す|
+;; | M-<down> | カーソルの右側をkillして、括弧を一段階外す|
+;; | M-r      | カーソル位置のシンボルを外に出す |
+
+;; | コマンド | 解説 |
+;; |----------+------------|
+;; | C-), C-<right> | 閉じ括弧を一つ右にずらす |
+;; | C-}, C-<left>  | 閉じ括弧を左にずらす     |
+;; | C-(, C-M-<left>, ESC C-<left> | 開き括弧を左にずらす|
+;; | C-{, C-M-<right>, ESC C-<right>| 開き括弧を右にずらす
+
+;; | コマンド | 解説 |
+;; |----------+------------|
+;; | M-) |  |
+;; | M-S | S式や"を分割する |
+;; | M-J | 分割されたS式などを結合する |
+;; |C-c C-M-l | S式を |
+;; | M-q | 一つのS式全体を再インデントする |
+
 
 ;;; 50_init-lisp.el ends here
