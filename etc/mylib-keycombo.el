@@ -3,7 +3,22 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'key-combo)
+
+(defun my-key-combo-global-conf ()
+  "My global key-combo setting."
+  ;; (key-combo-define-local (kbd "/") "/")
+  (key-combo-define-global (kbd "@see") "@see ")
+  ;; (key-combo-define-global (kbd "//") "//")
+  )
+
+(defun my-key-combo-js-conf ()
+  "My key-combo js setting."
+  ;; (key-combo-define-local (kbd "/") ("/" "//" "// "))
+  (key-combo-define-local (kbd "/*") "/* `!!' */"))
+
 (defun my-c++-mode-key-combo ()
+  "My key-combo C++ setting."
   (key-combo-define-local (kbd "//") "// ")
   (key-combo-define-local (kbd "/*") "/* `!!' */")
   (key-combo-define-local (kbd "/**") "/**\n*`!!'\n*/")
@@ -13,6 +28,7 @@
   )
 
 (defun my-lisp-mode-key-combo ()
+  "My Lisp key-combo setting."
   ;; (key-combo-define-local (kbd ";") '(key-combo-execute-orignal ";=> "))
   (key-combo-define-local (kbd ";=") "; => ")
   (key-combo-define-local (kbd "\\#'") "\\#'()")
@@ -20,6 +36,7 @@
   )
 
 (defun my-key-combo-haskell-conf ()
+  "My Haskell key-combo setting."
   (key-combo-define-local (kbd "," ) ", ")
   ;; (key-combo-define-local (kbd "!") 'key-combo-execute-orignal)
   ;; (key-combo-define-local (kbd "$" ) '(" $ " " $! "))
@@ -111,6 +128,7 @@
   )
 
 (defun my-coq-mode-key-combo ()
+  "My Coq key-combo setting."
   (key-combo-define-local (kbd ",") ", ")
   (key-combo-define-local (kbd ":") " : ")
   (key-combo-define-local (kbd "->") " -> ")
@@ -121,6 +139,7 @@
   )
 
 (defun my-prolog-mode-key-combo ()
+  "My key-combo Prolog setting."
   (key-combo-define-local (kbd ",") ", ")
   (key-combo-define-local (kbd ":-") " :- ")
   (key-combo-define-local (kbd "/*") "/* `!!' */")
@@ -136,6 +155,11 @@
   "Set Ruby key combo."
   (key-combo-define-local (kbd "::") "::")
   )
+
+(defun my-makefile-key-combo-conf ()
+  "My key-combo Makefile setting."
+  (key-combo-define-local (kbd "$") '("$" "$(`!!')"))
+  (key-combo-define-local (kbd ":") ": "))
 
 (provide 'mylib-keycombo)
 ;;; mylib-keycombo.el ends here

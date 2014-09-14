@@ -2,14 +2,19 @@
 ;; This program is free software
 ;;; Commentary:
 ;;; Code:
+
 (require 'key-combo)
+
 (key-combo-mode 1)
 
 (key-combo-load-default)
 
-(key-combo-define-global (kbd "@see") "@see ")
-
 (require 'mylib-keycombo)
+
+(my-key-combo-global-conf)
+
+(add-hook 'js2-mode-hook 'my-key-combo-js-conf)
+(add-hook 'javascript-mode-hook 'my-key-combo-js-conf)
 
 (add-hook 'c++-mode-hook 'my-c++-mode-key-combo)
 
@@ -31,12 +36,6 @@
 ;;               (key-combo-define-local (kbd "=") "=")
 ;;               ))
 
-(add-hook 'makefile-mode-hook
-          #'(lambda ()
-              (key-combo-define-local (kbd "$") '("$" "$(`!!')"))
-              (key-combo-define-local (kbd ":") ": ")
-              ))
-
 ;; (add-hook 'coq-mode-hook 'my-coq-mode-key-combo)
 ;; (add-hook 'proof-activate-scripting-hook 'my-coq-mode-key-combo)
 ;; (dont-compile
@@ -49,6 +48,8 @@
 (add-hook 'coffee-mode-hook 'my-coffee-mode-key-combo)
 
 (add-hook 'ruby-mode-hook 'my-ruby-mode-key-combo)
+
+(add-hook 'makefile-mode-hook 'my-makefile-key-combo-conf)
 
 (provide '40_init-key-combo)
 ;;; 40_init-key-combo ends here
