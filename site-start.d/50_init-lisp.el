@@ -6,60 +6,41 @@
   (require '00_init-macro)
   (require '00_init-hanbetu))
 
-(defun esk-remove-elc-on-save ()
-  "If you're saving an elisp file, likely the .elc is no longer valid."
-  (make-local-variable 'after-save-hook)
-  (add-hook 'after-save-hook
-            (lambda ()
-              (if (file-exists-p (concat buffer-file-name "c"))
-                  (delete-file (concat buffer-file-name "c"))))))
+(require 'mylib)
+
+(defun my-set-elisp-conf ()
+  (interactive)
+  ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
+  ;; (set (make-local-variable 'lisp-indent-function)
+  ;;  'common-lisp-indent-function)
+  (show-paren-mode t))
 
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
-            ;; (set (make-local-variable 'lisp-indent-function)
-            ;;  'common-lisp-indent-function)
-            (show-paren-mode t)))
+(add-hook 'emacs-lisp-mode-hook 'my-set-lisp-conf)
 
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 ;; (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
 
+(defun my-set-lisp-conf ()
+  (interactive)
+  ;; (slime-mode t)
+  (show-paren-mode t)
+  ;; if文でEmacsLispのインデントをCommonLispのインデントに変える設定
+  (set (make-local-variable 'lisp-indent-function)
+       'common-lisp-indent-function))
 
-(add-hook 'lisp-mode-hook
-          #'(lambda ()
-            (slime-mode t)
-            (show-paren-mode t)
-            (set (make-local-variable 'lisp-indent-function)
-                 'common-lisp-indent-function)
-            (show-paren-mode t)))
+;; (defun my-set-inferior-lisp-conf ()
+;;   (interactive)
+;;   (inferior-slime-mode t))
 
-(add-hook 'inferior-lisp-mode-hook
-	  (lambda ()
-	    (inferior-slime-mode t)))
+(add-hook 'lisp-mode-hook 'my-set-lisp-conf)
 
-(add-hook 'after-change-major-mode-hook
-          (lambda ()
-            (show-paren-mode t)))
+;; (add-hook 'inferior-lisp-mode-hook 'my-set-inferior-lisp-conf)
 
 ;; ------------------------------------------------------------------
 ;; @ slime
 ;(add-to-list 'load-path  "~/.emacs.d/plugins/slime/swank-loader.lisp")
-(add-to-list 'load-path "~/plugins/slime/")  ; your SLIME directory
-(add-to-list 'load-path "~/plugins/slime/contrib/")  ; your SLIME directory
 
-;(custom-set-variables
-; '(slime-backend
-;   (expand-file-name "~/.emacs.d/plugins/slime/swank-loader.lisp")))
-
-
-;; 文字コードの設定
-;(setq slime-lisp-implementations
-;      '(
-;	;(ccl (,(expand-file-name "~/opt/ccl/scripts/ccl64") "-K"  "utf-8"))
-;	(sbcl ("sbcl") :coding-system utf-8-unix)
-;	(clisp ("clisp") :coding-system euc-jp-unix)
-;	))
 (if run-linux
     (progn
       (when (autoload-if-found 'slime "slime" "slimeの呼び出し")
@@ -83,17 +64,6 @@
 ;;; start swank server ixn CL
 ;(load "swank-loader.lisp" :verbose t)  ; load swank definition files
 ;(swank:create-server :port 4005)       ; swank connect waiting port 4005
-
-;(setq slime-lisp-implementations
-;      `(
-;        (ccl (,(expand-file-name "~/opt/ccl/scripts/ccl64") "-K"  "utf-8"))
-;        ;; (ccl ("/opt/local/bin/ccl"))
-;        (abcl ("/opt/local/bin/abcl"))
-;        (clisp ("/opt/local/bin/clisp"))
-;        (ecl ("/usr/local/bin/ecl"))
-;        (gcl ("/usr/local/bin/gcl"))
-;        (sbcl ("/opt/local/bin/sbcl"));
-;	))
 
 ;;slimeのkey-bindのメモ
 ;'((" "        . slime-space)         ;; 関数名の後等でミニバッファに情報を表示するためのもの．
@@ -194,6 +164,7 @@
 (req eldoc-extension)
 (setq eldoc-idle-delay 0.21)
 (setq eldoc-echo-area-use-multiline-p t)
+
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
