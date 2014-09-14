@@ -301,6 +301,14 @@ FILENAME defaults to `buffer-file-name'."
    nil '(("\\<\\(FIX\\(ME\\)?\\|TODO\\|HACK\\|REFACTOR\\|NOCOMMIT\\)"
           1 font-lock-warning-face t))))
 
+(defun esk-remove-elc-on-save ()
+  "If you're saving an elisp file, likely the .elc is no longer valid."
+  (make-local-variable 'after-save-hook)
+  (add-hook 'after-save-hook
+            (lambda ()
+              (if (file-exists-p (concat buffer-file-name "c"))
+                  (delete-file (concat buffer-file-name "c"))))))
+
 (defun other-window-or-split ()
   (interactive)
   (when (one-window-p)
@@ -488,6 +496,27 @@ FILENAME defaults to `buffer-file-name'."
   (replace-regexp " *;;? ?=> ?.+" "" nil (region-beginning) (region-end))
   (replace-regexp "^;;? ?.+" ""  nil (region-beginning) (region-end)))
 
+
+(defun my-hash-exists-p (key table)
+  (let ((novalue (make-symbol "<nil>")))
+    (not (eq (gethash key table novalue) novalue))))
+
+(defun my-insert-keybinds-table ()
+  "init.el用のキーバインドの表を作る.
+
+Example:
+row> 3
+;; |  |  |
+;; |  |  |
+;; |  |  |"
+  (interactive)
+  (let* ((row (string-to-number (read-from-minibuffer "row> "))))
+    (cl-loop for i from 1 to row do
+             (insert ";; ")
+             (cl-loop for j from 1 to 2 do
+                      (insert "|  ")
+                      finally (insert "|\n"))
+             )))
 
 (provide 'mylib)
 ;;; mylib.el ends here
