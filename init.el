@@ -59,8 +59,9 @@
     (delete-file path)))
 
 ;;init-loader
+(when (equal emacs-major-version 24)
 (require 'init-loader)
-(init-loader-load (concat user-emacs-directory "site-start.d/"))
+  (init-loader-load (concat user-emacs-directory "site-start.d/")))
 
 ;; 00 一般設定
 ;; 10 起動前実行系
