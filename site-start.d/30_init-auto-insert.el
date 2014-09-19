@@ -17,7 +17,7 @@
 ;; 					    (buffer-file-name)))))
 ;; 			      my-template])
 	        ("\\.hs" . ["template.hs" my-template])
-		("\\.agda" . ["template.agda" my-template])
+            ("\\.agda" . ["template.agda" my-template])
 	        ("\\.rb" . ["template.rb" my-template])
 		;; 		("\\.r$" . ["template.r" my-template])
 ;; 		("\\.scm" . ["template.scm"

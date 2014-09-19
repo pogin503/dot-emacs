@@ -60,7 +60,7 @@
 
 ;;init-loader
 (when (equal emacs-major-version 24)
-(require 'init-loader)
+  (require 'init-loader)
   (init-loader-load (concat user-emacs-directory "site-start.d/")))
 
 ;; 00 一般設定

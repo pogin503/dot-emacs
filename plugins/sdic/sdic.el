@@ -85,7 +85,6 @@
 ;; と .emacs に設定されているか確認してください。
 
 
-(provide 'sdic)
 (require 'sdicf)
 (require 'stem)
 
@@ -260,7 +259,7 @@ FROM には正規表現を含む文字列を指定できるが、TO は固定文字列しか指定できない。"
 
 (defun sdic-sort-dictionary-order (entry-list) "\
 Function to sort entry list in dictionary order.
-見出し語、辞書シンボル、見出し語のIDからなる配列を要素とする配列 
+見出し語、辞書シンボル、見出し語のIDからなる配列を要素とする配列
 ENTRY-LIST を、見出し語の辞書順に並べ替える関数。"
   (mapcar 'cdr
 	  (sort (mapcar (lambda (entry)
@@ -953,3 +952,6 @@ they can be in either order. [Emacs 19.29 emulating function]"
     (let ((string (buffer-substring start end)))
       (set-text-properties 0 (length string) nil string)
       string)))
+
+(provide 'sdic)
+;;; sdic.el ends here

@@ -14,9 +14,9 @@
         ;;                   )
         (progn
           (set-face-attribute 'default nil
-                    :family "Ricty"
-                    :height 100
-                    :weight 'bold)
+                              :family "Ricty"
+                              :height 100
+                              :weight 'bold)
           (set-fontset-font (frame-parameter nil 'font)
                             'japanese-jisx0208
                             (cons "Ricty" "iso10646-1"))
