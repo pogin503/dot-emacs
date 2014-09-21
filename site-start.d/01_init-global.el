@@ -10,7 +10,7 @@
 ;; @ frame
 
 ;; フレームタイトルの設定
-(setq frame-title-format (format "%%b - %s-%s@%s" (invocation-name) emacs-version (system-name)))
+(setq frame-title-format (format "%%b - %s-%s" (invocation-name) emacs-version))
 
 ;; ------------------------------------------------------------------------
 ;; @ buffer
