@@ -42,7 +42,7 @@ FILENAME defaults to `buffer-file-name'."
   (file-name-sans-extension
    (file-name-nondirectory (or filename (buffer-file-name))))))
 
-(defun insert-elisp-file-info ()
+(defun my-insert-elisp-file-info ()
   "Insert Emacs Lisp header info."
   (interactive)
   (goto-char (point-min))
