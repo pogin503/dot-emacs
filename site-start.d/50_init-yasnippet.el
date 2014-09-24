@@ -10,8 +10,8 @@
 ;; (setq anything-c-yas-space-match-any-greedy t) ;スペース区切りで絞り込めるようにする デフォルトは nil
 
 (require 'yasnippet)
-(setq yas-snippet-dirs
-      '("~/.emacs.d/etc/snippets"))
+(add-to-list 'yas-snippet-dirs
+             "~/.emacs.d/etc/snippets")
 
 (yas-global-mode 1)
 
