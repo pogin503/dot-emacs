@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: ert-deftest
+# key: ertdef
+# --
+(ert-deftest {$1: test-function-name}-test ()
+  (should $0))

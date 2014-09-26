@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: liquid-if
+# key: liqif
+# --
+{% if {$1:cond} %}
+$0
+{% endif%}

@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: liquid-case
+# key: liqcase
+# --
+{% case ${1:var} %}
+{% when ${2:condition} %}
+$0
+{% endcase %}
