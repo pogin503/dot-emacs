@@ -21,15 +21,17 @@
 
 ;; (when (autoload-if-found 'dired-mode "dired")
 (eval-after-load "dired"
-  (define-key dired-mode-map "\C-m" 'my-dired-advertised-find-file)
-  ;; (define-key dired-mode-map "^" 'my-dired-up-directory)
-  (define-key dired-mode-map [M-up] 'my-dired-up-directory)
-  ;; (define-key dired-mode-map "s" 'my-dired-various-sort-change-or-edit)
-  ;; (define-key dired-mode-map "c"
-  ;;   '(lambda ()
-  ;;     (interactive)
-  ;;     (anything '(anything-c-source-dired-various-sort))))
-  )
+  '(progn
+    (define-key dired-mode-map "\C-m" 'my-dired-advertised-find-file)
+    ;; (define-key dired-mode-map "^" 'my-dired-up-directory)
+    (define-key dired-mode-map [M-up] 'my-dired-up-directory)
+    ;; (define-key dired-mode-map "s" 'my-dired-various-sort-change-or-edit)
+    ;; (define-key dired-mode-map "c"
+    ;;   '(lambda ()
+    ;;     (interactive)
+    ;;     (anything '(anything-c-source-dired-various-sort))))
+    ))
+
 
 ;; | C-m    | フォルダを開く時, 新しいバッファを作成しない |
 ;; | M-<up> | 上のディレクトリに行く |
