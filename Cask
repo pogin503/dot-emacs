@@ -23,6 +23,7 @@
 (depends-on "helm-gtags")
 (depends-on "helm-ls-git")
 (depends-on "helm-projectile")
+(depends-on "key-combo")
 (depends-on "lispxmp")
 (depends-on "magit")
 (depends-on "manage-minor-mode")
