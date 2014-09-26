@@ -1,5 +1,11 @@
-(add-to-list 'load-path "~/.emacs.d/plugins/magit/share/emacs/site-lisp/")
-;; (req magit)
+;;; 50_init-magit.el --- 50_init-magit.el
+;;; Commentary:
+;; @see http://d.hatena.ne.jp/ken_m/20111225/1324833439
+;; This program is free software
+;;; Code:
+
+(require '00_init-hanbetu)
+
 (autoload 'magit-status "magit" nil t)
 (if run-windows
     (if run-windows-x64
@@ -9,8 +15,9 @@
       (progn
         (setq magit-git-executable "C:/Program Files/Git/bin/git.exe")
         (add-to-list 'exec-path "C:/Program Files/Git/bin/git.exe"))))
-  ;; (setq magit-git-executable "C:/Program Files/Git/bin/git.exe"))
-;; exec-path
+
+;; (setq magit-diff-options '("-w" "-b"))
+(setq magit-diff-options '())
 
 ;;;
 ;;; Magit のバッファからファイル名を抽出して利用
@@ -113,4 +120,14 @@ PREFIX が t の場合 (前置引数がある場合) は、これまでの選択
             (local-set-key (kbd "@") 'my-magit-select-files)
             (local-set-key (kbd "`") 'my-magit-clear-selected-files)))
 
-(global-set-key (kbd "C-c i") 'my-magit-insert-selected-files)
+;; (global-set-key (kbd "C-c i") 'my-magit-insert-selected-files)
+
+;; magit my-keybind
+;; | @     | ステージするファイルの選択 |
+;; | `     | 選択したファイルのクリア   |
+;; | C-c i | `my-magit-select-files' で選択されたファイルを空白区切りの文字列   |
+;; |       | としてバッファに挿入する。これはmagitで`:'を押してコマンド入力状態 |
+;; |       | になったときに使用する。これで複数ファイルのステージができる       |
+
+(provide '50_init-magit)
+;;; 50_init-magit.el ends here
