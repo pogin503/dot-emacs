@@ -146,9 +146,11 @@
 
 ;; (my-define-backup-directory)
 
-(setq backup-directory-alist `((".*" . ,temporary-file-directory))
-      ;; auto-save-file-name-transforms `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/var/folders/4n/j5m8gw011y557nb9sfkx6w8w0000gn/T/\\2" t))
-      )
+;;バックアップファイルの作成場所を変更
+(setq backup-directory-alist         `((".*" . ,temporary-file-directory)))
+
+;;編集中ファイルのバックアップ先
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 ;; ;; 編集中ファイルのバックアップ先
 ;; (setq auto-save-file-name-transforms
