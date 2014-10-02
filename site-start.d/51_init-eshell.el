@@ -1,4 +1,4 @@
-;;; 50_init-eshell --- 50_init-eshell
+;;; 51_init-eshell --- 51_init-eshell
 ;;; Commentary:
 ;; @see http://d.hatena.ne.jp/a666666/20110222/1298345699
 ;; @see http://d.hatena.ne.jp/kitokitoki/20110222/p2
@@ -37,6 +37,7 @@
   (my-ac-eshell-mode)
   (define-key eshell-mode-map (kbd "C-i") 'auto-complete)
   )
+
 (add-hook 'eshell-mode-hook 'my-set-eshell-conf)
 
 ;; エスケープシーケンスを処理
@@ -57,34 +58,42 @@
  '(eshell-prompt-face ((t (:foreground "maroon2" :bold nil)))))
 
 ;; emacs 起動時に eshell バッファも一つ用意する
-;; (add-hook 'after-init-hook
-;;           (lambda()
-;;             (eshell)
-;;             (switch-to-buffer "*init log*")
-;;             ))
+(defun my-switch-eshell-buf-to-other-buf ()
+  (eshell)
+  (switch-to-buffer "*init log*"))
+
+(add-hook 'after-init-hook 'my-switch-eshell-buf-to-other-buf)
 
 (defun my-toggle-term ()
   "eshell と直前のバッファを行き来する。C-u 付きで呼ぶと 今いるバッファと同じディレクトリに cd して開く"
   (interactive)
-  (let ((ignore-list '("*Help*"  " *Minibuf-0*" " *Minibuf-1*" "*Messages*"
-                       "*terminal<1>*" "*terminal<2>*" "*terminal<3>*"
-                       "*compilation*" "*Anything Log*" "*Completions*"
-                       "*anything*" "*anything coplete*"))
+  (let ((ignore-list '("*Help*"
+                       " *Minibuf-0*"
+                       " *Minibuf-1*"
+                       "*Messages*"
+                       "*terminal<1>*"
+                       "*terminal<2>*"
+                       "*terminal<3>*"
+                       "*compilation*"
+                       "*Anything Log*"
+                       "*Completions*"
+                       "*anything*"
+                       "*anything coplete*"))
         (dir default-directory))
     (labels
         ((_my-toggle-term (target)
-                          (if (null (member (buffer-name (second target)) ignore-list))
-                              (if (equal "*eshell*" (buffer-name (window-buffer)))
-                                  (switch-to-buffer (second target))
-                                (switch-to-buffer "*eshell*")
-                                (when current-prefix-arg
-                                  (cd dir)
-                                  (eshell-interactive-print (concat "cd " dir "\n"))
-                                  (eshell-emit-prompt)))
-                            (_my-toggle-term (cdr target)))))
+           (if (null (member (buffer-name (cl-second target)) ignore-list))
+               (if (equal "*eshell*" (buffer-name (window-buffer)))
+                   (switch-to-buffer (cl-second target))
+                   (switch-to-buffer "*eshell*")
+                   (when current-prefix-arg
+                     (cd dir)
+                     (eshell-interactive-print (concat "cd " dir "\n"))
+                     (eshell-emit-prompt)))
+               (_my-toggle-term (cdr target)))))
       (_my-toggle-term (buffer-list)))))
 
 (global-set-key (kbd "<C-M-return>") 'my-toggle-term)
 
-(provide '50_init-eshell)
-;;; 50_init-eshell ends here
+(provide '51_init-eshell)
+;;; 51_init-eshell ends here
