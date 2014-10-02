@@ -29,7 +29,7 @@
 ;; (setq inertias-update-time 60)      ; 画面描画のwait時間（msec）
 
 ;eval-last-sexp-popup
-;;(load-file "~/.emacs.d/elisp/eval-last-sexp-popup.el")
+;;(load-file (concat user-emacs-directory "elisp/eval-last-sexp-popup.el")
 (req eval-last-sexp-popup)
 ;; (global-set-key (kbd "C-x C-e") 'eval-last-sexp)
 

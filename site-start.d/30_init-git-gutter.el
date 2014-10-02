@@ -1,6 +1,6 @@
 ;;; 30_init-git-gutter --- 30_init-git-gutter
-;; This program is free software
 ;;; Commentary:
+;; This program is free software
 ;; @see https://github.com/syohex/emacs-git-gutter
 ;;; Code:
 

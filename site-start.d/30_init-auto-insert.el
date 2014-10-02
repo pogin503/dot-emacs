@@ -6,7 +6,7 @@
 
 ;; (add-hook 'before-save-hook 'time-stamp)
 (add-hook 'find-file-hook 'auto-insert)
-(setq auto-insert-directory  "~/.emacs.d/etc/autoinsert")
+(setq auto-insert-directory  (concat user-emacs-directory "etc/autoinsert"))
 (setq auto-insert-alist
       (nconc '(
                ;; ("\\.lisp$" . ["template.lisp" my-template])
