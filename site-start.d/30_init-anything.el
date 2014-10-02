@@ -44,7 +44,10 @@
 
 (require 'helm-descbinds)
 (helm-descbinds-mode)
-;; (helm-mode 1)
+(helm-mode 1)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+;; (global-set-key (kbd "M-x") 'execute-extended-command)
 
 (provide '30_init-anything)
 ;;; 30_init-anything.el ends here

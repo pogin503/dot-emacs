@@ -44,11 +44,11 @@
 (push '("*Process List*" :stick t) popwin:special-display-config)
 (push '("*sdic*" :noselect t) popwin:special-display-config)
 (push '("*init log*" :stick t) popwin:special-display-config)
-(push '("\\*magit.*" :stick t :regexp t) popwin:special-display-config)
+(push '("\\*magit.*" :stick t :regexp t :height 25) popwin:special-display-config)
 (push '("COMMIT-EDITMSG" :height 15) popwin:special-display-config)
 (push '("*compilation*" :regexp t) popwin:special-display-config)
 (push '("*ert*" :regexp t) popwin:special-display-config)
-
+(push '("*Codic Result*" :height 15) popwin:special-display-config)
 (setq popwin:close-popup-window-timer-interval 0.7)
 
 (provide '30_init-popup)

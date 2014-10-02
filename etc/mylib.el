@@ -3,6 +3,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require '00_init-macro)
+
 (eval-when-compile
   (require 'cl))
 
@@ -105,8 +107,8 @@ FILENAME defaults to `buffer-file-name'."
     (reverse result)))
 
 (defun remove-dquote (str)
-  (loop for i from 1 to (- (length str) 2)
-                    ;; collect (char-to-string (aref str i))
+  "Remove double quotes in `STR'."
+  (cl-loop for i from 1 to (- (length str) 2)
                     concat (char-to-string (aref str i))
                     ))
 
