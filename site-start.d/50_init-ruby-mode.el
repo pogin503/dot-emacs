@@ -23,14 +23,14 @@
     (setq ruby-block-highlight-toggle t)
     ;; (defun ruby-mode-hook-ruby-block()
     ;;   (ruby-block-mode t))
-    (req ruby-electric)
+    ;; (req ruby-electric)
     ;; set ruby-mode indent
     (setq ruby-indent-level 2)
     (setq ruby-indent-tabs-mode nil)
     ))
 
 ;; ruby-electric
-(add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode 1)))
+;; (add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode 1)))
 
 ;; (setq ruby-electric-expand-delimiters-list nil)
 
