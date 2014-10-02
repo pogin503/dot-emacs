@@ -77,6 +77,7 @@
 ;;                  "C:/Program Files (x86)/Haskell Platform/2011.4.0.0/bin/"
 ;;                "C:/Program Files/Haskell Platform/2011.4.0.0/bin/"))
 
+;; path setting
 (when (or run-linux run-darwin)
   (add-to-list 'exec-path (expand-file-name "~/.cabal/bin"))
   (when run-darwin
@@ -85,9 +86,6 @@
 (if run-windows
     (add-to-list 'exec-path
                  (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
-
-;; ghc-flymake.el などがあるディレクトリ ghc-mod を ~/.emacs.d 以下で管理することにした
-;; (add-to-list 'load-path "~/.emacs.d/plugins/ghc-mod")
 
 ;; ghc-mod setting
 (autoload 'ghc-init "ghc" nil t)
@@ -111,8 +109,6 @@
 
 (add-hook 'haskell-mode-hook 'my-haskell-mode-keybinds)
 (add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
-
-;; (add-hook 'haskell-mode-hook 'my-ac-haskell-mode)
 
 ;; (load "~/.emacs.d/plugins/haskell-site-file.el")
 (setq haskell-program-name "/usr/bin/ghci")

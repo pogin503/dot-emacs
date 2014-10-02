@@ -4,7 +4,12 @@
 ;;; Code:
 
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/plugins/auto-complete/ac-dict/")
+
+(add-to-list 'ac-dictionary-directories
+             (concat user-emacs-directory "plugins/auto-complete/ac-dict/"))
+
+(setq ac-comphist-file (concat user-emacs-directory  "etc/ac-comphist.dat"))
+
 (ac-config-default)
 ;; (global-auto-complete-mode t)
 (setq-default ac-use-comphist nil)
@@ -24,7 +29,6 @@
                ))
   (add-hook hook 'auto-complete-mode))
 
-(setq ac-comphist-file (concat user-emacs-directory  "cache/auto-complete/ac-comphist.dat"))
 
 (provide '40_init-auto-complete)
 ;;; 40_init-auto-complete ends here

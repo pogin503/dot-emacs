@@ -1,0 +1,13 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: jekyll-desc
+# key: jekyll-desc
+# --
+---
+layout: $1
+title: $2
+tags: [$3]
+---
+
+{% include JB/setup %}
+
+$0
