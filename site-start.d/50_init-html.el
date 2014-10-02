@@ -1,13 +1,14 @@
 ;;; 50_init-html --- 50_init-html
 ;;; Commentary:
-;;; Code:
 ;; @see http://d.hatena.ne.jp/tototoshi/20110127/1296132523
+;; web-mode設定
+;; @see http://yanmoo.blogspot.jp/2013/06/html5web-mode.html
+;;; Code:
 (require '00_init-macro)
 
 ;; (add-to-load-path "plugins/zencoding")
 (req web-mode
-
-;;; emacs 23以下の互換
+     ;;; emacs 23以下の互換
      ;; (when (< emacs-major-version 24)
      ;;   (defalias 'prog-mode 'fundamental-mode))
 
@@ -19,7 +20,7 @@
      (add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
      (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
      ;;; インデント数
-     (defun web-mode-hook ()
+     (defun my-web-mode-conf ()
        "Hooks for Web mode."
        (setq web-mode-html-offset   2)
        (setq web-mode-css-offset    2)
@@ -27,22 +28,72 @@
        (setq web-mode-php-offset    2)
        (setq web-mode-java-offset   2)
        (setq web-mode-asp-offset    2)
-     ))
+       ))
+
+(add-hook 'web-mode-hook 'my-web-mode-conf)
+
+;; GET-ing an HTTP page
+;;
+;; (web-http-get
+;;  (lambda (con header data)
+;;    (message "the page returned is: %s" data))
+;;  :url "http://emacswiki.org/wiki/NicFerrier")
+
+;; POST-ing to an HTTP app
+;;
+;; (web-http-post
+;;  (lambda (con header data)
+;;    (message "the data is: %S" data))
+;;  :url "http://example.org/postplace/"
+;;  :data '(("parameter1" . "data")
+;;          ("parameter2" . "more data")))
+
+;; | C-c C-; | コメント/アンコメント                              |
+;; | C-c C-e | 閉じていないタグを見つける                         |
+;; | C-c C-f | 指定したタグのブロックを開閉する                   |
+;; | C-c C-i | 現在開いているバッファをインデントする             |
+;; | C-c C-m | マークする(マークする場所によって選択範囲が変わる) |
+;; | C-c C-n | 開始・終了タグまでジャンプ                         |
+;; | C-c C-r | HTML entitiesをリプレースする                      |
+;; | C-c C-s | スニペットを挿入                                   |
+;; | C-c C-w | スペースを表示・非表示                             |
+
+;; | C-c /   | 閉じタグを挿入(エレメントを閉じる) |
+;; | C-c e b | エレメントの最初へ移動             |
+;; | C-c e d | エレメントを削除                   |
+;; | C-c e e | エレメントの最後へ移動             |
+;; | C-c e e | エレメントを複製                   |
+;; | C-c e n | 次のエレメントへ移動               |
+;; | C-c e p | 前のエレメントへ移動               |
+;; | C-c e u | 親エレメントへ移動                 |
+;; | C-c e r | エレメントをリネーム               |
+;; | C-c e s | エレメント全体を選択               |
+;; | C-c e i | エレメントのコンテンツを選択       |
 
 
+;; | C-c t b | タグの先頭へ移動(エレメントの先頭では無くタグの先頭です。|
+;; |         |  </div>で実行した場合は</div>タグの先頭(<)に移動します)  |
+;; | C-c t e | タグの後尾へ移動                                         |
+;; | C-c t m | マッチするタグへ移動                                     |
+;; | C-c t s | タグを選択                                               |
+;; | C-c t p | 前のタグに移動                                           |
+;; | C-c t n | 次のタグに移動                                           |
 
-(add-hook 'web-mode-hook 'web-mode-hook)
+(eval-after-load "emmet-mode"
+  '(progn
+    (define-key emmet-mode-keymap (kbd "C-j") nil) ;; C-j は newline のままにしておく
+    (keyboard-translate ?\C-i ?\H-i) ;; C-i と Tabの被りを回避
+    (define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line) ;; C-i で展開
+    ))
 
-(req emmet-mode
-     (define-key emmet-mode-keymap (kbd "C-j") nil) ;; C-j は newline のままにしておく
-     (keyboard-translate ?\C-i ?\H-i) ;;C-i と Tabの被りを回避
-     (define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line) ;; C-i で展開)
-     )
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; マークアップ言語全部で使う
-(add-hook 'css-mode-hook  'emmet-mode) ;; CSSにも使う
+(defun my-emmet-conf ()
+  (setq emmet-indentation 2))
+
+(add-hook 'sgml-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook  'emmet-mode)
 (add-hook 'nxml-mode-hook 'emmet-mode)
-(add-hook 'emmet-mode-hook
-          (lambda () (setq emmet-indentation 2))) ;; indent はスペース2個
+(add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'emmet-mode-hook 'my-emmet-conf )
 
 (req multi-web-mode
      (setq mweb-default-major-mode 'html-mode)
@@ -73,6 +124,10 @@
      (define-key nxml-mode-map (kbd "M-'") 'lgfang-toggle-level)
      (define-key nxml-mode-map [mouse-3] 'lgfang-toggle-level)
      (define-key nxml-mode-map (kbd "<backtab>") 'lgfang-toggle-level)))
+
+;; | M-' or mouse-3 or backtab | 畳み込みのトグル |
+;; @memo
+;; backtab : Shift + TAB
 
 (provide '50_init-html)
 ;;; 50_init-html ends here
