@@ -16,7 +16,7 @@
   (show-paren-mode t))
 
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
-(add-hook 'emacs-lisp-mode-hook 'my-set-lisp-conf)
+(add-hook 'emacs-lisp-mode-hook 'my-set-elisp-conf)
 
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 ;; (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
