@@ -8,12 +8,6 @@
 (require '00_init-macro)
 (require '00_init-hanbetu)
 
-(defvar dropbox-directory
-  (cond
-   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
-   (t "~/Dropbox"))
-  "Set Dropbox directory."
-  )
 
 (define-key global-map (kbd "C-c , ,") 'howm-menu)
 (add-to-list 'auto-mode-alist '("\\.howm$'" . howm-mode))

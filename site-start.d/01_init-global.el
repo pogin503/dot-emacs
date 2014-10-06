@@ -15,8 +15,10 @@
 ;; ------------------------------------------------------------------------
 ;; @ buffer
 
-(setq truncate-lines t)                 ;; バッファ画面外文字の切り詰め表示
-(setq truncate-partial-width-windows t) ;; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
+(custom-set-variables
+ '(truncate-lines t)                 ;; バッファ画面外文字の切り詰め表示
+ '(truncate-partial-width-windows t) ;; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
+ )
 
 ;; 同一バッファ名にディレクトリ付与
 (require 'uniquify)
@@ -114,6 +116,9 @@
 ;;    "" (interactive) (scroll-up 5))
 ;; (global-set-key [mouse-4] 'scroll-down-with-lines)
 ;; (global-set-key [mouse-5] 'scroll-up-with-lines)
+
+;; マウスで選択するとコピーする Emacs 24 ではデフォルトが nil
+;; (setq mouse-drag-copy-region t)
 
 
 ;; スクロールバーの場所
@@ -259,10 +264,12 @@
 ;; open-junk-file
 (require 'open-junk-file)
 
-;; windowを分割したときに折り返すときの値。
-;; 非nilだと、変数の値の文字幅のときtruncate-lineしても
-;; 折り返してしまう
-(setq truncate-partial-width-windows nil)
+(defvar dropbox-directory
+  (cond
+   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
+   (t "~/Dropbox"))
+  "Set Dropbox directory."
+  )
 
 ;; path
 (req exec-path-from-shell
