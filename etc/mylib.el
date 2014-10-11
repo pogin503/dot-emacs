@@ -162,66 +162,9 @@ FILENAME defaults to `buffer-file-name'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; haskell
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'auto-complete)
 
-(defun my-haskell-ac-init ()
-  "Set AC-mode source."
-  (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
-    (auto-complete-mode t)
-    (setq ac-sources '(ac-source-words-in-same-mode-buffers
-                       ac-source-dictionary
-                       ac-source-ghc-mod))))
-
-;; (defun flymake-show-and-sit ()
-;;   "Displays the error/warning for the current line in the minibuffer"
-;;   (interactive)
-;;   (progn
-;;     (let* ( (line-no             (flymake-current-line-no) )
-;; 	    (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
-;; 	    (count               (length line-err-info-list))
-;; 	    )
-;;       (while (> count 0)
-;; 	(when line-err-info-list
-;; 	  (let* ((file       (flymake-ler-file (nth (1- count) line-err-info-list)))
-;; 		 (full-file  (flymake-ler-full-file (nth (1- count) line-err-info-list)))
-;; 		 (text (flymake-ler-text (nth (1- count) line-err-info-list)))
-;; 		 (line       (flymake-ler-line (nth (1- count) line-err-info-list))))
-;; 	    (message "[%s] %s" line text)
-;; 	    )
-;; 	  )
-;; 	(setq count (1- count)))))
-;;   (sit-for 60.0)
-;;   )
-;; ;;
-
-;; (defun define-haskell-mode-conf ()
-;;   (add-to-list 'flymake-allowed-file-name-masks
-;;                '("\\.l?hs$" flymake-Haskell-init flymake-simple-java-cleanup))
-;;   (add-to-list 'flymake-err-line-patterns
-;;                '("^\\(.+\\.l?hs\\):\\([0-9]+\\):\\([0-9]+\\):\\(\\(?:.\\|\\W\\)+\\)"
-;;                  1 2 3 4))
-;;   (set (make-local-variable 'multiline-flymake-mode) t)
-;;   (if (not (null buffer-file-name)) (flymake-mode))
-;;   )
-
-;; (defun helm-c-source-ghc-mod ()
-;;   (unless (executable-find "ghc-mod")
-;;     (error "ghc-mod を利用できません。ターミナルで which したり、*scratch* で exec-path を確認したりしましょう"))
-;;   (let ((buffer (helm-candidate-buffer 'global)))
-;;     (with-current-buffer buffer
-;;       (call-process "ghc-mod" nil t t "list"))))
-
-;; (defun helm-c-source-ghc-mod-action (candidate)
-;;   (interactive "P")
-;;   (let* ((pkg (ghc-resolve-package-name candidate)))
-;;     (helm-aif (and pkg candidate)
-;;         (ghc-display-document pkg it nil)
-;;       (message "No document found"))))
-
-;; (defun helm-ghc-browse-document ()
-;;   (interactive)
-;;   (helm helm-c-source-ghc-mod))
 (lazyload (haskell-mode) "hakskell-mode"
+          (require 'auto-complete)
           (defun my-haskell-ac-init ()
             "Set AC-mode source."
             (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
@@ -247,7 +190,8 @@ FILENAME defaults to `buffer-file-name'."
 ;; misc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar delete-trailing-whitespace-exclude-patterns (list "\\.md$" "\\.markdown$" "\\.org$"))
+(defvar delete-trailing-whitespace-exclude-patterns
+  (list "\\.md$" "\\.markdown$" "\\.org$"))
 
 ;; 行末のwhitespaceを削除
 (defun delete-trailing-whitespace-with-exclude-pattern ()
@@ -266,13 +210,6 @@ FILENAME defaults to `buffer-file-name'."
       (widen)
       (goto-char (point-max))
       (delete-blank-lines))))
-
-(defun esk-pretty-lambdas ()
-  (font-lock-add-keywords
-   nil `(("(?\\(lambda\\>\\)"
-          (0 (progn (compose-region (match-beginning 1) (match-end 1)
-                                    ,(make-char 'greek-iso8859-7 107))
-                   nil))))))
 
 ;; スクリプトを保存する時、自動的に chmod +x を行うようにする
 (defun make-file-executable ()
@@ -296,6 +233,13 @@ FILENAME defaults to `buffer-file-name'."
         (make-directory dir-name user-emacs-directory))
     (add-to-list 'backup-directory-alist
                  `(".*" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
+
+(defun esk-pretty-lambdas ()
+  (font-lock-add-keywords
+   nil `(("(?\\(lambda\\>\\)"
+          (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                    ,(make-char 'greek-iso8859-7 107))
+                   nil))))))
 
 ;; TODO
 (defun esk-add-watchwords ()
