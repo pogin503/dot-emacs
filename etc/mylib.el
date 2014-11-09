@@ -8,7 +8,7 @@
 (eval-when-compile
   (require 'cl))
 
-(defun print-escaped-sexp ()
+(defun my-print-escaped-sexp ()
   "Print escpaped s-expression."
   (interactive)
   (mark-defun)
@@ -20,7 +20,7 @@
   (insert (format "%S" (substring-no-properties (get-register ?r))))
   )
 
-(defun print-escaped-string (s e)
+(defun my-print-escaped-string (s e)
   "Print escaped string in region.
 
 `S' is (region-beginning)
@@ -29,7 +29,7 @@
   (copy-to-register ?r s e)
   (insert (format "%S" (substring-no-properties (get-register ?r)))))
 
-(defun reopen-buffer ()
+(defun my-reopen-buffer ()
   (interactive)
   (let ((current-buf (buffer-file-name)))
     (save-buffer)
@@ -255,7 +255,7 @@ FILENAME defaults to `buffer-file-name'."
               (if (file-exists-p (concat buffer-file-name "c"))
                   (delete-file (concat buffer-file-name "c"))))))
 
-(defun other-window-or-split ()
+(defun my-other-window-or-split ()
   (interactive)
   (when (one-window-p)
     (split-window-horizontally))
@@ -274,30 +274,31 @@ FILENAME defaults to `buffer-file-name'."
 (global-set-key (kbd "C-8") 'my-load-current-buffer)
 (global-set-key (kbd "s-8") 'my-load-current-buffer)
 
-;; ;; 'o' 次の行に挿入
-;; (defun edit-next-line ()
-;;   (interactive)
-;;   (end-of-line)
-;;   (newline-and-indent))
+;; @see http://d.hatena.ne.jp/syohex/20120331/1333175819
+;; 'o' 次の行に挿入
+(defun my-edit-next-line ()
+  (interactive)
+  (end-of-line)
+  (newline-and-indent))
 
-;; ;; 'O' 前の行に挿入
-;; (defun edit-previous-line ()
-;;   (interactive)
-;;   (forward-line -1)
-;;   (if (not (= (current-line) 1))
-;;       (end-of-line))
-;;   (newline-and-indent))
+;; 'O' 前の行に挿入
+(defun my-edit-previous-line ()
+  (interactive)
+  (forward-line -1)
+  (if (not (= (current-line) 1))
+      (end-of-line))
+  (newline-and-indent))
 
-;; 'f' 後方の入力した文字の上に移動
-(defun forward-match-char (n)
+(defun my-forward-match-char (n)
+  "後方の入力した文字の上に移動."
   (interactive "p")
   (let ((c (read-char)))
     (dotimes (i n)
       (forward-char)
       (skip-chars-forward (format "^%s" (char-to-string c))))))
 
-;; 'F' 前方の入力した文字の上に移動
-(defun backward-match-char (n)
+(defun my-backward-match-char (n)
+  "前方の入力した文字の上に移動."
   (interactive "p")
   (let ((c (read-char)))
     (dotimes (i n)
@@ -318,12 +319,6 @@ FILENAME defaults to `buffer-file-name'."
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; coq
-(defun my-ac-coq-mode ()
-  "Set coq ac-source."
-  (setq ac-sources '(ac-source-words-in-same-mode-buffers
-                     ac-source-dictionary)))
 
 ;; anything or helm
 
@@ -442,6 +437,10 @@ FILENAME defaults to `buffer-file-name'."
   (replace-regexp " *;;? ?=> ?.+" "" nil (region-beginning) (region-end))
   (replace-regexp "^;;? ?.+" ""  nil (region-beginning) (region-end)))
 
+(defun my-remove-dquote (str)
+  (cl-loop for i from 1 to (- (length str) 2)
+                       ;; collect (char-to-string (aref str i))
+                       concat (char-to-string (aref str i))))
 
 (defun my-hash-exists-p (key table)
   (let ((novalue (make-symbol "<nil>")))
@@ -463,6 +462,65 @@ row> 3
                       (insert "|  ")
                       finally (insert "|\n"))
              )))
+
+(defun my-insert-buffer-keybinds-table ()
+  "バッファ中の設定されているキーバインドを表を作る.
+
+global-set-key, define-key を探してそこからキーバインドの表を作る。
+
+Example:
+| C-a      | foo bar foo    |
+| C-x C-x  | bar foo bar    |
+| C-c C-c  | hoge piyo hoge |
+...
+"
+  (interactive)
+  (let (ret1 len)
+    (save-excursion
+      ;; [(keybind : String . function-name : String)]
+      ;; バッファ中のキーバインド、関数名を取得する
+      (setq ret1 (let (result break-flg)
+                   (goto-char (point-min))
+                   (while (and (not (eobp)) (not break-flg))
+                     (if (re-search-forward "\\(^[[:space:]]*(global-set-key\\)\\|\\(^[[:space:]]*(define-key\\)" nil t)
+                         (let (str1 str2 beg end end-next)
+                           (beginning-of-defun-raw)
+                           (setq beg (point))
+                           (end-of-defun)
+                           (narrow-to-region beg (point))
+                           (goto-char (point-min))
+                           (if (re-search-forward "kbd" nil t)
+                               (progn
+                                 (forward-char 2)
+                                 (setq str1 (substring-no-properties (my-thing-at-string)))
+                                 (if (re-search-forward "'" nil t)
+                                     (setq str2 (substring-no-properties (thing-at-point 'symbol)))
+                                   (setq str2 ""))))
+                           (widen)
+                           (push (list str1 str2) result)
+                           (end-of-defun)
+                           (setq end (point))
+                           (end-of-defun)
+                           (setq end-next (point))
+                           (if (equal end end-next)
+                               (setq break-flg t)
+                             (goto-char end)))
+                       (setq break-flg t)))
+                   result)))
+    ;; | keybind |  |
+    ;;     .
+    ;;     .
+    ;;     .
+    ;; を挿入する
+    (insert (with-temp-buffer
+              (save-excursion
+                (mapc (lambda (x) (insert (format "|%s||\n" (car x)))) ret1))
+              (org-table-align)
+              (while (not (eobp))
+                (beginning-of-line)
+                (insert ";; ")
+                (forward-line 1))
+              (buffer-string)))))
 
 (provide 'mylib)
 ;;; mylib.el ends here
