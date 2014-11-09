@@ -45,8 +45,9 @@
 
 (setq inhibit-startup-message t)            ;; 起動メッセージの非表示
 (setq inhibit-startup-echo-area-message -1) ;; スタートアップ時のエコー領域メッセージの非表示
-(setq blink-matching-paren t)               ;; 対応する括弧をブリンク
-(setq blink-matching-delay 1000)
+;; (blink-cursor-mode 1)
+;; (setq blink-matching-paren t)               ;; 対応する括弧をブリンク
+;; (setq blink-matching-delay 1000)
 (show-paren-mode t)                         ;; 括弧を強調表示する
 
 ;; ------------------------------------------------------------------------

@@ -37,19 +37,12 @@
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
-
-;; (global-set-key (kbd "M-o") 'edit-next-line)
 ;; (global-set-key (kbd "s-RET") 'edit-next-line)
 ;; (global-set-key (kbd "s-<RET>") 'edit-next-line)
-(global-set-key (kbd "S-<return>") 'edit-next-line)
-(global-set-key (kbd "M-O") 'edit-previous-line)
-(global-set-key (kbd "C-S-<return>") 'edit-previous-line)
-
-
-(global-set-key (kbd "M-l") 'forward-match-char)
-(global-set-key (kbd "M-L") 'backward-match-char)
-
-(global-set-key (kbd "C-x C-c") 'anything-execute-extended-command)
+;; (global-set-key (kbd "M-o") 'edit-next-line)
+(global-set-key (kbd "M-O") 'my-edit-previous-line)
+(global-set-key (kbd "S-<return>") 'my-edit-next-line)
+(global-set-key (kbd "C-S-<return>") 'my-edit-previous-line)
 
 ;; I never use C-x C-c
 (defalias 'exit 'save-buffers-kill-emacs)
@@ -57,8 +50,39 @@
 (global-set-key (kbd "C-x C-z") 'nil)
 
 (global-set-key (kbd "C-x C-o") 'other-window)
+
+;; window操作
 (global-set-key (kbd "C-x <up>") 'windmove-up)
 (global-set-key (kbd "C-x <down>") 'windmove-down)
 (global-set-key (kbd "C-x <left>") 'windmove-left)
 (global-set-key (kbd "C-x <right>") 'windmove-right)
+
+(global-set-key (kbd "C-t") 'my-other-window-or-split)
+
+;; | C-t           | 別のウィンドウに移動する。ウィンドウが一つの       |
+;; |               | 場合はウィンドウを分割する                         |
+;; | C-x <right>   | 右のウィンドウに移動                               |
+;; | C-x <left>    | 左のウィンドウに移動                               |
+;; | C-x <down>    | 下のウィンドウに移動                               |
+;; | C-x <up>      | 上のウィンドウに移動                               |
+;; | C-x C-o       | 間違ってC-x C-o としてしまったとき用のキーバインド |
+;; | C-x C-z       | なにか忘れたけどnilにする                          |
+;; | M-O           | 次の行を挿入                                       |
+;; | S-<return>    | 次の行に挿入                                       |
+;; | C-S-<return>  | 前の行に挿入                                       |
+;; | C-+           | バッファの文字を拡大                               |
+;; | C--           | バッファの文字を縮小                               |
+;; | C-<tab>       | タブによるインデント                               |
+;; | C-m           | 改行 + インデントをする                            |
+;; | s-w           | Mac用 コピー                                       |
+;; | s-<backspace> | Mac用 1単語削除                                    |
+;; | s-<down>      | Mac用 次のパラグラフ (空行?)に飛ぶ                 |
+;; | s-<up>        | Mac用 前のパラグラフ (空行?)に飛ぶ                 |
+;; | s-<left>      | Mac用 前の単語に移動                               |
+;; | s-<right>     | Mac用 次の単語に移動                               |
+;; | M-S-z         | リドゥ                                             |
+;; | C-S-z         | リドゥ                                             |
+;; | C-z           | アンドゥ                                           |
+;; | C-M-k         | 確認なしでパッファをキルする                       |
+
 ;;; 01_init-keybind.el ends here

@@ -3,7 +3,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(defun code-golf-for-js ()
+(defun my-code-golf-for-js ()
    "Thisandthat."
    (interactive)
    (mapc (lambda (x)
@@ -15,13 +15,6 @@
    (replace-regexp "{ " "{" nil (point-min) (point-max))
    (replace-regexp "^[[:space:]]* " "for" nil (point-min) (point-max))
    )
-
-;; coffee-mode
-(require '00_init-macro)
-(req coffee-mode
-     (add-to-list 'ac-modes 'coffee-mode)
-     )
-
 
 (provide '50_init-js)
 ;;; 50_init-js ends here

@@ -16,8 +16,6 @@
 (add-to-list 'auto-mode-alist '("\\.lucius$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.julius$" . js2-mode))
 
-(require 'auto-complete)
-
 (require 'mylib)
 
 (require '00_init-macro)
@@ -25,11 +23,6 @@
           (require 'haskell-mode)
           (require 'haskell-cabal)
           (require 'inf-haskell)
-
-          (defun my-ac-haskell-mode ()
-            (setq ac-sources '(ac-source-words-in-same-mode-buffers
-                               ac-source-dictionary
-                               ac-source-ghc-mod)))
 
           ;; https://github.com/m2ym/auto-complete
           ;; (ac-define-source ghc-mod
@@ -61,8 +54,6 @@
 ;; (eval-after-load 'flycheck
 ;;   '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
 
-(add-to-list 'ac-modes 'haskell-mode)
-
 ;; ghc-mod
 ;; cabal でインストールしたライブラリのコマンドが格納されている bin ディレクトリへのパスを exec-path に追加する
 
@@ -93,8 +84,9 @@
 
 (defun my-haskell-mode-keybinds ()
   "Set haskell-mode keybindings."
-  (define-key haskell-mode-map (kbd "C-M-d") 'anything-ghc-browse-document)
-  (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select))
+  ;; (define-key haskell-mode-map (kbd "C-M-d") 'anything-ghc-browse-document)
+  ;; (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select)
+  )
 
 (defun my-haskell-mode-conf ()
   "Set haskell-mode config."
@@ -136,11 +128,6 @@
 ;;   "Change focus to GHCi window after \\<haskell-mode-map>\\[inferior-haskell-load-file] command."
 ;;   (other-window 1))
 ;; (ad-activate 'inferior-haskell-load-file)
-
-;; agda-mode
-(load-file
- (let ((coding-system-for-read 'utf-8))
-   (shell-command-to-string "agda-mode locate")))
 
 (provide '50_init-haskell)
 ;;; 50_init-haskell ends here

@@ -3,11 +3,11 @@
 ;;; Code:
 (require 'package)
 
-;; .cask
-;; cask init
-(add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode))
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
+(when (and (file-exists-p "~/.cask/cask.el")
+           (display-graphic-p))
+  (add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode))
+  (require 'cask "~/.cask/cask.el")
+  (cask-initialize))
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)

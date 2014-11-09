@@ -9,30 +9,19 @@
 ;; Windows Setting
 (if run-windows
     (if run-windows-x64
-        (add-to-list 'exec-path "C:/Program Files (x86)/Coq/bin")
+		(add-to-list 'exec-path "C:/Program Files (x86)/Coq/bin")
       (add-to-list 'exec-path "C:/Program Files/Coq/bin"))
   (load-file
    (concat dropbox-directory
            "/eworkspace/ProofGeneral-4.2/ProofGeneral-4.2/generic/proof-site.el"))
   (load-file
    (concat dropbox-directory
-           "/eworkspace/ssreflect-1.4/pg-ssr.el"))
-  )
+           "/eworkspace/ssreflect-1.4/pg-ssr.el")))
 
 ;; 要 $ yaourt -S proofgeneral
 ;; (when (file-exists-p
 ;;        "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
 ;;   (load-file "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el"))
-
-;; (lazyload (coq-mode) "proof-site"
-;;           ;; set auto-complete-mode
-;;           (require 'proof-site)
-;;           (add-to-list 'ac-modes 'coq-mode)
-;;           )
-
-;; coq-mode-hook
-(add-hook 'coq-mode-hook 'auto-complete-mode)
-(add-hook 'coq-mode-hook 'my-ac-coq-mode)
 
 (setq coq-prog-name "/usr/local/bin/coqtop.opt")
 
