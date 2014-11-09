@@ -19,7 +19,10 @@
 (define-key ac-mode-map (kbd "M-i") 'auto-complete)
 (define-key ac-mode-map (kbd "H-i") 'auto-complete)
 (define-key ac-completing-map "\t" 'ac-complete)
+
+;; Enterで補完をしないようにする
 (define-key ac-completing-map "\r" nil)
+
 (ac-flyspell-workaround)
 
 (dolist (hook (list
@@ -29,6 +32,13 @@
                ))
   (add-hook hook 'auto-complete-mode))
 
+;; for eshell
+(add-to-list 'ac-modes 'eshell-mode)
+(ac-define-source pcomplete
+  '((candidates . pcomplete-completions)))
+
+
+(add-to-list 'ac-modes 'haskell-mode)
 
 (provide '40_init-auto-complete)
 ;;; 40_init-auto-complete ends here
