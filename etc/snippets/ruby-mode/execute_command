@@ -1,0 +1,9 @@
+# name : execute_command
+# --
+directory "${1:directory_name}" do
+    owner "${2:owner}"
+    group "${3:group}"
+    mode ${4:00755}
+    action ${5::create}
+end
+$0

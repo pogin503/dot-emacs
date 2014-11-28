@@ -1,0 +1,9 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: directory_delete
+# key: directory_del
+# --
+directory "${1:directory_name}" do
+  recursive ${2:true}
+  action :delete
+end
+$0
