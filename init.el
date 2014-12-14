@@ -1,9 +1,8 @@
 ;;; init.le --- init file
 ;;; Commentary:
 ;;; Code:
-; 常時デバッグ状態
+;; デバッグモード
 ;; (setq debug-on-error t)
-;; (setq debug-on-error nil)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -14,11 +13,14 @@
 
 ;;install elisp
 (setq load-path (cons "~/.emacs.d/elisp" load-path))
+(when (not (boundp 'user-emacs-directory))
+  (setq user-emacs-directory (expand-file-name "~/.emacs.d/")))
 
+(setq load-path (cons (concat user-emacs-directory "elisp/") load-path))
 
-;;auto-install*******************************
+;; auto-install
 (require 'auto-install)
-(setq auto-install-directory "~/.emacs.d/elisp/")
+(setq auto-install-directory (concat user-emacs-directory "elisp/"))
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)             ; 互換性確保
 
@@ -54,11 +56,11 @@
  "el-get"
  )
 
-(let ((path "~/.emacs.d/site-start.d/00_init-macro.elc"))
+(let ((path (concat user-emacs-directory "site-start.d/00_init-macro.elc")))
   (when (file-regular-p path)
     (delete-file path)))
 
-;;init-loader
+;; init-loader
 (when (equal emacs-major-version 24)
   (require 'init-loader)
   (init-loader-load (concat user-emacs-directory "site-start.d/")))

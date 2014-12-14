@@ -50,7 +50,7 @@ FILENAME defaults to `buffer-file-name'."
   (goto-char (point-min))
   (let ((f (file-name-nondirectory (buffer-file-name)))
         (f-noext (file-name-base)))
-    (insert (format ";;; %s --- %s\n" f f))
+    (insert (format ";;; %s --- %s -*- lexical-binding: t; coding: utf-8 -*-\n" f f))
     (insert (format ";; Author: %s\n" user-full-name))
     (insert ";; Version: \n")
     (insert ";; Package-Requires: ()\n")
@@ -550,6 +550,24 @@ Example:
         ;; snake case to camel case
         (delete-region s e)
         (insert str))))))
+
+(defun my-swap-windows ()
+  "If you have 2 windows, it swaps them."
+  (interactive)
+  (cond ((/= (count-windows) 2)
+         (message "You need exactly 2 windows to do this."))
+        (t
+         (let* ((w1 (first (window-list)))
+                (w2 (second (window-list)))
+                (b1 (window-buffer w1))
+                (b2 (window-buffer w2))
+                (s1 (window-start w1))
+                (s2 (window-start w2)))
+           (set-window-buffer w1 b2)
+           (set-window-buffer w2 b1)
+           (set-window-start w1 s2)
+           (set-window-start w2 s1))))
+  (other-window 1))
 
 (provide 'mylib)
 ;;; mylib.el ends here

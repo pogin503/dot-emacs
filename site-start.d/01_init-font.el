@@ -39,7 +39,7 @@
 
 (if (not run-no-window)
     (when run-darwin
-      (let* ((size 12) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
+      (let* ((size 14) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
              (asciifont "Menlo") ; ASCIIフォント
              (jpfont "Hiragino Kaku Gothic ProN") ; 日本語フォント
              (h (* size 10))
@@ -55,11 +55,12 @@
         (set-fontset-font nil '(#x0370 . #x03FF) fontspec) ; ギリシャ文字
         )
       ;;; フォントサイズの比を設定
-      (dolist (elt '(("^-apple-hiragino.*" . 1.2)
-                     (".*osaka-bold.*" . 1.2)
-                     (".*osaka-medium.*" . 1.2)
+      (dolist (elt '(("^-apple-hiragino.*" . 1.0)
+                     (".*osaka-bold.*" . 1.0)
+                     (".*osaka-medium.*" . 1.0)
                      (".*courier-bold-.*-mac-roman" . 1.0)
                      (".*monaco cy-bold-.*-mac-cyrillic" . 0.9)
                      (".*monaco-bold-.*-mac-roman" . 0.9)))
         (add-to-list 'face-font-rescale-alist elt))))
+
 ;;; 01_init-font.el ends here
