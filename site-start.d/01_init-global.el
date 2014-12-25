@@ -137,7 +137,8 @@
  '(recentf-auto-cleanup 600)
  '(recentf-exclude '(".recentf" "/elpa/" "/elisps/" "^/tmp/" "/\\.git/" "/\\.cask/"
                      "\\.mime-example" "\\.ido.last" "woman_cache.el"
-                     "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$")))
+                     "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$"
+					 "Command attempt to use minibuffer while in minibuffer")))
 
 
 ;; @see http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
@@ -168,12 +169,16 @@
 ;;       `((".*" ,(expand-file-name "~/.emacs.d/.backup") t)
 ;;         ("\#.*" ,(expand-file-name "~/.emacs.d/.backup") t)))
 
-(setq backup-by-copying t)      ;; いつもバックアップファイルを作るようにするかどうか
-(setq version-control nil)      ;; 複数のバックアップを残します。世代。
-(setq kept-new-versions 5)      ;; 新しいものをいくつ残すか
-(setq kept-old-versions 5)      ;; 古いものをいくつ残すか
-(setq delete-old-versions t)    ;; 確認せずに古いものを消す
-(setq vc-make-backup-files nil) ;; バージョン管理下のファイルもバックアップを作る
+(custom-set-variables
+ '(backup-by-copying       nil)   ;; いつもバックアップファイルを作るようにするかどうか
+ '(version-control         nil) ;; 複数のバックアップを残します。世代。
+ '(kept-new-versions       5)   ;; 新しいものをいくつ残すか
+ '(kept-old-versions       5)   ;; 古いものをいくつ残すか
+ '(delete-old-versions     t)   ;; 確認せずに古いものを消す
+ '(vc-make-backup-files    nil) ;; バージョン管理下のファイルもバックアップを作る
+ '(make-backup-files       nil) ;; バックアップファイルを作らないようにする
+ '(delete-auto-save-files  t)   ;; 終了時にオートセーブファイルを消す
+ )
 
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
 
@@ -274,14 +279,30 @@
 
 ;; path
 (req exec-path-from-shell
-    (exec-path-from-shell-initialize)
-    )
+    (exec-path-from-shell-initialize))
 
 ;; rbenv path
 ;; (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:"
 ;;                        (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
 ;; (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims")
 ;;                       (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
+
+;; ------------------------------------------------------------------------
+
+
+;; Cursor-type
+;; Use a bar cursor when mark is active and a region exists.
+(defun my-activate-mark-init ()
+  "Use a bar cursor."
+  (setq cursor-type 'bar))
+
+(add-hook 'activate-mark-hook 'my-activate-mark-init)
+
+(defun my-deactivate-mark-init ()
+  "Use a box cursor."
+  (setq cursor-type 'box))
+
+(add-hook 'deactivate-mark-hook 'my-deactivate-mark-init)
 
 (provide '01_init-global)
 ;;; 01_init-global ends here
