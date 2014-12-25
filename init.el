@@ -74,24 +74,10 @@
 ;; 60
 ;; 90 起動後実行系
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blink-cursor-mode nil)
- '(column-number-mode t)
- '(debug-on-error nil)
- '(display-time-mode nil)
- '(helm-gtags-auto-update t)
- '(helm-gtags-ignore-case t)
- '(helm-gtags-path-style (quote relative))
- '(safe-local-variable-values (quote ((flycheck-mode -1) (auto-revert-mode 1) (org-startup-truncated . t) (org-startup-truncated) (auto-fill-mode -1) (eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook" (add-hook (quote write-contents-functions) (lambda nil (delete-trailing-whitespace) nil)) (require (quote whitespace)) "Sometimes the mode needs to be toggled off and on." (whitespace-mode 0) (whitespace-mode 1)) (whitespace-style face trailing lines-tail) (require-final-newline . t) (ruby-compilation-executable . "ruby") (ruby-compilation-executable . "ruby1.8") (ruby-compilation-executable . "ruby1.9") (ruby-compilation-executable . "rbx") (ruby-compilation-executable . "jruby") (whitespace-line-column . 80) (lexical-binding . t))))
- '(session-use-package t nil (session))
- '(show-paren-mode t)
- '(tool-bar-mode nil)
- '(yas-trigger-key "TAB"))
 
-;;@see http://d.hatena.ne.jp/zqwell-ss/20100620/1277025809
+
+;; Custom path
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file)
 
 ;;; init.el ends here
