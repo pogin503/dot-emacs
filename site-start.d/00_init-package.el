@@ -53,12 +53,12 @@
 	;; (setq org-mobile-directory (concat org-directory "MobileOrg"))
 	;; (setq org-mobile-inbox-for-pull (concat org-directory "flagged.org"))
 
-	(setq org-startup-truncated nil)	   ;; org-mode¤Ç¤ÎÀŞ¤êÊÖ¤·ÀßÄê
-	(setq org-return-follows-link t)	   ;; ¥ê¥ó¥¯¤òreturn¤ÇÄÉ¤¦
+	(setq org-startup-truncated nil)	   ;; org-modeã§ã®æŠ˜ã‚Šè¿”ã—è¨­å®š
+	(setq org-return-follows-link t)	   ;; ãƒªãƒ³ã‚¯ã‚’returnã§è¿½ã†
 
-	(setq org-log-done 'time) ;; DONE¤Î»ş¹ï¤òµ­Ï¿
+	(setq org-log-done 'time) ;; DONEã®æ™‚åˆ»ã‚’è¨˜éŒ²
 
-	;; TODO¾õÂÖ
+	;; TODOçŠ¶æ…‹
 	(setq org-todo-keywords
 		  '((sequence "TODO(t)" "WAIT(w)" "|" "DONE(d)" "SOMEDAY(s)")))
 
@@ -78,7 +78,7 @@
 			))
 
 	;; (defvar org-code-reading-software-name nil)
-	;; ;; ~/memo/code-reading.org ¤Ëµ­Ï¿¤¹¤ë
+	;; ;; ~/memo/code-reading.org ã«è¨˜éŒ²ã™ã‚‹
 	;; (defvar org-code-reading-file "code-reading.org")
 	;; (defun org-code-reading-read-software-name ()
 	;;   (set (make-local-variable 'org-code-reading-software-name)
@@ -222,31 +222,28 @@ If the link is in hidden text, expose it."
   :config
   (volatile-highlights-mode t))
 
+;; ã‚¨ã‚³ãƒ¼ã‚¨ãƒªã‚¢ã«é–¢æ•°ã®å‹ã‚’è¡¨ç¤ºã™ã‚‹ãƒ¢ãƒ¼ãƒ‰ã‚’ã‚ªãƒ³ã«ã™ã‚‹
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+;; haskell-indentationãƒ¢ãƒ¼ãƒ‰ã‚’æœ‰åŠ¹ã«ã™ã‚‹
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (use-package haskell-mode
   :commands (haskell-mode literate-haskell-mode haskell-cabal-mode)
   :interpreter (("runghc" . haskell-mode)
 				("runhaskell" . haskell-mode))
-  :init
-  (progn
-	(add-to-list 'auto-mode-alist '("\\.l?hs$" . haskell-mode))
-	(add-to-list 'auto-mode-alist '("\\.cabal$" . haskell-cabal-mode)))
+  :mode (("\\.l?hs$" . haskell-mode)
+		 ("\\.cabal$" . haskell-cabal-mode)
+		 )
   :config
-  (progn
-	(use-package inf-haskell)
-	(use-package ghc
-	  :config
-	  (progn
-		;; ghc-mod setting
-		(autoload 'ghc-init "ghc" nil t)
-		;; (autoload 'ghc-debug "ghc" nil t)
-		)
+  (use-package inf-haskell)
+  (use-package ghc
+	:config
+	(progn
+	  ;; ghc-mod setting
+	  (autoload 'ghc-init "ghc" nil t)
+	  ;; (autoload 'ghc-debug "ghc" nil t)
 	  ))
-  ;; ¥¨¥³¡¼¥¨¥ê¥¢¤Ë´Ø¿ô¤Î·¿¤òÉ½¼¨¤¹¤ë¥â¡¼¥É¤ò¥ª¥ó¤Ë¤¹¤ë
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-  ;; haskell-indentation¥â¡¼¥É¤òÍ­¸ú¤Ë¤¹¤ë
-  ;; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
-  ;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
   )
 
 (use-package volatile-highlights
@@ -261,6 +258,10 @@ If the link is in hidden text, expose it."
 	(global-set-key (kbd "C-c <up>")    'windmove-up)
 	(global-set-key (kbd "C-c <right>") 'windmove-right)
 	))
+
+(use-package ats-mode
+  :mode ("\\.dats\\'" . ats-mode)
+  :commands (ats-mode))
 
 ;; (use-package helm-apropos)
 

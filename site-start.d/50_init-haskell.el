@@ -78,9 +78,6 @@
     (add-to-list 'exec-path
                  (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
 
-;; ghc-mod setting
-(autoload 'ghc-init "ghc" nil t)
-;; (autoload 'ghc-debug "ghc" nil t)
 
 (defun my-haskell-mode-keybinds ()
   "Set haskell-mode keybindings."
