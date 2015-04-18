@@ -12,10 +12,6 @@
   "Print escpaped s-expression."
   (interactive)
   (mark-defun)
-  ;; (let ((beg (region-beginning)) (end (region-end)))
-  ;;   (if (<= beg end)
-  ;;       (copy-to-register ?r beg end)
-  ;;     (copy-to-register ?r end beg)))
   (copy-to-register ?r (region-beginning) (region-end))
   (insert (format "%S" (substring-no-properties (get-register ?r))))
   )
@@ -183,7 +179,8 @@ FILENAME defaults to `buffer-file-name'."
     (interactive)
     (if (null flycheck-emacs-lisp-load-path)
         (setq-default flycheck-emacs-lisp-load-path load-path)
-      (setq-default flycheck-emacs-lisp-load-path nil))))
+      (setq-default flycheck-emacs-lisp-load-path nil))
+	(revert-buffer)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -371,12 +368,12 @@ FILENAME defaults to `buffer-file-name'."
   (add-to-list 'flex-autopair-pairs '(?\[ . ?\])))
 
 ;; ruby
-(defun ruby-insert-end ()
-  "Insert \"end\" at point and reindent current line."
-  (interactive)
-  (insert "end")
-  (ruby-indent-line t)
-  (end-of-line))
+;; (defun ruby-insert-end ()
+;;   "Insert \"end\" at point and reindent current line."
+;;   (interactive)
+;;   (insert "end")
+;;   (ruby-indent-line t)
+;;   (end-of-line))
 
 
 (defun my-ruby-resolve-warning ()
@@ -410,6 +407,23 @@ FILENAME defaults to `buffer-file-name'."
         (switch-to-buffer (find-file-noselect file))
         ))
     (switch-to-buffer (find-file-noselect file))))
+
+
+(defun my-text-scale-increase ()
+  (interactive)
+  (let ((old-face-attribute (face-attribute 'default :height))
+        new-size)
+    (text-scale-increase 1)
+    (setq new-size (/ (face-attribute 'default :height) 10))
+    (message "+1 %d" new-size)))
+
+(defun my-text-scale-decrease ()
+  (interactive)
+    (let ((old-face-attribute (face-attribute 'default :height))
+          new-size)
+      (text-scale-increase -1)
+      (setq new-size (/ (face-attribute 'default :height) 10))
+      (message "-1 %d" (- (/ old-face-attribute 10) 1))))
 
 (defun my-display-hashtable-data (hashtbl)
   (maphash #'(lambda (key val)
@@ -477,7 +491,7 @@ Example:
   (interactive)
   (let (ret1 len)
     (save-excursion
-      ;; [(keybind : String . function-name : String)]
+      ;; [(keybind :: String . function-name :: String)]
       ;; バッファ中のキーバインド、関数名を取得する
       (setq ret1 (let (result break-flg)
                    (goto-char (point-min))
@@ -568,6 +582,30 @@ Example:
            (set-window-start w1 s2)
            (set-window-start w2 s1))))
   (other-window 1))
+
+;; PATH
+(defun append-path (path)
+  (setenv "PATH" (concat (file-truename path)":" (getenv "PATH")))
+  (setq eshell-path-env (getenv "PATH"))
+  (setq exec-path (split-string (getenv "PATH") ":"))
+  (print exec-path))
+
+;;; Notification center
+(defun notif (title message)
+  (shell-command
+   (concat
+    "echo 'display notification \"'"
+    message
+    "'\" with title \""
+    title
+    "\"' | osascript"))
+  )
+
+(or (fboundp 'with-eval-after-load)
+    (defmacro with-eval-after-load (feature &rest body)
+      (declare (indent 1))
+      `(eval-after-load ,feature
+         '(progn ,@body))))
 
 (provide 'mylib)
 ;;; mylib.el ends here

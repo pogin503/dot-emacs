@@ -31,8 +31,8 @@
           ;;     (symbol . "s")
           ;;     (cache)))
 
-          ;; (defun my-ac-haskell-mode ()
-          ;;   (setq ac-sources '(ac-source-words-in-same-mode-buffers ac-source-dictionary ac-source-ghc-mod)))
+          (defun my-ac-haskell-mode ()
+            (setq ac-sources '(ac-source-words-in-same-mode-buffers ac-source-dictionary ac-source-ghc-mod)))
           ;; (add-hook 'haskell-mode-hook 'my-ac-haskell-mode)
 
           ;; (defun my-haskell-ac-init ()
@@ -40,6 +40,30 @@
           ;;     (auto-complete-mode t)
           ;;     (setq ac-sources '(ac-source-words-in-same-mode-buffers ac-source-dictionary ac-source-ghc-mod))))
           )
+;; エコーエリアに関数の型を表示するモードをオンにする
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+
+(use-package haskell-mode
+  :commands (haskell-mode literate-haskell-mode haskell-cabal-mode)
+  :interpreter (("runghc" . haskell-mode)
+				("runhaskell" . haskell-mode))
+  :mode (("\\.l?hs$" . haskell-mode)
+		 ("\\.cabal$" . haskell-cabal-mode)
+		 )
+  :config
+  (use-package ghc
+	:config
+	(progn
+	  ;; ghc-mod setting
+	  (autoload 'ghc-init "ghc" nil t)
+	  ;; (autoload 'ghc-debug "ghc" nil t)
+	  ))
+  )
+
 
 ;; エコーエリアに関数の型を表示するモードをオンにする
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
@@ -81,23 +105,18 @@
 
 (defun my-haskell-mode-keybinds ()
   "Set haskell-mode keybindings."
-  ;; (define-key haskell-mode-map (kbd "C-M-d") 'anything-ghc-browse-document)
-  ;; (define-key haskell-mode-map (kbd "C-c j") 'anything-hasktags-select)
   )
 
 (defun my-haskell-mode-conf ()
   "Set haskell-mode config."
   (ghc-init)
-  ;; (setq c-basic-offset 2       ;;基本インデント量4
-  ;;       tab-width 4            ;;タブ幅4
-  ;;       indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
-  ;; (make-local-variable 'kill-whole-line)
   (setq kill-whole-line nil)
   (my-ac-haskell-mode)
   (interactive-haskell-mode))
 
 (add-hook 'haskell-mode-hook 'my-haskell-mode-keybinds)
 (add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
+(add-hook 'haskell-mode-hook 'my-key-combo-haskell-conf)
 
 ;; (load "~/.emacs.d/plugins/haskell-site-file.el")
 (setq haskell-program-name "/usr/bin/ghci")

@@ -38,11 +38,11 @@
 ;; | C-x v s | 現在のハンクをインデックスに追加 |
 ;; | C-x v r | 現在のハンクの変更を取り消す |
 
-;; (add-hook 'cperl-mode-hook 'git-gutter-mode)
-;; (add-hook 'js2-mode-hook   'git-gutter-mode)
-;; (add-hook 'php-mode-hook   'git-gutter-mode)
-;; (add-hook 'ruby-mode-hook  'git-gutter-mode)
-;; (add-hook 'emacs-lisp-mode-hook  'git-gutter-mode)
+(add-hook 'cperl-mode-hook 'git-gutter-mode)
+(add-hook 'js2-mode-hook   'git-gutter-mode)
+(add-hook 'php-mode-hook   'git-gutter-mode)
+(add-hook 'ruby-mode-hook  'git-gutter-mode)
+(add-hook 'emacs-lisp-mode-hook  'git-gutter-mode)
 
 (provide '30_init-git-gutter)
 ;;; 30_init-git-gutter ends here

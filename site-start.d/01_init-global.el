@@ -17,7 +17,7 @@
 
 (custom-set-variables
  '(truncate-lines t)                 ;; バッファ画面外文字の切り詰め表示
- '(truncate-partial-width-windows t) ;; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
+ '(truncate-partial-width-windows 0) ;; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
  )
 
 ;; 同一バッファ名にディレクトリ付与
@@ -225,6 +225,7 @@
 ;; automatically save buffers associated with files on buffer switch
 ;; and on windows switch
 (defun my-save-buffer ()
+  (interactive)
   (when (and buffer-file-name
              (file-writable-p buffer-file-name))
     (save-buffer)))

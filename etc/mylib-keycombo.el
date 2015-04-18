@@ -125,6 +125,8 @@
 
   ;; Yesod
   (key-combo-define-local (kbd "{-#") "{-# `!!' #-}")
+  (key-combo-define-local (kbd "<|") "<|>")
+  (key-combo-define-local (kbd "<|>") "<|>")
   )
 
 (defun my-coq-mode-key-combo ()

@@ -3,8 +3,6 @@
 ;;; Code:
 ;(auto-install-from-url "http://tromey.com/elpa/package-install.el")
 
-(require '00_init-macro)
-
 (autoload 'ruby-mode "ruby-mode"
   "Mode for editing ruby source files" t)
 (add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
@@ -37,19 +35,10 @@
 ;; (add-hook 'ruby-mode-hook 'ruby-mode-hook-ruby-block)
 
 (require 'mylib)
-(require 'ruby-end)
-(add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode))
+(eval-after-load 'ruby-end
+  (add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode)))
 
-;; (defun html-setting ()
-;;   (setq c-basic-offset 1
-;;         tab-width 1))
-
-;; (add-hook 'rhtml-mode-hook 'html-setting)
-;; (require 'rhtml-mode)
-;; (require 'rinari)
-;; (add-hook 'rhtml-mode-hook
-;;     (lambda () (rinari-launch)))
-
-(req haml-mode)
+(eval-after-load 'haml-mode
+  (require 'haml-mode))
 
 ;;; 50_init-ruby-mode.el ends here

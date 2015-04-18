@@ -2,9 +2,18 @@
 ;; This program is free software
 ;;; Commentary:
 ;;; Code:
+
 (require '00_init-hanbetu)
-(require '40_init-howm)
 (require '30_init-anything)
+
+(require 'f)
+(when (f-exists? "/usr/local/opt/coq/lib/emacs/site-lisp")
+  (progn
+	(setq auto-mode-alist (cons '("\\.v$" . coq-mode) auto-mode-alist))
+	(autoload 'coq-mode "coq" "Major mode for editing Coq vernacular." t)
+	(custom-set-variables
+	 '(coq-prog-name "/usr/local/bin/coqtop.opt"))
+	))
 
 ;; Windows Setting
 (if run-windows
@@ -23,7 +32,7 @@
 ;;        "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
 ;;   (load-file "/usr/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el"))
 
-(setq coq-prog-name "/usr/local/bin/coqtop.opt")
+
 
 (provide '50_init-coq-mode)
 ;;; 50_init-coq-mode ends here

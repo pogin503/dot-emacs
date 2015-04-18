@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # elcファイルの除去
 # make clean-elc
 

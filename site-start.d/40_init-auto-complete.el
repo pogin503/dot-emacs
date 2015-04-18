@@ -3,42 +3,62 @@
 ;; @see http://cx4a.org/software/auto-complete/manual.ja.html
 ;;; Code:
 
-(require 'auto-complete-config)
+(use-package auto-complete
+  :config
+  (progn
+	(require 'auto-complete-config)
 
-(add-to-list 'ac-dictionary-directories
-             (concat user-emacs-directory "plugins/auto-complete/ac-dict/"))
+	(add-to-list 'ac-dictionary-directories
+				 (concat user-emacs-directory "plugins/auto-complete/ac-dict/"))
+	(setq ac-comphist-file (concat user-emacs-directory  "etc/ac-comphist.dat"))
+	(ac-config-default)
+	;; (global-auto-complete-mode t)
+	(setq-default ac-use-comphist nil)
+	(setq-default ac-auto-start 4
+				  ac-auto-show-menu 1.0)
+	(define-key ac-mode-map (kbd "M-i") 'auto-complete)
+	(define-key ac-mode-map (kbd "H-i") 'auto-complete)
+	(define-key ac-completing-map "\t" 'ac-complete)
 
-(setq ac-comphist-file (concat user-emacs-directory  "etc/ac-comphist.dat"))
+	;; Enterで補完をしないようにする
+	(define-key ac-completing-map "\r" nil)
 
-(ac-config-default)
-;; (global-auto-complete-mode t)
-(setq-default ac-use-comphist nil)
-(setq-default ac-auto-start 4
-              ac-auto-show-menu 1.0)
+	(dolist (hook (list
+				   'html-mode-hook
+				   'sgml-mode-hook
+				   'nxml-mode-hook
+				   ))
+	  (add-hook hook 'auto-complete-mode))
+	(eval-after-load "haskell-mode"
+	  '(defun my-ac-haskell-mode ()
+		 "Set haskell ac-source."
+		 (setq ac-sources '(ac-source-words-in-same-mode-buffers
+							ac-source-dictionary
+							ac-source-ghc-mod))))
+	(add-to-list 'ac-modes 'haskell-mode)
 
-(define-key ac-mode-map (kbd "M-i") 'auto-complete)
-(define-key ac-mode-map (kbd "H-i") 'auto-complete)
-(define-key ac-completing-map "\t" 'ac-complete)
-
-;; Enterで補完をしないようにする
-(define-key ac-completing-map "\r" nil)
-
-(ac-flyspell-workaround)
-
-(dolist (hook (list
-               'html-mode-hook
-               'sgml-mode-hook
-               'nxml-mode-hook
-               ))
-  (add-hook hook 'auto-complete-mode))
-
-;; for eshell
-(add-to-list 'ac-modes 'eshell-mode)
-(ac-define-source pcomplete
-  '((candidates . pcomplete-completions)))
+	;; coq
+	(defun my-ac-coq-mode ()
+	  "Set coq ac-source."
+	  (setq ac-sources '(ac-source-words-in-same-mode-buffers
+						 ac-source-dictionary)))
 
 
-(add-to-list 'ac-modes 'haskell-mode)
+	;; for eshell
+	(use-package eshell
+	  :defer t
+	  :config
+	  (progn
+		(add-to-list 'ac-modes 'eshell-mode)
+		(ac-define-source pcomplete
+		  '((candidates . pcomplete-completions)))
+		(defun my-ac-eshell-mode ()
+		  (setq ac-sources
+				'(ac-source-pcomplete
+				  ac-source-words-in-buffer
+				  ac-source-dictionary)))
+		))
+	))
 
 (provide '40_init-auto-complete)
 ;;; 40_init-auto-complete ends here
