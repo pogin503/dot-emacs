@@ -4,30 +4,11 @@
 ;; デバッグモード
 ;; (setq debug-on-error t)
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(eshell-prompt-face ((t (:foreground "maroon2" :bold nil))) t))
-
-;;install elisp
-(setq load-path (cons "~/.emacs.d/elisp" load-path))
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (when (not (boundp 'user-emacs-directory))
   (setq user-emacs-directory (expand-file-name "~/.emacs.d/")))
 
 (setq load-path (cons (concat user-emacs-directory "elisp/") load-path))
-
-;; auto-install
-(require 'auto-install)
-(setq auto-install-directory (concat user-emacs-directory "elisp/"))
-(auto-install-update-emacswiki-package-name t)
-(auto-install-compatibility-setup)             ; 互換性確保
-
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(when (not (boundp 'user-emacs-directory))
-  (setq user-emacs-directory (expand-file-name "~/.emacs.d/"))
-  )
 
 ;; 引数を load-path へ追加
 ;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
@@ -49,7 +30,6 @@
  "site-start.d"
  "plugins"
  "elisp"
- "elpa"
  "etc"
  "share"
  "private"
