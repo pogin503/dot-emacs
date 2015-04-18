@@ -12,40 +12,14 @@
   (with-current-buffer
       (url-retrieve-synchronously
        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (let (el-get-master-branch)
-      (goto-char (point-max))
-      (eval-print-last-sexp))))
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
 
 ;; レシピ置き場
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get/recipes")
-
-;; 追加のレシピ置き場
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get/local-recipes")
-
+(add-to-list 'el-get-recipe-path  "~/.emacs.d/el-get/el-get-user/recipes")
 (el-get 'sync)
 
 (setq el-get-verbose t)
 
-;; personal recipes
-;; (setq el-get-sources nil)
-
-;; (setq dim-packages
-;;       (append
-;;        ;; list of packages we use straight from official recipes
-;;        '(
-;;          ;; gnus
-;;          ;; bbdb switch-window vkill google-maps pgdevenv-el
-;;          ;; mbsync asciidoc smex geiser xcscope multiple-cursors
-;;          ;; anything descbinds-anything pcmpl-git magit-view-file
-;;          ;; emacs-goodies-el sicp auto-dictionnary keywiz pandoc-mode
-;;          ;; pgsql-linum-format psvn rect-mark crontab-mode icomplete+
-;;          ;; php-mode-improved rainbow-delimiters muse deft dpans2texi
-;;          ;; markdown-mode color-theme-solarized protobuf-mode paredit
-;;          hatena-diary
-;;          )
-
-;;          (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources))))
-
-;; (el-get 'sync dim-packages)
 (provide '00_init-el-get)
 ;;; 00_init-el-get ends here

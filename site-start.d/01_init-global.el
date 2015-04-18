@@ -6,14 +6,8 @@
 (eval-when-compile
   (require '00_init-hanbetu))
 
-;; ------------------------------------------------------------------------
-;; @ frame
-
 ;; フレームタイトルの設定
 (setq frame-title-format (format "%%b - %s-%s" (invocation-name) emacs-version))
-
-;; ------------------------------------------------------------------------
-;; @ buffer
 
 (custom-set-variables
  '(truncate-lines t)                 ;; バッファ画面外文字の切り詰め表示
@@ -22,26 +16,12 @@
 
 ;; 同一バッファ名にディレクトリ付与
 (require 'uniquify)
-;; (setq uniquify-buffer-name-style 'forward)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq uniquify-ignore-buffers-re "*[^*]+*")
 
 
-;; ------------------------------------------------------------------------
-;; @ modeline
-
 (line-number-mode t)   ;;行番号の表示
 (column-number-mode t) ;; 列番号を表示
-
-
-;; 時刻の表示
-;; (require 'time)
-;; (setq display-time-24hr-format t)
-;; (setq display-time-string-forms '(24-hours ":" minutes))
-;; (display-time-mode nil)
-
-;; ------------------------------------------------------------------------
-;; @ default setting
 
 (setq inhibit-startup-message t)            ;; 起動メッセージの非表示
 (setq inhibit-startup-echo-area-message -1) ;; スタートアップ時のエコー領域メッセージの非表示
@@ -50,27 +30,19 @@
 ;; (setq blink-matching-delay 1000)
 (show-paren-mode t)                         ;; 括弧を強調表示する
 
-;; ------------------------------------------------------------------------
-;; @fringe
-
-;;display line-number in buffer
 ;; (global-linum-mode t)
 
 ;;line-number's format
 ;; (set-face-attribute 'linum nil :foreground "red" :height 0.8)
 ;; (setq linum-format "%4d")
 ;; (setq linum-delay t)
-;; (defadvice linum-schedule (around my-linum-schedule () activate)
-;;   (run-with-idle-timer 0.2 nil #'linum-update-current))
 
 ;; ------------------------------------------------------------------------
 ;; @ misc
 
-;; @see http://aikotobaha.blogspot.com/2011/02/emacsdotemacs.html
 (fset 'yes-or-no-p 'y-or-n-p)            ;; yes/no を y/n へ簡略化
 (setq scroll-preserve-screen-position t) ;; スクロール時のカーソル位置の維持
 (file-name-shadow-mode t)                ;; C-x C-f での意味の無いパス表示をグレーアウトする
-
 
 (setq kill-whole-line nil) ;; カーソルが行頭にある場合も行全体を削除
 
@@ -105,23 +77,6 @@
 (cond (window-system
        (setq x-select-enable-clipboard t)))
 
-;;スクロール量について
-;; (setq scroll-conservatively 1)
-;; (setq scroll-step 1)
-;; (setq next-screen-context-lines 1)
-
-;; ;; マウスホイールでスクロール
-;; (defun scroll-down-with-lines ()
-;;   "" (interactive) (scroll-down 5))
-;; (defun scroll-up-with-lines ()
-;;    "" (interactive) (scroll-up 5))
-;; (global-set-key [mouse-4] 'scroll-down-with-lines)
-;; (global-set-key [mouse-5] 'scroll-up-with-lines)
-
-;; マウスで選択するとコピーする Emacs 24 ではデフォルトが nil
-;; (setq mouse-drag-copy-region t)
-
-
 ;; スクロールバーの場所
 ;;(set-scroll-bar-mode 'left) ;; 左側
 (set-scroll-bar-mode nil) ;; なし
@@ -144,30 +99,15 @@
 ;; @see http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
 ;; cua-mode
 (cua-mode t)
-(setq cua-enable-cua-keys nil) ;; 変なキーバインド禁止
+(setq cua-enable-cua-keys nil)
 
-(msb-mode 1) ;; msb-mode
-
-;; ------------------------------------------------------------------------
-;; @backup file
-
-;; (my-define-backup-directory)
+(msb-mode 1)
 
 ;;バックアップファイルの作成場所を変更
 (setq backup-directory-alist         `((".*" . ,temporary-file-directory)))
 
 ;;編集中ファイルのバックアップ先
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-;; ;; 編集中ファイルのバックアップ先
-;; (setq auto-save-file-name-transforms
-;;       `((".*" ,temporary-file-directory t)))
-;; (setq backup-directory-alist
-;;       `((".*" . ,temporary-file-directory)
-;;         ("\#.*" . ,temporary-file-directory)))
-;; (setq auto-save-file-name-transforms
-;;       `((".*" ,(expand-file-name "~/.emacs.d/.backup") t)
-;;         ("\#.*" ,(expand-file-name "~/.emacs.d/.backup") t)))
 
 (custom-set-variables
  '(backup-by-copying       nil)   ;; いつもバックアップファイルを作るようにするかどうか
@@ -188,32 +128,12 @@
 
 (setq-default require-final-newline t) ;; 保存時、バッファ末尾に空行が常にあるように
 (setq next-line-add-newlines t)        ;; バッファの最後でnewlineで新規行を追加するのかどうか
-
-;; ------------------------------------------------------------------------
-;; @ image-library
-(if run-windows
-    (let ((dll-list '((xpm "libxpm.dll")
-                      (png "libpng14.dll")
-                      (jpeg "libjpeg.dll")
-                      (tiff "libtiff3.dll")
-                      (gif "libungif4.dll")
-                      (svg "librsvg-2-2.dll")
-                      (gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
-                      (glib "libglib-2.0-0.dll")
-                      (gobject "libgobject-2.0-0.dll"))))
-      (if (< emacs-major-version 24)
-          (setq image-library-alist dll-list)
-        (setq dynamic-library-alist dll-list)
-        )))
-
-;; @see http://trey-jackson.blogspot.jp/2009/08/emacs-tip-32-completion-ignore-case-and.html
 ;; (setq completion-ignore-case t) ;; 非nilのとき大文字小文字を区別せずに補完する
 
 (setq read-buffer-completion-ignore-case t)    ;; 大文字小文字を無視した補完をするかどうか
 (setq read-file-name-completion-ignore-case t) ;; ミニバッファでファイル名補完の時、大文字・小文字を無視するかどうか
 
-
-(tool-bar-mode -1) ;; tool-barを使うか使わないか
+(tool-bar-mode -1)
 
 ;; menu-barを使うかどうか
 (if run-darwin
@@ -248,14 +168,9 @@
 (savehist-mode 1)          ;; ミニバッファの履歴を保存する
 (setq history-length 3000) ;; ミニバッファの履歴の保存数を増やす
 
-
 ;; 行間
 ;; (setq-default line-spacing 0)
 
-;; (add-hook 'prog-mode-hook 'esk-pretty-lambdas)
-;; (add-hook 'prog-mode-hook 'esk-add-watchwords)
-
-;; (set-default 'indicate-empty-lines nil)
 (set-default 'imenu-auto-rescan t) ;; いつも自動でリスキャンする
 
 ;; @indent setting
@@ -263,13 +178,8 @@
               tab-width 4            ;; タブ幅
               indent-tabs-mode nil)  ;; インデントをタブでするかスペースでするか
 
-;; highlight-cl
-(require 'highlight-cl)
 (add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
 (add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords)
-
-;; open-junk-file
-(require 'open-junk-file)
 
 (defvar dropbox-directory
   (cond
@@ -281,15 +191,6 @@
 ;; path
 (req exec-path-from-shell
     (exec-path-from-shell-initialize))
-
-;; rbenv path
-;; (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:"
-;;                        (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
-;; (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims")
-;;                       (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
-
-;; ------------------------------------------------------------------------
-
 
 ;; Cursor-type
 ;; Use a bar cursor when mark is active and a region exists.
@@ -304,6 +205,11 @@
   (setq cursor-type 'box))
 
 (add-hook 'deactivate-mark-hook 'my-deactivate-mark-init)
+
+(require 'server)
+(unless (server-running-p)
+  ;; (if (< emacs-major-version 23)
+  (server-start))
 
 (provide '01_init-global)
 ;;; 01_init-global ends here

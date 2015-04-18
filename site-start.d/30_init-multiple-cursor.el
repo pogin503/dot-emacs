@@ -2,7 +2,6 @@
 ;; This program is free software
 ;;; Commentary:
 ;;; Code:
-(require 'multiple-cursors)
 
 (global-set-key (kbd "C-c C-S-c") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)

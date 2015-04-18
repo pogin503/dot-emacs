@@ -4,9 +4,6 @@
 
 (require 'mylib)
 
-;; (global-set-key "\M-w" 'clipboard-kill-ring-save)  ; クリップボードにコピー
-;; (global-set-key "\C-w" 'clipboard-kill-region)     ; 切り取ってクリップボードへ
-
 (global-set-key (kbd "C-M-k")
   (lambda ()
     (interactive)
@@ -26,7 +23,6 @@
 ;; ¥の代わりにバックスラッシュを入力する
 (define-key global-map [?¥] [?\\])
 
-;; (global-set-key (kbd "C-h") 'delete-backward-char)
 (keyboard-translate ?\C-h ?\C-?)
 
 (global-set-key (kbd "C-m") 'newline-and-indent)
@@ -37,9 +33,6 @@
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
-;; (global-set-key (kbd "s-RET") 'edit-next-line)
-;; (global-set-key (kbd "s-<RET>") 'edit-next-line)
-;; (global-set-key (kbd "M-o") 'edit-next-line)
 (global-set-key (kbd "M-O") 'my-edit-previous-line)
 (global-set-key (kbd "S-<return>") 'my-edit-next-line)
 (global-set-key (kbd "C-S-<return>") 'my-edit-previous-line)

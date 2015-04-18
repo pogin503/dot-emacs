@@ -170,4 +170,21 @@
 
 (set-east-asian-ambiguous-width 2)
 
+;; ------------------------------------------------------------------------
+;; @ image-library
+(if run-windows
+    (let ((dll-list '((xpm "libxpm.dll")
+                      (png "libpng14.dll")
+                      (jpeg "libjpeg.dll")
+                      (tiff "libtiff3.dll")
+                      (gif "libungif4.dll")
+                      (svg "librsvg-2-2.dll")
+                      (gdk-pixbuf "libgdk_pixbuf-2.0-0.dll")
+                      (glib "libglib-2.0-0.dll")
+                      (gobject "libgobject-2.0-0.dll"))))
+      (if (< emacs-major-version 24)
+          (setq image-library-alist dll-list)
+        (setq dynamic-library-alist dll-list)
+        )))
+
 ;;; meadow-00_encoding.el ends here

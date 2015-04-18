@@ -3,10 +3,6 @@
 ;;; Code:
 
 ;; 背景の透過
-;; (add-to-list 'default-frame-alist '(alpha . (85 20)))
-;; (add-to-list 'default-frame-alist '(alpha . (95 85)))
-;; (add-to-list 'default-frame-alist '(alpha . (100 90)))
-
 (set-frame-parameter nil 'alpha 100)
 
 ;; タブ文字、全角空白、文末の空白の色付け

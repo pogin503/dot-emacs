@@ -6,12 +6,6 @@
 
 (if (not run-no-window)
     (if run-windows
-        ;; (set-face-attribute 'default nil
-        ;;                   :family "Meiryo"
-        ;;                   :height 100
-        ;;                   :weight 'bold
-        ;;                   ;; :weight 'normal
-        ;;                   )
         (progn
           (set-face-attribute 'default nil
                               :family "Ricty"

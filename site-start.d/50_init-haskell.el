@@ -3,10 +3,6 @@
 ;;; Commentary:
 ;;; Code:
 
-;; (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
-;; (add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
-;; (add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
-
 ;; #!/usr/bin/env runghc 用
 (add-to-list 'interpreter-mode-alist '("runghc" . haskell-mode))
 ;; #!/usr/bin/env runhaskell 用
@@ -24,22 +20,10 @@
           (require 'haskell-cabal)
           (require 'inf-haskell)
 
-          ;; https://github.com/m2ym/auto-complete
-          ;; (ac-define-source ghc-mod
-          ;;   '((depends ghc)
-          ;;     (candidates . (ghc-select-completion-symbol))
-          ;;     (symbol . "s")
-          ;;     (cache)))
-
           (defun my-ac-haskell-mode ()
             (setq ac-sources '(ac-source-words-in-same-mode-buffers ac-source-dictionary ac-source-ghc-mod)))
-          ;; (add-hook 'haskell-mode-hook 'my-ac-haskell-mode)
-
-          ;; (defun my-haskell-ac-init ()
-          ;;   (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
-          ;;     (auto-complete-mode t)
-          ;;     (setq ac-sources '(ac-source-words-in-same-mode-buffers ac-source-dictionary ac-source-ghc-mod))))
           )
+
 ;; エコーエリアに関数の型を表示するモードをオンにする
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 
@@ -73,25 +57,6 @@
 ;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 
-;; flycheck-haskellのフック
-;; cabal sandboxに対応している
-;; (eval-after-load 'flycheck
-;;   '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
-
-;; ghc-mod
-;; cabal でインストールしたライブラリのコマンドが格納されている bin ディレクトリへのパスを exec-path に追加する
-
-;; (add-to-list 'exec-path
-;;              (if run-linux
-;;                  (concat (getenv "HOME") "/.cabal/bin")
-;;                (if run-windows-x64
-;;                    "C:/Program Files (x86)/Haskell Platform/2011.4.0.0/lib/extralibs/bin/")
-;;                  "C:/Program Files/Haskell Platform/2011.4.0.0/lib/extralibs/bin/"))
-;; (add-to-list 'exec-path
-;;              (if run-windows-x64
-;;                  "C:/Program Files (x86)/Haskell Platform/2011.4.0.0/bin/"
-;;                "C:/Program Files/Haskell Platform/2011.4.0.0/bin/"))
-
 ;; path setting
 (when (or run-linux run-darwin)
   (add-to-list 'exec-path (expand-file-name "~/.cabal/bin"))
@@ -103,23 +68,15 @@
                  (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
 
 
-(defun my-haskell-mode-keybinds ()
-  "Set haskell-mode keybindings."
-  )
-
 (defun my-haskell-mode-conf ()
   "Set haskell-mode config."
   (ghc-init)
-  (setq kill-whole-line nil)
   (my-ac-haskell-mode)
   (interactive-haskell-mode))
 
 (add-hook 'haskell-mode-hook 'my-haskell-mode-keybinds)
 (add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
 (add-hook 'haskell-mode-hook 'my-key-combo-haskell-conf)
-
-;; (load "~/.emacs.d/plugins/haskell-site-file.el")
-(setq haskell-program-name "/usr/bin/ghci")
 
 ;; Haskell align setting
 (add-to-list 'align-rules-list

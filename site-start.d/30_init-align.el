@@ -36,7 +36,5 @@
                (group . (1 2))
                (modes . '(haskell-mode))))
 
-;; (pop align-rules-list)
-
 (provide '30_init-align)
 ;;; 30_init-align ends here
