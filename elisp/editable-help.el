@@ -1,3 +1,8 @@
+;;; editable-help.el --- editable-help.el
+;;; Commentary:
+;; This program is free software
+;;; Code:
+
 (require 'deferred)
 (require 'url-util)
 
@@ -151,10 +156,13 @@
 	    (with-current-buffer help-buf
 	        (set-buffer-modified-p nil))
 	    (kill-buffer buf)))))))
-  
+
 (defun editable-help-mode-on ()
   (when (string= (buffer-name) "*Help*")
     (editable-help-mode t)))
 
 (add-hook 'help-mode-hook
 	  'editable-help-mode-on)
+
+(provide 'editable-help)
+;;; editable-help.el ends here
