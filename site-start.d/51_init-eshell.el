@@ -34,7 +34,6 @@
   (define-key eshell-mode-map (kbd "<down>") 'eshell-next-matching-input-from-input)
   ;;(define-key eshell-mode-map [(meta return)] 'ns-toggle-fullscreen)
   ;;(define-key eshell-mode-map [(meta return)] (select-toggle-fullscreen))
-  (my-ac-eshell-mode)
   (define-key eshell-mode-map (kbd "C-i") 'auto-complete)
   )
 

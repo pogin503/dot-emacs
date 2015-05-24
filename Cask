@@ -60,6 +60,7 @@
 (depends-on "magit")
 (depends-on "manage-minor-mode")
 (depends-on "markdown-mode")
+(depends-on "migemo")
 (depends-on "multiple-cursors")
 (depends-on "navi2ch")
 (depends-on "neotree")

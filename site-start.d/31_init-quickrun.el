@@ -5,7 +5,7 @@
 (require 'quickrun)
 
 ;; 結果の出力バッファと元のバッファを行き来したい場合は
-;; ':stick t'の設定をするとよいでしょう
+;; ':stick t'の設定をするとよい
 (push '("*quickrun*") popwin:special-display-config)
 
 ;; よく使うならキーを割り当てるとよいでしょう

@@ -11,10 +11,10 @@
              '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
 (package-initialize)
-(require 'cask)
-(let ((bundle (cask-initialize)))
-  (cask-install bundle)
-  (add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode)))
+
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
+(add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode))
 
 (require 'use-package)
 
@@ -63,48 +63,48 @@
 		 ("C-c C-<"  . mc/mark-all-like-this)
 		 ("C-*"  . mc/mark-all-like-this)))
 
-;; (use-package popwin
-;;   :init
-;;   (progn
-;; 	;;dired
-;; 	(push '(dired-mode :position top) popwin:special-display-config)
+(use-package popwin
+  :init
+  (progn
+	;;dired
+	(push '(dired-mode :position top) popwin:special-display-config)
 
-;; 	;; Apropos
-;; 	(push '("*slime-apropos*") popwin:special-display-config)
-;; 	;; Macroexpand
-;; 	(push '("*slime-macroexpansion*") popwin:special-display-config)
-;; 	;; Help
-;; 	(push '("*slime-description*") popwin:special-display-config)
-;; 	;; Compilation
-;; 	(push '("*slime-compilation*" :noselect t) popwin:special-display-config)
-;; 	;; Cross-reference
-;; 	(push '("*slime-xref*") popwin:special-display-config)
-;; 	;; Debugger
-;; 	(push '(sldb-mode :stick t) popwin:special-display-config)
-;; 	;; REPL
-;; 	(push '(slime-repl-mode) popwin:special-display-config)
-;; 	;; Connections
-;; 	(push '(slime-connection-list-mode) popwin:special-display-config)
+	;; Apropos
+	(push '("*slime-apropos*") popwin:special-display-config)
+	;; Macroexpand
+	(push '("*slime-macroexpansion*") popwin:special-display-config)
+	;; Help
+	(push '("*slime-description*") popwin:special-display-config)
+	;; Compilation
+	(push '("*slime-compilation*" :noselect t) popwin:special-display-config)
+	;; Cross-reference
+	(push '("*slime-xref*") popwin:special-display-config)
+	;; Debugger
+	(push '(sldb-mode :stick t) popwin:special-display-config)
+	;; REPL
+	(push '(slime-repl-mode) popwin:special-display-config)
+	;; Connections
+	(push '(slime-connection-list-mode) popwin:special-display-config)
 
-;; 	;;@see http://d.hatena.ne.jp/sokutou-metsu/20110205/1296915272
-;; 	(push '(" *auto-async-byte-compile*" :height 14 :position bottom :noselect t) popwin:special-display-config)
-;; 	(push '("*VC-log*" :height 10 :position bottom) popwin:special-display-config)
-;; 	;;Compile-Log
-;; 	(push '("*Compile-Log*" :height 10 :noselect t) popwin:special-display-config)
-;; 	(push '("*Process List*" :stick t) popwin:special-display-config)
-;; 	(push '("*sdic*" :noselect t)  popwin:special-display-config)
-;; 	(push '("*init log*" :stick t) popwin:special-display-config)
-;; 	(push '("\\*magit.*" :stick t :regexp t :height 25) popwin:special-display-config)
-;; 	(push '("COMMIT-EDITMSG" :height 15) popwin:special-display-config)
-;; 	(push '("*compilation*" :regexp t) popwin:special-display-config)
-;; 	(push '("*ert*" :regexp t) popwin:special-display-config)
-;; 	(push '("*Codic Result*" :height 15) popwin:special-display-config))
-;;   :config
-;;   (progn
-;;     (setq popwin:close-popup-window-timer-interval 0.7)
-;; 	(setq display-buffer-function 'popwin:display-buffer)
-;; 	;; (popwin-mode 1)
-;; 	))
+	;;@see http://d.hatena.ne.jp/sokutou-metsu/20110205/1296915272
+	(push '(" *auto-async-byte-compile*" :height 14 :position bottom :noselect t) popwin:special-display-config)
+	(push '("*VC-log*" :height 10 :position bottom) popwin:special-display-config)
+	;;Compile-Log
+	(push '("*Compile-Log*" :height 10 :noselect t) popwin:special-display-config)
+	(push '("*Process List*" :stick t) popwin:special-display-config)
+	(push '("*sdic*" :noselect t)  popwin:special-display-config)
+	(push '("*init log*" :stick t) popwin:special-display-config)
+	(push '("\\*magit.*" :stick t :regexp t :height 25) popwin:special-display-config)
+	(push '("COMMIT-EDITMSG" :height 15) popwin:special-display-config)
+	(push '("*compilation*" :regexp t) popwin:special-display-config)
+	(push '("*ert*" :regexp t) popwin:special-display-config)
+	(push '("*Codic Result*" :height 15) popwin:special-display-config))
+  :config
+  (progn
+    (setq popwin:close-popup-window-timer-interval 0.7)
+	(setq display-buffer-function 'popwin:display-buffer)
+	(popwin-mode 1)
+	))
 
 (use-package volatile-highlights
   :config
