@@ -64,7 +64,7 @@
 		 ("C-*"  . mc/mark-all-like-this)))
 
 (use-package popwin
-  :init
+  :config
   (progn
 	;;dired
 	(push '(dired-mode :position top) popwin:special-display-config)
@@ -98,13 +98,12 @@
 	(push '("COMMIT-EDITMSG" :height 15) popwin:special-display-config)
 	(push '("*compilation*" :regexp t) popwin:special-display-config)
 	(push '("*ert*" :regexp t) popwin:special-display-config)
-	(push '("*Codic Result*" :height 15) popwin:special-display-config))
-  :config
-  (progn
-    (setq popwin:close-popup-window-timer-interval 0.7)
-	(setq display-buffer-function 'popwin:display-buffer)
-	(popwin-mode 1)
-	))
+	(push '("*Codic Result*" :height 15) popwin:special-display-config)
+    )
+  (setq popwin:close-popup-window-timer-interval 0.7)
+  ;; (popwin-mode 1)
+  (setq display-buffer-function 'popwin:display-buffer)
+  )
 
 (use-package volatile-highlights
   :config
