@@ -1,15 +1,4 @@
 #!/bin/sh
-# if [ -n "$TRAVIS" ]; then
-    # Make it look like this is ~/.emacs.d (needed for Emacs 24.3, at least)
-    # ~/repo/dot-emacs/
-    # HOME=~/repo/
-    # export HOME=$PWD/..
-    # PWD => ~/repo/dot-emacs
-    # ../.emacs.d =>
-    # ln -s dot-emacs ../.emacs.d
-    #
-    # ln -s emacs.d ../.emacs.d
-# fi
 
 ${EMACS:=emacs} -nw --batch \
                 --eval '(let ((debug-on-error t)
