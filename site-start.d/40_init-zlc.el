@@ -1,7 +1,4 @@
 ;;; 40_init-zlc.el --- 40_init-zlc.el
-;; Author: Ryo
-;; Version:
-;; Package-Requires: ()
 ;;; Commentary:
 ;; This program is free software
 ;;; Code:

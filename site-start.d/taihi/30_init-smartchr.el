@@ -1,10 +1,5 @@
-;;;; 30_init-smartchr.el ---- smartchr
+;;;; 30_init-smartchr.el ---- init smartchr
 ;; -*- Mode: Emacs-Lisp -*-
-
-;; Copyright (C) pogin
-
-;; Author: pogin
-;; Keywords: tools
 
 ;;; License
 ;;
