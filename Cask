@@ -70,6 +70,7 @@
 (depends-on "palette")
 (depends-on "pallet")
 (depends-on "paredit")
+(depends-on "peep-dired")
 (depends-on "pkg-info")
 (depends-on "popup")
 (depends-on "popwin")

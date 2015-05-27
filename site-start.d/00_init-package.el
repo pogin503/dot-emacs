@@ -122,6 +122,11 @@
   :mode ("\\.dats\\'" . ats-mode)
   :commands (ats-mode))
 
+(use-package peep-dired
+  :config
+  (define-key dired-mode-map "\C-xx" 'peep-dired)
+  (define-key peep-dired-mode-map "\C-xx" 'peep-dired)
+  )
 
 (use-package sudo-ext)
 
