@@ -109,10 +109,6 @@
   :config
   (volatile-highlights-mode t))
 
-(use-package volatile-highlights
-  :config
-  (volatile-highlights-mode t))
-
 (use-package buffer-move
   :config
   (progn
@@ -126,9 +122,11 @@
   :mode ("\\.dats\\'" . ats-mode)
   :commands (ats-mode))
 
-;; (use-package helm-apropos)
 
-;; (require 'mylib)
-;; (my-install-package installing-package-list)
+(use-package sudo-ext)
+
+(use-package zlc
+  :config
+  (zlc-mode 1))
 
 ;;; 00_init-package.el ends here

@@ -3,10 +3,6 @@
 ;;; Commentary:
 ;;; Code:
 
-;;; 30_init-google-translator.el --- for google-translator conf
-
-;;; Code:
-
 (require 'google-translate)
 (require 'google-translate-default-ui)
 (global-set-key "\C-ct" 'google-translate-at-point)
