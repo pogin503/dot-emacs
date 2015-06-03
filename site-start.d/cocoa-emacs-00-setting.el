@@ -3,11 +3,6 @@
 ;; This program is free software
 ;;; Code:
 
-;;; cocoa-emacs.el ---
-;;; Commentary:
-;; This program is free software
-;;; Code:
-
 ;; encoding
 (require 'ucs-normalize)
 (prefer-coding-system 'utf-8)

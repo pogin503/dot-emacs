@@ -14,7 +14,6 @@
  '(helm-gtags-ignore-case t)
  '(helm-gtags-auto-update t))
 
-;; key bindings
 (eval-after-load "helm-gtags"
   '(progn
      (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)

@@ -1,5 +1,4 @@
 ;;; 40_init-projectile.el --- 40_init-projectile.el
-;; Author: pogin
 ;;; Commentary:
 ;; This program is free software
 ;;; Code:

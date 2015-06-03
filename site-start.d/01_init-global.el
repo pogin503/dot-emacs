@@ -206,6 +206,41 @@
 
 (add-hook 'deactivate-mark-hook 'my-deactivate-mark-init)
 
+(require 'align)
+
+;; Align for haskell-mode
+(add-to-list 'align-rules-list
+             `(haskell-right-arrow
+               (regexp . ,(concat "\\(\\s-*\\)->\\(\\s-*\\)"
+                                 "\\([^= \t\n]\\|$\\)"))
+               (group . (1 2))
+               (justify . t)
+               ;; (repeat . t)
+               ;; (tab-stop . nil)
+               (modes . '(haskell-mode))))
+(add-to-list 'align-rules-list
+             `(haskell-left-arrow
+               (regexp . ,(concat "\\(\\s-*\\)<-\\(\\s-*\\)"
+                                 "\\([^= \t\n]\\|$\\)"))
+               (group . (1 2))
+               (justify . t)
+               ;; (repeat . t)
+               ;; (tab-stop . nil)
+               (modes . '(haskell-mode))))
+(add-to-list 'align-rules-list
+             '(haskell-assignment
+               (regexp . "\\(\\s-*\\)=\\(\\s-*\\)[a-zA-Z]")
+               (group . (1 2))
+               (justify . t)
+               (repeat . t)
+               (tab-stop . nil)
+               (modes . '(haskell-mode))))
+(add-to-list 'align-rules-list
+             '(haskell-def-operator
+               (regexp . "[a-zA-z']\\(\\s-*\\)::\\(\\s-*\\)")
+               (group . (1 2))
+               (modes . '(haskell-mode))))
+
 (require 'server)
 (unless (server-running-p)
   ;; (if (< emacs-major-version 23)

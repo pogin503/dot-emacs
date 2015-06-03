@@ -1,10 +1,7 @@
 ;; 50_init-ruby-mode.el --- ruby conf
 ;;; Commentary:
 ;;; Code:
-;(auto-install-from-url "http://tromey.com/elpa/package-install.el")
 
-(autoload 'ruby-mode "ruby-mode"
-  "Mode for editing ruby source files" t)
 (add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
@@ -18,7 +15,6 @@
     (setq ruby-indent-tabs-mode nil)
     ))
 
-(require 'mylib)
 (eval-after-load 'ruby-end
   (add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode)))
 

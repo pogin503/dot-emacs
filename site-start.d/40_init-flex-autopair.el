@@ -2,12 +2,9 @@
 ;; This program is free software
 ;;; Commentary:
 ;;; Code:
+
 (require 'flex-autopair)
 (flex-autopair-mode 1)
-
-(require 'mylib)
-
-(add-hook 'haskell-mode-hook 'my-haskell-hook-function1)
 
 (add-hook 'sh-mode-hook 'my-flex-sh-pair)
 

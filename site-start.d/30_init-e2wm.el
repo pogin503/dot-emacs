@@ -1,12 +1,4 @@
 ;;;  30_init-e2wm.el -- 30_init-e2wm
-;; -*- Mode: Emacs-Lisp -*-
-
-;; Created: Tue Jul 19 03:56:19 2011
-;; Last-Updated: Time-stamp: <2011-07-19 15:29:18 ogin>
-;; URL:
-;; Keywords:
-;; Compatibility:
-;;
 
 ;;; Commentary:
 ;;
@@ -29,10 +21,8 @@
 ;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ;; Floor, Boston, MA 02110-1301, USA.
 ;;
-
-;;
 ;;; Code:
-(require '00_init-macro)
+
 (when (autoload-if-found 'e2wm:start-management "e2wm" nil t)
   (global-set-key (kbd "M-+") 'e2wm:start-management))
 

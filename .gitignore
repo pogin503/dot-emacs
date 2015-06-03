@@ -5,13 +5,13 @@
 \#*\#
 session.*
 *.elc
-
 /.emacs.desktop
 /.emacs.desktop.lock
 auto-save-list
-
+tramp
 # Backup dir
 .backup/
+.\#*
 
 # TAGS
 TAGS
@@ -53,7 +53,7 @@ el-get/
 dir
 
 # cask
-.cask
+.cask/
 *-pkg.el
 
 # eshell files

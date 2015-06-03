@@ -4,38 +4,20 @@
 ;; @see http://ja.green.xrea.jp/emacs/autoinsert-mode
 (require 'autoinsert)
 
-;; (add-hook 'before-save-hook 'time-stamp)
 (add-hook 'find-file-hook 'auto-insert)
 (setq auto-insert-directory  (concat user-emacs-directory "etc/autoinsert"))
 (setq auto-insert-alist
       (nconc '(
-               ;; ("\\.lisp$" . ["template.lisp" my-template])
-;; 		("\\.asd$" . ["template.asd" "template.lisp"
-;; 			      (lambda () (my-template-package
-;; 					  (my-file-body-name
-;; 					   (file-name-nondirectory
-;; 					    (buffer-file-name)))))
-;; 			      my-template])
 	        ("\\.hs" . ["template.hs" my-template])
             ("\\.agda" . ["template.agda" my-template])
 	        ("\\.rb" . ["template.rb" my-template])
-		;; 		("\\.r$" . ["template.r" my-template])
-;; 		("\\.scm" . ["template.scm"
-;; 			     (lambda() (my-template-exec "/usr/local/bin/gosh"))
-;; 			     my-template])
 		("\\.sh$" . ["template.sh"
                      (lambda() (my-template-exec "#!/bin/sh"))
                      my-template])
 		("\\.py$" . ["template.py" my-template])
-;; 			     my-template])
-;; 		("\\.rb$" . ["template.sh"
-;; 			     (lambda() (my-template-exec "/usr/bin/ruby"))
-;; 			     my-template])
 		("\\.c$" . ["template.c" my-template])
 		("\\.cpp$" . ["template.cpp" my-template])
 		("\\.h$"   . ["template.h" my-template])
-;; 		(xml-mode . "xml-insert.xml")
-;;                 (texinfo-mode . "texinfo.texi")
 		)
 	    auto-insert-alist))
 
@@ -44,9 +26,6 @@
     ("%file%" . (lambda()(file-name-nondirectory (buffer-file-name))))
     ("%name%" . user-full-name)
     ("%mail%" . (lambda()(identity user-mail-address)))
-    ;; ("%cyear%" . (lambda()(substring (current-time-string) -4)))
-    ;; ("%license%" . (lambda()(read-from-minibuffer "License: ")))
-    ;; ("%bdesc%" . (lambda()(read-from-minibuffer "Brief dscription: ")))
     ("%file-without-ext%" . (lambda ()
                               (file-name-sans-extension
                                (file-name-nondirectory (buffer-file-name)))))
@@ -60,9 +39,6 @@
 			    (file-name-nondirectory (buffer-file-name))))))
     ))
 
-(eval-when-compile
-  (require 'cl))
-
 (defun my-file-body-name (file-name)
   (substring file-name 0 (position 46 file-name)))
 
@@ -72,7 +48,6 @@
      (replace-string ,arg_replace-string str)))
 
 (defreplace my-template-exec "%exec%")
-;; (defreplace my-template-package "%package%")
 
 (defun my-template ()
   "Templateの挿入."
