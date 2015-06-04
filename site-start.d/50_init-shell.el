@@ -40,5 +40,18 @@
   "Set `ansi-color-for-comint-mode' to t." t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(shell-pop-default-directory "~/")
+ '(shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
+ '(shell-pop-term-shell "/usr/local/bin/zsh")
+ '(shell-pop-universal-key "C-t")
+ '(shell-pop-window-height 30)
+ '(shell-pop-full-span t)
+ '(shell-pop-window-position "bottom"))
+
 (provide '50_init-shell)
 ;;; 50_init-shell ends here

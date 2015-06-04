@@ -84,6 +84,7 @@
 (depends-on "s")
 (depends-on "sequential-command")
 (depends-on "shadchen")
+(depends-on "shell-pop")
 (depends-on "shut-up")
 (depends-on "slamhound")
 (depends-on "smartparens")
