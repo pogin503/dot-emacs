@@ -63,11 +63,7 @@
 		 ("C-c C-<"  . mc/mark-all-like-this)
 		 ("C-*"  . mc/mark-all-like-this)))
 
-<<<<<<< HEAD
-(use-package volatile-highlights
-=======
 (use-package popwin
->>>>>>> d473b217204fead7de6f10a39cb731d1741cd146
   :config
   (progn
 	;;dired
@@ -126,8 +122,6 @@
   :mode ("\\.dats\\'" . ats-mode)
   :commands (ats-mode))
 
-<<<<<<< HEAD
-=======
 (use-package peep-dired
   :config
   (define-key dired-mode-map "\C-xx" 'peep-dired)
@@ -140,5 +134,4 @@
   :config
   (zlc-mode 1))
 
->>>>>>> d473b217204fead7de6f10a39cb731d1741cd146
 ;;; 00_init-package.el ends here
