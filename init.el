@@ -4,11 +4,9 @@
 ;; デバッグモード
 ;; (setq debug-on-error t)
 
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-(when (not (boundp 'user-emacs-directory))
-  (setq user-emacs-directory (expand-file-name "~/.emacs.d/")))
+(add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
 
-(setq load-path (cons (concat user-emacs-directory "elisp/") load-path))
+(setq load-path (cons (concat user-emacs-directory "elisp") load-path))
 
 ;; 引数を load-path へ追加
 ;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で

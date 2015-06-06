@@ -66,12 +66,6 @@
 ;; @see http://d.hatena.ne.jp/fu7mu4/20101027/1288191419
 (setq warning-suppress-types nil)
 
-;; Emacs 設定ディレクトリを設定。Emacs 22以下用
-;; Emacs 23.1 以上では user-emacs-directory 変数が用意されているのでそれを利用
-;; (when load-file-name
-;;   (setq user-emacs-directory (file-name-directory load-file-name)))
-(add-to-list 'load-path user-emacs-directory)
-
 (add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
 
 (cond (window-system
