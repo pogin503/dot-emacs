@@ -8,18 +8,18 @@
 (setq auto-insert-directory  (concat user-emacs-directory "etc/autoinsert"))
 (setq auto-insert-alist
       (nconc '(
-	        ("\\.hs" . ["template.hs" my-template])
-            ("\\.agda" . ["template.agda" my-template])
-	        ("\\.rb" . ["template.rb" my-template])
-		("\\.sh$" . ["template.sh"
-                     (lambda() (my-template-exec "#!/bin/sh"))
-                     my-template])
-		("\\.py$" . ["template.py" my-template])
-		("\\.c$" . ["template.c" my-template])
-		("\\.cpp$" . ["template.cpp" my-template])
-		("\\.h$"   . ["template.h" my-template])
-		)
-	    auto-insert-alist))
+               ("\\.hs" . ["template.hs" my-template])
+               ("\\.agda" . ["template.agda" my-template])
+               ("\\.rb" . ["template.rb" my-template])
+               ("\\.sh$" . ["template.sh"
+                            (lambda() (my-template-exec "#!/bin/sh"))
+                            my-template])
+               ("\\.py$" . ["template.py" my-template])
+               ("\\.c$" . ["template.c" my-template])
+               ("\\.cpp$" . ["template.cpp" my-template])
+               ("\\.h$"   . ["template.h" my-template])
+               )
+             auto-insert-alist))
 
 (defvar template-replacements-alists
   '(
