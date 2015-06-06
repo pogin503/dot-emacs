@@ -29,7 +29,9 @@
   :ensure elisp-slime-nav
   :config
   (progn
-	(dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+	(dolist (hook '(emacs-lisp-mode-hook
+                    ielm-mode-hook
+                    lisp-interaction-mode-hook))
 	  (add-hook hook 'turn-on-elisp-slime-nav-mode))))
 
 (use-package ido
