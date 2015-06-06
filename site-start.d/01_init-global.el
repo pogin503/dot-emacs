@@ -172,9 +172,6 @@
               tab-width 4            ;; タブ幅
               indent-tabs-mode nil)  ;; インデントをタブでするかスペースでするか
 
-(add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
-(add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords)
-
 (defvar dropbox-directory
   (cond
    ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
