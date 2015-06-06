@@ -14,7 +14,7 @@
 (hl-line-mode 1)
 (global-hl-line-mode)
 
-(load-theme 'solarized-dark t)
+(load-theme 'solarized-light t)
 
 (provide '01_init-color)
 ;;; 01_init-color.el ends here
