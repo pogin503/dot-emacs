@@ -32,18 +32,6 @@
 	(dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
 	  (add-hook hook 'turn-on-elisp-slime-nav-mode))))
 
-(use-package org
-  :commands (org-mode org-todo-list org-agenda org-store-link)
-  :bind (("C-c a" . org-agenda)
-		 ("C-c c" . org-capture)
-		 ("C-c l" . org-store-link)
-		 ("C-c b" . org-iswitchb))
-  :config
-  ;; (define-key org-mode-map (kbd "C-m") 'org-return-indent)
-  (use-package org-export-generic)
-  )
-
-
 (use-package ido
   :config
   (progn

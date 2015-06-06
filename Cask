@@ -66,6 +66,7 @@
 (depends-on "neotree")
 (depends-on "noflet")
 (depends-on "open-junk-file")
+(depends-on "org-bullets")
 (depends-on "package-build")
 (depends-on "palette")
 (depends-on "pallet")
