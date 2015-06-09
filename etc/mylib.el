@@ -325,7 +325,7 @@ FILENAME defaults to `buffer-file-name'."
            (defun anything-font-families ()
              "Preconfigured `anything' for font family."
              (interactive)
-             (flet ((anything-mp-highlight-match () nil))
+             (cl-flet ((anything-mp-highlight-match () nil))
                (anything-other-buffer
                 '(anything-c-source-font-families)
                 "*anything font families*")))
@@ -606,6 +606,29 @@ Example:
       (declare (indent 1))
       `(eval-after-load ,feature
          '(progn ,@body))))
+
+(defun describe-encoded-char (pos)
+  "Describe how the character at POS is encoded by various coding-systems.
+If a coding-system can't safely encode the character, display \"?\"."
+  (interactive "d")
+  (let ((coding-systems '(utf-8 utf-16be shift_jis cp932 iso-2022-jp))
+        (label-fmt "%15s: ")
+        (char (char-after pos))
+        (byte-to-hex (lambda (byte) (format "%02x" byte))))
+    (with-help-window (help-buffer)
+      (with-current-buffer standard-output
+        (insert (concat (format label-fmt "character") (char-to-string char) "\n"))
+        (insert (concat (format label-fmt "code point")
+                        (format (if (<= char #xffff) "U+%04x" "U+%06x") char) "\n"))
+        (cl-loop for coding-system in coding-systems
+                 do
+                 (let* ((encoded-bytes (encode-coding-char char coding-system))
+                        (encoded-hex (if encoded-bytes
+                                         (concat "0x"
+                                                 (mapconcat byte-to-hex encoded-bytes ""))
+                                       "?")))
+                   (insert (concat (format label-fmt coding-system) encoded-hex "\n"))))
+        ))))
 
 (provide 'mylib)
 ;;; mylib.el ends here
