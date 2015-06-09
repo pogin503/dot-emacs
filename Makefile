@@ -1,4 +1,4 @@
-EMACS ?= "${HOME}/workspace/emacs/emacs-24.3/nextstep/Emacs.app/Contents/MacOS/Emacs"
+EMACS ?= emacs
 
 BATCH = $(EMACS) --batch -L .
 ELENV = -l tests/run-test
