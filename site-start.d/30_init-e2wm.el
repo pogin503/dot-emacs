@@ -39,9 +39,8 @@
                     (- (:upper-size-ratio 0.7)
                        main sub)))
 
-          (req e2wm-config)
-
-          (req e2wm-vcs)
+          (require 'e2wm-config)
+          (require 'e2wm-vcs)
           )
 
 (provide '30_init-e2wm)
