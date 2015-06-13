@@ -1,6 +1,7 @@
 ;;; 01_init-encoding --- 01_init-encoding
 ;; This program is free software
 ;;; Commentary:
+;; @see http://qiita.com/alpha22jp/items/01e614474e7dbfd78305
 ;;; Code:
 ;; 文字コード
 
@@ -17,14 +18,21 @@
 ;;              ‘(iso-2022-jp . cp50220))
 
 ;; encoding
-(require 'ucs-normalize)
-(prefer-coding-system 'utf-8)
-(setq file-name-coding-system 'utf-8-hfs)
-(setq locale-coding-system 'utf-8-hfs)
+(cond (run-darwin
+       (require 'ucs-normalize)
+       ;; ファイル名の文字コードを指定
+       (setq file-name-coding-system 'utf-8-hfs)
+       (setq locale-coding-system 'utf-8-hfs)
+       (prefer-coding-system 'utf-8))
+      (t
+       (setq file-name-coding-system 'utf-8)
+       (setq locale-coding-system 'utf-8)
+       ))
+
 
 ;; @see https://gist.github.com/sky-y/3264252
 (defun ucs-normalize-NFC-buffer ()
-  "バッフ�＞賢��������劫���≪���眼���障��。"
+  "バッファ全体の濁点分離を直します."
   (interactive)
   (ucs-normalize-NFC-region (point-min) (point-max))
   )

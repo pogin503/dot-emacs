@@ -53,7 +53,8 @@
   (defvar run-windows-x64 nil))
 
 ;; Macの判定
-(defvar run-darwin (equal system-type 'darwin))
+(defvar run-darwin (or (eq system-type 'darwin)
+                       (eq window-system 'ns)))
 
 (defvar run-xemacs (featurep 'xemacs))
 (defvar run-xemacs-no-mule
