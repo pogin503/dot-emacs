@@ -44,10 +44,6 @@
 ;; | C-c c | アジェンダ(行動計画)機能を起動する |
 ;; | C-c b | orgバッファのみ行き来する |
 
-(defun my-set-org-bullets-mode ()
-  (interactive)
-
-  )
 (use-package org-bullets
   :config
   (add-hook 'org-mode-hook '(lambda () (org-bullets-mode 1)))
