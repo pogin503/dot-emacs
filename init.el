@@ -22,7 +22,6 @@
         (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
             (normal-top-level-add-subdirs-to-load-path))))))
 
-;; Emacs Lisp のPathを通す
 (add-to-load-path
  ;; 初期設定ファイル
  "site-start.d"

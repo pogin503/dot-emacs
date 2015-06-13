@@ -5,7 +5,7 @@
 ;;
 ;; Install Agda
 ;;
-;; cabal install agda
+;; cabal update
 ;; cabal install Agda
 ;; agda-mode setup
 ;;

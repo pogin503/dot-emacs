@@ -10,5 +10,6 @@
 (req tabbar
      (tabbar-mode 1)
      )
+
 (provide '40_init-tabbar)
 ;;; 40_init-tabbar ends here
