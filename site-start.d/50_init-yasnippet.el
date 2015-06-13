@@ -5,8 +5,6 @@
 ;;; Code:
 
 (require 'yasnippet)
-(add-to-list 'yas-snippet-dirs
-             (concat user-emacs-directory "etc/snippets"))
 
 (yas-global-mode 1)
 
