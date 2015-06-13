@@ -16,7 +16,7 @@
 (lazyload (howm-menu howm-mode) "howm"
           (require 'howm)
 
-          (setq howm-directory (concat dropbox-directory "/Documents/howm/"))
+          (setq howm-directory (concat dropbox-directory "Documents/howm/"))
 
           (setq howm-menu-lang 'ja)
           ;; (autoload 'howm-menu "howm-mode" "Hitori Otegaru Wiki Modoki" t)

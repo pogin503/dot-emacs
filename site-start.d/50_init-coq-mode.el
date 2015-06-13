@@ -19,9 +19,9 @@
       (add-to-list 'exec-path "C:/Program Files/Coq/bin"))
   ;; run other OS
   (let ((file1 (concat dropbox-directory
-                      "/eworkspace/ProofGeneral-4.2/ProofGeneral-4.2/generic/proof-site.el"))
+                      "eworkspace/ProofGeneral-4.2/ProofGeneral-4.2/generic/proof-site.el"))
         (file2 (concat dropbox-directory
-                 "/eworkspace/ssreflect-1.4/pg-ssr.el")))
+                 "eworkspace/ssreflect-1.4/pg-ssr.el")))
     (if (f-exists? file1)
         (load-file file1)
       (error "Please install ProofGeneral"))

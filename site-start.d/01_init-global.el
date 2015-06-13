@@ -174,8 +174,8 @@
 
 (defvar dropbox-directory
   (cond
-   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox"))
-   (t "~/Dropbox"))
+   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox/"))
+   (t "~/Dropbox/"))
   "Set Dropbox directory."
   )
 
