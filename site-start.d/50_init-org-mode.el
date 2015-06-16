@@ -29,11 +29,21 @@
            "* %?n %Un %i")
           ))
 
+  ;; org-agendaで使うファイル、ディレクトリを設定する。
+  ;; ファイルの場合、指定したファイルのみorg-agendaで読みこむ
+  ;; ディレクトリ名があったら、そのディレクトリの中にある".org"という拡張子がついた
+  ;; すべてのファイルがアジェンダファイルの対象になる。
   (setq org-agenda-files
         (list
          (concat org-directory "work.org")
          (concat org-directory "home.org")
          org-directory))
+
+  ;; TODO状態
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WAIT(w)" "|" "DONE(d)" "SOMEDAY(s)")))
+  ;; DONEの時刻を記録
+  (setq org-log-done 'time)
 
   ;; fontify code in code blocks
   (setq org-src-fontify-natively t)
