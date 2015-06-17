@@ -57,4 +57,9 @@
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file)
 
+(when noninteractive
+  (init-loader-show-log)
+  (with-current-buffer (get-buffer "*init log*")
+    (print (buffer-string))))
+
 ;;; init.el ends here
