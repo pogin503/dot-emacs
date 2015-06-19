@@ -47,7 +47,8 @@
 
   ;; fontify code in code blocks
   (setq org-src-fontify-natively t)
-  )
+  (require 'org-drill)
+  (use-package org-drill))
 
 ;; | C-c l | 現在のファイル行のリンクを保存する |
 ;; | C-c a | org-modeでメモをする |
