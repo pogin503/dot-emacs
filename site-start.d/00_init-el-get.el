@@ -16,8 +16,8 @@
     (eval-print-last-sexp)))
 
 (add-to-list 'el-get-recipe-path (locate-user-emacs-file "el-get-user/recipes"))
-(el-get 'sync)
 (el-get-bundle tarao/with-eval-after-load-feature-el)
+(el-get 'sync)
 
 (provide '00_init-el-get)
 ;;; 00_init-el-get ends here
