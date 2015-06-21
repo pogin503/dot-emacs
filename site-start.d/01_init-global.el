@@ -202,5 +202,9 @@
   ;; (if (< emacs-major-version 23)
   (server-start))
 
+;; aliases
+(defalias 'ms 'magit-status)
+(defalias 'rr 'replace-regexp)
+
 (provide '01_init-global)
 ;;; 01_init-global ends here
