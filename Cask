@@ -91,6 +91,7 @@
 (depends-on "shell-pop")
 (depends-on "shut-up")
 (depends-on "slamhound")
+(depends-on "slim-mode")
 (depends-on "smartparens")
 (depends-on "solarized-theme")
 (depends-on "tabbar")
