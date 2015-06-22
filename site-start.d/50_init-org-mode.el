@@ -26,8 +26,7 @@
           ("j" "Journal" entry (file+datetree (concat org-directory "journal.org"))
            "* %?n %Un %in %a")
           ("n" "Note" entry (file+headline (cocat org-directory "notes.org") "Notes")
-           "* %?n %Un %i")
-          ))
+           "* %?n %Un %i")))
 
   ;; org-agendaで使うファイル、ディレクトリを設定する。
   ;; ファイルの場合、指定したファイルのみorg-agendaで読みこむ
@@ -57,8 +56,8 @@
 
 (use-package org-bullets
   :config
-  (add-hook 'org-mode-hook '(lambda () (org-bullets-mode 1)))
-  )
+  (add-hook 'org-mode-hook '(lambda () (org-bullets-mode 1))))
+
 
 (provide '50_init-org-mode)
 ;;; 50_init-org-mode ends here

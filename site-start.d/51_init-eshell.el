@@ -14,12 +14,13 @@
 (require 'em-prompt)
 (require 'pcomplete)
 
-(setq eshell-cmpl-ignore-case t)           ;; 補完時に大文字小文字を区別しない
-(setq eshell-cmpl-cycle-completions nil)   ;; 補完時にサイクルする
-;;(setq eshell-cmpl-cycle-cutoff-length 5) ;;補完候補がこの数値以下だとサイクルせずに候補表示
-(setq eshell-hist-ignoredups nil)          ;; 履歴で重複を無視する
+(setq eshell-cmpl-ignore-case t)           ; 補完時に大文字小文字を区別しない
+(setq eshell-cmpl-cycle-completions nil)   ; 補完時にサイクルする
+;;(setq eshell-cmpl-cycle-cutoff-length 5) ; 補完候補がこの数値以下だとサイクルせずに候補表示
+(setq eshell-hist-ignoredups nil)          ; 履歴で重複を無視する
 
 (defun my-eshell-promp-function ()
+  "プロンプトを設定する."
   (concat "[" (user-login-name) "@" (system-name) " " (eshell/pwd) "]"
           (if (= (user-uid) 0) "\n# " "\n$ ")))
 
