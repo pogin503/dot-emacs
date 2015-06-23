@@ -38,21 +38,40 @@
          (concat org-directory "home.org")
          org-directory))
 
+  ;; アスタリスクはかくす
+  (setq org-hide-leading-stars t)
+
+  ;; 初期状態は見出しを表示
+  (setq org-startup-folded 'content)
+
+  ;; A: 04:00 - 07:00
+  ;; B: 07:00 - 10:00
+  ;; C: 10:00 - 13:00
+  ;; D: 13:00 - 16:00
+  ;; E: 16:00 - 19:00
+  ;; F: 19:00 - 22:00
+  ;; G: 22:00 - 25:00
+
+  (setq org-highest-priority ?A)
+  (setq org-lowest-priority ?G)
+  (setq org-default-priority ?G)
+
   ;; TODO状態
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAIT(w)" "|" "DONE(d)" "SOMEDAY(s)")))
+
   ;; DONEの時刻を記録
   (setq org-log-done 'time)
 
   ;; fontify code in code blocks
-  (setq org-src-fontify-natively t)
-  (require 'org-drill)
-  (use-package org-drill))
+  (setq org-src-fontify-natively t))
 
 ;; | C-c l | 現在のファイル行のリンクを保存する |
 ;; | C-c a | org-modeでメモをする |
 ;; | C-c c | アジェンダ(行動計画)機能を起動する |
 ;; | C-c b | orgバッファのみ行き来する |
+
+(use-package org-drill)
 
 (use-package org-bullets
   :config
