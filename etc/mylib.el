@@ -537,7 +537,7 @@ Example:
               (buffer-string)))))
 
 ;; @see http://d.hatena.ne.jp/IMAKADO/20091209/1260323922
-(defun ik:decamelize (string)
+(defun my-decamelize (string)
   "Convert from CamelCaseString to camel_case_string."
   (let ((case-fold-search nil))
     (downcase
@@ -547,7 +547,7 @@ Example:
        "\\([a-z\\d]\\)\\([A-Z]\\)" "\\1_\\2"
        string)))))
 
-(defun ik:camerize<->decamelize-on-region (s e)
+(defun my-camerize<->decamelize-on-region (s e)
   "リージョン中の文字列をキャメルケース⇔スネークケースで切り替える。"
   (interactive "r")
   (let ((buf-str (buffer-substring-no-properties s e))
