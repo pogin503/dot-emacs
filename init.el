@@ -4,6 +4,11 @@
 ;; デバッグモード
 ;; (setq debug-on-error t)
 
+;; emacs -l init.el のように起動されるとload-file-nameにinit.elのパスが入るので
+(when load-file-name
+  ;; 設定ファイルの基準となるディレクトリを読み込んだinit.elのあるディレクトリへ変更する
+  (setq user-emacs-directory (file-name-directory load-file-name)))
+
 (add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
 
 (setq load-path (cons (concat user-emacs-directory "elisp") load-path))
