@@ -1,11 +1,3 @@
-;;; ats2-mode.el --- ats2-mode.el -*- lexical-binding: t; coding: utf-8 -*-
-;; Author: Ryo
-;; Version:
-;; Package-Requires: ()
-;;; Commentary:
-;; This program is free software
-;;; Code:
-
 ;;; ats2-mode.el --- Major mode to edit ATS2 source code
 
 ;; Copyright (C) 2007  Stefan Monnier
