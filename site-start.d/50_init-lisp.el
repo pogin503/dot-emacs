@@ -15,7 +15,11 @@
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 (add-hook 'emacs-lisp-mode-hook 'my-set-elisp-conf)
 
-(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
+
+(if (and (equal emacs-major-version 24)
+         (> emacs-minor-version 4))
+    (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
+  (define-key read-expression-map (kbd "TAB") 'lisp-completion-at-point))
 
 (defun my-set-lisp-conf ()
   (interactive)
