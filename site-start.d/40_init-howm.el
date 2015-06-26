@@ -35,11 +35,9 @@
           (setq howm-file-name-format "%Y/%m/%Y_%m_%d.howm") ; 1 日 1 ファイル
           (setq howm-keyword-case-fold-search t) ; <<< で大文字小文字を区別しない
 
-          ;; リンクを TAB で辿る
-          (eval-after-load "howm-mode"
-            '(progn
-              (define-key howm-mode-map [tab] 'action-lock-goto-next-link)
-              (define-key howm-mode-map [(meta tab)] 'action-lock-goto-previous-link)))
+          (define-key howm-mode-map [tab] 'action-lock-goto-next-link)
+          (define-key howm-mode-map [(meta tab)] 'action-lock-goto-previous-link)
+
           ;; 「最近のメモ」一覧時にタイトル表示
           (setq howm-list-recent-title t)
           ;; 全メモ一覧時にタイトル表示
