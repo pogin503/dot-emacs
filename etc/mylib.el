@@ -13,8 +13,7 @@
   (interactive)
   (mark-defun)
   (copy-to-register ?r (region-beginning) (region-end))
-  (insert (format "%S" (substring-no-properties (get-register ?r))))
-  )
+  (insert (format "%S" (substring-no-properties (get-register ?r)))))
 
 (defun my-print-escaped-string (s e)
   "Print escaped string in region.
@@ -30,8 +29,7 @@
   (let ((current-buf (buffer-file-name)))
     (save-buffer)
     (kill-buffer)
-    (find-file current-buf)
-    ))
+    (find-file current-buf)))
 
 (if (not (fboundp 'file-name-base))
     (defun file-name-base (&optional filename)
@@ -56,8 +54,7 @@ FILENAME defaults to `buffer-file-name'."
     (goto-char (point-max))
     (save-excursion
       (insert (format "\n(provide '%s)\n" f-noext))
-      (insert (format ";;; %s ends here\n" f))
-    )))
+      (insert (format ";;; %s ends here\n" f)))))
 
 (defun my-set-dev-env ()
   "For develop setting."
@@ -105,8 +102,7 @@ FILENAME defaults to `buffer-file-name'."
 (defun remove-dquote (str)
   "Remove double quotes in `STR'."
   (cl-loop for i from 1 to (- (length str) 2)
-                    concat (char-to-string (aref str i))
-                    ))
+                    concat (char-to-string (aref str i))))
 
 (defun toggle-trancate-partial-width-windows ()
   (interactive)
@@ -152,7 +148,6 @@ FILENAME defaults to `buffer-file-name'."
       (package-refresh-contents)
       (dolist (pkg not-installed)
         (package-install pkg))))
-  (message "done")
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -168,6 +163,7 @@ FILENAME defaults to `buffer-file-name'."
               (setq ac-sources '(ac-source-words-in-same-mode-buffers
                                  ac-source-dictionary
                                  ac-source-ghc-mod)))))
+  (message "done"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; flycheck
@@ -230,13 +226,6 @@ FILENAME defaults to `buffer-file-name'."
         (make-directory dir-name user-emacs-directory))
     (add-to-list 'backup-directory-alist
                  `(".*" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
-
-(defun esk-pretty-lambdas ()
-  (font-lock-add-keywords
-   nil `(("(?\\(lambda\\>\\)"
-          (0 (progn (compose-region (match-beginning 1) (match-end 1)
-                                    ,(make-char 'greek-iso8859-7 107))
-                   nil))))))
 
 ;; TODO
 (defun esk-add-watchwords ()
@@ -312,8 +301,7 @@ FILENAME defaults to `buffer-file-name'."
       (byte-compile-file (concat user-emacs-directory "init.el")))
   (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
   (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
-  (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0)
-  )
+  (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -474,8 +462,7 @@ row> 3
              (insert ";; ")
              (cl-loop for j from 1 to 2 do
                       (insert "|  ")
-                      finally (insert "|\n"))
-             )))
+                      finally (insert "|\n")))))
 
 (defun my-insert-buffer-keybinds-table ()
   "バッファ中の設定されているキーバインドを表を作る.
