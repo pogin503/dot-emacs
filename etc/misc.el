@@ -23,5 +23,17 @@
 (fset 'hankaku-region #'japanese-hankaku-region)
 (fset 'zenkaku-region #'japanese-zenkaku-region)
 
+(defun my-pp-for-translate ()
+  (interactive)
+  (save-excursion (replace-regexp "\\([a-zA-Z]\\)
+" "\\1 " nil (region-beginning) (region-end))))
+
+(defun my-pp-for-translate-quote ()
+  (interactive)
+  (save-excursion (replace-regexp "^> " "" nil (region-beginning) (region-end))
+                  (replace-regexp "\\([a-zA-Z]\\)
+" "\\1 " nil (region-beginning) (region-end))
+                  (goto-char (region-beginning))
+                  (insert "> ")))
 
 ;;; misc.el ends here
