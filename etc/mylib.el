@@ -110,14 +110,6 @@ FILENAME defaults to `buffer-file-name'."
       (setq truncate-partial-width-windows nil)
     (setq truncate-partial-width-windows t)))
 
-(defun my-toggle-truncate-lines ()
-  "折り返し表示をトグル動作します."
-  (interactive)
-  (if truncate-lines
-      (setq truncate-lines nil)
-    (setq truncate-lines t))
-  (recenter))
-
 (defconst my-truncate-t nil)
 (defun my-toggle-truncate-setting ()
   (interactive)
@@ -127,16 +119,12 @@ FILENAME defaults to `buffer-file-name'."
         (setq truncate-lines t)
         (setq my-truncate-t t)
         (recenter)
-        (message "Set truncate-lines t")
-        )
-    (progn
-      (setq truncate-partial-width-windows nil)
-      (setq truncate-lines nil)
-      (setq my-truncate-t nil)
-      (recenter)
-      (message "Set truncate-lines nil")
-      )
-  ))
+        (message "Set truncate-lines t"))
+    (setq truncate-partial-width-windows nil)
+    (setq truncate-lines nil)
+    (setq my-truncate-t nil)
+    (recenter)
+    (message "Set truncate-lines nil")))
 
 ;; package
 (defun my-install-package (pkgs)
@@ -148,21 +136,6 @@ FILENAME defaults to `buffer-file-name'."
       (package-refresh-contents)
       (dolist (pkg not-installed)
         (package-install pkg))))
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; haskell
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(lazyload (haskell-mode) "hakskell-mode"
-          (require 'auto-complete)
-          (defun my-haskell-ac-init ()
-            "Set AC-mode source."
-            (when (member (file-name-extension buffer-file-name) '("hs" "lhs"))
-              (auto-complete-mode t)
-              (setq ac-sources '(ac-source-words-in-same-mode-buffers
-                                 ac-source-dictionary
-                                 ac-source-ghc-mod)))))
   (message "done"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -346,23 +319,6 @@ FILENAME defaults to `buffer-file-name'."
                  (candidate)
                  (with-current-buffer anything-current-buffer
                    (insert candidate)))))))
-
-(defun my-haskell-hook-function1 ()
-  "Set haskell flex-autopair setting."
-  (add-to-list 'flex-autopair-pairs '(?\' . ?\')))
-
-(defun my-flex-sh-pair ()
-  "Set shell flex-autopair setting."
-  (add-to-list 'flex-autopair-pairs '(?\[ . ?\])))
-
-;; ruby
-;; (defun ruby-insert-end ()
-;;   "Insert \"end\" at point and reindent current line."
-;;   (interactive)
-;;   (insert "end")
-;;   (ruby-indent-line t)
-;;   (end-of-line))
-
 
 (defun my-ruby-resolve-warning ()
   (interactive)

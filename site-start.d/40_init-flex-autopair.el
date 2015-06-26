@@ -6,6 +6,14 @@
 (require 'flex-autopair)
 (flex-autopair-mode 1)
 
+(defun my-haskell-hook-function1 ()
+  "Set haskell flex-autopair setting."
+  (add-to-list 'flex-autopair-pairs '(?\' . ?\')))
+
+(defun my-flex-sh-pair ()
+  "Set shell flex-autopair setting."
+  (add-to-list 'flex-autopair-pairs '(?\[ . ?\])))
+
 (add-hook 'sh-mode-hook 'my-flex-sh-pair)
 
 (setq flex-autopair-user-conditions-high
