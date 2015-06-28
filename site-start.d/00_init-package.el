@@ -124,4 +124,11 @@
   :config
   (zlc-mode 1))
 
+(use-package open-junk-file)
+
+(use-package anzu
+  :bind  ("M-%" . anzu-query-replace-regexp)
+  :config
+  (global-anzu-mode +1))
+
 ;;; 00_init-package.el ends here
