@@ -202,6 +202,9 @@
   ;; (if (< emacs-major-version 23)
   (server-start))
 
+;; M-x diff でunified diff形式で表示する。
+(setq diff-switches "-u")
+
 ;; aliases
 (defalias 'ms 'magit-status)
 (defalias 'rr 'replace-regexp)
