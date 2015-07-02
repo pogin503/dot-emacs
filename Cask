@@ -54,6 +54,7 @@
 (depends-on "helm-gtags")
 (depends-on "helm-ls-git")
 (depends-on "helm-projectile")
+(depends-on "helm-swoop")
 (depends-on "hexrgb")
 (depends-on "historyf")
 (depends-on "key-combo")

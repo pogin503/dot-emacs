@@ -131,4 +131,11 @@
   :config
   (global-anzu-mode +1))
 
+(use-package helm-swoop
+  :config
+  ;; When doing isearch, hand the word over to helm-swoop
+  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+  ;; From helm-swoop to helm-multi-swoop-all
+  (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop))
+
 ;;; 00_init-package.el ends here
