@@ -6,12 +6,6 @@
 (require 'r-like-example)
 (require 'elisp-examples)
 
-;; (define-key emacs-lisp-mode-map (kbd "s-9") 'ex-example)
-;; (define-key emacs-lisp-mode-map (kbd "M-9") 'ex-example)
-;; (define-key emacs-lisp-mode-map (kbd "s-0") 'ex-insert-current-buffer)
-;; (define-key emacs-lisp-mode-map (kbd "C-c 0") 'ex-add-example)
-;; (define-key emacs-lisp-mode-map (kbd "C-c 9") 'ex-deque-example)
-
 ;; (add-to-list 'popwin:special-display-config '("*example*" :position right :width 45 :stick t))
 (push '("*example*" :position right :width 45 :stick t) popwin:special-display-config)
 

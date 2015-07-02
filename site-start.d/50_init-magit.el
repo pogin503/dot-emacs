@@ -23,11 +23,5 @@
 ;;; Magit のバッファからファイル名を抽出して利用
 ;;;
 
-(add-hook 'magit-mode-hook
-          ;; Magit で有効なキー設定
-          (lambda ()
-            (local-set-key (kbd "@") 'my-magit-select-files)
-            (local-set-key (kbd "`") 'my-magit-clear-selected-files)))
-
 (provide '50_init-magit)
 ;;; 50_init-magit.el ends here
