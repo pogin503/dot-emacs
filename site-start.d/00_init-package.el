@@ -131,4 +131,15 @@
   ;; From helm-swoop to helm-multi-swoop-all
   (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop))
 
+(use-package expand-region
+  :bind ("C-=" er/expand-region))
+
+(use-package pretty-lambdada
+  :config
+  (pretty-lambda-for-modes))
+
+(use-package sequential-command-config
+  :config
+  (sequential-command-setup-keys))
+
 ;;; 00_init-package.el ends here
