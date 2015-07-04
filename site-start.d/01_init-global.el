@@ -19,6 +19,11 @@
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq uniquify-ignore-buffers-re "*[^*]+*")
 
+;; 現在ポイントがある桁を`C-n'や`C-p'等で移動するときに桁の位置を固定して
+;; 移動できるようにする。
+;; C-x C-nで有効
+;; C-u C-x C-nで無効化する
+(put 'set-goal-column 'disabled nil)
 
 (line-number-mode t)   ; 行番号の表示
 (column-number-mode t) ; 列番号を表示

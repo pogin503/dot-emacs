@@ -132,7 +132,7 @@
   (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop))
 
 (use-package expand-region
-  :bind ("C-=" er/expand-region))
+  :bind ("C-=" . er/expand-region))
 
 (use-package pretty-lambdada
   :config
