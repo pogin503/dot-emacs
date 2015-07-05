@@ -42,6 +42,7 @@
    '(ido-use-filename-at-point 'guess)
    '(ido-everywhere t)
    '(ido-use-faces nil)
+   '(ido-save-directory-list-file (locate-user-emacs-file "cache/ido.last"))
    '(ido-ignore-extensions t)))
 
 (use-package multiple-cursors
@@ -49,7 +50,10 @@
 		 ("C->" . mc/mark-next-like-this)
 		 ("C-<" . mc/mark-previous-like-this)
 		 ("C-c C-<"  . mc/mark-all-like-this)
-		 ("C-*"  . mc/mark-all-like-this)))
+		 ("C-*"  . mc/mark-all-like-this))
+  :config
+  (setq mc/list-file (locate-user-emacs-file "cache/.mc-lists.el")))
+
 
 (use-package popwin
   :config

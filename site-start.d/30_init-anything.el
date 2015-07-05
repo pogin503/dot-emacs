@@ -18,6 +18,10 @@
 (helm-descbinds-mode)
 (helm-mode 1)
 
+(custom-set-variables
+  '(helm-M-x-always-save-history t)
+  '(helm-adaptive-history-file (locate-user-emacs-file "cache/helm-adaptive-history")))
+
 (global-set-key (kbd "M-x") 'helm-M-x)
 ;; (global-set-key (kbd "M-x") 'execute-extended-command)
 

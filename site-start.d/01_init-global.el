@@ -92,7 +92,8 @@
  '(recentf-exclude '(".recentf" "/elpa/" "/elisps/" "^/tmp/" "/\\.git/" "/\\.cask/"
                      "\\.mime-example" "\\.ido.last" "woman_cache.el"
                      "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$"
-					 "Command attempt to use minibuffer while in minibuffer")))
+					 "Command attempt to use minibuffer while in minibuffer"))
+ '(recentf-save-file (locate-user-emacs-file "cache/recentf")))
 
 
 ;; @see http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
@@ -213,6 +214,9 @@
 ;; aliases
 (defalias 'ms 'magit-status)
 (defalias 'rr 'replace-regexp)
+
+(custom-set-variables
+ `(url-history-file ,(locate-user-emacs-file "cache/url/history")))
 
 (provide '01_init-global)
 ;;; 01_init-global ends here
