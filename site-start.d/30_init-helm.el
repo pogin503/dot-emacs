@@ -23,6 +23,7 @@
   '(helm-adaptive-history-file (locate-user-emacs-file "cache/helm-adaptive-history")))
 
 (global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-c") 'helm-M-x)
 ;; (global-set-key (kbd "M-x") 'execute-extended-command)
 
 (provide '30_init-anything)

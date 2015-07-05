@@ -52,6 +52,9 @@
 
 (global-set-key (kbd "C-t") 'my-other-window-or-split)
 
+;; for oyayubi shift
+(global-set-key (kbd "M-,") #'(lambda () (interactive) (insert "、")))
+
 ;; | C-t           | 別のウィンドウに移動する。ウィンドウが一つの       |
 ;; |               | 場合はウィンドウを分割する                         |
 ;; | C-x <right>   | 右のウィンドウに移動                               |

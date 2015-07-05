@@ -110,10 +110,10 @@
 ;; キーバインド
 (e2wm:add-keymap
  e2wm:pst-minor-mode-keymap
- '(("<M-left>" . e2wm:dp-code) ; codeへ変更
-   ("<M-right>"  . e2wm:dp-two)  ; twoへ変更
-   ("<M-up>"    . e2wm:dp-doc)  ; docへ変更
-   ("<M-down>"  . e2wm:dp-dashboard) ; dashboardへ変更
+ '(("<M-S-left>" . e2wm:dp-code) ; codeへ変更
+   ("<M-S-right>"  . e2wm:dp-two)  ; twoへ変更
+   ("<M-S-up>"    . e2wm:dp-doc)  ; docへ変更
+   ("<M-S-down>"  . e2wm:dp-dashboard) ; dashboardへ変更
    ("C-."       . e2wm:pst-history-forward-command) ; 履歴を進む
    ("C-,"       . e2wm:pst-history-back-command) ; 履歴をもどる
    ("prefix L"  . ielm)
