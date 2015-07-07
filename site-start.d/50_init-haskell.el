@@ -3,6 +3,18 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'use-package)
+
+;; path setting
+(when (or run-linux run-darwin)
+  (add-to-list 'exec-path (expand-file-name "~/.cabal/bin"))
+  (when run-darwin
+    (add-to-list 'exec-path "~/Library/Haskell/bin")))
+
+(if run-windows
+    (add-to-list 'exec-path
+                 (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
+
 (use-package haskell-mode
   :commands (haskell-mode literate-haskell-mode haskell-cabal-mode)
   :interpreter (("runghc" . haskell-mode)      ; #!/usr/bin/env runghc 用
@@ -22,29 +34,16 @@
     ;; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
     (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
     ;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-    ))
+    ;; エコーエリアに関数の型を表示するモードをオンにする
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+
+    (add-hook 'haskell-mode-hook 'my-haskell-mode-keybinds)
+    (add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
+    (add-hook 'haskell-mode-hook 'my-key-combo-haskell-conf)))
 
 (add-to-list 'auto-mode-alist '("\\.hamlet$" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.lucius$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.julius$" . js2-mode))
-
-;; エコーエリアに関数の型を表示するモードをオンにする
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-
-;; haskell-indentationモードを有効にする
-;; (add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent))
-;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-
-;; path setting
-(when (or run-linux run-darwin)
-  (add-to-list 'exec-path (expand-file-name "~/.cabal/bin"))
-  (when run-darwin
-    (add-to-list 'exec-path "~/Library/Haskell/bin")))
-
-(if run-windows
-    (add-to-list 'exec-path
-                 (concat "C:/Users/" user-login-name "/AppData/Roaming/cabal/bin")))
 
 
 (defun my-haskell-mode-conf ()
@@ -52,10 +51,6 @@
   (ghc-init)
   (my-ac-haskell-mode)
   (interactive-haskell-mode))
-
-(add-hook 'haskell-mode-hook 'my-haskell-mode-keybinds)
-(add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
-(add-hook 'haskell-mode-hook 'my-key-combo-haskell-conf)
 
 ;; Haskell align setting
 (add-to-list 'align-rules-list
