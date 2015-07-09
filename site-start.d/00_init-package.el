@@ -146,4 +146,8 @@
   :config
   (sequential-command-setup-keys))
 
+(use-package haskell-emacs
+  :config
+  (haskell-emacs-init))
+
 ;;; 00_init-package.el ends here
