@@ -21,9 +21,10 @@
        (prefer-coding-system 'utf-8))
       (t
        (setq file-name-coding-system 'utf-8)
-       (setq locale-coding-system 'utf-8)
-       ))
+       (setq locale-coding-system 'utf-8)))
 
+;; git commit時に文字化けしないために設定する
+(setq default-process-coding-system 'utf-8)
 
 ;; @see https://gist.github.com/sky-y/3264252
 (defun ucs-normalize-NFC-buffer ()
@@ -33,6 +34,11 @@
   )
 
 (global-set-key (kbd "C-x RET u") 'ucs-normalize-NFC-buffer)
+
+(add-hook 'server-visit-hook
+          (lambda ()
+            (if (string-match "COMMIT_EDITMSG" buffer-file-name)
+                (set-buffer-file-coding-system 'utf-8))))
 
 (provide '01_init-encoding)
 ;;; 01_init-encoding ends here
