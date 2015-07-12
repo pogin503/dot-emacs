@@ -22,30 +22,26 @@
   (equal system-type 'cygwin))
 
 ;; Emacsenの種類とVerを判別
-(defvar run-emacs20
-  (and (equal emacs-major-version 20)
-       (null (featurep 'xemacs))))
-(defvar run-emacs21
-  (and (equal emacs-major-version 21)
-       (null (featurep 'xemacs))))
 (defvar run-emacs22
   (and (equal emacs-major-version 22)
        (null (featurep 'xemacs)))); OpenSolaris2090.06
+
 (defvar run-emacs23
   (and (equal emacs-major-version 23)
        (null (featurep 'xemacs))))
 
-;; meadowの種類とVerを判別
-(defvar run-meadow (featurep 'meadow))
-(defvar run-meadow1 (and run-meadow run-emacs20))
-(defvar run-meadow2 (and run-meadow run-emacs21))
-(defvar run-meadow3 (and run-meadow run-emacs22))
+(--each '(1 2 3 4 5)
+  ;; Emacsのバージョンの判定結果を設定する
+  (if (and (equal emacs-major-version 24)
+	   (= emacs-minor-version it))
+      (set (intern (concat "run-emacs24-" (number-to-string it))) t)
+    (set (intern (concat "run-emacs24-" (number-to-string it))) nil)))
 
 ;; Windowsの判定
 (defvar run-nt (equal system-type 'windows-nt))
 (defvar run-ms-dos (equal system-type 'ms-dos))
 (defvar run-windows
-  (or run-nt run-cygwin run-ms-dos run-meadow))
+  (or run-nt run-cygwin run-ms-dos))
 
 ;; Windowsの64bit判定
 (if (and run-windows (file-exists-p "C:/Program Files (x86)"))
@@ -55,13 +51,6 @@
 ;; Macの判定
 (defvar run-darwin (or (eq system-type 'darwin)
                        (eq window-system 'ns)))
-
-(defvar run-xemacs (featurep 'xemacs))
-(defvar run-xemacs-no-mule
-  (and run-xemacs (not (featurep 'mule))))
-(defvar run-carbon-emacs (and run-darwin window-system))
-
-(defvar run-no-window (null window-system))
 
 (provide '00_init-hanbetu)
 ;;; 00_init-hanbetu.el ends here
