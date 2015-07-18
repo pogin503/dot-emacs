@@ -48,6 +48,8 @@
 (depends-on "guide-key")
 (depends-on "haml-mode")
 (depends-on "haskell-emacs")
+(depends-on "haskell-emacs-base")
+(depends-on "haskell-emacs-text")
 (depends-on "haskell-mode")
 (depends-on "helm")
 (depends-on "helm-descbinds")
