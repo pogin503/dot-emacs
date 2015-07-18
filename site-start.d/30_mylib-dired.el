@@ -200,7 +200,7 @@ Creates a buffer if necessary."
       ))
 
     ;; @see http://d.hatena.ne.jp/mooz/20091207/p1
-    (defvar dired-various-sort-type
+    (defvar my-dired-various-sort-type
       '(("S" . "size")
         ("X" . "extension")
         ("v" . "version")
