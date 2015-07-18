@@ -15,11 +15,9 @@
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 (add-hook 'emacs-lisp-mode-hook 'my-set-elisp-conf)
 
-
-(if (and (equal emacs-major-version 24)
-         (> emacs-minor-version 4))
+(if (version<= emacs-version "24.4")
     (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
-  (define-key read-expression-map (kbd "TAB") 'lisp-completion-at-point))
+  (define-key read-expression-map (kbd "TAB") 'completion-at-point))
 
 (defun my-set-lisp-conf ()
   (interactive)
@@ -35,16 +33,18 @@
 (setq eldoc-idle-delay 0.21)
 (setq eldoc-echo-area-use-multiline-p t)
 
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(--each '(emacs-lisp-mode-hook
+          lisp-interaction-mode-hook
+          ielm-mode-hook)
+  (add-hook it 'turn-on-eldoc-mode))
 
 ;; paredit
 (require 'paredit)
-(add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-(add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-(add-hook 'lisp-mode-hook 'enable-paredit-mode)
-(add-hook 'ielm-mode-hook 'enable-paredit-mode)
+(--each '(emacs-lisp-mode-hook
+          lisp-interaction-mode-hook
+          ielm-mode-hook
+          lisp-mode-hook)
+  (add-hook it 'enable-paredit-mode))
 
 (define-key paredit-mode-map (kbd "C-j") 'eval-print-last-sexp)
 
@@ -78,8 +78,7 @@
 ;; | M-) |  |
 ;; | M-S | S式や"を分割する |
 ;; | M-J | 分割されたS式などを結合する |
-;; |C-c C-M-l | S式を |
+;; | C-c C-M-l | S式を |
 ;; | M-q | 一つのS式全体を再インデントする |
-
 
 ;;; 50_init-lisp.el ends here
