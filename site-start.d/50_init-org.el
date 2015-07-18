@@ -17,7 +17,7 @@
 		 ("C-c b" . org-iswitchb))
   :config
   (if (boundp 'dropbox-directory)
-      (setq org-directory (concat dropbox-directory "Documents/"))
+      (setq org-directory (concat dropbox-directory "Documents/org/"))
     (setq org-directory "~/Documents/org/"))
 
   (setq org-capture-templates
