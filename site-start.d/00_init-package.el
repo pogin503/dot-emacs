@@ -166,4 +166,44 @@
   (safe-diminish "projectile" 'projectile-mode)
   (safe-diminish "volatile-highlights" 'volatile-highlights-mode))
 
+(use-package smart-compile
+  :init
+  (defconst smart-compile-alist
+  '(("\\.c\\'"          . "gcc -O2 %f -lm -o %n")
+    ("\\.[Cc]+[Pp]*\\'" . "g++ -O2 %f -lm -o %n")
+    ("\\.java\\'"       . "javac %f")
+    ("\\.f90\\'"        . "gfortran %f -o %n")
+    ("\\.[Ff]\\'"       . "gfortran %f -o %n")
+    ("\\.tex\\'"        . (tex-file))
+    ("\\.pl\\'"         . "perl -cw %f")
+    (emacs-lisp-mode    . (emacs-lisp-byte-compile))
+    ("\\.hs\\'"         . "ghc -o %n %f")
+    ) "...")
+  :config
+  (global-set-key "\C-cc" 'smart-compile)
+  (define-key menu-bar-tools-menu [compile] '("Compile..." . smart-compile)))
+
+(use-package quickrun
+  :config
+  ;; 結果の出力バッファと元のバッファを行き来したい場合は
+  ;; ':stick t'の設定をするとよい
+  (push '("*quickrun*") popwin:special-display-config)
+
+  ;; よく使うならキーを割り当てるとよいでしょう
+  (global-set-key (kbd "<f5>") 'quickrun)
+  (global-set-key (kbd "<f6>") 'quickrun-compile-only))
+
+(use-package flycheck
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode))
+
+;;; Projectile
+(use-package projectile
+  :config
+  (projectile-global-mode))
+
+(use-package tabbar
+  :config
+  (tabbar-mode 1))
+
 ;;; 00_init-package.el ends here
