@@ -151,15 +151,14 @@
 (use-package diminish
   :config
   (defmacro safe-diminish (file mode &optional new-name)
-  `(with-eval-after-load ,file
-     (diminish ,mode ,new-name)))
+    `(with-eval-after-load ,file
+       (diminish ,mode ,new-name)))
 
   (safe-diminish "anzu" 'anzu-mode)
   (safe-diminish "auto-complete" 'auto-complete-mode)
   (safe-diminish "eldoc" 'eldoc-mode)
   (safe-diminish "flex-autopair" 'flex-autopair-mode)
   (safe-diminish "git-gutter" 'git-gutter-mode "GG")
-  (safe-diminish "helm" 'helm-mode)
   (safe-diminish "key-combo" 'key-combo-mode)
   (safe-diminish "magit" 'magit-auto-revert-mode)
   (safe-diminish "paredit" 'paredit-mode "()")

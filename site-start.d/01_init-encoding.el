@@ -30,8 +30,7 @@
 (defun ucs-normalize-NFC-buffer ()
   "バッファ全体の濁点分離を直します."
   (interactive)
-  (ucs-normalize-NFC-region (point-min) (point-max))
-  )
+  (ucs-normalize-NFC-region (point-min) (point-max)))
 
 (global-set-key (kbd "C-x RET u") 'ucs-normalize-NFC-buffer)
 

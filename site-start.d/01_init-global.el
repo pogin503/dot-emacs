@@ -24,6 +24,7 @@
 ;; C-x C-nで有効
 ;; C-u C-x C-nで無効化する
 (put 'set-goal-column 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
 
 (line-number-mode t)   ; 行番号の表示
 (column-number-mode t) ; 列番号を表示
@@ -182,8 +183,7 @@
   (cond
    ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox/"))
    (t "~/Dropbox/"))
-  "Set Dropbox directory."
-  )
+  "Set Dropbox directory.")
 
 ;; path
 (req exec-path-from-shell
@@ -214,6 +214,7 @@
 ;; aliases
 (defalias 'ms 'magit-status)
 (defalias 'rr 'replace-regexp)
+(defalias 'rv 'revert-buffer)
 
 (custom-set-variables
  `(url-history-file ,(locate-user-emacs-file "cache/url/history")))
