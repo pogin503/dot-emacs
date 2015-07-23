@@ -4,7 +4,7 @@
 (eval-when-compile
   (require '00_init-hanbetu))
 
-(if (not run-no-window)
+(if window-system
     (if run-windows
         (progn
           (set-face-attribute 'default nil
@@ -31,7 +31,7 @@
         (set-fontset-font nil 'japanese-jisx0208
                           (font-spec :family "Ricty")))))
 
-(if (not run-no-window)
+(if window-system
     (when run-darwin
       (let* ((size 14) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
              (asciifont "Menlo") ; ASCIIフォント
