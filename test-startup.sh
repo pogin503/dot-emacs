@@ -2,6 +2,9 @@
 
 set -e
 
+make clean-config-elc
+# make build
+
 ${EMACS:=emacs} -nw --batch \
                 --eval '(let ((debug-on-error t)
                               (url-show-status nil)
@@ -10,4 +13,5 @@ ${EMACS:=emacs} -nw --batch \
                               (load-path (delq default-directory load-path)))
                            (load-file user-init-file)
                            (run-hooks (quote after-init-hook)))'
-echo "Startup successful"
+
+echo "Test startup successful"

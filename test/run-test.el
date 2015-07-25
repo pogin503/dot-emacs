@@ -47,9 +47,8 @@
  "elisp"
  "plugins"
  "etc"
- "tests")
-
-(require 'run-qmode-test)
+ "test"
+ ".cask")
 
 (provide 'run-test)
 ;;; run-test ends here
