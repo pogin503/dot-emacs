@@ -29,12 +29,7 @@
 				   'nxml-mode-hook
 				   ))
 	  (add-hook hook 'auto-complete-mode))
-	(eval-after-load "haskell-mode"
-	  '(defun my-ac-haskell-mode ()
-		 "Set haskell ac-source."
-		 (setq ac-sources '(ac-source-words-in-same-mode-buffers
-							ac-source-dictionary
-							ac-source-ghc-mod))))
+
 	(add-to-list 'ac-modes 'haskell-mode)
 
 	;; coq
@@ -42,22 +37,6 @@
 	  "Set coq ac-source."
 	  (setq ac-sources '(ac-source-words-in-same-mode-buffers
 						 ac-source-dictionary)))
-
-
-	;; for eshell
-	(use-package eshell
-	  :defer t
-	  :config
-	  (progn
-		(add-to-list 'ac-modes 'eshell-mode)
-		(ac-define-source pcomplete
-		  '((candidates . pcomplete-completions)))
-		(defun my-ac-eshell-mode ()
-		  (setq ac-sources
-				'(ac-source-pcomplete
-				  ac-source-words-in-buffer
-				  ac-source-dictionary)))
-		))
 	))
 
 (provide '40_init-auto-complete)
