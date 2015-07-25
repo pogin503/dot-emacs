@@ -23,20 +23,19 @@
 ;;
 ;;; Code:
 
-(use-package e2wm
-  :bind (("M-+" . e2wm:start-management))
-  :config
-  ;; for 1024x768
-  (setq e2wm:c-code-recipe
-        '(| (:left-max-size 35)
-            (- (:upper-size-ratio 0.7)
-               (- (:upper-size-ratio 0.6)
-                  files imenu)
-               history)
-            (- (:upper-size-ratio 0.7)
-               main sub)))
-  (use-package e2wm-config)
-  (use-package e2wm-vcs))
+;; (use-package e2wm
+;;   :bind (("M-+" . e2wm:start-management))
+;;   :config
+;;   ;; for 1024x768
+;;   (setq e2wm:c-code-recipe
+;;         '(| (:left-max-size 35)
+;;             (- (:upper-size-ratio 0.7)
+;;                (- (:upper-size-ratio 0.6)
+;;                   files imenu)
+;;                history)
+;;             (- (:upper-size-ratio 0.7)
+;;                main sub)))
+;;   (use-package e2wm-config))
 
 (provide '30_init-e2wm)
 ;;; 30_init-e2wm ends here

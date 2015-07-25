@@ -1,4 +1,4 @@
-;;; 30_init-auto-insert.el --- for autoinsert conf
+;;; 30_init-auto-insert.el --- for autoinsert conf  -*- lexical-binding: t; coding: utf-8 -*-
 ;;; Commentary:
 ;;; Code:
 ;; @see http://ja.green.xrea.jp/emacs/autoinsert-mode
@@ -18,7 +18,7 @@
                ("\\.c$" . ["template.c" my-template])
                ("\\.cpp$" . ["template.cpp" my-template])
                ("\\.h$"   . ["template.h" my-template])
-               )
+               ("\\.dats$"   . ["template.dats" my-template]))
              auto-insert-alist))
 
 (defvar template-replacements-alists
@@ -40,7 +40,7 @@
     ))
 
 (defun my-file-body-name (file-name)
-  (substring file-name 0 (position 46 file-name)))
+  (substring file-name 0 (cl-position 46 file-name)))
 
 (defmacro defreplace (name arg_replace-string)
   `(defun ,name (str)
@@ -60,4 +60,5 @@
   (goto-char (point-max))
   (message "done."))
 
-;;; 30_init-auto-insert.el ends here
+(provide '30_init-autoinsert)
+;;; 30_init-autoinsert.el ends here
