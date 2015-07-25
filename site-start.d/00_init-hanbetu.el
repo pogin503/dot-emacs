@@ -30,12 +30,13 @@
   (and (equal emacs-major-version 23)
        (null (featurep 'xemacs))))
 
-(--each '(1 2 3 4 5)
-  ;; Emacsのバージョンの判定結果を設定する
-  (if (and (equal emacs-major-version 24)
-	   (= emacs-minor-version it))
-      (set (intern (concat "run-emacs24-" (number-to-string it))) t)
-    (set (intern (concat "run-emacs24-" (number-to-string it))) nil)))
+(mapc (lambda (x)
+        ;; Emacsのバージョンの判定結果を設定する
+        (if (and (equal emacs-major-version 24)
+                 (= emacs-minor-version x))
+            (set (intern (concat "run-emacs24-" (number-to-string x))) t)
+          (set (intern (concat "run-emacs24-" (number-to-string x))) nil)))
+      '(1 2 3 4 5))
 
 ;; Windowsの判定
 (defvar run-nt (equal system-type 'windows-nt))

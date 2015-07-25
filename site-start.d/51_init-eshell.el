@@ -80,7 +80,7 @@
                        "*anything*"
                        "*anything coplete*"))
         (dir default-directory))
-    (labels
+    (cl-labels
         ((_my-toggle-term (target)
            (if (null (member (buffer-name (cl-second target)) ignore-list))
                (if (equal "*eshell*" (buffer-name (window-buffer)))

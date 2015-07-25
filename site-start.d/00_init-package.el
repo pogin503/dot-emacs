@@ -160,7 +160,6 @@
   (safe-diminish "flex-autopair" 'flex-autopair-mode)
   (safe-diminish "git-gutter" 'git-gutter-mode "GG")
   (safe-diminish "key-combo" 'key-combo-mode)
-  (safe-diminish "magit" 'magit-auto-revert-mode)
   (safe-diminish "paredit" 'paredit-mode "()")
   (safe-diminish "projectile" 'projectile-mode)
   (safe-diminish "volatile-highlights" 'volatile-highlights-mode))

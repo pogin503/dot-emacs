@@ -5,7 +5,7 @@
 
 (use-package r-like-example
   :config
-  (require 'elisp-examples')
+  (require 'elisp-examples)
   (push '("*example*" :position right :width 40 :stick t) popwin:special-display-config)
   (ex-set-keybindings))
 
