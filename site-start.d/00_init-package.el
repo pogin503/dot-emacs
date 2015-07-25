@@ -205,4 +205,6 @@
   :config
   (tabbar-mode 1))
 
+(use-package jazzradio)
+
 ;;; 00_init-package.el ends here
