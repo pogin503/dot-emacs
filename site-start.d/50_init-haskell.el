@@ -38,7 +38,6 @@
 
   (defun my-haskell-mode-conf ()
     "Set haskell-mode config."
-    (my-ac-haskell-mode)
     (interactive-haskell-mode))
 
   (add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
