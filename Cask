@@ -101,6 +101,7 @@
 (depends-on "tabbar")
 (depends-on "use-package")
 (depends-on "volatile-highlights")
+(depends-on "web-mode")
 (depends-on "window-layout")
 (depends-on "wrap-region")
 (depends-on "yaml-mode")
