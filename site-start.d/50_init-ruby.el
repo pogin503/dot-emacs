@@ -1,24 +1,24 @@
-;; 50_init-ruby-mode.el --- ruby conf
+;; 50_init-ruby.el --- ruby conf
 ;;; Commentary:
 ;;; Code:
 
-(add-to-list 'auto-mode-alist '("\\.rb$latex " . ruby-mode))
-(add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+(use-package ruby-mode
+  :mode (("\\.rb$latex " . ruby-mode)
+         ("Capfile$" . ruby-mode)
+         ("Gemfile$" . ruby-mode))
+  :config
+  ;; ruby-block
+  ;; ミニバッファに表示し, かつ, オーバレイする.
+  (setq ruby-block-highlight-toggle t)
+  (setq ruby-indent-level 2)
+  (setq ruby-indent-tabs-mode nil))
 
-(eval-after-load 'ruby-mode
-  (progn
-    ;; ruby-block
-    ;; ミニバッファに表示し, かつ, オーバレイする.
-    (setq ruby-block-highlight-toggle t)
-    (setq ruby-indent-level 2)
-    (setq ruby-indent-tabs-mode nil)
-    ))
-
-(eval-after-load 'ruby-end
+(use-package ruby-end
+  :config
   (add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode)))
 
-(eval-after-load 'haml-mode
-  (require 'haml-mode))
+(use-package haml-move
+  :defer t)
 
-;;; 50_init-ruby-mode.el ends here
+(provide '50_init-ruby)
+;;; 50_init-ruby.el ends here
