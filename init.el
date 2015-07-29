@@ -35,17 +35,24 @@
  "etc"
  "share"
  "private"
- "el-get"
- )
+ "el-get")
 
 (let ((path (concat user-emacs-directory "site-start.d/00_init-macro.elc")))
   (when (file-regular-p path)
     (delete-file path)))
 
+;; Custom path
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file)
+
 ;; init-loader
 (when (equal emacs-major-version 24)
   (require 'init-loader)
-  (init-loader-load (concat user-emacs-directory "site-start.d/")))
+  (init-loader-load (concat user-emacs-directory "site-start.d/"))
+  (when noninteractive
+    (init-loader-show-log)
+    (with-current-buffer (get-buffer "*init log*")
+      (print (buffer-string)))))
 
 ;; 00 一般設定
 ;; 10 起動前実行系
@@ -55,16 +62,5 @@
 ;; 50 メジャーモード
 ;; 60
 ;; 90 起動後実行系
-
-
-
-;; Custom path
-(setq custom-file (concat user-emacs-directory "custom.el"))
-(load custom-file)
-
-(when noninteractive
-  (init-loader-show-log)
-  (with-current-buffer (get-buffer "*init log*")
-    (print (buffer-string))))
 
 ;;; init.el ends here
