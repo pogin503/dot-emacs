@@ -119,5 +119,10 @@
    (replace-regexp "{ " "{" nil (point-min) (point-max))
    (replace-regexp "^[[:space:]]* " "for" nil (point-min) (point-max)))
 
+(autoload 'css-mode "css-mode")
+(setq auto-mode-alist
+      (cons '("\\.css$" . css-mode) auto-mode-alist))
+(setq cssm-indent-function #'cssm-c-style-indenter)
+
 (provide '50_init-html)
 ;;; 50_init-html ends here
