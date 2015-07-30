@@ -164,6 +164,11 @@
 (defadvice windmove-right (before other-window-now activate)
   (my-save-buffer))
 
+(defun save-all ()
+  (interactive)
+  (save-some-buffers t))
+(add-hook 'focus-out-hook 'save-all)
+
 (defalias 'deactivate-advice 'ad-deactivate-all)
 
 (savehist-mode 1)          ; ミニバッファの履歴を保存する
