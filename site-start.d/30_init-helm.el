@@ -18,6 +18,9 @@
 (helm-descbinds-mode)
 (helm-mode 1)
 
+;;; 処理を変更したいコマンドをリストに登録していく
+(add-to-list 'helm-completing-read-handlers-alist '(find-file . nil))
+
 (custom-set-variables
   '(helm-M-x-always-save-history t)
   '(helm-adaptive-history-file (locate-user-emacs-file "cache/helm-adaptive-history")))

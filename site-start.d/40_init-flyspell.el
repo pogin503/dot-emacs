@@ -17,7 +17,8 @@
    (add-hook hook 'my-flyspell-mode-enable))
  '(changelog-mode-hook
    text-mode-hook
-   latex-mode-hook))
+   latex-mode-hook
+   git-commit-mode-hook))
 
 (provide '40_init-flyspell)
 ;;; 40_init-flyspell ends here
