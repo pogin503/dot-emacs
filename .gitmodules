@@ -1,13 +1,3 @@
-[submodule "plugins/multi-web-mode"]
-	path = plugins/multi-web-mode
-	url = git://github.com/fgallina/multi-web-mode.git
-	ignore = dirty
-[submodule "plugins/haskell-mode"]
-	path = plugins/haskell-mode
-	url = git://github.com/haskell/haskell-mode.git
-[submodule "plugins/omm-mode"]
-	path = plugins/omm-mode
-	url = git://github.com/pogin503/omm-mode.git
 [submodule "plugins/r-like-example"]
 	path = plugins/r-like-example
 	url = git@github.com:pogin503/r-like-example.git
