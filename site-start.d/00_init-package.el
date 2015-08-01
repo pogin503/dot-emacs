@@ -193,6 +193,8 @@
 
 (use-package flycheck
   :config
+  (custom-set-variables
+   '(flycheck-emacs-lisp-load-path load-path))
   (add-hook 'after-init-hook #'global-flycheck-mode))
 
 ;;; Projectile
