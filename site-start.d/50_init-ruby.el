@@ -11,7 +11,11 @@
   ;; ミニバッファに表示し, かつ, オーバレイする.
   (setq ruby-block-highlight-toggle t)
   (setq ruby-indent-level 2)
-  (setq ruby-indent-tabs-mode nil))
+  (setq ruby-indent-tabs-mode nil)
+  (custom-set-variables
+   '(ac-modes (append '(enh-ruby-mode inf-ruby-mode) ac-modes))
+   '(inf-ruby-default-implementation "pry")
+   '(inf-ruby-eval-binding "Pry.toplevel_binding")))
 
 (use-package ruby-end
   :config
