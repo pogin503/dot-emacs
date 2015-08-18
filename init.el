@@ -33,8 +33,6 @@
  "plugins"
  "elisp"
  "etc"
- "share"
- "private"
  "el-get")
 
 (let ((path (concat user-emacs-directory "site-start.d/00_init-macro.elc")))
