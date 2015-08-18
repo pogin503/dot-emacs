@@ -144,10 +144,6 @@
   :config
   (sequential-command-setup-keys))
 
-(use-package haskell-emacs
-  :config
-  (haskell-emacs-init))
-
 (use-package diminish
   :config
   (defmacro safe-diminish (file mode &optional new-name)
@@ -207,5 +203,9 @@
   (tabbar-mode 1))
 
 (use-package jazzradio)
+
+(use-package haskell-emacs
+  :config
+  (haskell-emacs-init))
 
 ;;; 00_init-package.el ends here
