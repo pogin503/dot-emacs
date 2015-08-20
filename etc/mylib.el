@@ -573,5 +573,15 @@ If a coding-system can't safely encode the character, display \"?\"."
                    (insert (concat (format label-fmt coding-system) encoded-hex "\n"))))
         ))))
 
+(require 's)
+(defun buffer-lines ()
+  (s-split "\n" (buffer-substring-no-properties (point-min) (point-max))))
+
+(defun words (str)
+  (s-split " " str))
+
+(defun unwords (str)
+  (s-join " " str))
+
 (provide 'mylib)
 ;;; mylib.el ends here
