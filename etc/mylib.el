@@ -16,10 +16,7 @@
   (insert (format "%S" (substring-no-properties (get-register ?r)))))
 
 (defun my-print-escaped-string (s e)
-  "Print escaped string in region.
-
-`S' is (region-beginning)
-`E' is (region-end)"
+  "Print escaped string in region."
   (interactive "r")
   (copy-to-register ?r s e)
   (insert (format "%S" (substring-no-properties (get-register ?r)))))
@@ -166,18 +163,7 @@ FILENAME defaults to `buffer-file-name'."
                           thereis (string-match pattern buffer-file-name)))
          (delete-trailing-whitespace))))
 
-;; ファイル末尾の改行を削除
-;; http://www.emacswiki.org/emacs/DeletingWhitespace
-(defun my-delete-trailing-blank-lines ()
-  "Deletes all blank lines at the end of the file."
-  (interactive)
-  (save-excursion
-    (save-restriction
-      (widen)
-      (goto-char (point-max))
-      (delete-blank-lines))))
-
-;; スクリプトを保存する時、自動的に chmod +x を行うようにする
+; スクリプトを保存する時、自動的に chmod +x を行うようにする
 (defun make-file-executable ()
   "Make the file of this buffer executable, when it is a script source."
   (save-restriction
@@ -248,22 +234,6 @@ FILENAME defaults to `buffer-file-name'."
       (end-of-line))
   (newline-and-indent))
 
-(defun my-forward-match-char (n)
-  "後方の入力した文字の上に移動."
-  (interactive "p")
-  (let ((c (read-char)))
-    (dotimes (i n)
-      (forward-char)
-      (skip-chars-forward (format "^%s" (char-to-string c))))))
-
-(defun my-backward-match-char (n)
-  "前方の入力した文字の上に移動."
-  (interactive "p")
-  (let ((c (read-char)))
-    (dotimes (i n)
-      (skip-chars-backward (format "^%s" (char-to-string c)))
-      (backward-char))))
-
 ;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
 ;; 終了時バイトコンパイル
 (defun my-byte-compile-func ()
@@ -276,8 +246,7 @@ FILENAME defaults to `buffer-file-name'."
   (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
   (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; anything or helm
 
 ;;anything-font-families
@@ -320,6 +289,8 @@ FILENAME defaults to `buffer-file-name'."
                  (with-current-buffer anything-current-buffer
                    (insert candidate)))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun my-ruby-resolve-warning ()
   (interactive)
   (save-excursion
@@ -341,18 +312,6 @@ FILENAME defaults to `buffer-file-name'."
       (replace-regexp "\\(.\\)$" "\\1|")
       )))
 
-(defun nisshi ()
-  (interactive)
-  (let ((file (concat "~/workspace/日誌/"
-                      (format-time-string "%Y-%m-%d.org" (current-time)))))
-    (if (null (f-exists? file))
-      (progn
-        (f-touch file)
-        (switch-to-buffer (find-file-noselect file))
-        ))
-    (switch-to-buffer (find-file-noselect file))))
-
-
 (defun my-text-scale-increase ()
   (interactive)
   (let ((old-face-attribute (face-attribute 'default :height))
@@ -373,32 +332,10 @@ FILENAME defaults to `buffer-file-name'."
   (maphash #'(lambda (key val)
                (insert (format "%s, %s\n" key val))) hashtbl))
 
-(defun my-ex-display-added-symbol ()
-  (interactive)
-  (mapconcat 'indentity
-             (save-excursion
-               (let (result)
-                 (while (null (eobp))
-                   (let ((q (re-search-forward "^(ex-put-example '" nil t))
-                         (str (thing-at-point 'symbol)))
-                     (if q
-                         (push (with-temp-buffer
-                                 (insert str)
-                                 (buffer-substring-no-properties (point-min) (point-max)))
-                               result)
-                       (goto-char (point-max)))))
-
-                 (reverse result))) "\n"))
-
 (defun my-remove-comment ()
   (interactive)
   (replace-regexp " *;;? ?=> ?.+" "" nil (region-beginning) (region-end))
   (replace-regexp "^;;? ?.+" ""  nil (region-beginning) (region-end)))
-
-(defun my-remove-dquote (str)
-  (cl-loop for i from 1 to (- (length str) 2)
-                       ;; collect (char-to-string (aref str i))
-                       concat (char-to-string (aref str i))))
 
 (defun my-hash-exists-p (key table)
   (let ((novalue (make-symbol "<nil>")))
@@ -541,8 +478,7 @@ Example:
     message
     "'\" with title \""
     title
-    "\"' | osascript"))
-  )
+    "\"' | osascript")))
 
 (or (fboundp 'with-eval-after-load)
     (defmacro with-eval-after-load (feature &rest body)
