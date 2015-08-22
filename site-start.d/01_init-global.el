@@ -70,18 +70,9 @@
 
 ;; config warning-suppress-types
 ;; @see http://d.hatena.ne.jp/fu7mu4/20101027/1288191419
-(setq warning-suppress-types nil)
+;; (setq warning-suppress-types nil)
 
 (add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
-
-(cond (window-system
-       (setq x-select-enable-clipboard t)))
-
-;; スクロールバーの場所
-;; (set-scroll-bar-mode 'left) ; 左側
-(set-scroll-bar-mode nil)   ; なし
-;; (set-scroll-bar-mode 'right) ; 右側
-
 
 ;; @recentf-mode
 (require 'recentf)
@@ -141,6 +132,14 @@
     (menu-bar-mode 1)
   (menu-bar-mode -1))
 
+(cond (window-system
+       (setq x-select-enable-clipboard t)))
+
+;; スクロールバーの場所
+;; (set-scroll-bar-mode 'left) ; 左側
+(set-scroll-bar-mode nil)   ; なし
+;; (set-scroll-bar-mode 'right) ; 右側
+
 (auto-fill-mode -1) ; 自動詰め込み(auto-file) モードにするかどうか
 
 ;; automatically save buffers associated with files on buffer switch
@@ -168,8 +167,6 @@
   (interactive)
   (save-some-buffers t))
 (add-hook 'focus-out-hook 'save-all)
-
-(defalias 'deactivate-advice 'ad-deactivate-all)
 
 (savehist-mode 1)          ; ミニバッファの履歴を保存する
 (setq history-length 3000) ; ミニバッファの履歴の保存数を増やす
@@ -220,6 +217,8 @@
 (defalias 'ms 'magit-status)
 (defalias 'rr 'replace-regexp)
 (defalias 'rv 'revert-buffer)
+(defalias 'deactivate-advice 'ad-deactivate-all)
+(defalias 'exit 'save-buffers-kill-emacs)
 
 (custom-set-variables
  `(url-history-file ,(locate-user-emacs-file "cache/url/history")))

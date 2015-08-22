@@ -37,9 +37,6 @@
 (global-set-key (kbd "S-<return>") 'my-edit-next-line)
 (global-set-key (kbd "C-S-<return>") 'my-edit-previous-line)
 
-;; I never use C-x C-c
-(defalias 'exit 'save-buffers-kill-emacs)
-
 (global-set-key (kbd "C-x C-z") 'nil)
 
 (global-set-key (kbd "C-x C-o") 'other-window)

@@ -13,6 +13,9 @@
 
 (global-set-key (kbd "M-]") 'helm-mini)
 (global-set-key (kbd "s-]") 'helm-mini)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-c") 'helm-M-x)
+;; (global-set-key (kbd "M-x") 'execute-extended-command)
 
 (require 'helm-descbinds)
 (helm-descbinds-mode)
@@ -24,10 +27,6 @@
 (custom-set-variables
   '(helm-M-x-always-save-history t)
   '(helm-adaptive-history-file (locate-user-emacs-file "cache/helm-adaptive-history")))
-
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x C-c") 'helm-M-x)
-;; (global-set-key (kbd "M-x") 'execute-extended-command)
 
 (provide '30_init-anything)
 ;;; 30_init-anything.el ends here
