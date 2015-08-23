@@ -12,6 +12,9 @@
   (interactive)
   (show-paren-mode t))
 
+;; .elと.elcの新しい方をロードする
+(setq load-prefer-newer t)
+
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 (add-hook 'emacs-lisp-mode-hook 'my-set-elisp-conf)
 
