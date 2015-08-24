@@ -31,30 +31,33 @@
         (set-fontset-font nil 'japanese-jisx0208
                           (font-spec :family "Ricty")))))
 
-(if window-system
-    (when run-darwin
-      (let* ((size 14) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
-             (asciifont "Menlo") ; ASCIIフォント
-             (jpfont "Hiragino Kaku Gothic ProN") ; 日本語フォント
-             (h (* size 10))
-             (fontspec (font-spec :family asciifont))
-             (jp-fontspec (font-spec :family jpfont)))
-        (set-face-attribute 'default nil :family asciifont :height h)
-        (set-fontset-font nil 'japanese-jisx0213.2004-1 jp-fontspec)
-        (set-fontset-font nil 'japanese-jisx0213-2 jp-fontspec)
-        (set-fontset-font nil 'japanese-jisx0212 jp-fontspec)
-        (set-fontset-font nil 'japanese-jisx0208 jp-fontspec)
-        (set-fontset-font nil 'katakana-jisx0201 jp-fontspec) ; 半角カナ
-        (set-fontset-font nil '(#x0080 . #x024F) fontspec) ; 分音符付きラテン
-        (set-fontset-font nil '(#x0370 . #x03FF) fontspec) ; ギリシャ文字
-        )
-      ;;; フォントサイズの比を設定
-      (dolist (elt '(("^-apple-hiragino.*" . 1.0)
-                     (".*osaka-bold.*" . 1.0)
-                     (".*osaka-medium.*" . 1.0)
-                     (".*courier-bold-.*-mac-roman" . 1.0)
-                     (".*monaco cy-bold-.*-mac-cyrillic" . 0.9)
-                     (".*monaco-bold-.*-mac-roman" . 0.9)))
-        (add-to-list 'face-font-rescale-alist elt))))
+(when (or window-system run-darwin)
+  (set-frame-font "Ricty-20"))
+
+;; (if window-system
+;;     (when run-darwin
+;;       (let* ((size 14) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
+;;              (asciifont "Menlo") ; ASCIIフォント
+;;              (jpfont "Migu 2M") ; 日本語フォント
+;;              (h (* size 10))
+;;              (fontspec (font-spec :family asciifont))
+;;              (jp-fontspec (font-spec :family jpfont)))
+;;         (set-face-attribute 'default nil :family asciifont :height h)
+;;         (set-fontset-font nil 'japanese-jisx0213.2004-1 jp-fontspec)
+;;         (set-fontset-font nil 'japanese-jisx0213-2 jp-fontspec)
+;;         (set-fontset-font nil 'japanese-jisx0212 jp-fontspec)
+;;         (set-fontset-font nil 'japanese-jisx0208 jp-fontspec)
+;;         (set-fontset-font nil 'katakana-jisx0201 jp-fontspec) ; 半角カナ
+;;         (set-fontset-font nil '(#x0080 . #x024F) fontspec) ; 分音符付きラテン
+;;         (set-fontset-font nil '(#x0370 . #x03FF) fontspec) ; ギリシャ文字
+;;         )
+;;       ;;; フォントサイズの比を設定
+;;       (dolist (elt '(("^-apple-hiragino.*" . 1.0)
+;;                      (".*osaka-bold.*" . 1.0)
+;;                      (".*osaka-medium.*" . 1.0)
+;;                      (".*courier-bold-.*-mac-roman" . 1.0)
+;;                      (".*monaco cy-bold-.*-mac-cyrillic" . 0.9)
+;;                      (".*monaco-bold-.*-mac-roman" . 0.9)))
+;;         (add-to-list 'face-font-rescale-alist elt))))
 
 ;;; 01_init-font.el ends here
