@@ -204,6 +204,10 @@
 
 (use-package jazzradio)
 
+(use-package nyan-mode
+  :config
+  (nyan-mode))
+
 (use-package haskell-emacs
   :config
   (haskell-emacs-init))

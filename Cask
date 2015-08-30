@@ -69,6 +69,7 @@
 (depends-on "navi2ch")
 (depends-on "neotree")
 (depends-on "noflet")
+(depends-on "nyan-mode")
 (depends-on "open-junk-file")
 (depends-on "org")
 (depends-on "org-bullets")
