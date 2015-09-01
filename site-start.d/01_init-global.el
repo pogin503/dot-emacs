@@ -223,5 +223,9 @@
 (custom-set-variables
  `(url-history-file ,(locate-user-emacs-file "cache/url/history")))
 
+(setq woman-manpath '("/usr/share/man"
+                      "/usr/local/share/man"
+                      "/usr/local/share/man/ja"))
+
 (provide '01_init-global)
 ;;; 01_init-global ends here
