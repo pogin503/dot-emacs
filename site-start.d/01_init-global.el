@@ -115,8 +115,6 @@
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace-with-exclude-pattern) ; 行末のwhitespaceを削除
-(add-hook 'before-save-hook 'my-delete-trailing-blank-lines)                  ; ファイル末尾の改行を削除
-
 
 (setq-default require-final-newline t) ; 保存時、バッファ末尾に空行が常にあるように
 (setq next-line-add-newlines t)        ; バッファの最後でnewlineで新規行を追加するのかどうか
