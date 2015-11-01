@@ -18,7 +18,6 @@
 (add-to-list 'el-get-recipe-path (locate-user-emacs-file "el-get-user/recipes"))
 (el-get-bundle tarao/with-eval-after-load-feature-el)
 (el-get-bundle syohex/emacs-jazzradio)
-(el-get-bundle dmacro)
 (el-get 'sync)
 
 (provide '00_init-el-get)
