@@ -519,5 +519,10 @@ If a coding-system can't safely encode the character, display \"?\"."
 (defun unwords (str)
   (s-join " " str))
 
+(defun now ()
+  "Insert string for the current time formatted like '22:34'."
+  (interactive)                 ; permit invocation in minibuffer
+  (insert (format-time-string "%H:%M")))
+
 (provide 'mylib)
 ;;; mylib.el ends here
