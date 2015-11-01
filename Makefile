@@ -34,7 +34,7 @@ byte-compile:
 
 clean-config-elc:
 	rm -f init.elc
-	find site-start.d -name "*.elc" | xargs rm
+	find site-start.d -name "*.elc" | xargs --no-run-if-empty rm
 
 clean-elc:
 	rm init.elc
