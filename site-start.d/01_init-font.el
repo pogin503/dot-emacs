@@ -28,8 +28,9 @@
                             :family "Ricty"
                             :height 110
                             :weight 'bold)
-        (set-fontset-font nil 'japanese-jisx0208
-                          (font-spec :family "Ricty")))))
+        (if window-system
+            (set-fontset-font nil 'japanese-jisx0208
+                              (font-spec :family "Ricty"))))))
 
 (when (or window-system run-darwin)
   (set-frame-font "Ricty-20"))

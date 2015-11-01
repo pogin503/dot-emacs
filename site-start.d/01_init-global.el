@@ -131,12 +131,12 @@
   (menu-bar-mode -1))
 
 (cond (window-system
-       (setq x-select-enable-clipboard t)))
-
-;; スクロールバーの場所
-;; (set-scroll-bar-mode 'left) ; 左側
-(set-scroll-bar-mode nil)   ; なし
-;; (set-scroll-bar-mode 'right) ; 右側
+       (setq x-select-enable-clipboard t)
+       ;; スクロールバーの場所
+       ;; (set-scroll-bar-mode 'left) ; 左側
+       (set-scroll-bar-mode nil)   ; なし
+       ;; (set-scroll-bar-mode 'right) ; 右側
+       ))
 
 (auto-fill-mode -1) ; 自動詰め込み(auto-file) モードにするかどうか
 
