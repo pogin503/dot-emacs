@@ -90,7 +90,7 @@
   (push '("*Codic Result*" :height 15) popwin:special-display-config)
   (setq popwin:close-popup-window-timer-interval 0.7)
   ;; (popwin-mode 1)
-  (setq display-buffer-function 'popwin:display-buffer))
+  )
 
 (use-package volatile-highlights
   :config
