@@ -34,7 +34,9 @@ byte-compile:
 
 clean-config-elc:
 	rm -f init.elc
-	find site-start.d -name "*.elc" | xargs --no-run-if-empty rm
+	XARGS_NO_RUN=''
+	if [ `uname` = 'Linux' ]; then XARGS_NO_RUN='--no-run-if-empty'; fi
+	find site-start.d -name "*.elc" | xargs $(XARGS_NO_RUN) rm
 
 clean-elc:
 	rm init.elc
