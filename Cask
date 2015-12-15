@@ -1,4 +1,4 @@
-(source "melpa-stable" "http://melpa-stable.milkbox.net/packages/")
+(source "melpa-stable" "https://melpa-stable.milkbox.net/packages/")
 (source gnu)
 (source melpa)
 (source org)
