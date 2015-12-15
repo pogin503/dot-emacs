@@ -21,6 +21,10 @@
   :config
   (add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode)))
 
+(use-package inf-ruby
+  :config
+  (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode))
+
 (use-package haml-move
   :defer t)
 

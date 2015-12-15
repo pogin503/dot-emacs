@@ -59,6 +59,7 @@
 (depends-on "helm-swoop")
 (depends-on "hexrgb")
 (depends-on "historyf")
+(depends-on "inf-ruby")
 (depends-on "key-combo")
 (depends-on "lispxmp")
 (depends-on "magit")
