@@ -15,7 +15,7 @@
 ;; 既存スニペットを閲覧・編集する
 (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
 
-(define-key yas-minor-mode-map (kbd "C-SPC") 'yas/expand)
+(define-key yas-minor-mode-map (kbd "C-SPC") 'yas-expand)
 (define-key yas-minor-mode-map (kbd "TAB") nil)
 
 ;; | C-x i i | 既存スニペットを挿入する |
