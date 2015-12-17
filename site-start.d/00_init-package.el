@@ -214,5 +214,4 @@
   :config
   (drag-stuff-mode))
 
-(use-package hardcore-mode
 ;;; 00_init-package.el ends here

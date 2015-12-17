@@ -6,7 +6,8 @@
 
 (require '00_init-hanbetu)
 
-(autoload 'magit-status "magit" nil t)
+(use-package magit)
+
 (if run-windows
     (if run-windows-x64
         (progn
@@ -17,9 +18,9 @@
         '(magit-git-executable "C:/Program Files/Git/bin/git.exe")
         (add-to-list 'exec-path "C:/Program Files/Git/bin/git.exe"))))
 
-(custom-set-variables
- ;; '(magit-diff-options '("-w" "-b"))
- '(magit-diff-options '()))
+;; (custom-set-variables
+;;  ;; '(magit-diff-options '("-w" "-b"))
+;;  '(magit-diff-options '()))
 
 ;;;
 ;;; Magit のバッファからファイル名を抽出して利用
