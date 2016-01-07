@@ -209,6 +209,7 @@
   (nyan-mode))
 
 (use-package haskell-emacs)
+;; M-x haskell-emacs-init
 
 (use-package drag-stuff
   :config

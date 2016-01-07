@@ -66,6 +66,3 @@ dir
 # Org-mode
 .org-id-locations
 *_archive
-
-# haskell-emacs
-/haskell-fun
