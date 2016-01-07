@@ -10,23 +10,29 @@
   :init
   (add-hook 'web-mode-hook 'my-web-mode-conf)
   :config
-  ;; 適用する拡張子
-  (add-to-list 'auto-mode-alist '("\\.phtml$"     . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tpl\\.php$" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsp$"       . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.as[cp]x$"   . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
   ;; インデント数
   (defun my-web-mode-conf ()
     "Hooks for Web mode."
+    (setq web-mode-markup-indent-offset 2)
     (custom-set-variables
-     '(web-mode-html-offset   2)
-     '(web-mode-css-offset    2)
+     '(web-mode-asp-offset 2)
+     '(web-mode-code-indent-offset 2)
+     '(web-mode-css-indent-offset 2)
+     '(web-mode-css-offset 2)
+     '(web-mode-enable-auto-expanding t)
+     '(web-mode-html-offset 2)
+     '(web-mode-java-offset 2)
+     '(web-mode-markup-indent-offset 2)
+     '(web-mode-php-offset 2)
      '(web-mode-script-offset 2)
-     '(web-mode-php-offset    2)
-     '(web-mode-java-offset   2)
-     '(web-mode-asp-offset    2))))
+     '(web-mode-sql-indent-offset 2))))
 
 ;; GET-ing an HTTP page
 ;;
@@ -93,7 +99,7 @@
 ;; @see http://lgfang.github.io/emacs/emacs-xml.html
 (use-package hideshow
   :functions (hs-show-block hs-hide-level)
-  :init
+  :config
   (add-hook 'nxml-mode-hook (lambda() (hs-minor-mode 1)))
   (defun lgfang-toggle-level ()
     "mainly to be used in nxml mode"
@@ -119,10 +125,7 @@
    (replace-regexp "{ " "{" nil (point-min) (point-max))
    (replace-regexp "^[[:space:]]* " "for" nil (point-min) (point-max)))
 
-(autoload 'css-mode "css-mode")
-(setq auto-mode-alist
-      (cons '("\\.css$" . css-mode) auto-mode-alist))
-(setq cssm-indent-function #'cssm-c-style-indenter)
+
 
 (provide '50_init-html)
 ;;; 50_init-html ends here

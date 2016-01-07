@@ -3,6 +3,7 @@
 (source melpa)
 (source org)
 
+(depends-on "ac-php")
 (depends-on "ag")
 (depends-on "ansi")
 (depends-on "anzu")
