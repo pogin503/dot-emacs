@@ -542,5 +542,13 @@ If a coding-system can't safely encode the character, display \"?\"."
 ** Step6 作業の段取りを決める
 "))
 
+;; regionの選択中にBackspaceを押すと消せるようにする
+;; @see http://www.fan.gr.jp/~ring/Meadow/meadow.html#ys:backward-delete-region
+(defadvice backward-delete-char-untabify
+  (around ys:backward-delete-region activate)
+  (if (and transient-mark-mode mark-active)
+      (delete-region (region-beginning) (region-end))
+    ad-do-it))
+
 (provide 'mylib)
 ;;; mylib.el ends here
