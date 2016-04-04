@@ -1,3 +1,4 @@
+
 ;;; mylib.el --- mylib
 ;; This program is free software
 ;;; Commentary:
@@ -181,10 +182,10 @@ FILENAME defaults to `buffer-file-name'."
 
 (defun my-define-backup-directory ()
   (let ((dir-name ".backup"))
-    (if (not (file-exists-p (concat user-emacs-directory dir-name)))
+    (if (not (file-exists-p (locate-user-emacs-file dir-name)))
         (make-directory dir-name user-emacs-directory))
     (add-to-list 'backup-directory-alist
-                 `(".*" . ,(expand-file-name (concat user-emacs-directory dir-name))))))
+                 `(".*" . ,(expand-file-name (locate-user-emacs-file dir-name))))))
 
 ;; TODO
 (defun esk-add-watchwords ()
@@ -239,12 +240,12 @@ FILENAME defaults to `buffer-file-name'."
 (defun my-byte-compile-func ()
   "Byte-compile files in particular directory."
   (interactive)
-  (if (file-newer-than-file-p (concat user-emacs-directory "init.el")
-                              (concat user-emacs-directory "init.elc"))
-      (byte-compile-file (concat user-emacs-directory "init.el")))
-  (byte-recompile-directory (concat user-emacs-directory "elisp") 0)
-  (byte-recompile-directory (concat user-emacs-directory "plugins") 0)
-  (byte-recompile-directory (concat user-emacs-directory "site-start.d") 0))
+  (if (file-newer-than-file-p (locate-user-emacs-file "init.el")
+                              (locate-user-emacs-file "init.elc"))
+      (byte-compile-file (locate-user-emacs-file "init.el")))
+  (byte-recompile-directory (locate-user-emacs-file "elisp") 0)
+  (byte-recompile-directory (locate-user-emacs-file "plugins") 0)
+  (byte-recompile-directory (locate-user-emacs-file "site-start.d") 0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; anything or helm
@@ -511,9 +512,11 @@ If a coding-system can't safely encode the character, display \"?\"."
 
 (require 's)
 (defun buffer-lines ()
+  "Get buffer lines."
   (s-split "\n" (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun words (str)
+  "Get string that split by a space."
   (s-split " " str))
 
 (defun unwords (str)
@@ -521,8 +524,23 @@ If a coding-system can't safely encode the character, display \"?\"."
 
 (defun now ()
   "Insert string for the current time formatted like '22:34'."
-  (interactive)                 ; permit invocation in minibuffer
+  (interactive)
   (insert (format-time-string "%H:%M")))
+
+(defun to-str (obj)
+  (format "%s" obj))
+
+(defun my-fundamental-template ()
+  (interactive)
+  (insert (format-time-string "* %Y/%m/%d"))
+  (insert "
+** Step1 仕事のゴールを決める
+** Step2 作業をゴールまでを作業に分割する
+** Step3 作業ごとの時間を見積もる
+** Step4 最も時間のかかる作業を
+** Step5 作業の依存関係を見極める
+** Step6 作業の段取りを決める
+"))
 
 (provide 'mylib)
 ;;; mylib.el ends here

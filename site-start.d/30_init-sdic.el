@@ -5,8 +5,8 @@
 
 (require 'sdic)
 
-(add-to-list 'load-path (concat user-emacs-directory "plugins/sdic/"))
-(add-to-list 'load-path (concat user-emacs-directory "etc/dict/"))
+(add-to-list 'load-path (locate-user-emacs-file "plugins/sdic/"))
+(add-to-list 'load-path (locate-user-emacs-file "etc/dict/"))
 
 ;;; sdic-mode 用の設定
 (autoload 'sdic-describe-word "sdic" "英単語の意味を調べる" t nil)
@@ -20,11 +20,11 @@
 ;; | C-c W | カーソルの位置の英単語の意味を調べる |
 
 (setq sdic-eiwa-dictionary-list
-      '((sdicf-client (concat user-emacs-directory "etc/dict/gene.sdic"))))
+      '((sdicf-client (locate-user-emacs-file "etc/dict/gene.sdic"))))
 
 ;; 和英検索で使用する辞書
 (setq sdic-waei-dictionary-list
-      '((sdicf-client (concat user-emacs-directory "etc/dict/jedict.sdic"))))
+      '((sdicf-client (locate-user-emacs-file "etc/dict/jedict.sdic"))))
 
 ;;文字エンコード
 ;(setq sdic-default-coding-system 'utf-8)
@@ -39,8 +39,8 @@
 (setq sdic-inline-word-at-point-strict t) ; ポイント下に単語がある場合のみマッチする
 
 ;; 辞書ファイルの設定
-(setq sdic-inline-eiwa-dictionary (concat user-emacs-directory "etc/dict/gene.sdic"))
-(setq sdic-inline-waei-dictionary (concat user-emacs-directory "etc/dict/jedict.sdic"))
+(setq sdic-inline-eiwa-dictionary (locate-user-emacs-file "etc/dict/gene.sdic"))
+(setq sdic-inline-waei-dictionary (locate-user-emacs-file "etc/dict/jedict.sdic"))
 
 ;; sdic-inline を有効とするメジャーモードを収めたリスト。
 ;; sdic-inline-enable-modes

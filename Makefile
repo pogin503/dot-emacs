@@ -24,7 +24,7 @@ build-strict:
 	--eval 	'(progn \
 		(message default-directory) \
 		(message (concat default-directory "test/run-test.el")) \
-		(load (concat user-emacs-directory "test/run-test.el")) \
+		(load (locate-user-emacs-file "test/run-test.el")) \
 		(setq byte-compile-error-on-warn t) \
 		(batch-byte-compile))' ~/.emacs.d/site-start.d/*.el
 

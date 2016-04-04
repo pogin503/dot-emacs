@@ -5,7 +5,7 @@
 (require 'autoinsert)
 
 (add-hook 'find-file-hook 'auto-insert)
-(setq auto-insert-directory  (concat user-emacs-directory "etc/autoinsert"))
+(setq auto-insert-directory  (locate-user-emacs-file "etc/autoinsert"))
 (setq auto-insert-alist
       (nconc '(
                ("\\.hs" . ["template.hs" my-template])

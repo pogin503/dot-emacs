@@ -9,9 +9,9 @@
   ;; 設定ファイルの基準となるディレクトリを読み込んだinit.elのあるディレクトリへ変更する
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
-(add-to-list 'load-path (concat user-emacs-directory "el-get/el-get"))
+(add-to-list 'load-path (locate-user-emacs-file "el-get/el-get"))
 
-(setq load-path (cons (concat user-emacs-directory "elisp") load-path))
+(setq load-path (cons (locate-user-emacs-file "elisp") load-path))
 
 ;; 引数を load-path へ追加
 ;; normal-top-level-add-subdirs-to-load-path はディレクトリ中の中で
@@ -22,7 +22,7 @@
 `PATHS' Directorys you want to read recursively."
   (let (path)
     (dolist (path paths paths)
-      (let ((default-directory (expand-file-name (concat user-emacs-directory path))))
+      (let ((default-directory (expand-file-name (locate-user-emacs-file path))))
         (add-to-list 'load-path default-directory)
         (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
             (normal-top-level-add-subdirs-to-load-path))))))
@@ -35,18 +35,18 @@
  "etc"
  "el-get")
 
-(let ((path (concat user-emacs-directory "site-start.d/00_init-macro.elc")))
+(let ((path (locate-user-emacs-file "site-start.d/00_init-macro.elc")))
   (when (file-regular-p path)
     (delete-file path)))
 
 ;; Custom path
-(setq custom-file (concat user-emacs-directory "custom.el"))
+(setq custom-file (locate-user-emacs-file "custom.el"))
 (load custom-file)
 
 ;; init-loader
 (when (equal emacs-major-version 24)
   (require 'init-loader)
-  (init-loader-load (concat user-emacs-directory "site-start.d/"))
+  (init-loader-load (locate-user-emacs-file "site-start.d/"))
   (when noninteractive
     (init-loader-show-log)
     (with-current-buffer (get-buffer "*init log*")

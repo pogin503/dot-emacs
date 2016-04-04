@@ -8,7 +8,7 @@
   (require 'auto-complete)
   (require 'auto-complete-config)
 
-  (setq ac-comphist-file (concat user-emacs-directory  "etc/ac-comphist.dat"))
+  (setq ac-comphist-file (locate-user-emacs-file  "etc/ac-comphist.dat"))
   (ac-config-default)
   ;; (global-auto-complete-mode t)
   (setq-default ac-use-comphist t)
