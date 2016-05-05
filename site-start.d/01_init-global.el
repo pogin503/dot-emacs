@@ -213,11 +213,13 @@
                       "/usr/local/share/man"
                       "/usr/local/share/man/ja"))
 
-(when (f-exists? "~/workspace/repo/emacs")
-  (setq find-function-C-source-directory "~/workspace/repo/emacs/src")
+(defconst my-emacs-repo-dir "~/workspace/repo/emacs/")
+(when (f-exists? my-emacs-repo-dir)
+  (setq find-function-C-source-directory (concat my-emacs-repo-dir "src"))
   (when (and (executable-find "gtags")
-             (not (f-exists? "~/workspace/repo/emacs/src/GTAGS")))
-    (shell-command "gtags -v ~/workspace/repo/emacs/src")))
+             (not (f-exists? (concat my-emacs-repo-dir "src/GTAGS"))))
+    (let ((default-directory find-function-C-source-directory))
+      (shell-command (concat "gtags -v " find-function-C-source-directory)))))
 
 (provide '01_init-global)
 ;;; 01_init-global ends here
