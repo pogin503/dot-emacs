@@ -1,4 +1,3 @@
-
 ;;; mylib.el --- mylib
 ;; This program is free software
 ;;; Commentary:
@@ -245,7 +244,18 @@ FILENAME defaults to `buffer-file-name'."
       (byte-compile-file (locate-user-emacs-file "init.el")))
   (byte-recompile-directory (locate-user-emacs-file "elisp") 0)
   (byte-recompile-directory (locate-user-emacs-file "plugins") 0)
-  (byte-recompile-directory (locate-user-emacs-file "site-start.d") 0))
+  (byte-recompile-directory (locate-user-emacs-file "site-start.d") 0)
+  (f-write (concat
+            (with-current-buffer
+                (get-buffer "*Compile-Log*")
+              (buffer-substring-no-properties (point-min) (point-max)))
+            ";; Local variables:\n"
+            ";; mode: compilation\n"
+            ";; End:\n")
+           'utf-8
+           (concat "~/log/"  (format-time-string "emacs-compile-log_%Y-%m-%d %T.log"))
+           )
+  t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; anything or helm
@@ -516,7 +526,9 @@ If a coding-system can't safely encode the character, display \"?\"."
   (s-split "\n" (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun words (str)
-  "Get string that split by a space."
+  "
+
+`STR' is words by a space."
   (s-split " " str))
 
 (defun unwords (str)

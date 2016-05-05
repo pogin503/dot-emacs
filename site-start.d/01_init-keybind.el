@@ -10,8 +10,10 @@
     (kill-buffer (current-buffer))))
 
 (global-set-key (kbd "C-z") 'undo)
-(global-set-key (kbd "C-S-z") 'redo)
-(global-set-key (kbd "M-S-z") 'redo)
+(use-package redo+
+  :config
+  (global-set-key (kbd "C-S-z") 'redo)
+  (global-set-key (kbd "M-S-z") 'redo))
 
 (global-set-key (kbd "s-<right>") 'right-word)
 (global-set-key (kbd "s-<left>") 'left-word)
