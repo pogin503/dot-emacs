@@ -274,7 +274,7 @@ FILENAME defaults to `buffer-file-name'."
            (defun anything-font-families-create-buffer ()
              (with-current-buffer
                  (get-buffer-create "*Fonts*")
-               (loop for family in (sort (delete-duplicates (font-family-list)) 'string<)
+               (loop for family in (sort (cl-delete-duplicates (font-family-list)) 'string<)
                      do (insert
                          (propertize (concat family "\n")
                                      'font-lock-face

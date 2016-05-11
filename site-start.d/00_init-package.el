@@ -96,8 +96,6 @@
   :config
   (volatile-highlights-mode t))
 
-;; (use-package buffer-move
-
 (use-package ats-mode
   :mode ("\\.dats\\'" . ats-mode)
   :commands (ats-mode))
@@ -208,5 +206,11 @@
 (use-package drag-stuff
   :config
   (drag-stuff-mode))
+
+(use-package historyf
+  :config
+  (define-key emacs-lisp-mode-map (kbd "C-c C-<left>") 'historyf-back)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-<left>") 'historyf-forward)
+  (add-to-list 'historyf-minor-modes 'elisp-slime-nav))
 
 ;;; 00_init-package.el ends here
