@@ -562,5 +562,16 @@ If a coding-system can't safely encode the character, display \"?\"."
       (delete-region (region-beginning) (region-end))
     ad-do-it))
 
+(defun my-get-buffer-function ()
+  (interactive)
+  (let (ret (q t))
+    (save-excursion
+      (goto-char (point-min))
+      (while q
+        (setq q (re-search-forward "^\\((defun \\|(cl-defun \\)" nil t))
+        (when q
+          (push (thing-at-point 'symbol) ret))))
+    ret))
+
 (provide 'mylib)
 ;;; mylib.el ends here
