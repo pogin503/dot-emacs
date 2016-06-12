@@ -570,7 +570,7 @@ If a coding-system can't safely encode the character, display \"?\"."
       (while q
         (setq q (re-search-forward "^\\((defun \\|(cl-defun \\)" nil t))
         (when q
-          (push (thing-at-point 'symbol) ret))))
+          (push (substring-no-properties (thing-at-point 'symbol)) ret))))
     ret))
 
 (provide 'mylib)
