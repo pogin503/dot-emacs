@@ -193,6 +193,7 @@
 
 ;; aliases
 (defalias 'ms 'magit-status)
+(defalias 'mgc 'magit-commit)
 (defalias 'rr 'replace-regexp)
 (defalias 'rv 'revert-buffer)
 (defalias 'deactivate-advice 'ad-deactivate-all)
