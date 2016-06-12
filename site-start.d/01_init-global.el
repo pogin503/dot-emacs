@@ -27,11 +27,13 @@
 
 (auto-fill-mode -1) ; 自動詰め込み(auto-file) モードにするかどうか
 
-;; linum-mode
-;; (global-linum-mode t)
-;; (set-face-attribute 'linum nil :foreground "red" :height 0.8)
-;; (setq linum-format "%4d")
-;; (setq linum-delay t)
+(use-package linum
+  :defer t
+  :commands (linum-mode global-linum-mode)
+  :config
+  (set-face-attribute 'linum nil :foreground "red" :height 0.8)
+  (setq linum-format "%4d")
+  (setq linum-delay t))
 
 ;; 行間
 ;; (setq-default line-spacing 0)
