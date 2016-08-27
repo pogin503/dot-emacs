@@ -49,6 +49,7 @@
 		 ("C-<" . mc/mark-previous-like-this)
 		 ("C-c C-<"  . mc/mark-all-like-this)
 		 ("C-*"  . mc/mark-all-like-this))
+  :functions rrm/switch-to-multiple-cursors
   :config
   (setq mc/list-file (locate-user-emacs-file "cache/.mc-lists.el")))
 
@@ -89,7 +90,6 @@
   (push '("*ert*" :regexp t) popwin:special-display-config)
   (push '("*Codic Result*" :height 15) popwin:special-display-config)
   (setq popwin:close-popup-window-timer-interval 0.7)
-  ;; (popwin-mode 1)
   )
 
 (use-package volatile-highlights

@@ -15,7 +15,6 @@
   (setq-default ac-auto-start 4
                 ac-auto-show-menu 1.0)
   (define-key ac-mode-map (kbd "M-i") 'auto-complete)
-  (define-key ac-mode-map (kbd "H-i") 'auto-complete)
   (define-key ac-completing-map "\t" 'ac-complete)
 
   ;; Enterで補完をしないようにする

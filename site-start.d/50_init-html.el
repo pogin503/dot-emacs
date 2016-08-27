@@ -91,10 +91,13 @@
   (add-hook 'css-mode-hook  'emmet-mode)
   (add-hook 'nxml-mode-hook 'emmet-mode)
   (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'php-mode-hook 'emmet-mode)
   :config
-  (define-key emmet-mode-keymap (kbd "C-j") nil) ;; C-j は newline のままにしておく
-  (keyboard-translate ?\C-i ?\H-i)               ;; C-i と Tabの被りを回避
-  (define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line))
+  ;; (define-key emmet-mode-keymap (kbd "C-j") nil) ;; C-j は newline のままにしておく
+  ;; (keyboard-translate ?\C-i ?\H-i)               ;; C-i と Tabの被りを回避
+  (define-key emmet-mode-keymap (kbd "C-j") 'emmet-expand-line)
+  (define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line)
+  )
 
 ;; @see http://lgfang.github.io/emacs/emacs-xml.html
 (use-package hideshow

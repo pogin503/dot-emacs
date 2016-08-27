@@ -23,9 +23,6 @@
        (setq file-name-coding-system 'utf-8)
        (setq locale-coding-system 'utf-8)))
 
-;; git commit時に文字化けしないために設定する
-(setq default-process-coding-system 'utf-8)
-
 ;; @see https://gist.github.com/sky-y/3264252
 (defun ucs-normalize-NFC-buffer ()
   "バッファ全体の濁点分離を直します."
