@@ -1,4 +1,3 @@
-
 ;;; mylib.el --- mylib
 ;; This program is free software
 ;;; Commentary:
@@ -245,7 +244,18 @@ FILENAME defaults to `buffer-file-name'."
       (byte-compile-file (locate-user-emacs-file "init.el")))
   (byte-recompile-directory (locate-user-emacs-file "elisp") 0)
   (byte-recompile-directory (locate-user-emacs-file "plugins") 0)
-  (byte-recompile-directory (locate-user-emacs-file "site-start.d") 0))
+  (byte-recompile-directory (locate-user-emacs-file "site-start.d") 0)
+  (f-write (concat
+            (with-current-buffer
+                (get-buffer "*Compile-Log*")
+              (buffer-substring-no-properties (point-min) (point-max)))
+            ";; Local variables:\n"
+            ";; mode: compilation\n"
+            ";; End:\n")
+           'utf-8
+           (concat "~/log/"  (format-time-string "emacs-compile-log_%Y-%m-%d %T.log"))
+           )
+  t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; anything or helm
@@ -264,7 +274,7 @@ FILENAME defaults to `buffer-file-name'."
            (defun anything-font-families-create-buffer ()
              (with-current-buffer
                  (get-buffer-create "*Fonts*")
-               (loop for family in (sort (delete-duplicates (font-family-list)) 'string<)
+               (loop for family in (sort (cl-delete-duplicates (font-family-list)) 'string<)
                      do (insert
                          (propertize (concat family "\n")
                                      'font-lock-face
@@ -516,7 +526,9 @@ If a coding-system can't safely encode the character, display \"?\"."
   (s-split "\n" (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun words (str)
-  "Get string that split by a space."
+  "
+
+`STR' is words by a space."
   (s-split " " str))
 
 (defun unwords (str)
@@ -549,6 +561,17 @@ If a coding-system can't safely encode the character, display \"?\"."
   (if (and transient-mark-mode mark-active)
       (delete-region (region-beginning) (region-end))
     ad-do-it))
+
+(defun my-get-buffer-function ()
+  (interactive)
+  (let (ret (q t))
+    (save-excursion
+      (goto-char (point-min))
+      (while q
+        (setq q (re-search-forward "^\\((defun \\|(cl-defun \\)" nil t))
+        (when q
+          (push (substring-no-properties (thing-at-point 'symbol)) ret))))
+    ret))
 
 (provide 'mylib)
 ;;; mylib.el ends here

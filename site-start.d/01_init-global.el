@@ -27,11 +27,13 @@
 
 (auto-fill-mode -1) ; 自動詰め込み(auto-file) モードにするかどうか
 
-;; linum-mode
-;; (global-linum-mode t)
-;; (set-face-attribute 'linum nil :foreground "red" :height 0.8)
-;; (setq linum-format "%4d")
-;; (setq linum-delay t)
+(use-package linum
+  :defer t
+  :commands (linum-mode global-linum-mode)
+  :config
+  (set-face-attribute 'linum nil :foreground "red" :height 0.8)
+  (setq linum-format "%4d")
+  (setq linum-delay t))
 
 ;; 行間
 ;; (setq-default line-spacing 0)
@@ -191,6 +193,7 @@
 
 ;; aliases
 (defalias 'ms 'magit-status)
+(defalias 'mgc 'magit-commit)
 (defalias 'rr 'replace-regexp)
 (defalias 'rv 'revert-buffer)
 (defalias 'deactivate-advice 'ad-deactivate-all)
@@ -213,11 +216,13 @@
                       "/usr/local/share/man"
                       "/usr/local/share/man/ja"))
 
-(when (f-exists? "~/workspace/repo/emacs")
-  (setq find-function-C-source-directory "~/workspace/repo/emacs/src")
+(defconst my-emacs-repo-dir "~/workspace/repo/emacs/")
+(when (f-exists? my-emacs-repo-dir)
+  (setq find-function-C-source-directory (concat my-emacs-repo-dir "src"))
   (when (and (executable-find "gtags")
-             (not (f-exists? "~/workspace/repo/emacs/src/GTAGS")))
-    (shell-command "gtags -v ~/workspace/repo/emacs/src")))
+             (not (f-exists? (concat my-emacs-repo-dir "src/GTAGS"))))
+    (let ((default-directory find-function-C-source-directory))
+      (shell-command (concat "gtags -v " find-function-C-source-directory)))))
 
 (provide '01_init-global)
 ;;; 01_init-global ends here

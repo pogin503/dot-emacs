@@ -96,14 +96,6 @@
   :config
   (volatile-highlights-mode t))
 
-(use-package buffer-move
-  :config
-  (progn
-	(global-set-key (kbd "C-c <left>")  'buf-move-left)
-	(global-set-key (kbd "C-c <down>")  'buf-move-down)
-	(global-set-key (kbd "C-c <up>")    'buf-move-up)
-	(global-set-key (kbd "C-c <right>") 'buf-move-right)))
-
 (use-package ats-mode
   :mode ("\\.dats\\'" . ats-mode)
   :commands (ats-mode))
@@ -214,5 +206,11 @@
 (use-package drag-stuff
   :config
   (drag-stuff-mode))
+
+(use-package historyf
+  :config
+  (define-key emacs-lisp-mode-map (kbd "C-c C-<left>") 'historyf-back)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-<left>") 'historyf-forward)
+  (add-to-list 'historyf-minor-modes 'elisp-slime-nav))
 
 ;;; 00_init-package.el ends here
