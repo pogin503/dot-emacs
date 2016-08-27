@@ -18,7 +18,8 @@
                ("\\.c$" . ["template.c" my-template])
                ("\\.cpp$" . ["template.cpp" my-template])
                ("\\.h$"   . ["template.h" my-template])
-               ("\\.dats$"   . ["template.dats" my-template]))
+               ("\\.dats$"   . ["template.dats" my-template])
+               ("\\.rc$" . ["template.rc" my-template]))
              auto-insert-alist))
 
 (defvar template-replacements-alists
