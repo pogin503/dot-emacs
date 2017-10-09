@@ -573,5 +573,48 @@ If a coding-system can't safely encode the character, display \"?\"."
           (push (substring-no-properties (thing-at-point 'symbol)) ret))))
     ret))
 
+    (defun my-copy-current-line-info (rs re)
+      (interactive "r")
+      (let ((line-info (if (region-active-p)
+                           (let ((line-start (save-excursion
+                                               (goto-char rs)
+                                               (current-line-number)))
+                                 (line-end (save-excursion
+                                             (goto-char re)
+                                             (if (bolp)
+                                                 (1- (current-line-number))
+                                               (current-line-number)))))
+                             (format "L%s-L%s" line-start line-end))
+                         (format "L%s" (current-line-number))))
+            (s (if (region-active-p)
+                   rs
+                 (save-excursion (beginning-of-line) (point))))
+            (e (if (region-active-p)
+                   re
+                 (save-excursion (end-of-line) (point)))))
+        (setq result (format "%s %s\n%s\n"
+                             (f-filename (f-this-file))
+                             line-info
+                             (buffer-substring-no-properties s e)))
+        (kill-new result)
+        result))
+    )
+
+  (defvar my-initel-org-path "/Users/pogin/Dropbox/100_emacs/initel.org")
+
+  (defun my-copy-current-line-org (s e)
+    (interactive "r")
+    (let ((ret (if (region-active-p)
+                   (my-copy-current-line-info s e)
+                 (my-copy-current-line-info (point) (point)))))
+      (kill-new (format "** %s\n#+begin_src elisp\n%s#+end_src\n"
+                        (car (s-lines ret))
+                        ret))
+      (deactivate-mark)
+      (when (not (get-buffer "initel.org"))
+        (find-file-noselect my-initel-org-path))
+      (switch-to-buffer "initel.org")
+      ))
+
 (provide 'mylib)
 ;;; mylib.el ends here
