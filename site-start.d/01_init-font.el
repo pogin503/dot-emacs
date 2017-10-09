@@ -4,6 +4,15 @@
 (eval-when-compile
   (require '00_init-hanbetu))
 
+;; カナｶﾅ
+;; ┏┓┗┛
+(concat
+ " あいうえお かきくけこ あいうえお かきくけこ あいうえお かきくけこ あいうえお かきくけこ "
+ " AABBCCDDEE FFGGHHIIJJ AABBCCDDEE FFGGHHIIJJ AABBCCDDEE FFGGHHIIJJ AABBCCDDEE FFGGHHIIJJ "
+ " 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 "
+ " 幸福な人生 幸福な人生 幸福な人生 幸福な人生 幸福な人生 幸福な人生 幸福な人生 幸福な人生 "
+ " ｱｲｳｴｵｶｷｸｹｺ ｱｲｳｴｵｶｷｸｹｺ ｱｲｳｴｵｶｷｸｹｺ ｱｲｳｴｵｶｷｸｹｺ ｱｲｳｴｵｶｷｸｹｺ ｱｲｳｴｵｶｷｸｹｺ ｱｲｳｴｵｶｷｸｹｺ ｱｲｳｴｵｶｷｸｹｺ ")
+
 (if window-system
     (if run-windows
         (progn
