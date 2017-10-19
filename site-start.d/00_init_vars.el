@@ -1,5 +1,6 @@
-;;; 00_init-hanbetu.el --- environment variable
+;;; 00_init_env.el --- 00_init_env.el -*- lexical-binding: t; coding: utf-8 -*-
 ;;; Commentary:
+;; This program is free software
 ;; @see https://github.com/murasesyuka/dotemacs
 ;; @see http://d.hatena.ne.jp/tomoya/20090807/1249601308
 ;;; Code:
@@ -53,5 +54,28 @@
 (defvar run-darwin (or (eq system-type 'darwin)
                        (eq window-system 'ns)))
 
-(provide '00_init-hanbetu)
-;;; 00_init-hanbetu.el ends here
+;; ref from https://github.com/tarsius/no-littering
+;; ref https://github.com/Sarcasm/.emacs.d/init.el
+(defvar dropbox-directory
+  (cond
+   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox/"))
+   (t (expand-file-name (convert-standard-filename "Dropbox/") "~/")))
+  "Dropbox directory.")
+
+(defun my-expand-dropbox-file-name (file)
+  "Expand filename FILE relative to `my-expand-dropbox-file-name'."
+  (expand-file-name (convert-standard-filename file)
+                    dropbox-directory))
+
+(cl-letf (((symbol-function 'dropbox)
+           (symbol-function #'my-expand-dropbox-file-name)))
+  (defconst my-initel-org-path (dropbox "100_emacs/initel.org"))
+  (defconst my-org-files-path (dropbox "100_workspace-etc")))
+
+(custom-set-variables
+ `(url-history-file ,(locate-user-emacs-file "cache/url/history")))
+
+(defconst emacs-repo-dir "~/workspace/repo/emacs/")
+
+(provide '00_init_env)
+;;; 00_init_env.el ends here

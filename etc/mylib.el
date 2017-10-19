@@ -236,7 +236,7 @@ FILENAME defaults to `buffer-file-name'."
 
 ;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
 ;; 終了時バイトコンパイル
-(defun my-byte-compile-func ()
+(defun my-byte-compile-directory ()
   "Byte-compile files in particular directory."
   (interactive)
   (if (file-newer-than-file-p (locate-user-emacs-file "init.el")
@@ -306,6 +306,7 @@ FILENAME defaults to `buffer-file-name'."
   (interactive)
   (save-excursion
     (goto-char (point-min))
+    ;; replace " -> '
     (replace-regexp "\"" "'")
     (goto-char (point-min))
     (replace-regexp ":\\([a-zA-Z0-9]*\\)\s=>\s" "\\1: ")
@@ -341,16 +342,16 @@ FILENAME defaults to `buffer-file-name'."
 
 (defun my-display-hashtable-data (hashtbl)
   (maphash #'(lambda (key val)
-               (insert (format "%s, %s\n" key val))) hashtbl))
+               (message (format "%s, %s\n" key val))) hashtbl))
+
+(defun my-hash-exists-p (key table)
+  (let ((novalue (make-symbol "<nil>")))
+    (not (eq (gethash key table novalue) novalue))))
 
 (defun my-remove-comment ()
   (interactive)
   (replace-regexp " *;;? ?=> ?.+" "" nil (region-beginning) (region-end))
   (replace-regexp "^;;? ?.+" ""  nil (region-beginning) (region-end)))
-
-(defun my-hash-exists-p (key table)
-  (let ((novalue (make-symbol "<nil>")))
-    (not (eq (gethash key table novalue) novalue))))
 
 (defun my-insert-keybinds-table ()
   "init.el用のキーバインドの表を作る.
@@ -474,7 +475,6 @@ Example:
            (set-window-start w2 s1))))
   (other-window 1))
 
-;; PATH
 (defun append-path (path)
   (setenv "PATH" (concat (file-truename path)":" (getenv "PATH")))
   (setq eshell-path-env (getenv "PATH"))
@@ -526,9 +526,7 @@ If a coding-system can't safely encode the character, display \"?\"."
   (s-split "\n" (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun words (str)
-  "
-
-`STR' is words by a space."
+  "Split `STR' with a space."
   (s-split " " str))
 
 (defun unwords (str)
@@ -573,48 +571,78 @@ If a coding-system can't safely encode the character, display \"?\"."
           (push (substring-no-properties (thing-at-point 'symbol)) ret))))
     ret))
 
-    (defun my-copy-current-line-info (rs re)
-      (interactive "r")
-      (let ((line-info (if (region-active-p)
-                           (let ((line-start (save-excursion
-                                               (goto-char rs)
-                                               (current-line-number)))
-                                 (line-end (save-excursion
-                                             (goto-char re)
-                                             (if (bolp)
-                                                 (1- (current-line-number))
-                                               (current-line-number)))))
-                             (format "L%s-L%s" line-start line-end))
-                         (format "L%s" (current-line-number))))
-            (s (if (region-active-p)
-                   rs
-                 (save-excursion (beginning-of-line) (point))))
-            (e (if (region-active-p)
-                   re
-                 (save-excursion (end-of-line) (point)))))
-        (setq result (format "%s %s\n%s\n"
-                             (f-filename (f-this-file))
-                             line-info
-                             (buffer-substring-no-properties s e)))
-        (kill-new result)
-        result))
-    )
+(defun current-line-number ()
+  "Get the current line number (in the buffer) of point."
+  (interactive)
+  (save-restriction
+    (widen)
+    (save-excursion
+      (beginning-of-line)
+      (1+ (count-lines 1 (point))))))
 
-  (defvar my-initel-org-path "/Users/pogin/Dropbox/100_emacs/initel.org")
+(use-package f
+  :config
+  (defun my-copy-current-line-info ()
+    (interactive)
+    (let ((path (f-this-file))
+          ;; (root-path ((f-traverse-upwards
+          ;;              (lambda (path)
+          ;;                (f-exists? (f-expand ".git" path)))
+          ;;              start-path)))
+          )
+      (when (not (null path))
+        (kill-new (format "%s L%s\n"
+                          (f-filename (f-this-file))
+                          (current-line-number)
+                          (buffer-substring-no-properties s e))))))
 
-  (defun my-copy-current-line-org (s e)
+  (defun my-copy-current-line-info (rs re)
     (interactive "r")
-    (let ((ret (if (region-active-p)
-                   (my-copy-current-line-info s e)
-                 (my-copy-current-line-info (point) (point)))))
-      (kill-new (format "** %s\n#+begin_src elisp\n%s#+end_src\n"
-                        (car (s-lines ret))
-                        ret))
-      (deactivate-mark)
-      (when (not (get-buffer "initel.org"))
-        (find-file-noselect my-initel-org-path))
-      (switch-to-buffer "initel.org")
-      ))
+    (let ((line-info (if (region-active-p)
+                         (let ((line-start (save-excursion
+                                             (goto-char rs)
+                                             (current-line-number)))
+                               (line-end (save-excursion
+                                           (goto-char re)
+                                           (if (bolp)
+                                               (1- (current-line-number))
+                                             (current-line-number)))))
+                           (format "L%s-L%s" line-start line-end))
+                       (format "L%s" (current-line-number))))
+          (s (if (region-active-p)
+                 rs
+               (save-excursion (beginning-of-line) (point))))
+          (e (if (region-active-p)
+                 re
+               (save-excursion (end-of-line) (point)))))
+      (setq result (format "%s %s\n%s\n"
+                           (f-filename (f-this-file))
+                           line-info
+                           (buffer-substring-no-properties s e)))
+      (kill-new result)
+      result)))
+
+;; @see http://stackoverflow.com/questions/1511737/how-do-you-list-the-active-minor-modes-in-emacs
+(defun which-active-modes ()
+  "Give a message of which minor modes are enabled in the current buffer."
+  (interactive)
+  (let ((active-modes))
+    (mapc (lambda (mode) (condition-case nil
+                             (if (and (symbolp mode) (symbol-value mode))
+                                 (add-to-list 'active-modes mode))
+                           (error nil) ))
+          minor-mode-list)
+    (message "Active modes are %s" active-modes)))
+
+(defun no-properties-string (str)
+  (with-temp-buffer
+    (insert str)
+    (buffer-substring-no-properties (point-min) (point-max))))
+
+(defun contains (elt list)
+  (if (numberp (position elt list))
+      t
+    nil))
 
 (provide 'mylib)
 ;;; mylib.el ends here

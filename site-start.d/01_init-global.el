@@ -4,7 +4,7 @@
 ;;; Code:
 
 (eval-when-compile
-  (require '00_init-hanbetu))
+  (require '00_init-env))
 
 (setq inhibit-startup-message t)            ; 起動メッセージの非表示
 (setq inhibit-startup-echo-area-message -1) ; スタートアップ時のエコー領域メッセージの非表示
@@ -59,7 +59,7 @@
 ;; @see http://d.hatena.ne.jp/fu7mu4/20101027/1288191419
 ;; (setq warning-suppress-types nil)
 
-(add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
+;; (add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
 
 ;; @recentf-mode
 (require 'recentf)
@@ -203,20 +203,10 @@
 (req exec-path-from-shell
     (exec-path-from-shell-initialize))
 
-(defvar dropbox-directory
-  (cond
-   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox/"))
-   (t "~/Dropbox/"))
-  "Set Dropbox directory.")
-
-(custom-set-variables
- `(url-history-file ,(locate-user-emacs-file "cache/url/history")))
-
 (setq woman-manpath '("/usr/share/man"
                       "/usr/local/share/man"
                       "/usr/local/share/man/ja"))
 
-(defconst my-emacs-repo-dir "~/workspace/repo/emacs/")
 (when (f-exists? my-emacs-repo-dir)
   (setq find-function-C-source-directory (concat my-emacs-repo-dir "src"))
   (when (and (executable-find "gtags")
