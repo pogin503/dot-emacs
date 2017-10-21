@@ -1,4 +1,4 @@
-;;; 00_init_env.el --- 00_init_env.el -*- lexical-binding: t; coding: utf-8 -*-
+;;; 00_init-vars.el --- 00_init-vars.el -*- lexical-binding: t; coding: utf-8 -*-
 ;;; Commentary:
 ;; This program is free software
 ;; @see https://github.com/murasesyuka/dotemacs
@@ -77,5 +77,5 @@
 
 (defconst emacs-repo-dir "~/workspace/repo/emacs/")
 
-(provide '00_init_env)
-;;; 00_init_env.el ends here
+(provide '00_init-vars)
+;;; 00_init-vars.el ends here
