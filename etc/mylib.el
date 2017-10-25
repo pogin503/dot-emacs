@@ -537,6 +537,10 @@ If a coding-system can't safely encode the character, display \"?\"."
   (interactive)
   (insert (format-time-string "%H:%M")))
 
+(defun my-date-iso8601 ()
+  "2014-10-10T13:50:40+09:00"
+  (format-time-string "%Y-%m-%dT%H:%M:%S+09:00"))
+
 (defun to-str (obj)
   (format "%s" obj))
 
