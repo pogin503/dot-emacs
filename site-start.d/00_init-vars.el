@@ -69,13 +69,18 @@
 
 (cl-letf (((symbol-function 'dropbox)
            (symbol-function #'my-expand-dropbox-file-name)))
-  (defconst my-initel-org-path (dropbox "100_emacs/initel.org"))
-  (defconst my-org-files-path (dropbox "100_workspace-etc")))
+  (defvar my-emacs-workspace-path (dropbox "100_emacs/"))
+  (defvar my-initel-org-path (dropbox "100_emacs/initel.org"))
+  (defvar my-org-files-path (dropbox "100_workspace-etc")))
+
+(defvar my-dotfiles-repo-path
+  (expand-file-name (convert-standard-filename "dotfiles/") "~/")
+  "dotfiles repository path.")
 
 (custom-set-variables
  `(url-history-file ,(locate-user-emacs-file "cache/url/history")))
 
-(defconst emacs-repo-dir "~/workspace/repo/emacs/")
+(defvar emacs-repo-dir "~/workspace/repo/emacs/")
 
 (provide '00_init-vars)
 ;;; 00_init-vars.el ends here
