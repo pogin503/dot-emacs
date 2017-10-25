@@ -17,17 +17,22 @@
 
 (use-package haskell-mode
   :commands (haskell-mode literate-haskell-mode haskell-cabal-mode)
-  :interpreter (("runghc" . haskell-mode) ; #!/usr/bin/env runghc 用
-				("runhaskell" . haskell-mode)) ; #!/usr/bin/env runhaskell 用
+  ;; :interpreter (("runghc" . haskell-mode) ; #!/usr/bin/env runghc 用
+	;; 			("runhaskell" . haskell-mode)) ; #!/usr/bin/env runhaskell 用
   :mode (("\\.l?hs$" . haskell-mode)
 		 ("\\.cabal$" . haskell-cabal-mode))
   :config
   (use-package ghc
-	:config
-	;; ghc-mod setting
+    :config
+
+    ;; ghc-mod setting
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+
+  (setq haskell-process-type 'stack-ghci)
+  (setq haskell-process-path-ghci "stack")
+  (setq haskell-process-args-ghci "ghci")
 
   ;; エコーエリアに関数の型を表示するモードをオンにする
   (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
@@ -41,8 +46,9 @@
     (interactive-haskell-mode))
 
   (add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
-  (require 'mylib-keycombo)
-  (add-hook 'haskell-mode-hook 'my-key-combo-haskell-conf))
+  ;; (require 'mylib-keycombo)
+  ;; (add-hook 'haskell-mode-hook 'my-key-combo-haskell-conf)
+  )
 
 (add-to-list 'auto-mode-alist '("\\.hamlet$" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.lucius$" . css-mode))
