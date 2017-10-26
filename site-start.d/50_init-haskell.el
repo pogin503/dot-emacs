@@ -54,7 +54,7 @@
 (add-to-list 'auto-mode-alist '("\\.lucius$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.julius$" . js2-mode))
 
-
+(require 'align)
 ;; Haskell align setting
 (add-to-list 'align-rules-list
              '(haskell-types
