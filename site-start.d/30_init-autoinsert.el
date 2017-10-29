@@ -12,7 +12,7 @@
                ("\\.agda" . ["template.agda" my-template])
                ("\\.rb" . ["template.rb" my-template])
                ("\\.sh$" . ["template.sh"
-                            (lambda() (my-template-exec "#!/bin/bash"))
+                            (lambda() (my-template-exec "#!/usr/bin/env bash"))
                             my-template])
                ("\\.py$" . ["template.py" my-template])
                ("\\.c$" . ["template.c" my-template])
