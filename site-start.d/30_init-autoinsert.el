@@ -8,19 +8,20 @@
 (setq auto-insert-directory  (locate-user-emacs-file "etc/autoinsert"))
 (setq auto-insert-alist
       (nconc '(
-               ("\\.hs" . ["template.hs" my-template])
-               ("\\.agda" . ["template.agda" my-template])
-               ("\\.rb" . ["template.rb" my-template])
-               ("\\.sh$" . ["template.sh"
-                            (lambda() (my-template-exec "#!/usr/bin/env bash"))
-                            my-template])
-               ("\\.py$" . ["template.py" my-template])
+               ("\\.pl$" . ["perl.agda" my-template])
+               ("\\.agda$" . ["template.agda" my-template])
                ("\\.c$" . ["template.c" my-template])
                ("\\.cpp$" . ["template.cpp" my-template])
-               ("\\.h$"   . ["template.h" my-template])
                ("\\.dats$"   . ["template.dats" my-template])
-               ("\\.rc$" . ["template.rc" my-template]))
+               ("\\.h$"   . ["template.h" my-template])
+               ("\\.hs$" . ["template.hs" my-template])
                ("\\.html$"   . ["template.html" my-template])
+               ("\\.py$" . ["template.py" my-template])
+               ("\\.rb$" . ["template.rb" my-template])
+               ("\\.rc$" . ["template.rc" my-template])
+               ("\\.sh$" . ["template.sh"
+                            (lambda() (my-template-exec "#!/usr/bin/env bash"))
+                            my-template]))
              auto-insert-alist))
 
 (defvar template-replacements-alists
