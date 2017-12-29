@@ -80,7 +80,7 @@
 (custom-set-variables
  `(url-history-file ,(locate-user-emacs-file "cache/url/history")))
 
-(defvar emacs-repo-dir "~/workspace/repo/emacs/")
+(defconst my-emacs-repo-dir "~/workspace/emacs/")
 
 (provide '00_init-vars)
 ;;; 00_init-vars.el ends here
