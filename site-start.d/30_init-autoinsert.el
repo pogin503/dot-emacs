@@ -20,6 +20,7 @@
                ("\\.h$"   . ["template.h" my-template])
                ("\\.dats$"   . ["template.dats" my-template])
                ("\\.rc$" . ["template.rc" my-template]))
+               ("\\.html$"   . ["template.html" my-template])
              auto-insert-alist))
 
 (defvar template-replacements-alists
