@@ -648,5 +648,19 @@ If a coding-system can't safely encode the character, display \"?\"."
       t
     nil))
 
+;; @see https://github.com/howardabrams/dot-files/blob/master/elisp/shell-script-funcs.el
+(defun substring-replace (old-str new-str beg end)
+  "Return a new string where a subsection of OLD-STR has been replaced with NEW-STR beginning at position BEG and ending at END."
+  (concat (substring old-str 0 beg) new-str (substring old-str end)))
+
+;; @see https://github.com/rejeep/f.el#using-standard-emacs-builtin-functions
+(defun find-git-root (&optional dir)
+  (unless dir (setq dir (expand-file-name (file-name-directory (buffer-file-name)))))
+  (let ((parent (expand-file-name ".." dir)))
+    (unless (equal parent dir)
+      (if (file-exists-p (expand-file-name ".git" dir))
+          dir
+        (find-git-root parent)))))
+
 (provide 'mylib)
 ;;; mylib.el ends here
