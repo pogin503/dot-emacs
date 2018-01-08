@@ -22,7 +22,8 @@
                ("\\.rc$"   . ["template.rc"   my-template])
                ("\\.sh$"   . ["template.sh"
                             (lambda() (my-template-exec "#!/usr/bin/env bash"))
-                            my-template]))
+                            my-template])
+               ("^.editorconfig$"   . ["template.editorconfig" my-template]))
              auto-insert-alist))
 
 (defvar template-replacements-alists
