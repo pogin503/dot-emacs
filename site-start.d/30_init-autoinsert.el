@@ -26,7 +26,8 @@
                ("^.editorconfig$"   . ["template.editorconfig" my-template]))
              auto-insert-alist))
 
-(defvar template-replacements-alists
+(use-package s)
+(defconst template-replacements-alists
   '(
     ("%file%" . (lambda()(file-name-nondirectory (buffer-file-name))))
     ("%name%" . user-full-name)
@@ -39,9 +40,12 @@
                                       (upcase
                                        (file-name-sans-extension
                                         (file-name-nondirectory buffer-file-name))))))
-    ("%rbclass%" . (lambda () (capitalize
-			   (file-name-sans-extension
-			    (file-name-nondirectory (buffer-file-name))))))
+    ("%rbclass%" . (lambda ()
+                     (s-replace "_" ""
+                      (capitalize
+                       (file-name-sans-extension
+                        (file-name-nondirectory (buffer-file-name)))))
+))
     ))
 
 (defun my-file-body-name (file-name)
