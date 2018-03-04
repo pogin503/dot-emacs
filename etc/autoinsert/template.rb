@@ -9,6 +9,7 @@ class %rbclass%
   end
 end
 
+# rubocop:disable IfUnlessModifier
 if %rbclass% == $PROGRAM_NAME
   %rbclass%.new.start
 end
