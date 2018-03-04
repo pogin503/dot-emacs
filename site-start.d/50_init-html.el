@@ -5,6 +5,11 @@
 ;; @see http://yanmoo.blogspot.jp/2013/06/html5web-mode.html
 ;;; Code:
 
+(use-package js2-mode
+  :config
+  (setq js2-strict-trailing-comma-warning nil)
+  (add-to-list 'auto-mode-alist '("\\.vue" . js2-mode)))
+
 ;; (add-to-load-path "plugins/zencoding")
 (use-package web-mode
   :init
@@ -21,6 +26,7 @@
   (defun my-web-mode-conf ()
     "Hooks for Web mode."
     (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-enable-auto-indentation nil)
     (custom-set-variables
      '(web-mode-asp-offset 2)
      '(web-mode-code-indent-offset 2)
@@ -32,7 +38,8 @@
      '(web-mode-markup-indent-offset 2)
      '(web-mode-php-offset 2)
      '(web-mode-script-offset 2)
-     '(web-mode-sql-indent-offset 2))))
+     '(web-mode-sql-indent-offset 2))
+    ))
 
 ;; GET-ing an HTTP page
 ;;
