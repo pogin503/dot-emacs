@@ -12,7 +12,8 @@
   (setq ruby-indent-tabs-mode nil)
   (custom-set-variables
    '(inf-ruby-default-implementation "pry")
-   '(inf-ruby-eval-binding "Pry.toplevel_binding")))
+   '(inf-ruby-eval-binding "Pry.toplevel_binding")
+   '(ruby-insert-encoding-magic-comment nil)))
 
 (use-package ruby-end
   :config
