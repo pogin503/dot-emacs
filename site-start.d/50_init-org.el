@@ -64,7 +64,16 @@
   (setq org-log-done 'time)
 
   ;; fontify code in code blocks
-  (setq org-src-fontify-natively t))
+  (setq org-src-fontify-natively t)
+
+  (setq org-feed-default-template "\n* %h-%U\n %description\n %a")
+  (setq org-feed-retrieval-method 'wget)
+  (setq org-feed-alist
+        '(("POSTD" "http://postd.cc/feed/"
+           "~/org/feeds.org" "POSTD")
+          ("GIGAZINE" "http://gigazine.net/index.php?/news/rss_2.0/"
+           "~/org/feeds.org" "GIGAZINE")))
+  )
 
 ;; | C-c l | 現在のファイル行のリンクを保存する |
 ;; | C-c a | org-modeでメモをする |
