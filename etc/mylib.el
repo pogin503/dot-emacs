@@ -664,6 +664,7 @@ If a coding-system can't safely encode the character, display \"?\"."
         (find-git-root parent)))))
 
 (defun my-qa-insert (q)
+  "org-modeでQA形式のテンプレートを挿入する"
   (interactive "sQ: ")
   (insert (format "** Q. [[#%s][%s]]\n" q q))
   (goto-char (point-max))
@@ -672,7 +673,9 @@ If a coding-system can't safely encode the character, display \"?\"."
    :CUSTOM_ID: %s
    :END:
 \n\n" q q))
+  ;; :PROPERTIES: の行に移動する
   (forward-line -5)
+  ;; :PROPERTIES: を隠す
   (org-cycle))
 
 (provide 'mylib)
