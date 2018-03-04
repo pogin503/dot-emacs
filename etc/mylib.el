@@ -663,5 +663,17 @@ If a coding-system can't safely encode the character, display \"?\"."
           dir
         (find-git-root parent)))))
 
+(defun my-qa-insert (q)
+  (interactive "sQ: ")
+  (insert (format "** Q. [[#%s][%s]]\n" q q))
+  (goto-char (point-max))
+  (insert (format "** A. %s
+   :PROPERTIES:
+   :CUSTOM_ID: %s
+   :END:
+\n\n" q q))
+  (forward-line -5)
+  (org-cycle))
+
 (provide 'mylib)
 ;;; mylib.el ends here
