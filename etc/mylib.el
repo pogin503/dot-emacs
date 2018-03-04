@@ -19,6 +19,7 @@
   "Print escaped string in region."
   (interactive "r")
   (copy-to-register ?r s e)
+  (kill-region s e)
   (insert (format "%S" (substring-no-properties (get-register ?r)))))
 
 (defun my-reopen-buffer ()
