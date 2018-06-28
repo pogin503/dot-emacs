@@ -5,10 +5,14 @@
 ;; @see http://yanmoo.blogspot.jp/2013/06/html5web-mode.html
 ;;; Code:
 
-(use-package js2-mode
+(use-package vue-mode
   :config
-  (setq js2-strict-trailing-comma-warning nil)
-  (add-to-list 'auto-mode-alist '("\\.vue" . js2-mode)))
+  (use-package js2-mode
+    :config
+    (setq js2-strict-trailing-comma-warning nil)
+    (setq js2-strict-missing-semi-warning nil)
+    (setq web-mode-markup-indent-offset 4)
+    ))
 
 ;; (add-to-load-path "plugins/zencoding")
 (use-package web-mode
