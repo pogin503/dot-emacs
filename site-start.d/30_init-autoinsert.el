@@ -19,7 +19,7 @@
                ("\\.php$"  . ["template.php"  my-template])
                ("\\.py$"   . ["template.py"   my-template])
                ("\\.rb$"   . ["template.rb"   my-template])
-               ("\\.rc$"   . ["template.rc"   my-template])
+               ("\\.rs$"   . ["template.rs"   my-template])
                ("\\.sh$"   . ["template.sh"
                             (lambda() (my-template-exec "#!/usr/bin/env bash"))
                             my-template])
