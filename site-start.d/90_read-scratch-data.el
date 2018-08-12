@@ -4,7 +4,7 @@
                (set-buffer (get-buffer "*scratch*"))
                (buffer-substring-no-properties
                 (point-min) (point-max))))
-        (file (expand-file-name (locate-user-emacs-file "cache/.scratch")))
+        (file (expand-file-name (locate-user-emacs-file ".cache/.scratch")))
         (buf (if (get-file-buffer file)
                  (get-file-buffer file)
                (find-file-noselect file))))
@@ -19,7 +19,7 @@
   (save-scratch-data))
 
 (defun read-scratch-data ()
-  (let ((file (locate-user-emacs-file "cache/.scratch")))
+  (let ((file (locate-user-emacs-file ".cache/.scratch")))
     (when (file-exists-p file)
       (set-buffer (get-buffer "*scratch*"))
       (erase-buffer)

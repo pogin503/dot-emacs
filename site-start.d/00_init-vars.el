@@ -78,7 +78,7 @@
   "dotfiles repository path.")
 
 (custom-set-variables
- `(url-history-file ,(locate-user-emacs-file "cache/url/history")))
+ `(url-history-file ,(locate-user-emacs-file ".cache/url/history")))
 
 (defconst my-emacs-repo-dir "~/workspace/emacs/")
 

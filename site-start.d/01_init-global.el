@@ -72,7 +72,7 @@
                      "\\.mime-example" "\\.ido.last" "woman_cache.el"
                      "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$"
 					 "Command attempt to use minibuffer while in minibuffer"))
- '(recentf-save-file (locate-user-emacs-file "cache/recentf")))
+ '(recentf-save-file (locate-user-emacs-file ".cache/recentf")))
 
 (msb-mode 1)
 
