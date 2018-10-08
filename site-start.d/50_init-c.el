@@ -1,4 +1,4 @@
-;;; 50_init-c-mode --- 50_init-c-mode
+;;; 50_init-c --- 50_init-c-mode
 ;; This program is free software
 ;;; Commentary:
 ;;; Code:
@@ -46,5 +46,5 @@
 ;; c-argdecl-indent              Cの関数の引数宣言の字下げを指定します．
 ;; c-label-offset                ラベルやcase，defaultのある文に加える字下げの数を指定します．
 
-(provide '50_init-c-mode)
-;;; 50_init-c-mode ends here
+(provide '50_init)
+;;; 50_init-c ends here

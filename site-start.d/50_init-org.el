@@ -1,4 +1,4 @@
-;;; 50_init-org-mode --- 50_init-org-mode
+;;; 50_init-org --- 50_init-org
 ;; This program is free software
 ;;; Commentary:
 ;;@see http://d.hatena.ne.jp/rubikitch/20090121/1232468026
@@ -87,5 +87,5 @@
   (add-hook 'org-mode-hook '(lambda () (org-bullets-mode 1))))
 
 
-(provide '50_init-org-mode)
-;;; 50_init-org-mode ends here
+(provide '50_init-org)
+;;; 50_init-org ends here

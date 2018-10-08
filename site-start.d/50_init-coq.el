@@ -1,4 +1,4 @@
-;;; 50_init-coq-mode --- 50_init-coq-mode
+;;; 50_init-coq --- 50_init-coq
 ;; This program is free software
 ;;; Commentary:
 ;;; Code:
@@ -30,5 +30,5 @@
       (error "Please install Ssreflect")))
   )
 
-(provide '50_init-coq-mode)
-;;; 50_init-coq-mode ends here
+(provide '50_init-coq)
+;;; 50_init-coq ends here
