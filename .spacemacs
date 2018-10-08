@@ -31,6 +31,10 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     python
+     javascript
+     yaml
+     shell-scripts
      html
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -63,14 +67,26 @@ values."
                                       ag
                                       anaphora
                                       editorconfig
-                                      quickrun
+                                      flycheck-rust
+                                      sequenctial-command
+                                      flycheck-package
                                       helpful
+                                      treemacs
+                                      multiple-cursors
+                                      paredit
+                                      peep-dired
+                                      quickrun
+                                      vue-mode
+                                      ggtags
+                                      helm-gtags
+                                      free-keys
                                       )
+
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(
-                                    ;; org-projectile
+                                    org-projectile
                                     )
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -313,28 +329,6 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-
-  (defun add-to-load-path (&rest paths)
-    "Add to load path recursively.
-`PATHS' Directorys you want to read recursively."
-    (let (path)
-      (dolist (path paths paths)
-        (let ((default-directory (expand-file-name (locate-user-emacs-file path))))
-          (add-to-list 'load-path default-directory)
-          (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-              (normal-top-level-add-subdirs-to-load-path))))))
-  (when (file-exists-p (expand-file-name "/Users/pogin/workspace/dot-emacs/site-start.d"))
-      (add-to-load-path "/Users/pogin/workspace/dot-emacs/site-start.d"))
-  (when (file-exists-p (expand-file-name "/Users/pogin/workspace/dot-emacs/site-start.d"))
-    (add-to-load-path "/Users/pogin/workspace/dot-emacs/etc"))
-  (use-package )
-  (use-package mylib)
-  (use-package 00_init-vars)
-  (use-package 30_init-helm)
-  (use-package 50_init-html)
-  (use-package 30_init-autoinsert)
-  (with-eval-after-load 'rust-mode
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
   )
 
 (defun dotspacemacs/user-config ()
@@ -344,6 +338,92 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  (defun add-to-load-path (&rest paths)
+    "Add to load path recursively.
+`PATHS' Directorys you want to read recursively."
+    (let (path)
+      (dolist (path paths paths)
+        (let ((default-directory (expand-file-name (locate-user-emacs-file path))))
+          (add-to-list 'load-path default-directory)
+          (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+              (normal-top-level-add-subdirs-to-load-path))))))
+  (let ((filepath "/Users/pogin/workspace/dot-emacs/site-start.d"))
+    (if (file-exists-p (expand-file-name filepath))
+        (add-to-load-path filepath)
+      (error filepath)))
+
+  (when (file-exists-p (expand-file-name "/Users/pogin/workspace/dot-emacs/site-start.d"))
+    (add-to-load-path "/Users/pogin/workspace/dot-emacs/etc"))
+  (use-package mylib)
+  (use-package 00_init-vars)
+  (use-package 00_init-package)
+  (use-package 30_init-helm)
+  (use-package 50_init-html)
+  (use-package 30_init-autoinsert)
+  (exec-path-from-shell-initialize)
+  ;; (use-package 31_init-dired)
+  ;; browser
+  (when run-darwin
+    (setq browse-url-browser-function 'browse-url-generic
+          ;; browse-url-generic-program "google-chrome"
+          browse-url-generic-program "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+          )
+    (setq browse-url-firefox-program "/Applications/Firefox.app/Contents/MacOS/firefox")
+    (setq browse-url-chrome-program "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
+
+  (use-package rust-mode
+    :config
+    (setq rust-format-on-save t)
+    ;; (use-package flycheck-rust
+    ;;   :config
+    ;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+    ;; (setq rust-rustfmt-bin )
+    )
+  ;;; Enable helm-gtags-mode
+  (use-package helm-gtags
+    :config
+    (add-hook 'c-mode-hook 'helm-gtags-mode)
+    (add-hook 'c++-mode-hook 'helm-gtags-mode)
+    (add-hook 'asm-mode-hook 'helm-gtags-mode)
+    ;; customize
+    (custom-set-variables
+     '(helm-gtags-path-style 'relative)
+     '(helm-gtags-ignore-case t)
+     '(helm-gtags-auto-update t)))
+
+  ;; key bindings
+  (with-eval-after-load 'helm-gtags
+    (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+    (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+    (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+    (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+    (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+    (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))
+
+  ;;;###autoload
+  (defun duplicate-thing (n)
+    (interactive "P")
+    (save-excursion
+      (let (start
+            end
+            (with-comment-out (consp n)))
+        (cond (mark-active
+               (setq start (region-beginning) end (region-end)))
+              (t
+               (beginning-of-line)
+               (setq start (point))
+               (forward-line)
+               (setq end (point))))
+        (kill-ring-save start end)
+        (if with-comment-out
+            (progn
+              (comment-region start end)
+              (yank))
+          (dotimes (i (or n 1))
+            (yank))))))
+
+  (define-key c-mode-map (kbd "C-~") 'duplicate-thing)
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -352,12 +432,24 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(c-electric-pound-behavior (quote (alignleft)))
+ '(evil-want-Y-yank-to-eol nil)
+ '(flycheck-emacs-lisp-load-path load-path)
  '(helm-M-x-always-save-history t)
- '(helm-adaptive-history-file (locate-user-emacs-file "cache/helm-adaptive-history"))
+ '(helm-adaptive-history-file (locate-user-emacs-file ".cache/helm-adaptive-history"))
+ '(helm-gtags-auto-update t)
+ '(helm-gtags-ignore-case t)
+ '(helm-gtags-path-style (quote relative))
+ '(ido-enable-flex-matching t)
+ '(ido-everywhere t)
+ '(ido-ignore-extensions t)
+ '(ido-save-directory-list-file (locate-user-emacs-file ".cache/ido.last"))
+ '(ido-use-faces nil)
+ '(ido-use-filename-at-point (quote guess))
  '(package-selected-packages
    (quote
-    (helpful flycheck-rust wgrep-ag multiple-cursors quickrun ag web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode editorconfig paredit anaphora ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org spaceline smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el paradox orgit org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint intero indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode cargo auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
- '(url-history-file "~/.emacs.d/cache/url/history"))
+    (flycheck-package package-lint docker yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode anaconda-mode pythonic free-keys zenburn-theme ggtags helm-gtags peep-dired web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc coffee-mode diredful yaml-mode insert-shebang fish-mode vue-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake phpunit phpcbf php-extras php-auto-yasnippets org-projectile org-category-capture minitest drupal-mode php-mode chruby bundler inf-ruby treemacs helpful flycheck-rust wgrep-ag multiple-cursors quickrun ag web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode editorconfig paredit anaphora ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org spaceline smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el paradox orgit org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint intero indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode cargo auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+ '(url-history-file "~/.emacs.d/.cache/url/history"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
