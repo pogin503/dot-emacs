@@ -17,16 +17,22 @@
 		 ("C-c b" . org-iswitchb))
   :config
   (if (boundp 'dropbox-directory)
-      (setq org-directory (concat dropbox-directory "Documents/org/"))
+      (setq org-directory (concat dropbox-directory "001_Documents/org/"))
     (setq org-directory "~/Documents/org/"))
 
+  (unless (file-directory-p org-directory)
+    (error "not found: check org-directory"))
+
+  ;; org-capture
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline (concat org-directory "todo.org") "Tasks")
+        `(("t" "Todo" entry (file+headline ,(concat org-directory "todo.org") "Tasks")
            "* TODO %?n %in %a")
-          ("j" "Journal" entry (file+datetree (concat org-directory "journal.org"))
+          ("j" "Journal" entry (file+datetree ,(concat org-directory "journal.org"))
            "* %?n %Un %in %a")
-          ("n" "Note" entry (file+headline (cocat org-directory "notes.org") "Notes")
+          ("n" "Note" entry (file+headline ,(concat org-directory "notes.org") "Notes")
            "* %?n %Un %i")))
+
+  (setq org-default-notes-file (concat org-directory "capture.org"))
 
   ;; org-agendaで使うファイル、ディレクトリを設定する。
   ;; ファイルの場合、指定したファイルのみorg-agendaで読みこむ
@@ -42,7 +48,7 @@
   (setq org-hide-leading-stars t)
 
   ;; 初期状態は見出しを表示
-  (setq org-startup-folded 'content)
+  (setq org-startup-folded 'showall)
 
   ;; A: 04:00 - 07:00
   ;; B: 07:00 - 10:00
@@ -52,6 +58,7 @@
   ;; F: 19:00 - 22:00
   ;; G: 22:00 - 25:00
 
+  ;; 優先順位の設定
   (setq org-highest-priority ?A)
   (setq org-lowest-priority ?G)
   (setq org-default-priority ?G)
@@ -69,10 +76,10 @@
   (setq org-feed-default-template "\n* %h-%U\n %description\n %a")
   (setq org-feed-retrieval-method 'wget)
   (setq org-feed-alist
-        '(("POSTD" "http://postd.cc/feed/"
-           "~/org/feeds.org" "POSTD")
+        `(("POSTD" "http://postd.cc/feed/"
+           ,(concat org-directory "feeds.org" "POSTD")
           ("GIGAZINE" "http://gigazine.net/index.php?/news/rss_2.0/"
-           "~/org/feeds.org" "GIGAZINE")))
+           ,(concat org-directory "feeds.org") "GIGAZINE"))))
   )
 
 ;; | C-c l | 現在のファイル行のリンクを保存する |
@@ -85,7 +92,6 @@
 (use-package org-bullets
   :config
   (add-hook 'org-mode-hook '(lambda () (org-bullets-mode 1))))
-
 
 (provide '50_init-org)
 ;;; 50_init-org ends here
