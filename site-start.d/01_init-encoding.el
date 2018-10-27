@@ -6,7 +6,7 @@
 ;; 文字コード
 
 (set-language-environment "Japanese")
-(require '00_init-hanbetu)
+(require '00_init-vars)
 ;;改行コード表示
 (setq eol-mnemonic-dos "(CRLF)")
 (setq eol-mnemonic-mac "(CR)")

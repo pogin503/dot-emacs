@@ -6,7 +6,7 @@
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/howm/")
 
 (require '00_init-macro)
-(require '00_init-hanbetu)
+(require '00_init-vars)
 
 
 (define-key global-map (kbd "C-c , ,") 'howm-menu)

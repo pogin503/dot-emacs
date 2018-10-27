@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (eval-when-compile
-  (require '00_init-hanbetu))
+  (require '00_init-vars))
 
 ;; カナｶﾅ
 ;; ┏┓┗┛

@@ -4,7 +4,7 @@
 ;;; Code:
 
 (eval-when-compile
-  (require '00_init-env))
+  (require '00_init-vars))
 
 (setq inhibit-startup-message t)            ; 起動メッセージの非表示
 (setq inhibit-startup-echo-area-message -1) ; スタートアップ時のエコー領域メッセージの非表示

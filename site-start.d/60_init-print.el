@@ -16,7 +16,7 @@
   (interactive)
   (my-print-region (point-min) (point-max)))
 
-(require '00_init-hanbetu)
+(require '00_init-vars)
 
 (if run-windows
     (setq ps-print-color-p t

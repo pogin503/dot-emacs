@@ -43,7 +43,10 @@
 
   (defun my-haskell-mode-conf ()
     "Set haskell-mode config."
-    (interactive-haskell-mode))
+    (interactive-haskell-mode)
+    (font-lock-replace-symbol mode "\\(->\\)" "→")
+    (font-lock-replace-symbol mode "\\(<-\\)" "←")
+    (font-lock-replace-symbol mode "\\(=>\\)" "⇒"))
 
   (add-hook 'haskell-mode-hook 'my-haskell-mode-conf)
   ;; (require 'mylib-keycombo)

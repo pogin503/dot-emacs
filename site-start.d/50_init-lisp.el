@@ -4,7 +4,7 @@
 
 (eval-when-compile
   (require '00_init-macro)
-  (require '00_init-hanbetu))
+  (require '00_init-vars))
 
 (require 'mylib)
 

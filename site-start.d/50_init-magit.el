@@ -4,7 +4,7 @@
 ;; This program is free software
 ;;; Code:
 
-(require '00_init-hanbetu)
+(require '00_init-vars)
 
 (use-package magit)
 

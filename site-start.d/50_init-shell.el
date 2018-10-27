@@ -3,7 +3,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(require '00_init-hanbetu)
+(require '00_init-vars)
 
 (require 'shell)
 (when run-windows
