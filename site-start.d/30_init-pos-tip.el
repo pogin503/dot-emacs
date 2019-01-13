@@ -17,8 +17,6 @@
          (buffer-string)))
      nil nil nil 0)))
 
-(define-key emacs-lisp-mode-map (kbd "C-;") 'my-describe-function)
-
 ;;popup-pos-tip
 (req popup-pos-tip)
 (defadvice popup-tip

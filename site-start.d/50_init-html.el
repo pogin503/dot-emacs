@@ -106,27 +106,21 @@
   :config
   ;; (define-key emmet-mode-keymap (kbd "C-j") nil) ;; C-j は newline のままにしておく
   ;; (keyboard-translate ?\C-i ?\H-i)               ;; C-i と Tabの被りを回避
-  (define-key emmet-mode-keymap (kbd "C-j") 'emmet-expand-line)
-  (define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line)
+  ;; (define-key emmet-mode-keymap (kbd "C-j") 'emmet-expand-line)
+  ;; (define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line)
   )
 
 ;; @see http://lgfang.github.io/emacs/emacs-xml.html
 (use-package hideshow
   :functions (hs-show-block hs-hide-level)
   :config
-  (add-hook 'nxml-mode-hook (lambda() (hs-minor-mode 1)))
-  (defun lgfang-toggle-level ()
-    "mainly to be used in nxml mode"
-    (interactive) (hs-show-block) (hs-hide-level 1))
-  (use-package nxml-mode
-    :config
-    (define-key nxml-mode-map (kbd "M-'") 'lgfang-toggle-level)
-    (define-key nxml-mode-map [mouse-3] 'lgfang-toggle-level)
-    (define-key nxml-mode-map (kbd "<backtab>") 'lgfang-toggle-level)))
+  (with-no-warnings
+    (add-hook 'nxml-mode-hook (lambda () (hs-minor-mode 1)))
 
-;; | M-' or mouse-3 or backtab | 畳み込みのトグル |
-;; @memo
-;; backtab : Shift + TAB
+    (defun lgfang-toggle-level ()
+      "mainly to be used in nxml mode"
+      (interactive) (hs-show-block) (hs-hide-level 1)))
+  )
 
 (defun my-code-golf-for-js ()
    (interactive)
@@ -138,8 +132,6 @@
    (replace-regexp "var " "" nil (point-min) (point-max))
    (replace-regexp "{ " "{" nil (point-min) (point-max))
    (replace-regexp "^[[:space:]]* " "for" nil (point-min) (point-max)))
-
-
 
 (provide '50_init-html)
 ;;; 50_init-html ends here

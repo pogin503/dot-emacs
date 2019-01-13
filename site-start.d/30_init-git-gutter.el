@@ -22,15 +22,6 @@
 (set-face-foreground 'git-gutter:deleted "red")
 (set-face-foreground 'git-gutter:separator "yellow")
 
-(global-set-key (kbd "C-x C-g") 'git-gutter:toggle)      ;; Toggle git-gutter
-(global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)  ;; Popup diff window
-
-(global-set-key (kbd "C-x p") 'git-gutter:previous-hunk) ;; Jump to previous hunk
-(global-set-key (kbd "C-x n") 'git-gutter:next-hunk)     ;; Jump to next hunk
-
-(global-set-key (kbd "C-x v s") 'git-gutter:stage-hunk)  ;; Stage current hunk
-(global-set-key (kbd "C-x v r") 'git-gutter:revert-hunk) ;; Revert current hunk
-
 ;; | C-x C-g | git-gutterのトグル |
 ;; | C-x v = | diffのウィンドウをポップアップさせて変更点を見る |
 ;; | C-x p   | 前のハンクに移動 |

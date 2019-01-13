@@ -8,8 +8,6 @@
 (require '00_init-macro)
 (require '00_init-vars)
 
-
-(define-key global-map (kbd "C-c , ,") 'howm-menu)
 (add-to-list 'auto-mode-alist '("\\.howm$'" . howm-mode))
 
 ;;はじめて C-c , , した時に読み込む
@@ -35,8 +33,6 @@
           (setq howm-file-name-format "%Y/%m/%Y_%m_%d.howm") ; 1 日 1 ファイル
           (setq howm-keyword-case-fold-search t) ; <<< で大文字小文字を区別しない
 
-          (define-key howm-mode-map [tab] 'action-lock-goto-next-link)
-          (define-key howm-mode-map [(meta tab)] 'action-lock-goto-previous-link)
 
           ;; 「最近のメモ」一覧時にタイトル表示
           (setq howm-list-recent-title t)
@@ -96,10 +92,6 @@
                                  (buffer-file-name)))
               (save-buffer)
               (kill-buffer nil)))
-          (eval-after-load "howm"
-            '(progn
-              (define-key howm-mode-map
-               "\C-c\C-c" 'my-save-and-kill-buffer)))
 
           ;; メニューを自動更新しない
           (setq howm-menu-refresh-after-save nil)

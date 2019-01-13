@@ -44,11 +44,6 @@
    '(ido-ignore-extensions t)))
 
 (use-package multiple-cursors
-  :bind (("C-c C-S-c" . mc/edit-lines)
-		 ("C->" . mc/mark-next-like-this)
-		 ("C-<" . mc/mark-previous-like-this)
-		 ("C-c C-<"  . mc/mark-all-like-this)
-		 ("C-*"  . mc/mark-all-like-this))
   :functions rrm/switch-to-multiple-cursors
   :config
   (setq mc/list-file (locate-user-emacs-file ".cache/.mc-lists.el")))
@@ -100,10 +95,7 @@
   :mode ("\\.dats\\'" . ats-mode)
   :commands (ats-mode))
 
-(use-package peep-dired
-  :config
-  (define-key dired-mode-map "\C-xx" 'peep-dired)
-  (define-key peep-dired-mode-map "\C-xx" 'peep-dired))
+(use-package peep-dired)
 
 (use-package sudo-ext)
 
@@ -114,7 +106,6 @@
 (use-package open-junk-file)
 
 (use-package anzu
-  :bind  ("M-%" . anzu-query-replace-regexp)
   :config
   (global-anzu-mode +1))
 
@@ -125,8 +116,7 @@
   ;; From helm-swoop to helm-multi-swoop-all
   (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop))
 
-(use-package expand-region
-  :bind ("C-=" . er/expand-region))
+(use-package expand-region)
 
 (use-package pretty-lambdada
   :config
@@ -207,10 +197,8 @@
   :config
   (drag-stuff-mode))
 
-(use-package historyf
-  :config
-  (define-key emacs-lisp-mode-map (kbd "C-c C-<left>") 'historyf-back)
-  (define-key emacs-lisp-mode-map (kbd "C-c C-<left>") 'historyf-forward)
-  (add-to-list 'historyf-minor-modes 'elisp-slime-nav))
+;; (use-package historyf
+;;   :config
+;;   (add-to-list 'historyf-minor-modes 'elisp-slime-nav))
 
 ;;; 00_init-package.el ends here

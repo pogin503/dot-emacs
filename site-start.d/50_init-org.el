@@ -6,15 +6,6 @@
 
 (use-package org
   :commands (org-mode org-todo-list org-agenda org-store-link)
-  :bind (
-         ;; org-agendaはアジェンダ(行動計画)を立てるための機能
-         ("C-c a" . org-agenda)
-         ;; org-modeでのメモをする機能
-		 ("C-c c" . org-capture)
-         ;; orgモードを使って現在のファイル行へのリンクを保存する
-		 ("C-c l" . org-store-link)
-         ;; orgバッファのみを行き来するiswitchbコマンド
-		 ("C-c b" . org-iswitchb))
   :config
   (if (boundp 'dropbox-directory)
       (setq org-directory (concat dropbox-directory "001_Documents/org/"))

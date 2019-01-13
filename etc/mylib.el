@@ -678,5 +678,33 @@ If a coding-system can't safely encode the character, display \"?\"."
   ;; :PROPERTIES: を隠す
   (org-cycle))
 
+  ;;;###autoload
+(defun duplicate-thing (n)
+  (interactive "P")
+  (save-excursion
+    (let (start
+          end
+          (with-comment-out (consp n)))
+      (cond (mark-active
+             (setq start (region-beginning) end (region-end)))
+            (t
+             (beginning-of-line)
+             (setq start (point))
+             (forward-line)
+             (setq end (point))))
+      (kill-ring-save start end)
+      (if with-comment-out
+          (progn
+            (comment-region start end)
+            (yank))
+        (dotimes (i (or n 1))
+          (yank))))))
+
+;; @see https://gist.github.com/sky-y/3264252
+(defun ucs-normalize-NFC-buffer ()
+  "バッファ全体の濁点分離を直します."
+  (interactive)
+  (ucs-normalize-NFC-region (point-min) (point-max)))
+
 (provide 'mylib)
 ;;; mylib.el ends here

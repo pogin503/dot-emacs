@@ -14,11 +14,6 @@
   (setq-default ac-use-comphist t)
   (setq-default ac-auto-start 4
                 ac-auto-show-menu 1.0)
-  (define-key ac-mode-map (kbd "M-i") 'auto-complete)
-  (define-key ac-completing-map "\t" 'ac-complete)
-
-  ;; Enterで補完をしないようにする
-  (define-key ac-completing-map "\r" nil)
 
   (dolist (hook (list
                  'html-mode-hook

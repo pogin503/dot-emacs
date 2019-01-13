@@ -3,11 +3,16 @@
 ;; This program is free software
 ;;; Code:
 
-(define-key treemacs-mode-map (kbd "+") 'my-make-directory)
+(use-package treemacs
+  :config
+  (treemacs-git-mode 'deferred)
+  (treemacs-follow-mode nil))
 
 (require 'f)
 (defun my-make-directory (dirname)
-  (interactive (list (read-string (format "directory name is (pwd: %s) ? " default-directory))))
+  (interactive (list (read-string
+                      (format "directory name is (pwd: %s) ? "
+                              default-directory))))
   (if (not (f-exists? (f-join default-directory dirname)))
       (make-directory (f-join default-directory dirname))
     (message (format "cannot make directory : %s" dirname)))

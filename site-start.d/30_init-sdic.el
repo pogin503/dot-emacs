@@ -10,14 +10,9 @@
 
 ;;; sdic-mode 用の設定
 (autoload 'sdic-describe-word "sdic" "英単語の意味を調べる" t nil)
-(global-set-key "\C-cw" 'sdic-describe-word)
 
 (autoload 'sdic-describe-word-at-point
   "sdic" "カーソルの位置の英単語の意味を調べる" t nil)
-(global-set-key "\C-cW" 'sdic-describe-word-at-point)
-
-;; | C-c w | 英単語の意味を調べる |
-;; | C-c W | カーソルの位置の英単語の意味を調べる |
 
 (setq sdic-eiwa-dictionary-list
       '((sdicf-client (locate-user-emacs-file "etc/dict/gene.sdic"))))
@@ -65,7 +60,6 @@
 
 (setq sdic-inline-search-func 'sdic-inline-search-word-with-stem)
 (setq sdic-inline-display-func 'sdic-inline-pos-tip-show-when-region-selected)
-(define-key sdic-inline-map "\C-c\C-p" 'sdic-inline-pos-tip-show)
 
 (provide '30_init-sdic)
 ;;; 30_init-sdic ends here

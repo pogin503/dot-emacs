@@ -23,14 +23,6 @@
        (setq file-name-coding-system 'utf-8)
        (setq locale-coding-system 'utf-8)))
 
-;; @see https://gist.github.com/sky-y/3264252
-(defun ucs-normalize-NFC-buffer ()
-  "バッファ全体の濁点分離を直します."
-  (interactive)
-  (ucs-normalize-NFC-region (point-min) (point-max)))
-
-(global-set-key (kbd "C-x RET u") 'ucs-normalize-NFC-buffer)
-
 (add-hook 'server-visit-hook
           (lambda ()
             (if (string-match "COMMIT_EDITMSG" buffer-file-name)

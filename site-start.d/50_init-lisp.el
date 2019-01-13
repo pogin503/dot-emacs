@@ -18,10 +18,6 @@
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 (add-hook 'emacs-lisp-mode-hook 'my-set-elisp-conf)
 
-(if (version<= emacs-version "24.4")
-    (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
-  (define-key read-expression-map (kbd "TAB") 'completion-at-point))
-
 (defun my-set-lisp-conf ()
   (interactive)
   (show-paren-mode t)
@@ -49,8 +45,6 @@
           ielm-mode-hook
           lisp-mode-hook)
   (add-hook it 'enable-paredit-mode))
-
-(define-key paredit-mode-map (kbd "C-j") 'eval-print-last-sexp)
 
 ;; | コマンド | 解説               |
 ;; |----------+--------------------|
