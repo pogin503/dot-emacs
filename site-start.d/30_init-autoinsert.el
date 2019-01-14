@@ -23,7 +23,8 @@
                ("\\.sh$"   . ["template.sh"
                             (lambda() (my-template-exec "#!/usr/bin/env bash"))
                             my-template])
-               ("\\.editorconfig$"   . ["template.editorconfig" my-template]))
+               ("\\.editorconfig$"    . ["template.editorconfig" my-template])
+               ("\\.dir-locals\\.el") . ["template.dir-locals.el" my-template])
              auto-insert-alist))
 
 (use-package s)
