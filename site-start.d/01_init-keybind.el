@@ -105,10 +105,11 @@
                  ;; ([(meta return)] . (select-toggle-fullscreen))
                  )
       )
-    (use-package auto-complete
-      :config
-      (bind-keys :map eshell-mode-map
-                 ("C-i" . auto-complete)))
+    ;; (use-package auto-complete
+    ;;   :config
+    ;;   (bind-keys :map eshell-mode-map
+    ;;              ("C-i" . auto-complete))
+    ;;   )
     )
   (use-package yasnippet
     :config
@@ -137,14 +138,17 @@
     :config
     ;; (define-key dired-mode-map "\C-m" 'my-dired-advertised-find-file)
     (bind-keys :map dired-mode-map
-               ([M-up] . my-dired-up-directory))
+               ([M-up] . my-dired-up-directory)
+               ;; ("RET" . dired-find-alternate-file)
+               ;; ([mouse-1] . dired-mouse-find-file)
+               )
 
     ;; (define-key dired-mode-map "s" 'my-dired-various-sort-change-or-edit)
-    (bind-keys :map dired-mode-map
-               ("\C-xx" . peep-dired))
 
     (use-package peep-dired
       :config
+      (bind-keys :map dired-mode-map
+                 ("\C-xx" . peep-dired))
       (bind-keys :map peep-dired-mode-map
                  ("\C-xx" . peep-dired)))
 
@@ -164,17 +168,19 @@
       ;; (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
 
       (bind-keys :map dired-mode-map
+                 ;; ([mouse-1] . dired-reuse-buffer-mouse)
+                 ;; ("RET" . dired-reuse-buffer)
                  ("^" . (function
                          (lambda nil (interactive) (dired-reuse-buffer "..")))))))
 
   (use-package company
     :config
-    (bind-key "C-M-i" company-complete))
+    (bind-key "C-M-i" 'company-complete))
 
   (use-package google-translate
     :config
-    (bind-key "\C-ct" google-translate-at-point)
-    (bind-key "\C-cT" google-translate-query-translate))
+    (bind-key "\C-ct" 'google-translate-at-point)
+    (bind-key "\C-cT" 'google-translate-query-translate))
 
   (use-package paredit
     :config
@@ -189,14 +195,15 @@
     (bind-key "<f5>" 'quickrun)
     (bind-key "<f6>" 'quickrun-compile-only))
 
-  (use-package howm
-    :config
-    (bind-key "C-c , ," howm-menu)
-    (bind-keys :map howm-mode-map
-                ([tab] . action-lock-goto-next-link)
-                ([(meta tab)] . action-lock-goto-previous-link)
-                ("\C-c\C-c" . my-save-and-kill-buffer))
-    )
+  ;; (use-package howm
+  ;;   :config
+  ;;   (bind-key "C-c , ," 'howm-menu)
+  ;;   (bind-keys :map howm-mode-map
+  ;;               ([tab] . action-lock-goto-next-link)
+  ;;               ([(meta tab)] . action-lock-goto-previous-link)
+  ;;               ("\C-c\C-c" . my-save-and-kill-buffer))
+  ;;   )
+
   (define-key menu-bar-tools-menu [compile] '("Compile..." . smart-compile))
   (use-package cc-mode
     :config
@@ -237,26 +244,26 @@
            ;; orgバッファのみを行き来するiswitchbコマンド
 		   ("C-c b" . org-iswitchb)))
 
-  (use-package auto-complete
-    :config
-    (bind-keys :map ac-mode-map
-               ("M-i" . auto-complete))
-    (bind-keys :map ac-completing-map
-               ("\t" . ac-complete)
-               ;; Enterで補完をしないようにする
-               ("\r" nil)))
+  ;; (use-package auto-complete
+  ;;   :config
+  ;;   (bind-keys :map ac-mode-map
+  ;;              ("M-i" . auto-complete))
+  ;;   (bind-keys :map ac-completing-map
+  ;;              ("\t" . ac-complete)
+  ;;              ;; Enterで補完をしないようにする
+  ;;              ("\r" nil)))
 
-  (use-package git-gutter
-    :config
-    (bind-key ("C-x C-g") 'git-gutter:toggle)      ;; Toggle git-gutter
-    (bind-key ("C-x v =") 'git-gutter:popup-hunk)  ;; Popup diff window
+  ;; (use-package git-gutter
+  ;;   :config
+  ;;   (bind-key ("C-x C-g") 'git-gutter:toggle)      ;; Toggle git-gutter
+  ;;   (bind-key ("C-x v =") 'git-gutter:popup-hunk)  ;; Popup diff window
 
-    (bind-key ("C-x p") 'git-gutter:previous-hunk) ;; Jump to previous hunk
-    (bind-key ("C-x n") 'git-gutter:next-hunk)     ;; Jump to next hunk
+  ;;   (bind-key ("C-x p") 'git-gutter:previous-hunk) ;; Jump to previous hunk
+  ;;   (bind-key ("C-x n") 'git-gutter:next-hunk)     ;; Jump to next hunk
 
-    (bind-key ("C-x v s") 'git-gutter:stage-hunk)  ;; Stage current hunk
-    (bind-key ("C-x v r") 'git-gutter:revert-hunk) ;; Revert current hunk
-    )
+  ;;   (bind-key ("C-x v s") 'git-gutter:stage-hunk)  ;; Stage current hunk
+  ;;   (bind-key ("C-x v r") 'git-gutter:revert-hunk) ;; Revert current hunk
+  ;;   )
 
   ;; (global-set-key "\C-cw" 'sdic-describe-word)
   ;; (global-set-key "\C-cW" 'sdic-describe-word-at-point)
@@ -264,8 +271,7 @@
   ;; | C-c w | 英単語の意味を調べる |
   ;; | C-c W | カーソルの位置の英単語の意味を調べる |
 
-  ;; ¥の代わりにバックスラッシュを入力する
-  (keyboard-translate ?\C-h ?\C-?)
+  ;; (keyboard-translate ?\C-h ?\C-?)
   )
 
 
