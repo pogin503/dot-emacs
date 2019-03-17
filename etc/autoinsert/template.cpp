@@ -20,6 +20,7 @@ typedef std::vector<VI> VVI;
 typedef std::vector<std::string> VS;
 typedef std::pair<int, int> PII;
 typedef long long LL;
+typedef unsigned long UL;
 
 //container util
 //------------------------------------------
