@@ -15,7 +15,7 @@
                  ("TAB" . lisp-complete-symbol))
     (bind-keys :map read-expression-map
                ("TAB" . completion-at-point)))
-
+  (bind-key "C-x s" 'save-buffer)
   (bind-key "C-z" 'undo)
   (bind-key "s-<right>" 'right-word)
   (bind-key "s-<left>" 'left-word)
@@ -40,7 +40,10 @@
   (bind-key "S-<return>" 'my-edit-next-line)
   (bind-key "C-S-<return>" 'my-edit-previous-line)
   (bind-key "C-x C-o" 'other-window)
-
+  (bind-key [?\¥] [?\\])
+  (bind-key [?\C-¥] [?\C-\\])
+  (bind-key [?\M-¥] [?\M-\\])
+  (bind-key [?\C-\M-¥] [?\C-\M-\\])
   ;; (use-package emacs-lisp-mode
   ;;   :config
   ;;   ;; (use-package historyf
