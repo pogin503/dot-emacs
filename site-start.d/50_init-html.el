@@ -5,19 +5,17 @@
 ;; @see http://yanmoo.blogspot.jp/2013/06/html5web-mode.html
 ;;; Code:
 
-(use-package vue-mode
+(require 'use-package)
+
+(use-package js2-mode
   :config
-  (use-package js2-mode
-    :config
-    (setq js2-strict-trailing-comma-warning nil)
-    (setq js2-strict-missing-semi-warning nil)
-    (setq web-mode-markup-indent-offset 4)
-    ))
+  (setq js2-strict-trailing-comma-warning nil)
+  (setq js2-strict-missing-semi-warning nil)
+  )
+
 
 ;; (add-to-load-path "plugins/zencoding")
 (use-package web-mode
-  :init
-  (add-hook 'web-mode-hook 'my-web-mode-conf)
   :config
   (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -26,24 +24,32 @@
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.blade\\.php\\'" . web-mode))
+
+  (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+  (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
+  (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+  (add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil))
+
+  ;; Highlight of columns
+  (setq web-mode-enable-current-column-highlight t)
+  (setq web-mode-enable-current-element-highlight t)
+
+  (setq web-mode-engines-alist
+        '(("php"    . "\\.phtml\\'")
+          ("blade"  . "\\.blade\\.")))
   ;; インデント数
   (defun my-web-mode-conf ()
     "Hooks for Web mode."
-    (setq web-mode-markup-indent-offset 2)
+    ;; (setq web-mode-markup-indent-offset 2)
     (setq web-mode-enable-auto-indentation nil)
-    (custom-set-variables
-     '(web-mode-asp-offset 2)
-     '(web-mode-code-indent-offset 2)
-     '(web-mode-css-indent-offset 2)
-     '(web-mode-css-offset 2)
-     '(web-mode-enable-auto-expanding t)
-     '(web-mode-html-offset 2)
-     '(web-mode-java-offset 2)
-     '(web-mode-markup-indent-offset 2)
-     '(web-mode-php-offset 2)
-     '(web-mode-script-offset 2)
-     '(web-mode-sql-indent-offset 2))
-    ))
+    ;; (setq web-mode-markup-indent-offset 4)
+    ;; (setq web-mode-css-indent-offset 4)
+    ;; (setq web-mode-code-indent-offset 4)
+    (setq web-mode-markup-indent-offset 4)
+    )
+  (add-hook 'web-mode-hook 'my-web-mode-conf)
+  )
 
 ;; GET-ing an HTTP page
 ;;
@@ -61,24 +67,24 @@
 ;;  :data '(("parameter1" . "data")
 ;;          ("parameter2" . "more data")))
 
-;; | C-c C-; | コメント/アンコメント                              |
-;; | C-c C-e | 閉じていないタグを見つける                         |
-;; | C-c C-f | 指定したタグのブロックを開閉する                   |
-;; | C-c C-i | 現在開いているバッファをインデントする             |
+;; | C-c C-; | コメント/アンコメント                         |
+;; | C-c C-e | 閉じていないタグを見つける                     |
+;; | C-c C-f | 指定したタグのブロックを開閉する                |
+;; | C-c C-i | 現在開いているバッファをインデントする           |
 ;; | C-c C-m | マークする(マークする場所によって選択範囲が変わる) |
-;; | C-c C-n | 開始・終了タグまでジャンプ                         |
-;; | C-c C-r | HTML entitiesをリプレースする                      |
-;; | C-c C-s | スニペットを挿入                                   |
-;; | C-c C-w | スペースを表示・非表示                             |
+;; | C-c C-n | 開始・終了タグまでジャンプ                     |
+;; | C-c C-r | HTML entitiesをリプレースする                |
+;; | C-c C-s | スニペットを挿入                             |
+;; | C-c C-w | スペースを表示・非表示                        |
 
-;; | C-c /   | 閉じタグを挿入(エレメントを閉じる) |
+;; | C-c /   | 閉じタグを挿入(エレメントを閉じる)   |
 ;; | C-c e b | エレメントの最初へ移動             |
-;; | C-c e d | エレメントを削除                   |
+;; | C-c e d | エレメントを削除                  |
 ;; | C-c e e | エレメントの最後へ移動             |
-;; | C-c e e | エレメントを複製                   |
+;; | C-c e e | エレメントを複製                  |
 ;; | C-c e n | 次のエレメントへ移動               |
 ;; | C-c e p | 前のエレメントへ移動               |
-;; | C-c e u | 親エレメントへ移動                 |
+;; | C-c e u | 親エレメントへ移動                |
 ;; | C-c e r | エレメントをリネーム               |
 ;; | C-c e s | エレメント全体を選択               |
 ;; | C-c e i | エレメントのコンテンツを選択       |
@@ -94,16 +100,17 @@
 
 (use-package emmet-mode
   :defines emmet-indentation
-  :init
-  (defun my-emmet-conf ()
-    (setq emmet-indentation 2))
-  (add-hook 'emmet-mode-hook 'my-emmet-conf)
-  (add-hook 'sgml-mode-hook 'emmet-mode)
-  (add-hook 'css-mode-hook  'emmet-mode)
-  (add-hook 'nxml-mode-hook 'emmet-mode)
-  (add-hook 'web-mode-hook 'emmet-mode)
-  (add-hook 'php-mode-hook 'emmet-mode)
-  :config
+  ;; :init
+  ;; (defun my-emmet-conf ()
+  ;;   (setq emmet-indentation 2))
+  ;; (add-hook 'emmet-mode-hook 'my-emmet-conf)
+  ;; (add-hook 'sgml-mode-hook 'emmet-mode)
+  ;; (add-hook 'css-mode-hook  'emmet-mode)
+  ;; (add-hook 'nxml-mode-hook 'emmet-mode)
+  ;; (add-hook 'web-mode-hook 'emmet-mode)
+  ;; (add-hook 'php-mode-hook 'emmet-mode)
+  ;; :config
+
   ;; (define-key emmet-mode-keymap (kbd "C-j") nil) ;; C-j は newline のままにしておく
   ;; (keyboard-translate ?\C-i ?\H-i)               ;; C-i と Tabの被りを回避
   ;; (define-key emmet-mode-keymap (kbd "C-j") 'emmet-expand-line)
