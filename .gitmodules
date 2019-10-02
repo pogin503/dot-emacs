@@ -1,3 +1,3 @@
 [submodule "plugins/r-like-example"]
 	path = plugins/r-like-example
-	url = git@github.com:pogin503/r-like-example.git
+	url = https://github.com/pogin503/r-like-example.git
