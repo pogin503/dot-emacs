@@ -8,17 +8,19 @@
 (add-to-list 'package-archives
              '("melpa-stable" . "https://melpa-stable.milkbox.net/packages/") t)
 
+;; (setq package-user-dir "~/.emacs.d/elap")
+
 (package-initialize)
 
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
-(add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode))
+;; (require 'cask "~/.cask/cask.el")
+;; (cask-initialize)
+;; (add-to-list 'auto-mode-alist '("Cask$" . emacs-lisp-mode))
 
 (require 'use-package)
 
-(use-package pallet
-  :config
-  (pallet-mode +1))
+;; (use-package pallet
+;;   :config
+;;   (pallet-mode +1))
 
 (use-package ag
   :ensure ag)
@@ -99,28 +101,15 @@
 
 (use-package sudo-ext)
 
-(use-package zlc
-  :config
-  (zlc-mode 1))
-
 (use-package open-junk-file)
 
 (use-package anzu
   :config
   (global-anzu-mode +1))
 
-(use-package helm-swoop
-  :config
-  ;; When doing isearch, hand the word over to helm-swoop
-  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-  ;; From helm-swoop to helm-multi-swoop-all
-  (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop))
+(use-package helm-swoop)
 
 (use-package expand-region)
-
-(use-package pretty-lambdada
-  :config
-  (pretty-lambda-for-modes))
 
 (use-package sequential-command-config
   :config
@@ -142,6 +131,12 @@
   (safe-diminish "projectile" 'projectile-mode)
   (safe-diminish "volatile-highlights" 'volatile-highlights-mode))
 
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1)
+  (setq editorconfig-indentation-alist (nconc editorconfig-indentation-alist '((fish-mode fish-indent-offset))))
+  )
+
 (use-package smart-compile
   :init
   (defconst smart-compile-alist
@@ -157,17 +152,13 @@
     ) "...")
   :config
   (global-set-key "\C-cc" 'smart-compile)
-  (define-key menu-bar-tools-menu [compile] '("Compile..." . smart-compile)))
+  )
 
 (use-package quickrun
   :config
   ;; 結果の出力バッファと元のバッファを行き来したい場合は
   ;; ':stick t'の設定をするとよい
-  (push '("*quickrun*") popwin:special-display-config)
-
-  ;; よく使うならキーを割り当てるとよいでしょう
-  (global-set-key (kbd "<f5>") 'quickrun)
-  (global-set-key (kbd "<f6>") 'quickrun-compile-only))
+  (push '("*quickrun*") popwin:special-display-config))
 
 (use-package flycheck
   :config
@@ -190,15 +181,73 @@
   :config
   (nyan-mode))
 
-(use-package haskell-emacs)
+;; (use-package haskell-emacs)
 ;; M-x haskell-emacs-init
 
 (use-package drag-stuff
   :config
   (drag-stuff-mode))
 
+(use-package ein
+  :config
+  (use-package ein-notebook)
+  (use-package ein-subpackages))
+
+(use-package flycheck
+  :config
+  (global-flycheck-mode 1))
+
 ;; (use-package historyf
 ;;   :config
 ;;   (add-to-list 'historyf-minor-modes 'elisp-slime-nav))
+
+(use-package rust-mode
+  :config
+  (setq rust-format-on-save t)
+  ;; (use-package flycheck-rust
+  ;;   :config
+  ;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  ;; (setq rust-rustfmt-bin )
+  )
+
+(use-package helm-gtags
+  :config
+  (add-hook 'c-mode-hook 'helm-gtags-mode)
+  (add-hook 'c++-mode-hook 'helm-gtags-mode)
+  (add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+  ;; customize
+  (custom-set-variables
+   '(helm-gtags-path-style 'relative)
+   '(helm-gtags-ignore-case t)
+   '(helm-gtags-auto-update t)))
+
+(use-package sh-script
+  :config
+  (defun sh-mode-conf ()
+    (interactive)
+    (setq sh-basic-offset 2))
+  (add-hook 'sh-mode-hook #'sh-mode-conf))
+
+(use-package no-littering
+  :config
+  ;; (setq no-littering-etc-directory
+  ;;       (expand-file-name "config/" user-emacs-directory))
+  (setq no-littering-var-directory
+        (expand-file-name "data/" user-emacs-directory)))
+
+(use-package gitter
+  :config
+  )
+
+(use-package markdown-preview-mode
+  :config
+  )
+
+(use-package company
+  :config
+  (global-company-mode)
+  (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+  )
 
 ;;; 00_init-package.el ends here
