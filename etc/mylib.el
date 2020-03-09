@@ -4,9 +4,12 @@
 ;;; Code:
 
 (require '00_init-macro)
+(require '00_init-vars)
 
-(eval-when-compile
-  (require 'cl))
+(require 'cl-lib)
+(require 'package)
+(require 'use-package)
+(require 'f)
 
 (defun my-print-escaped-sexp ()
   "Print escpaped s-expression."
@@ -127,7 +130,7 @@ FILENAME defaults to `buffer-file-name'."
 ;; package
 (defun my-install-package (pkgs)
   "Install my packages."
-  (let ((not-installed (loop for x in pkgs
+  (let ((not-installed (cl-loop for x in pkgs
                              when (not (package-installed-p x))
                              collect x)))
     (when not-installed
@@ -160,7 +163,7 @@ FILENAME defaults to `buffer-file-name'."
 ;; 行末のwhitespaceを削除
 (defun delete-trailing-whitespace-with-exclude-pattern ()
   (interactive)
-  (cond ((equal nil (loop for pattern in delete-trailing-whitespace-exclude-patterns
+  (cond ((equal nil (cl-loop for pattern in delete-trailing-whitespace-exclude-patterns
                           thereis (string-match pattern buffer-file-name)))
          (delete-trailing-whitespace))))
 
@@ -235,29 +238,6 @@ FILENAME defaults to `buffer-file-name'."
       (end-of-line))
   (newline-and-indent))
 
-;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
-;; 終了時バイトコンパイル
-(defun my-byte-compile-directory ()
-  "Byte-compile files in particular directory."
-  (interactive)
-  (if (file-newer-than-file-p (locate-user-emacs-file "init.el")
-                              (locate-user-emacs-file "init.elc"))
-      (byte-compile-file (locate-user-emacs-file "init.el")))
-  (byte-recompile-directory (locate-user-emacs-file "elisp") 0)
-  (byte-recompile-directory (locate-user-emacs-file "plugins") 0)
-  (byte-recompile-directory (locate-user-emacs-file "site-start.d") 0)
-  (f-write (concat
-            (with-current-buffer
-                (get-buffer "*Compile-Log*")
-              (buffer-substring-no-properties (point-min) (point-max)))
-            ";; Local variables:\n"
-            ";; mode: compilation\n"
-            ";; End:\n")
-           'utf-8
-           (concat "~/log/"  (format-time-string "emacs-compile-log_%Y-%m-%d %T.log"))
-           )
-  t)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; anything or helm
 
@@ -275,7 +255,7 @@ FILENAME defaults to `buffer-file-name'."
            (defun anything-font-families-create-buffer ()
              (with-current-buffer
                  (get-buffer-create "*Fonts*")
-               (loop for family in (sort (cl-delete-duplicates (font-family-list)) 'string<)
+               (cl-loop for family in (sort (cl-delete-duplicates (font-family-list)) 'string<)
                      do (insert
                          (propertize (concat family "\n")
                                      'font-lock-face
@@ -477,6 +457,7 @@ Example:
   (other-window 1))
 
 (defun append-path (path)
+  ""
   (setenv "PATH" (concat (file-truename path)":" (getenv "PATH")))
   (setq eshell-path-env (getenv "PATH"))
   (setq exec-path (split-string (getenv "PATH") ":"))
@@ -484,6 +465,7 @@ Example:
 
 ;;; Notification center
 (defun notif (title message)
+  ""
   (shell-command
    (concat
     "echo 'display notification \"'"
@@ -531,6 +513,7 @@ If a coding-system can't safely encode the character, display \"?\"."
   (s-split " " str))
 
 (defun unwords (str)
+  ""
   (s-join " " str))
 
 (defun now ()
@@ -543,29 +526,52 @@ If a coding-system can't safely encode the character, display \"?\"."
   (format-time-string "%Y-%m-%dT%H:%M:%S+09:00"))
 
 (defun to-str (obj)
+  ""
   (format "%s" obj))
 
-(defun my-fundamental-template ()
+(defun my-template ()
+  ""
   (interactive)
-  (insert (format-time-string "* %Y/%m/%d"))
-  (insert "
-** Step1 仕事のゴールを決める
-** Step2 作業をゴールまでを作業に分割する
-** Step3 作業ごとの時間を見積もる
-** Step4 最も時間のかかる作業を
-** Step5 作業の依存関係を見極める
-** Step6 作業の段取りを決める
-"))
+  (let* ((date (format-time-string "%Y/%m/%d"))
+         (header-char (cond ((string= major-mode "org-mode")
+                             "*")
+                            ((string= major-mode "markdown-mode")
+                             "#")))
+         (header-1 (s-repeat 1 header-char))
+         (header-2 (s-repeat 2 header-char)))
+    (insert (concat header-1 " " date
+                    "\n"
+                    header-2 " 前やったこと"
+                    "\n"
+                    header-2 " 今日やること"
+                    "\n"
+                    header-2 " 次回やること
+
+============================
+(1)()
+
+"))))
+
+
+(defun my-start-work ()
+  ""
+  (interactive)
+  (find-file (concat dropbox-directory "/001_Documents/org/work.org"))
+  (goto-char (point-max))
+  (my-template)
+  )
 
 ;; regionの選択中にBackspaceを押すと消せるようにする
 ;; @see http://www.fan.gr.jp/~ring/Meadow/meadow.html#ys:backward-delete-region
 (defadvice backward-delete-char-untabify
-  (around ys:backward-delete-region activate)
+    (around ys:backward-delete-region activate)
+  ""
   (if (and transient-mark-mode mark-active)
       (delete-region (region-beginning) (region-end))
     ad-do-it))
 
 (defun my-get-buffer-function ()
+  ""
   (interactive)
   (let (ret (q t))
     (save-excursion
@@ -587,19 +593,41 @@ If a coding-system can't safely encode the character, display \"?\"."
 
 (use-package f
   :config
-  (defun my-copy-current-line-info ()
+  ;;@see http://felyce.info/archives/blog/2010/12/emacs-25.html
+  ;; 終了時バイトコンパイル
+  (defun my-byte-compile-directory ()
+    "Byte-compile files in particular directory."
     (interactive)
-    (let ((path (f-this-file))
-          ;; (root-path ((f-traverse-upwards
-          ;;              (lambda (path)
-          ;;                (f-exists? (f-expand ".git" path)))
-          ;;              start-path)))
-          )
-      (when (not (null path))
-        (kill-new (format "%s L%s\n"
-                          (f-filename (f-this-file))
-                          (current-line-number)
-                          (buffer-substring-no-properties s e))))))
+    (if (file-newer-than-file-p (locate-user-emacs-file "init.el")
+                                (locate-user-emacs-file "init.elc"))
+        (byte-compile-file (locate-user-emacs-file "init.el")))
+    (byte-recompile-directory (locate-user-emacs-file "elisp") 0)
+    (byte-recompile-directory (locate-user-emacs-file "plugins") 0)
+    (byte-recompile-directory (locate-user-emacs-file "site-start.d") 0)
+    (f-write (concat
+              (with-current-buffer
+                  (get-buffer "*Compile-Log*")
+                (buffer-substring-no-properties (point-min) (point-max)))
+              ";; Local variables:\n"
+              ";; mode: compilation\n"
+              ";; End:\n")
+             'utf-8
+             (concat "~/log/"  (format-time-string "emacs-compile-log_%Y-%m-%d %T.log"))
+             )
+    t)
+  ;; (defun my-copy-current-line-info ()
+  ;;   (interactive)
+  ;;   (let ((path (f-this-file))
+  ;;         ;; (root-path ((f-traverse-upwards
+  ;;         ;;              (lambda (path)
+  ;;         ;;                (f-exists? (f-expand ".git" path)))
+  ;;         ;;              start-path)))
+  ;;         )
+  ;;     (when (not (null path))
+  ;;       (kill-new (format "%s L%s\n"
+  ;;                         (f-filename (f-this-file))
+  ;;                         (current-line-number)
+  ;;                         (buffer-substring-no-properties s e))))))
 
   (defun my-copy-current-line-info (rs re)
     (interactive "r")
@@ -614,18 +642,45 @@ If a coding-system can't safely encode the character, display \"?\"."
                                              (current-line-number)))))
                            (format "L%s-L%s" line-start line-end))
                        (format "L%s" (current-line-number))))
-          (s (if (region-active-p)
+          (rs (if (region-active-p)
                  rs
                (save-excursion (beginning-of-line) (point))))
-          (e (if (region-active-p)
+          (re (if (region-active-p)
                  re
                (save-excursion (end-of-line) (point)))))
-      (setq result (format "%s %s\n%s\n"
+      (let (result)
+        (setq result (format "%s %s\n"
                            (f-filename (f-this-file))
                            line-info
-                           (buffer-substring-no-properties s e)))
-      (kill-new result)
-      result)))
+                           ))
+        (kill-new result)
+        result)))
+  (defun my-copy-current-line-info-with-code (rs re)
+    (interactive "r")
+    (let ((line-info (if (region-active-p)
+                         (let ((line-start (save-excursion
+                                             (goto-char rs)
+                                             (current-line-number)))
+                               (line-end (save-excursion
+                                           (goto-char re)
+                                           (if (bolp)
+                                               (1- (current-line-number))
+                                             (current-line-number)))))
+                           (format "L%s-L%s" line-start line-end))
+                       (format "L%s" (current-line-number))))
+          (rs (if (region-active-p)
+                 rs
+               (save-excursion (beginning-of-line) (point))))
+          (re (if (region-active-p)
+                 re
+               (save-excursion (end-of-line) (point)))))
+      (let (result)
+        (setq result (format "%s %s\n%s\n"
+                           (f-filename (f-this-file))
+                           line-info
+                           (buffer-substring-no-properties rs re)))
+        (kill-new result)
+        result))))
 
 ;; @see http://stackoverflow.com/questions/1511737/how-do-you-list-the-active-minor-modes-in-emacs
 (defun which-active-modes ()
@@ -640,12 +695,14 @@ If a coding-system can't safely encode the character, display \"?\"."
     (message "Active modes are %s" active-modes)))
 
 (defun no-properties-string (str)
+  ""
   (with-temp-buffer
     (insert str)
     (buffer-substring-no-properties (point-min) (point-max))))
 
 (defun contains (elt list)
-  (if (numberp (position elt list))
+  ""
+  (if (numberp (cl-position elt list))
       t
     nil))
 
@@ -666,6 +723,7 @@ If a coding-system can't safely encode the character, display \"?\"."
 (defun my-qa-insert (q)
   "org-modeでQA形式のテンプレートを挿入する"
   (interactive "sQ: ")
+  (move-beginning-of-line 1)
   (insert (format "** Q. [[#%s][%s]]\n" q q))
   (goto-char (point-max))
   (insert (format "** A. %s
@@ -677,6 +735,43 @@ If a coding-system can't safely encode the character, display \"?\"."
   (forward-line -5)
   ;; :PROPERTIES: を隠す
   (org-cycle))
+
+(defun revert-buffer-without-confirm ()
+  (interactive)
+  (revert-buffer nil t)
+  (message "Buffer reverted."))
+
+;; https://stackoverflow.com/questions/3034237/check-if-current-emacs-buffer-contains-a-string
+(defun buffer-contains-substring (string)
+  ""
+  (save-excursion
+    (save-match-data
+      (goto-char (point-min))
+      (search-forward string nil t))))
+
+(defun my-sandbox-dir-dired ()
+  ""
+  (interactive)
+  (let ((buf (dired (concat dropbox-directory "100_repo/ghworkspace"))))
+    (switch-to-buffer buf))
+  )
+
+;;----------------------------------------------------------------------------
+;; String utilities missing from core emacs
+;;----------------------------------------------------------------------------
+(defun sanityinc/string-all-matches (regex str &optional group)
+  "Find all matches for `REGEX' within `STR', returning the full match string or group `GROUP'."
+  (let ((result nil)
+        (pos 0)
+        (group (or group 0)))
+    (while (string-match regex str pos)
+      (push (match-string group str) result)
+      (setq pos (match-end group)))
+    result))
+
+(defun sanityinc/string-rtrim (str)
+  "Remove trailing whitespace from `STR'."
+  (replace-regexp-in-string "[ \t\n]+$" "" str))
 
   ;;;###autoload
 (defun duplicate-thing (n)
@@ -705,6 +800,13 @@ If a coding-system can't safely encode the character, display \"?\"."
   "バッファ全体の濁点分離を直します."
   (interactive)
   (ucs-normalize-NFC-region (point-min) (point-max)))
+
+(defun my-get-buffer-dir-path ()
+  "Get buffer directory."
+  (interactive)
+  (if (f-this-file)
+      (f-parent (f-this-file))
+    (dired-current-directory)))
 
 (provide 'mylib)
 ;;; mylib.el ends here

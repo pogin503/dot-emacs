@@ -1,6 +1,13 @@
+;;; .spacemacs --- .spacemacs -*- lexical-binding: t; coding: utf-8 -*-
+;;; Commentary:
+;; This program is free software
+;;; Code:
+
 ;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
+
+(require 'use-package)
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
@@ -31,6 +38,11 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     ansible
+     csv
+     nginx
+     sql
+     go
      python
      javascript
      yaml
@@ -66,20 +78,34 @@ values."
    dotspacemacs-additional-packages '(
                                       ag
                                       anaphora
+                                      company
+                                      drag-stuff
                                       editorconfig
-                                      flycheck-rust
-                                      sequenctial-command
+                                      ein
                                       flycheck-package
+                                      flycheck-rust
+                                      free-keys
+                                      ggtags
+                                      git-timemachine
+                                      gitter
+                                      helm-gtags
                                       helpful
-                                      treemacs
+                                      markdown-preview-mode
                                       multiple-cursors
+                                      no-littering
+                                      no-littering
+                                      nyan-mode
                                       paredit
                                       peep-dired
                                       quickrun
+                                      sequential-command
+                                      tabbar
+                                      treemacs
+                                      treemacs-projectile
+                                      visual-regexp
+                                      visual-regexp-steroids
                                       vue-mode
-                                      ggtags
-                                      helm-gtags
-                                      free-keys
+                                      wgrep-ag
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -148,6 +174,8 @@ values."
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    dotspacemacs-startup-lists '((recents . 5)
                                 (projects . 7))
+
+   dotspacemacs-mode-line-theme 'spacemacs
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
    ;; Default major mode of the scratch buffer (default `text-mode')
@@ -312,7 +340,7 @@ values."
    dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
    ;; The default package repository used if no explicit repository has been
    ;; specified with an installed package.
-   ;; Not used for now. (default nil)
+./   ;; Not used for now. (default nil)
    dotspacemacs-default-package-repository nil
    ;; Delete whitespace while saving buffer. Possible values are `all'
    ;; to aggressively delete empty line and long sequences of whitespace,
@@ -338,6 +366,9 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  (setq-default dotspacemacs-configuration-layers
+                '((syntax-checking :variables syntax-checking-enable-tooltips t)))
+
   (defun add-to-load-path (&rest paths)
     "Add to load path recursively.
 `PATHS' Directorys you want to read recursively."
@@ -347,86 +378,151 @@ you should place your code here."
           (add-to-list 'load-path default-directory)
           (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
               (normal-top-level-add-subdirs-to-load-path))))))
-  (let ((filepath "/Users/pogin/workspace/dot-emacs/site-start.d"))
-    (if (file-exists-p (expand-file-name filepath))
-        (add-to-load-path filepath)
-      (error filepath)))
+    ;; (if (file-exists-p (expand-file-name filepath))
+  (add-to-load-path "/Users/pogin/workspace/dot-emacs/site-start.d"
+                    "/Users/pogin/workspace/dot-emacs/elisp")
+      ;; (error filepath))
 
   (when (file-exists-p (expand-file-name "/Users/pogin/workspace/dot-emacs/site-start.d"))
-    (add-to-load-path "/Users/pogin/workspace/dot-emacs/etc"))
+    (add-to-load-path "/Users/pogin/workspace/dot-emacs/etc"
+                      "/Users/pogin/workspace/dot-emacs/elisp"))
+
+  (require 'use-package)
+
+  (use-package 01_init-global)
+
+  ;; (use-package dired+
+  ;;   :config
+  ;;   (diredp-toggle-find-file-reuse-dir 1)
+  ;;   ;; (diredp-mouse-find-file-reuse-dir-buffer 1)
+  ;;   (diredp-make-find-file-keys-reuse-dirs)
+  ;;   (put 'dired-find-alternate-file 'disabled nil)
+  ;;   )
+  (setq-default c-basic-offset 4       ; 基本インデント量
+                tab-width 4            ; タブ幅
+                ;; indent-tabs-mode nil
+                )  ; インデントをタブでするかスペースでするか
+
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+
   (use-package mylib)
   (use-package 00_init-vars)
   (use-package 00_init-package)
+  ;; (use-package 01_init-encoding)
+  (use-package 01_init-keybind)
   (use-package 30_init-helm)
-  (use-package 50_init-html)
   (use-package 30_init-autoinsert)
+  (use-package 30_init-treemacs)
+  (use-package 50_init-html)
+  ;; path
+  (require '00_init-mouse)
+  (use-package company
+    :config
+    (add-hook 'after-init-hook 'global-company-mode))
+
   (exec-path-from-shell-initialize)
+  (put 'dired-find-alternate-file 'disabled nil)
   ;; (use-package 31_init-dired)
   ;; browser
-  (when run-darwin
-    (setq browse-url-browser-function 'browse-url-generic
-          ;; browse-url-generic-program "google-chrome"
-          browse-url-generic-program "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-          )
-    (setq browse-url-firefox-program "/Applications/Firefox.app/Contents/MacOS/firefox")
-    (setq browse-url-chrome-program "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
 
-  (use-package rust-mode
-    :config
-    (setq rust-format-on-save t)
-    ;; (use-package flycheck-rust
-    ;;   :config
-    ;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
-    ;; (setq rust-rustfmt-bin )
-    )
-  ;;; Enable helm-gtags-mode
-  (use-package helm-gtags
-    :config
-    (add-hook 'c-mode-hook 'helm-gtags-mode)
-    (add-hook 'c++-mode-hook 'helm-gtags-mode)
-    (add-hook 'asm-mode-hook 'helm-gtags-mode)
-    ;; customize
-    (custom-set-variables
-     '(helm-gtags-path-style 'relative)
-     '(helm-gtags-ignore-case t)
-     '(helm-gtags-auto-update t)))
-
-  ;; key bindings
-  (with-eval-after-load 'helm-gtags
-    (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-    (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-    (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-    (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-    (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-    (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))
-
-  ;;;###autoload
-  (defun duplicate-thing (n)
-    (interactive "P")
-    (save-excursion
-      (let (start
-            end
-            (with-comment-out (consp n)))
-        (cond (mark-active
-               (setq start (region-beginning) end (region-end)))
-              (t
-               (beginning-of-line)
-               (setq start (point))
-               (forward-line)
-               (setq end (point))))
-        (kill-ring-save start end)
-        (if with-comment-out
-            (progn
-              (comment-region start end)
-              (yank))
-          (dotimes (i (or n 1))
-            (yank))))))
-
-  (define-key c-mode-map (kbd "C-~") 'duplicate-thing)
   )
+
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(alert-default-style (quote notifier))
+ '(alert-severity-colors
+   (quote
+    ((urgent . "red")
+     (high . "orange")
+     (moderate . "yellow")
+     (normal . "grey85")
+     (low . "blue")
+     (trivial . "purple"))))
+ '(backup-by-copying nil)
+ '(blink-cursor-mode nil)
+ '(c-electric-pound-behavior (quote (alignleft)))
+ '(column-number-mode t)
+ '(delete-auto-save-files t)
+ '(delete-old-versions t)
+ '(evil-want-Y-yank-to-eol nil)
+ '(flycheck-emacs-lisp-load-path load-path)
+ '(helm-M-x-always-save-history t)
+ '(helm-adaptive-history-file (locate-user-emacs-file ".cache/helm-adaptive-history"))
+ '(helm-gtags-auto-update t)
+ '(helm-gtags-ignore-case t)
+ '(helm-gtags-path-style (quote relative))
+ '(ido-enable-flex-matching t)
+ '(ido-everywhere t)
+ '(ido-ignore-extensions t)
+ '(ido-save-directory-list-file (locate-user-emacs-file ".cache/ido.last"))
+ '(ido-use-faces nil)
+ '(ido-use-filename-at-point (quote guess))
+ '(kept-new-versions 5)
+ '(kept-old-versions 5)
+ '(make-backup-files nil)
+ '(markdown-command "grip")
+ '(org-agenda-files nil)
+ '(package-selected-packages
+   (quote
+    (solarized-theme init-loader nyan-mode drag-stuff jinja2-mode ansible-doc ansible latex-pretty-symbols visual-regexp-steroids visual-regexp yasnippet-snippets auto-yasnippet whitespace-cleanup-mode tramp-term counsel-tramp tide ssh-config-mode ssh restclient virtualenv py-autopep8 company-jedi jedi elpy prettier-js php-refactor-mode counsel-projectile pdf-tools pandoc-mode ox-pandoc interleave nov nix-sandbox nix-mode multi-term term+ markdown-preview-mode javadoc-lookup ivy swiper smex ivy-rich itail import-js geben highlight-symbol hardcore-mode guess-language groovy-mode groovy-imports google-maps flycheck-inline eslintd-fix ensime scala-mode sbt-mode elm-mode flycheck-elm elm-yasnippets ecb cmake-ide counsel-bbdb epkg no-littering csv-mode srefactor cmake-mode gitter mode-line-bell git-gutter nginx-mode sql-indent ein go-guru go-eldoc go-mode hyperbole rope-read-mode treemacs-projectile less-css-mode sequential-command flycheck-package package-lint docker yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode anaconda-mode pythonic free-keys zenburn-theme ggtags helm-gtags peep-dired web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc coffee-mode diredful yaml-mode insert-shebang fish-mode vue-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake phpunit phpcbf php-extras php-auto-yasnippets org-projectile org-category-capture minitest drupal-mode php-mode chruby bundler inf-ruby treemacs helpful flycheck-rust wgrep-ag multiple-cursors quickrun ag web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode editorconfig paredit anaphora ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org spaceline smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el paradox orgit org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint intero indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode cargo auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+ '(recentf-auto-cleanup 600)
+ '(recentf-exclude
+   (quote
+    (".recentf" "/elpa/" "/elisps/" "^/tmp/" "/\\.git/" "/\\.cask/" "\\.mime-example" "\\.ido.last" "woman_cache.el" "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$" "Command attempt to use minibuffer while in minibuffer")))
+ '(recentf-max-saved-items 2000)
+ '(recentf-save-file (locate-user-emacs-file ".cache/recentf"))
+ '(safe-local-variable-values
+   (quote
+    ((eval setq-local flycheck-command-wrapper-function
+           (lambda
+             (command)
+             (let
+                 ((default-directory
+                    (find-git-root)))
+               (append
+                (quote
+                 ("bundle" "exec"))
+                command))))
+     (eval let
+           ((default-directory
+              (find-git-root)))
+           (lambda
+             (command)
+             (let
+                 ((default-directory
+                    (find-git-root)))
+               (append
+                (quote
+                 ("bundle" "exec"))
+                command))))
+     (no-byte-compile t))))
+ '(show-paren-mode t)
+ '(tool-bar-mode nil)
+ '(truncate-lines t)
+ '(truncate-partial-width-windows 0)
+ '(url-history-file "~/.emacs.d/data/url/history")
+ '(use-package-enable-imenu-support t)
+ '(use-package-verbose t)
+ '(vc-make-backup-files nil)
+ '(version-control nil))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Source Code Pro" :foundry "nil" :slant normal :weight normal :height 130 :width normal)))))
+
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -446,9 +542,35 @@ you should place your code here."
  '(ido-save-directory-list-file (locate-user-emacs-file ".cache/ido.last"))
  '(ido-use-faces nil)
  '(ido-use-filename-at-point (quote guess))
+ '(org-agenda-files nil)
  '(package-selected-packages
    (quote
-    (flycheck-package package-lint docker yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode anaconda-mode pythonic free-keys zenburn-theme ggtags helm-gtags peep-dired web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc coffee-mode diredful yaml-mode insert-shebang fish-mode vue-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake phpunit phpcbf php-extras php-auto-yasnippets org-projectile org-category-capture minitest drupal-mode php-mode chruby bundler inf-ruby treemacs helpful flycheck-rust wgrep-ag multiple-cursors quickrun ag web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode editorconfig paredit anaphora ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org spaceline smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el paradox orgit org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint intero indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode cargo auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+    (writeroom-mode visual-fill-column wgrep edit-indirect ssass-mode vue-html-mode ht pfuture tern symon string-inflection spaceline-all-the-icons powerline seeing-is-believing ruby-refactor ruby-hash-syntax pos-tip prettier-js pippel pipenv password-generator spinner overseer alert log4e gntp org-brain nameless magit-svn json-navigator hierarchy importmagic epc ctable concurrent deferred impatient-mode parent-mode shut-up elisp-refs dash-functional loop helm-xref helm-purpose window-purpose imenu-list helm-org-rifle request helm-git-grep yasnippet haskell-mode godoctor go-tag go-rename go-impl go-gen-test go-fill-struct gitignore-templates gitignore-mode flycheck-bashate flycheck flx evil-org magit org-plus-contrib go-guru go-eldoc go-mode hyperbole rope-read-mode treemacs-projectile less-css-mode sequential-command flycheck-package package-lint docker yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode anaconda-mode pythonic free-keys zenburn-theme ggtags helm-gtags peep-dired web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc coffee-mode diredful yaml-mode insert-shebang fish-mode vue-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake phpunit phpcbf php-extras php-auto-yasnippets org-projectile org-category-capture minitest drupal-mode php-mode chruby bundler inf-ruby treemacs helpful flycheck-rust wgrep-ag multiple-cursors quickrun ag web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode editorconfig paredit anaphora ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org spaceline smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el paradox orgit org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint intero indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode cargo auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+ '(safe-local-variable-values
+   (quote
+    ((eval setq-local flycheck-command-wrapper-function
+           (lambda
+             (command)
+             (let
+                 ((default-directory
+                    (find-git-root)))
+               (append
+                (quote
+                 ("bundle" "exec"))
+                command))))
+     (eval let
+           ((default-directory
+              (find-git-root)))
+           (lambda
+             (command)
+             (let
+                 ((default-directory
+                    (find-git-root)))
+               (append
+                (quote
+                 ("bundle" "exec"))
+                command))))
+     (no-byte-compile t))))
  '(url-history-file "~/.emacs.d/.cache/url/history"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -456,3 +578,6 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+)
+
+;;; .spacemacs ends here

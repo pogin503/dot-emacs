@@ -5,6 +5,8 @@
 ;; @see http://d.hatena.ne.jp/tomoya/20090807/1249601308
 ;;; Code:
 
+(require 'use-package)
+
 ;;; OSを判別、UNIX系？:
 (defvar run-unix
   (or (equal system-type 'gnu/linux)
@@ -75,10 +77,15 @@
 
 (defvar my-dotfiles-repo-path
   (expand-file-name (convert-standard-filename "dotfiles/") "~/")
-  "dotfiles repository path.")
+  "Dotfiles repository path.")
+
+(use-package no-littering
+  :config
+  (defvar my-cache-directory no-littering-var-directory))
+
 
 (custom-set-variables
- `(url-history-file ,(locate-user-emacs-file ".cache/url/history")))
+ `(url-history-file ,(locate-user-emacs-file "data/url/history")))
 
 (defconst my-emacs-repo-dir "~/workspace/emacs/")
 
