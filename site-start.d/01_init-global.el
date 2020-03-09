@@ -3,8 +3,9 @@
 ;;; Commentary:
 ;;; Code:
 
-(eval-when-compile
-  (require '00_init-vars))
+(require '00_init-vars)
+(require 'use-package)
+(require 'f)
 
 (setq inhibit-startup-message t)            ; 起動メッセージの非表示
 (setq inhibit-startup-echo-area-message -1) ; スタートアップ時のエコー領域メッセージの非表示
@@ -27,13 +28,13 @@
 
 (auto-fill-mode -1) ; 自動詰め込み(auto-file) モードにするかどうか
 
-(use-package linum
-  :defer t
-  :commands (linum-mode global-linum-mode)
-  :config
-  (set-face-attribute 'linum nil :foreground "red" :height 0.8)
-  (setq linum-format "%4d")
-  (setq linum-delay t))
+;; (use-package linum
+;;   :defer t
+;;   :commands (linum-mode global-linum-mode)
+;;   :config
+;;   (set-face-attribute 'linum nil :foreground "red" :height 0.8)
+;;   (setq linum-format "%4d")
+;;   (setq linum-delay t))
 
 ;; 行間
 ;; (setq-default line-spacing 0)
@@ -47,8 +48,6 @@
 (setq scroll-preserve-screen-position t) ; スクロール時のカーソル位置の維持
 (file-name-shadow-mode t)                ; C-x C-f での意味の無いパス表示をグレーアウトする
 (setq kill-whole-line nil)               ; カーソルが行頭にある場合も行全体を削除
-
-(require 'mylib)
 
 (add-hook 'after-save-hook 'make-file-executable)
 
@@ -131,19 +130,26 @@
     (save-buffer)))
 
 (defadvice switch-to-buffer (before save-buffer-now activate)
+  ""
   (my-save-buffer))
 (defadvice other-window (before other-window-now activate)
+  ""
   (my-save-buffer))
 (defadvice windmove-up (before other-window-now activate)
+  ""
   (my-save-buffer))
 (defadvice windmove-down (before other-window-now activate)
+  ""
   (my-save-buffer))
 (defadvice windmove-left (before other-window-now activate)
+  ""
   (my-save-buffer))
 (defadvice windmove-right (before other-window-now activate)
+  ""
   (my-save-buffer))
 
 (defun save-all ()
+  "Save all buffers."
   (interactive)
   (save-some-buffers t))
 (add-hook 'focus-out-hook 'save-all)
@@ -191,6 +197,17 @@
 (cua-mode t)
 (setq cua-enable-cua-keys nil)
 
+(when run-darwin
+  (use-package browse-url
+    :config
+    (setq browse-url-browser-function 'browse-url-generic
+          ;; browse-url-generic-program "google-chrome"
+          browse-url-generic-program "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+          )
+    (setq browse-url-firefox-program "/Applications/Firefox.app/Contents/MacOS/firefox")
+    (setq browse-url-chrome-program "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
+  )
+
 ;; aliases
 (defalias 'ms 'magit-status)
 (defalias 'mgc 'magit-commit)
@@ -199,20 +216,59 @@
 (defalias 'deactivate-advice 'ad-deactivate-all)
 (defalias 'exit 'save-buffers-kill-emacs)
 
-;; path
-(req exec-path-from-shell
-    (exec-path-from-shell-initialize))
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
 
-(setq woman-manpath '("/usr/share/man"
-                      "/usr/local/share/man"
-                      "/usr/local/share/man/ja"))
+(use-package woman
+  :config
+  (setq woman-manpath '("/usr/share/man"
+                        "/usr/local/share/man"
+                        "/usr/local/share/man/ja")))
 
-(when (f-exists? my-emacs-repo-dir)
-  (setq find-function-C-source-directory (concat my-emacs-repo-dir "src"))
-  (when (and (executable-find "gtags")
-             (not (f-exists? (concat my-emacs-repo-dir "src/GTAGS"))))
-    (let ((default-directory find-function-C-source-directory))
-      (shell-command (concat "gtags -v " find-function-C-source-directory)))))
+
+;; follow symlinks and thereby keep version control features
+(setq vc-follow-symlinks t)
+
+(use-package find-func
+  :config
+  (when (f-exists? my-emacs-repo-dir)
+    (setq find-function-C-source-directory (concat my-emacs-repo-dir "src"))
+    (when (and (executable-find "gtags")
+               (not (f-exists? (concat my-emacs-repo-dir "src/GTAGS"))))
+      (let ((default-directory find-function-C-source-directory))
+        (shell-command (concat "gtags -v " find-function-C-source-directory)))))
+  )
+
+;; (defun browse-url-firefox (url &optional new-window)
+;;   "Ask the Firefox WWW browser to load URL.
+;; Default to the URL around or before point.  The strings in
+;; variable `browse-url-firefox-arguments' are also passed to
+;; Firefox.
+
+;; When called interactively, if variable
+;; `browse-url-new-window-flag' is non-nil, load the document in a
+;; new Firefox window, otherwise use a random existing one.  A
+;; non-nil interactive prefix argument reverses the effect of
+;; `browse-url-new-window-flag'.
+
+;; If `browse-url-firefox-new-window-is-tab' is non-nil, then
+;; whenever a document would otherwise be loaded in a new window, it
+;; is loaded in a new tab in an existing window instead.
+
+;; When called non-interactively, optional second argument
+;; NEW-WINDOW is used instead of `browse-url-new-window-flag'."
+;;   (interactive (browse-url-interactive-arg "URL: "))
+;;   (setq url (browse-url-encode-url url))
+;;   (let* ((process-environment (browse-url-process-environment))
+;;          (window-args (if (browse-url-maybe-new-window new-window)
+;;                           (if browse-url-firefox-new-window-is-tab
+;;                               '("-new-tab")
+;;                             '("-new-window"))))
+;;          (ff-args (append browse-url-firefox-arguments window-args (list url)))
+;;          (process-name (concat "firefox " url))
+;;          (process (apply 'start-process process-name nil
+;;                          browse-url-firefox-program ff-args)))))
 
 (provide '01_init-global)
 ;;; 01_init-global ends here
