@@ -41,12 +41,12 @@
   ;; インデント数
   (defun my-web-mode-conf ()
     "Hooks for Web mode."
-    ;; (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-markup-indent-offset 2)
     (setq web-mode-enable-auto-indentation nil)
     ;; (setq web-mode-markup-indent-offset 4)
     ;; (setq web-mode-css-indent-offset 4)
     ;; (setq web-mode-code-indent-offset 4)
-    (setq web-mode-markup-indent-offset 4)
+    (setq web-mode-markup-indent-offset 2)
     )
   (add-hook 'web-mode-hook 'my-web-mode-conf)
   )
@@ -100,6 +100,7 @@
 
 (use-package emmet-mode
   :defines emmet-indentation
+  (emmet-expand-line nil)
   ;; :init
   ;; (defun my-emmet-conf ()
   ;;   (setq emmet-indentation 2))

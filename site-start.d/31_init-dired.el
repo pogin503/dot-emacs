@@ -5,8 +5,6 @@
 
 (require 'popwin)
 
-(require '30_mylib-dired)
-
 (eval-after-load "dired"
   '(progn
     ;;@see http://www.bookshelf.jp/soft/meadow_25.html

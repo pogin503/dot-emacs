@@ -44,6 +44,8 @@
   (bind-key [?\C-¥] [?\C-\\])
   (bind-key [?\M-¥] [?\M-\\])
   (bind-key [?\C-\M-¥] [?\C-\M-\\])
+  (bind-key "<S-down-mouse-1>" 'mouse-save-then-kill)
+
   ;; (use-package emacs-lisp-mode
   ;;   :config
   ;;   ;; (use-package historyf
@@ -59,7 +61,7 @@
   (use-package treemacs
     :config
     (bind-keys :map treemacs-mode-map
-               ([mouse-1] . treemacs-single-click-expand-action)
+               ;; ([mouse-1] . treemacs-single-click-expand-action)
                ("+" . my-make-directory)))
 
   (use-package redo+
@@ -140,11 +142,11 @@
   (use-package dired
     :config
     ;; (define-key dired-mode-map "\C-m" 'my-dired-advertised-find-file)
-    (bind-keys :map dired-mode-map
-               ([M-up] . my-dired-up-directory)
-               ;; ("RET" . dired-find-alternate-file)
-               ;; ([mouse-1] . dired-mouse-find-file)
-               )
+    ;; (bind-keys :map dired-mode-map
+    ;;            ([M-up] . my-dired-up-directory)
+    ;;            ;; ("RET" . dired-find-alternate-file)
+    ;;            ;; ([mouse-1] . dired-mouse-find-file)
+    ;;            )
 
     ;; (define-key dired-mode-map "s" 'my-dired-various-sort-change-or-edit)
 
@@ -161,20 +163,20 @@
                  ("e" . wdired-change-to-wdired-mode)
                  ([mouse-2] . dired-mouse-find-file)))
 
-    (use-package dired-reuse
-      :config
-      ;; (define-key dired-mode-map (kbd "RET") 'dired-reuse-buffer)
-      ;; (define-key dired-mode-map [mouse-1] 'dired-reuse-buffer-mouse)
-      ;; (define-key dired-mode-map [mouse-1] 'dired-mouse-find-file)
-      ;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
+    ;; (use-package dired-reuse
+    ;;   :config
+    ;;   ;; (define-key dired-mode-map (kbd "RET") 'dired-reuse-buffer)
+    ;;   ;; (define-key dired-mode-map [mouse-1] 'dired-reuse-buffer-mouse)
+    ;;   ;; (define-key dired-mode-map [mouse-1] 'dired-mouse-find-file)
+    ;;   ;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
 
-      ;; (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+    ;;   ;; (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
 
-      (bind-keys :map dired-mode-map
-                 ;; ([mouse-1] . dired-reuse-buffer-mouse)
-                 ;; ("RET" . dired-reuse-buffer)
-                 ("^" . (function
-                         (lambda nil (interactive) (dired-reuse-buffer "..")))))))
+    ;;   (bind-keys :map dired-mode-map
+    ;;              ;; ([mouse-1] . dired-reuse-buffer-mouse)
+    ;;              ;; ("RET" . dired-reuse-buffer)
+    ;;              ))
+    )
 
   (use-package company
     :config
@@ -275,7 +277,15 @@
   ;; | C-c W | カーソルの位置の英単語の意味を調べる |
 
   ;; (keyboard-translate ?\C-h ?\C-?)
+  (use-package treemacs
+    :bind (("M-0" . treemacs-select-window)
+           ("C-c t 1" . treemacs-no-delete-other-windows)
+           ("C-c t t" . treemacs)
+           ("C-c t B" . treemacs-bookmark)
+           ("C-c t C-t" . treemacs-find-file)
+           ("C-c t M-t" . treemacs-find-tag)))
   )
 
 
+(provide '01_init-keybind)
 ;;; 01_init-keybind.el ends here

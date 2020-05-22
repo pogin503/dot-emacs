@@ -3,12 +3,19 @@
 ;; This program is free software
 ;;; Code:
 
+(require 'f)
+(require 'use-package)
+
 (use-package treemacs
   :config
-  (treemacs-git-mode 'deferred)
+  (pcase (cons (not (null (executable-find "git")))
+               (not (null (executable-find "python3"))))
+    (`(t . t)
+     (treemacs-git-mode 'simple))
+    (`(t . _)
+     (treemacs-git-mode 'simple)))
   (treemacs-follow-mode nil))
 
-(require 'f)
 (defun my-make-directory (dirname)
   (interactive (list (read-string
                       (format "directory name is (pwd: %s) ? "
@@ -18,5 +25,18 @@
     (message (format "cannot make directory : %s" dirname)))
   )
 
+(defun my-set-current-buffer-treemacs ()
+  (interactive)
+  (pcase (treemacs-current-visibility)
+    ('visible (delete-window (treemacs-get-local-window)))
+    ('exists  (treemacs-select-window))
+    ('none    (treemacs--init (f-this-file))))
+
+  ;; (let ((new-root (f-this-file)))
+  ;;   (treemacs-remove-project-from-workspace)
+  ;;   (treemacs-do-add-project-to-workspace new-root (file-name-nondirectory new-root)
+  ;;   (treemacs-goto-button new-root)
+  ;;   (treemacs-toggle-node)))
+  )
 (provide '30_init-treemacs)
 ;;; 30_init-treemacs.el ends here

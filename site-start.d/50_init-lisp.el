@@ -13,7 +13,8 @@
 
 (defun my-set-elisp-conf ()
   (interactive)
-  (show-paren-mode t))
+  (show-paren-mode t)
+  (paredit-mode t))
 
 (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
 (add-hook 'emacs-lisp-mode-hook 'my-set-elisp-conf)
@@ -22,13 +23,14 @@
   (interactive)
   (show-paren-mode t)
   (set (make-local-variable 'lisp-indent-function)
-       'common-lisp-indent-function))
+       'common-lisp-indent-function)
+  (paredit-mode t))
 
 (add-hook 'lisp-mode-hook 'my-set-lisp-conf)
 
 ;; eldoc setting
 (require 'eldoc)
-(require 'eldoc-extension)
+;; (require 'eldoc-extension)
 (setq eldoc-idle-delay 0.21)
 (setq eldoc-echo-area-use-multiline-p t)
 
@@ -39,12 +41,14 @@
   (add-hook it 'turn-on-eldoc-mode))
 
 ;; paredit
-(require 'paredit)
-(--each '(emacs-lisp-mode-hook
-          lisp-interaction-mode-hook
-          ielm-mode-hook
-          lisp-mode-hook)
-  (add-hook it 'enable-paredit-mode))
+(use-package paredit
+  :config
+  (--each '(emacs-lisp-mode-hook
+            lisp-interaction-mode-hook
+            ielm-mode-hook
+            lisp-mode-hook)
+    (add-hook it 'enable-paredit-mode)))
+
 
 ;; | コマンド | 解説               |
 ;; |----------+--------------------|

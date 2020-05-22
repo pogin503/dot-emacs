@@ -246,4 +246,6 @@
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
   )
 
+(provide '00_init-package)
+
 ;;; 00_init-package.el ends here

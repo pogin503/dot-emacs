@@ -30,11 +30,17 @@
   ;; しかしこれをするとEnterのキーマップまで影響するので
   ;; 大人しくC-jを使ったnewline-and-indentを使うほうが
   ;; (define-key c-mode-base-map ""\C-m" 'newline-and-indent)
-  (c-set-style "stroustrup")                  ;;スタイルはストラウストラップ
+  (c-set-style "stroustrup")
   ;; (flyspell-prog-mode)                        ;;flyspell-prog-mode(自動ispell機能)
-  (show-paren-mode t)                         ;;カッコを強調表示する
-  (labo-indent)
-  (auto-revert-mode)
+  (setq c-basic-offset 2)
+  (c-set-offset 'arglist-cont 0)
+  (c-set-offset 'arglist-close 0)
+  ;; (labo-indent)
+  ;; (setq company-minimum-prefix-length 4) ; デフォルトは4
+  ;; (c-set-offset 'arglist-intro 2)
+  ;; (c-set-offset 'arglist-cont '+)
+  ;; (customize-variable
+  ;;  '(c-electric-pound-behavior (quote (alignleft))))
   )
 
 (add-hook 'c-mode-common-hook 'set-c-mode-common-conf)
@@ -45,6 +51,10 @@
 ;; c-brace-imaginary-offset      他のテキストの後ろにある開き中かっこが，この行の先頭からどれだけ右にある と考えるかを指定します．
 ;; c-argdecl-indent              Cの関数の引数宣言の字下げを指定します．
 ;; c-label-offset                ラベルやcase，defaultのある文に加える字下げの数を指定します．
+(require 'use-package)
+(use-package flycheck
+  :config
+  (add-to-list 'flycheck-enabled-checkers 'c/c++-gcc))
 
 (provide '50_init)
 ;;; 50_init-c ends here
