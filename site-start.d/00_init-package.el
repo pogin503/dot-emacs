@@ -50,8 +50,7 @@
 (use-package popwin
   :config
   ;;dired
-  (push '(dired-mode :position top) popwin:special-display-config)
-
+  ;; (push '(dired-mode :position top) popwin:special-display-config)
   ;; Apropos
   (push '("*slime-apropos*") popwin:special-display-config)
   ;; Macroexpand
@@ -77,8 +76,8 @@
   (push '("*Process List*" :stick t) popwin:special-display-config)
   (push '("*sdic*" :noselect t)  popwin:special-display-config)
   (push '("*init log*" :stick t) popwin:special-display-config)
-  (push '("\\*magit.*" :stick t :regexp t :height 25) popwin:special-display-config)
-  (push '("COMMIT-EDITMSG" :height 15) popwin:special-display-config)
+  ;; (push '("\\*magit.*" :stick t :regexp t :height 25) popwin:special-display-config)
+  ;; (push '("COMMIT-EDITMSG" :height 15) popwin:special-display-config)
   (push '("*compilation*" :regexp t) popwin:special-display-config)
   (push '("*ert*" :regexp t) popwin:special-display-config)
   (push '("*Codic Result*" :height 15) popwin:special-display-config)
