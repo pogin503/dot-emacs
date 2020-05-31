@@ -7,8 +7,6 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
-(require 'use-package)
-
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
 You should not put any user code in this function besides modifying the variable
@@ -38,6 +36,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     ansible
      ansible
      csv
      nginx
@@ -106,6 +105,10 @@ values."
                                       visual-regexp-steroids
                                       vue-mode
                                       wgrep-ag
+                                      f
+                                      s
+                                      lsp-mode
+                                      lsp-ui
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -378,14 +381,12 @@ you should place your code here."
           (add-to-list 'load-path default-directory)
           (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
               (normal-top-level-add-subdirs-to-load-path))))))
-    ;; (if (file-exists-p (expand-file-name filepath))
-  (add-to-load-path "/Users/pogin/workspace/dot-emacs/site-start.d"
-                    "/Users/pogin/workspace/dot-emacs/elisp")
-      ;; (error filepath))
 
-  (when (file-exists-p (expand-file-name "/Users/pogin/workspace/dot-emacs/site-start.d"))
-    (add-to-load-path "/Users/pogin/workspace/dot-emacs/etc"
-                      "/Users/pogin/workspace/dot-emacs/elisp"))
+  (when (file-exists-p (expand-file-name (concat "/Users/" user-login-name "/workspace/dot-emacs/")))
+    (add-to-load-path (concat "/Users/" user-login-name "/workspace/dot-emacs/etc")
+                      (concat "/Users/" user-login-name "/workspace/dot-emacs/elisp")
+                      (concat "/Users/" user-login-name "/workspace/dot-emacs/site-start.d")
+                      ))
 
   (require 'use-package)
 
@@ -421,7 +422,6 @@ you should place your code here."
     (add-hook 'after-init-hook 'global-company-mode))
 
   (exec-path-from-shell-initialize)
-  (put 'dired-find-alternate-file 'disabled nil)
   ;; (use-package 31_init-dired)
   ;; browser
 
