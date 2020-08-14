@@ -200,13 +200,27 @@
 (when run-darwin
   (use-package browse-url
     :config
-    (setq browse-url-browser-function 'browse-url-generic
-          ;; browse-url-generic-program "google-chrome"
-          browse-url-generic-program "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-          )
-    (setq browse-url-firefox-program "/Applications/Firefox.app/Contents/MacOS/firefox")
-    (setq browse-url-chrome-program "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"))
-  )
+    (let* ((firefox "/Applications/Firefox.app/Contents/MacOS/firefox")
+           (brew-prefix (s-chomp (shell-command-to-string "brew --prefix")))
+           (chrome-brew-path (concat brew-prefix
+                                     "/Caskroom/google-chrome/latest"
+                                     "/Google Chrome.app/Contents/MacOS/Google Chrome"))
+           (chrome (cond ((f-exists? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+                          "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+                         ((f-exists? chrome-brew-path)
+                          chrome-brew-path)
+                         (:else ""))))
+      (seq-mapn (lambda (browser-path)
+                  (if (not (f-exists? browser-path))
+                      (warn (concat browser-path " does not exist."))))
+                (list firefox chrome))
+      (setq browse-url-browser-function 'browse-url-generic
+            browse-url-generic-program firefox
+            ;; browse-url-generic-program chrome
+            )
+      (setq browse-url-firefox-program firefox)
+      (setq browse-url-chrome-program chrome))
+    ))
 
 ;; aliases
 (defalias 'ms 'magit-status)
