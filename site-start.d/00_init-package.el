@@ -5,9 +5,6 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://melpa-stable.milkbox.net/packages/") t)
-
 ;; (setq package-user-dir "~/.emacs.d/elap")
 
 (package-initialize)
