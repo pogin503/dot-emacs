@@ -85,7 +85,8 @@
 
 
 (custom-set-variables
- `(url-history-file ,(locate-user-emacs-file "data/url/history")))
+ `(url-history-file ,(locate-user-emacs-file "data/url/history"))
+ '(my-user-name "pogin503"))
 
 (defconst my-emacs-repo-dir "~/workspace/emacs/")
 
