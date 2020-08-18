@@ -31,7 +31,7 @@
 (defconst template-replacements-alists
   '(
     ("%file%" . (lambda()(file-name-nondirectory (buffer-file-name))))
-    ("%name%" . user-full-name)
+    ("%name%" . my-user-name)
     ("%mail%" . (lambda()(identity user-mail-address)))
     ("%file-without-ext%" . (lambda ()
                               (file-name-sans-extension
