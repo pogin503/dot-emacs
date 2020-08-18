@@ -5,7 +5,7 @@
 (require 'autoinsert)
 
 (add-hook 'find-file-hook 'auto-insert)
-(setq auto-insert-directory  (locate-user-emacs-file "etc/autoinsert"))
+(setq auto-insert-directory  (concat my-dotemacs-path "/etc/autoinsert"))
 (setq auto-insert-alist
       (nconc '(
                ("\\.pl$"   . ["perl.pl"       my-template])
