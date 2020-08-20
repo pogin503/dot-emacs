@@ -84,9 +84,10 @@
   (defvar my-cache-directory no-littering-var-directory))
 
 
+(defconst my-user-name "pogin503")
+
 (custom-set-variables
- `(url-history-file ,(locate-user-emacs-file "data/url/history"))
- '(my-user-name "pogin503"))
+ `(url-history-file ,(locate-user-emacs-file "data/url/history")))
 
 (defconst my-emacs-repo-dir "~/workspace/emacs/")
 
