@@ -415,6 +415,7 @@ you should place your code here."
   (use-package 30_init-autoinsert)
   (use-package 30_init-treemacs)
   (use-package 50_init-html)
+  (use-package 50_init-ruby)
   ;; path
   (require '00_init-mouse)
   (use-package company
