@@ -16,13 +16,18 @@
    '(ruby-insert-encoding-magic-comment nil)))
 
 (defun my-ruby-mode-conf ()
-  (setq company-auto-expand t)
-  (setq company-transformers '(company-sort-by-backend-importance)) ;; ソート順
-  (setq company-idle-delay 0) ; 遅延なしにすぐ表示
-  (setq company-minimum-prefix-length 1) ; 何文字打つと補完動作を行うか設定
-  (setq company-selection-wrap-around t) ; 候補の最後の次は先頭に戻る
-  (setq completion-ignore-case t)
-  (setq company-dabbrev-downcase nil)
+  (use-package company
+    :config
+    (setq company-transformers '(company-sort-by-backend-importance)) ;; ソート順
+    (setq company-idle-delay 0) ; 遅延なしにすぐ表示
+    (setq company-minimum-prefix-length 1) ; 何文字打つと補完動作を行うか設定
+    (setq company-selection-wrap-around t) ; 候補の最後の次は先頭に戻る
+    (setq completion-ignore-case t)
+    ;; deprecated ???
+    ;; (setq company-auto-expand t)
+    ;; (setq company-dabbrev-downcase nil)
+    (add-hook 'ruby-mode-hook #'my-ruby-mode-conf)
+    )
   (my-ruby-mode-keybinds)
   )
 
@@ -30,9 +35,6 @@
   :config
   (add-hook 'ruby-mode-hook #'my-ruby-mode-conf)
   )
-(use-package ruby-end
-  :config
-  (add-to-list 'auto-mode-alist '(".erb$" . rhtml-mode)))
 
 (use-package inf-ruby
   :config
