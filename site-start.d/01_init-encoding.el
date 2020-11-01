@@ -5,7 +5,6 @@
 ;;; Code:
 ;; 文字コード
 
-(set-language-environment "Japanese")
 (require '00_init-vars)
 ;;改行コード表示
 (setq eol-mnemonic-dos "(CRLF)")
@@ -22,6 +21,16 @@
       (t
        (setq file-name-coding-system 'utf-8)
        (setq locale-coding-system 'utf-8)))
+
+
+;; https://kokufu.blogspot.com/2016/05/emacs-undecided-unix-cannot-encode.html
+(defun my-set-utf-8-in-undecided-encoding ()
+  (cond ((string-match "undecided-?.*" (format "%s" buffer-file-coding-system))
+         (let ((coding-system-for-read 'utf-8))
+           (revert-buffer t t)))))
+
+(add-hook 'find-file-hook
+          'my-set-utf-8-in-undecided-encoding)
 
 (add-hook 'server-visit-hook
           (lambda ()
