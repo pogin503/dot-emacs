@@ -11,10 +11,6 @@
 
 (require 'use-package)
 
-;; (use-package pallet
-;;   :config
-;;   (pallet-mode +1))
-
 (use-package ag
   :ensure ag)
 
@@ -27,22 +23,21 @@
                     lisp-interaction-mode-hook))
 	  (add-hook hook 'turn-on-elisp-slime-nav-mode))))
 
-(use-package ido
-  :config
-  (ido-mode +1)
-  (custom-set-variables
-   '(ido-enable-flex-matching t)
-   '(ido-use-filename-at-point 'guess)
-   '(ido-everywhere t)
-   '(ido-use-faces nil)
-   '(ido-save-directory-list-file (locate-user-emacs-file ".cache/ido.last"))
-   '(ido-ignore-extensions t)))
+;; (use-package ido
+;;   :config
+;;   (ido-mode +1)
+;;   (custom-set-variables
+;;    '(ido-enable-flex-matching t)
+;;    '(ido-use-filename-at-point 'guess)
+;;    '(ido-everywhere t)
+;;    '(ido-use-faces nil)
+;;    '(ido-save-directory-list-file (locate-user-emacs-file ".cache/ido.last"))
+;;    '(ido-ignore-extensions t)))
 
 (use-package multiple-cursors
   :functions rrm/switch-to-multiple-cursors
   :config
   (setq mc/list-file (locate-user-emacs-file ".cache/.mc-lists.el")))
-
 
 (use-package popwin
   :config
@@ -180,10 +175,11 @@
   :config
   (drag-stuff-mode))
 
-(use-package ein
-  :config
-  (use-package ein-notebook)
-  (use-package ein-subpackages))
+;; (use-package ein
+;;   :config
+;;   (use-package ein-notebook)
+;;   ;; (use-package ein-subpackages)
+;;   )
 
 (use-package flycheck
   :config
@@ -194,6 +190,7 @@
 ;;   (add-to-list 'historyf-minor-modes 'elisp-slime-nav))
 
 (use-package rust-mode
+  :ensure t
   :config
   (setq rust-format-on-save t)
   ;; (use-package flycheck-rust
@@ -203,11 +200,12 @@
   )
 
 (use-package helm-gtags
+  :hook (
+         (c-mode . helm-gtags-mode)
+         (c++-mode . helm-gtags-mode)
+         (asm-mode . helm-gtags-mode)
+         )
   :config
-  (add-hook 'c-mode-hook 'helm-gtags-mode)
-  (add-hook 'c++-mode-hook 'helm-gtags-mode)
-  (add-hook 'asm-mode-hook 'helm-gtags-mode)
-
   ;; customize
   (custom-set-variables
    '(helm-gtags-path-style 'relative)
@@ -221,12 +219,17 @@
     (setq sh-basic-offset 2))
   (add-hook 'sh-mode-hook #'sh-mode-conf))
 
-(use-package no-littering
+;;
+(leaf no-littering
+  :when (run-hook-with-args-until-failure 'use-package--no-littering--pre-init-hook)
+  :custom `((no-littering-etc-directory . ,(expand-file-name "config/" user-emacs-directory))
+            (no-littering-var-directory . ,(expand-file-name "data/" user-emacs-directory)))
+  :require t
   :config
-  ;; (setq no-littering-etc-directory
-  ;;       (expand-file-name "config/" user-emacs-directory))
-  (setq no-littering-var-directory
-        (expand-file-name "data/" user-emacs-directory)))
+  (when (run-hook-with-args-until-failure 'use-package--no-littering--pre-config-hook)
+    (setq auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-save/")
+                                            t)))
+    (run-hooks 'use-package--no-littering--post-config-hook)))
 
 (use-package gitter
   :config
@@ -240,7 +243,70 @@
   :config
   (global-company-mode)
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+  ;; Trigger completion immediately.
+  ;; (setq company-idle-delay 0)
+
+  ;; Number the candidates (use M-1, M-2 etc to select completions).
+  (setq company-show-numbers t)
   )
+
+
+(use-package lsp-mode
+  :ensure t
+  :init
+  (yas-global-mode)
+  (setq read-process-output-max (* 1024 1024))
+  :hook (
+         (rust-mode . lsp)
+         (rustic-mode . lsp)
+         )
+  ;; :bind ("C-c h" . lsp-des)
+  :custom (lsp-rust-server 'rust-analyzer)
+  )
+
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp))))
+
+(use-package company
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
+
+
+  (use-package erc
+    :defer t
+    :config (progn
+              (use-package erc-hl-nicks :config (add-hook 'erc-mode-hook #'erc-hl-nicks-mode))
+              (erc-autojoin-mode t)
+              (erc-scrolltobottom-enable)
+              (erc-scrolltobottom-mode t)
+              (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#emacs" "#clojure"))
+                    erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
+                    erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                              "324"  "329"  "332"  "333"  "353" "477")
+                    erc-server "irc.freenode.net"
+                    erc-port 6667
+                    erc-nick "pogin"
+                    erc-track-position-in-mode-line t
+                    erc-input-line-position -2
+                    erc-prompt-for-password nil
+                    erc-header-line-face-method nil
+                    erc-server-coding-system '(utf-8 . utf-8)
+                    erc-prompt ">"
+                    erc-accidental-paste-threshold-seconds 0.5
+                    erc-join-buffer 'bury)))
+
+(use-package company-tabnine
+  :config
+  (add-to-list 'company-backends #'company-tabnine))
+
+(use-package pipenv
+  :hook (python-mode . pipenv-mode)
+  :init
+  (setq pipenv-projectile-after-switch-function
+        #'pipenv-projectile-after-switch-extended))
 
 (provide '00_init-package)
 

@@ -63,15 +63,17 @@
 ;; @recentf-mode
 (require 'recentf)
 (recentf-mode 1)
-(custom-set-variables
- ;; '(recentf-auto-cleanup 'never)
- '(recentf-max-saved-items 2000)
- '(recentf-auto-cleanup 600)
- '(recentf-exclude '(".recentf" "/elpa/" "/elisps/" "^/tmp/" "/\\.git/" "/\\.cask/"
-                     "\\.mime-example" "\\.ido.last" "woman_cache.el"
-                     "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$"
-					 "Command attempt to use minibuffer while in minibuffer"))
- '(recentf-save-file (locate-user-emacs-file ".cache/recentf")))
+(add-to-list 'recentf-exclude no-littering-var-directory)
+(add-to-list 'recentf-exclude no-littering-etc-directory)
+;; (custom-set-variables
+;;  ;; '(recentf-auto-cleanup 'never)
+;;  '(recentf-max-saved-items 2000)
+;;  '(recentf-auto-cleanup 600)
+;;  '(recentf-exclude '(".recentf" "/elpa/" "/elisps/" "^/tmp/" "/\\.git/" "/\\.cask/"
+;;                      "\\.mime-example" "\\.ido.last" "woman_cache.el"
+;;                      "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$"
+;; 					 "Command attempt to use minibuffer while in minibuffer"))
+;;  )
 
 (msb-mode 1)
 

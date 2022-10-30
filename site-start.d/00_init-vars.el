@@ -90,6 +90,7 @@
  `(url-history-file ,(locate-user-emacs-file "data/url/history")))
 
 (defconst my-emacs-repo-dir "~/workspace/emacs/")
+(defconst my-dotemacs-dir (concat "/Users/" user-login-name "/workspace/dot-emacs"))
 
 (provide '00_init-vars)
 ;;; 00_init-vars.el ends here

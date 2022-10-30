@@ -36,7 +36,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ansible
+     lua
      ansible
      csv
      nginx
@@ -60,9 +60,9 @@ values."
      markdown
      org
      haskell
-     rust
      php
      ruby
+     (rust :disbled-for rust)
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -76,14 +76,17 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
                                       ag
+                                      ;; アナフォリックマクロ用
                                       anaphora
                                       company
+                                      company-tabnine
+                                      docker
+                                      dockerfile-mode
                                       drag-stuff
                                       editorconfig
-                                      ein
                                       flycheck-package
-                                      flycheck-rust
                                       free-keys
+                                      ;; gtags用
                                       ggtags
                                       git-timemachine
                                       gitter
@@ -91,12 +94,14 @@ values."
                                       helpful
                                       markdown-preview-mode
                                       multiple-cursors
-                                      no-littering
+                                      ;; 不要ファイルを管理してくれるやつ
                                       no-littering
                                       nyan-mode
                                       paredit
                                       peep-dired
+                                      pipenv
                                       quickrun
+                                      rustic
                                       sequential-command
                                       tabbar
                                       treemacs
@@ -109,6 +114,7 @@ values."
                                       s
                                       lsp-mode
                                       lsp-ui
+                                      lsp-pyright
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -343,7 +349,7 @@ values."
    dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
    ;; The default package repository used if no explicit repository has been
    ;; specified with an installed package.
-./   ;; Not used for now. (default nil)
+   ;; Not used for now. (default nil)
    dotspacemacs-default-package-repository nil
    ;; Delete whitespace while saving buffer. Possible values are `all'
    ;; to aggressively delete empty line and long sequences of whitespace,
@@ -360,6 +366,16 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  ;; WhichKeyの古い関数をSpacemacsで使っている
+(defalias 'which-key-declare-prefixes 'which-key-add-key-based-replacements)
+(make-obsolete 'which-key-declare-prefixes
+              'which-key-add-key-based-replacements
+              "2016-10-05")
+(defalias 'which-key-declare-prefixes-for-mode
+ 'which-key-add-major-mode-key-based-replacements)
+(make-obsolete 'which-key-declare-prefixes-for-mode
+              'which-key-add-major-mode-key-based-replacements
+              "2016-10-05")
   )
 
 (defun dotspacemacs/user-config ()
@@ -389,9 +405,9 @@ you should place your code here."
                       ))
 
   (require 'use-package)
-
+  (setq byte-compile-warnings '(not cl-functions obsolete))
   (use-package 01_init-global)
-
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
   ;; (use-package dired+
   ;;   :config
   ;;   (diredp-toggle-find-file-reuse-dir 1)
@@ -409,22 +425,17 @@ you should place your code here."
   (use-package mylib)
   (use-package 00_init-vars)
   (use-package 00_init-package)
-  ;; (use-package 01_init-encoding)
+  (use-package 01_init-encoding)
   (use-package 01_init-keybind)
   (use-package 30_init-helm)
   (use-package 30_init-autoinsert)
   (use-package 30_init-treemacs)
   (use-package 50_init-html)
   (use-package 50_init-ruby)
+  (use-package 50_init-rust)
   ;; path
-  (require '00_init-mouse)
-  (use-package company
-    :config
-    (add-hook 'after-init-hook 'global-company-mode))
 
   (exec-path-from-shell-initialize)
-  ;; (use-package 31_init-dired)
-  ;; browser
 
   )
 
@@ -435,19 +446,21 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(alert-default-style (quote notifier))
+ '(alert-default-style 'notifier)
  '(alert-severity-colors
-   (quote
-    ((urgent . "red")
+   '((urgent . "red")
      (high . "orange")
      (moderate . "yellow")
      (normal . "grey85")
      (low . "blue")
-     (trivial . "purple"))))
+     (trivial . "purple")))
  '(backup-by-copying nil)
  '(blink-cursor-mode nil)
- '(c-electric-pound-behavior (quote (alignleft)))
+ '(c-electric-pound-behavior '(alignleft))
  '(column-number-mode t)
+ '(company-minimum-prefix-length 4)
+ '(company-tabnine-always-trigger nil)
+ '(company-tabnine-wait 0.3)
  '(delete-auto-save-files t)
  '(delete-old-versions t)
  '(evil-want-Y-yank-to-eol nil)
@@ -456,38 +469,38 @@ you should place your code here."
  '(helm-adaptive-history-file (locate-user-emacs-file ".cache/helm-adaptive-history"))
  '(helm-gtags-auto-update t)
  '(helm-gtags-ignore-case t)
- '(helm-gtags-path-style (quote relative))
+ '(helm-gtags-path-style 'relative)
  '(ido-enable-flex-matching t)
  '(ido-everywhere t)
  '(ido-ignore-extensions t)
  '(ido-save-directory-list-file (locate-user-emacs-file ".cache/ido.last"))
  '(ido-use-faces nil)
- '(ido-use-filename-at-point (quote guess))
+ '(ido-use-filename-at-point 'guess)
+ '(inf-ruby-default-implementation "pry")
+ '(inf-ruby-eval-binding "Pry.toplevel_binding" t)
  '(kept-new-versions 5)
  '(kept-old-versions 5)
+ '(lsp-rust-unstable-features t)
  '(make-backup-files nil)
  '(markdown-command "grip")
+ '(my-user-name "pogin503" t)
  '(org-agenda-files nil)
  '(package-selected-packages
-   (quote
-    (solarized-theme init-loader nyan-mode drag-stuff jinja2-mode ansible-doc ansible latex-pretty-symbols visual-regexp-steroids visual-regexp yasnippet-snippets auto-yasnippet whitespace-cleanup-mode tramp-term counsel-tramp tide ssh-config-mode ssh restclient virtualenv py-autopep8 company-jedi jedi elpy prettier-js php-refactor-mode counsel-projectile pdf-tools pandoc-mode ox-pandoc interleave nov nix-sandbox nix-mode multi-term term+ markdown-preview-mode javadoc-lookup ivy swiper smex ivy-rich itail import-js geben highlight-symbol hardcore-mode guess-language groovy-mode groovy-imports google-maps flycheck-inline eslintd-fix ensime scala-mode sbt-mode elm-mode flycheck-elm elm-yasnippets ecb cmake-ide counsel-bbdb epkg no-littering csv-mode srefactor cmake-mode gitter mode-line-bell git-gutter nginx-mode sql-indent ein go-guru go-eldoc go-mode hyperbole rope-read-mode treemacs-projectile less-css-mode sequential-command flycheck-package package-lint docker yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode anaconda-mode pythonic free-keys zenburn-theme ggtags helm-gtags peep-dired web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc coffee-mode diredful yaml-mode insert-shebang fish-mode vue-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake phpunit phpcbf php-extras php-auto-yasnippets org-projectile org-category-capture minitest drupal-mode php-mode chruby bundler inf-ruby treemacs helpful flycheck-rust wgrep-ag multiple-cursors quickrun ag web-mode tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode editorconfig paredit anaphora ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org spaceline smeargle restart-emacs rainbow-delimiters racer popwin persp-mode pcre2el paradox orgit org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint intero indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode cargo auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
+   '(dockerfile-mode leaf-tree leaf-convert undo-tree queue treemacs-projectile treemacs cfrs pfuture posframe tabbar rvm rspec-mode robe racer lsp-ui rustic use-package leaf typescript-mode lua-mode lsp-pyright org-plus-contrib pipenv package-lint-flymake company-tabnine which-key web-mode pos-tip rust-mode solarized-theme init-loader nyan-mode drag-stuff jinja2-mode ansible-doc ansible latex-pretty-symbols visual-regexp-steroids visual-regexp yasnippet-snippets auto-yasnippet whitespace-cleanup-mode tramp-term counsel-tramp tide ssh-config-mode ssh restclient virtualenv py-autopep8 company-jedi jedi elpy prettier-js php-refactor-mode counsel-projectile pdf-tools pandoc-mode ox-pandoc interleave nov nix-sandbox nix-mode multi-term term+ markdown-preview-mode javadoc-lookup ivy swiper smex ivy-rich itail import-js geben highlight-symbol hardcore-mode guess-language groovy-mode groovy-imports google-maps flycheck-inline eslintd-fix ensime scala-mode sbt-mode elm-mode flycheck-elm elm-yasnippets ecb cmake-ide counsel-bbdb epkg no-littering csv-mode srefactor cmake-mode gitter mode-line-bell git-gutter nginx-mode sql-indent ein go-guru go-eldoc go-mode hyperbole rope-read-mode less-css-mode sequential-command flycheck-package package-lint docker yapfify pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode anaconda-mode free-keys zenburn-theme ggtags helm-gtags peep-dired web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc coffee-mode diredful yaml-mode insert-shebang fish-mode vue-mode ruby-tools ruby-test-mode rubocop rbenv rake phpunit phpcbf php-extras php-auto-yasnippets org-projectile org-category-capture minitest drupal-mode php-mode chruby bundler inf-ruby helpful flycheck-rust wgrep-ag multiple-cursors quickrun ag tagedit slim-mode scss-mode sass-mode pug-mode helm-css-scss haml-mode emmet-mode editorconfig paredit anaphora ws-butler winum volatile-highlights vi-tilde-fringe uuidgen toml-mode toc-org spaceline smeargle restart-emacs rainbow-delimiters popwin persp-mode pcre2el paradox orgit org-present org-pomodoro org-mime org-download org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative link-hint intero indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-ag haskell-snippets google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word company-ghci company-ghc column-enforce-mode cmm-mode clean-aindent-mode cargo auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))
  '(recentf-auto-cleanup 600)
  '(recentf-exclude
-   (quote
-    (".recentf" "/elpa/" "/elisps/" "^/tmp/" "/\\.git/" "/\\.cask/" "\\.mime-example" "\\.ido.last" "woman_cache.el" "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$" "Command attempt to use minibuffer while in minibuffer")))
+   '(".recentf" "/elpa/" "/elisps/" "^/tmp/" "/\\.git/" "/\\.cask/" "\\.mime-example" "\\.ido.last" "woman_cache.el" "COMMIT_EDITMSG" "MERGE_MSG" "bookmarks" "\\.gz$" "Command attempt to use minibuffer while in minibuffer"))
  '(recentf-max-saved-items 2000)
- '(recentf-save-file (locate-user-emacs-file ".cache/recentf"))
+ '(ruby-insert-encoding-magic-comment nil)
  '(safe-local-variable-values
-   (quote
-    ((eval setq-local flycheck-command-wrapper-function
+   '((eval setq-local flycheck-command-wrapper-function
            (lambda
              (command)
              (let
                  ((default-directory
                     (find-git-root)))
                (append
-                (quote
-                 ("bundle" "exec"))
+                '("bundle" "exec")
                 command))))
      (eval let
            ((default-directory
@@ -498,10 +511,9 @@ you should place your code here."
                  ((default-directory
                     (find-git-root)))
                (append
-                (quote
-                 ("bundle" "exec"))
+                '("bundle" "exec")
                 command))))
-     (no-byte-compile t))))
+     (no-byte-compile t)))
  '(show-paren-mode t)
  '(tool-bar-mode nil)
  '(truncate-lines t)
@@ -510,7 +522,8 @@ you should place your code here."
  '(use-package-enable-imenu-support t)
  '(use-package-verbose t)
  '(vc-make-backup-files nil)
- '(version-control nil))
+ '(version-control nil)
+ '(warning-suppress-types '((use-package) (use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -573,6 +586,7 @@ This function is called at the very end of Spacemacs initialization."
                 command))))
      (no-byte-compile t))))
  '(url-history-file "~/.emacs.d/.cache/url/history"))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

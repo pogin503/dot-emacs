@@ -3,9 +3,9 @@
 ;;; Code:
 ;; @see http://ja.green.xrea.jp/emacs/autoinsert-mode
 (require 'autoinsert)
-
+(require '00_init-vars)
 (add-hook 'find-file-hook 'auto-insert)
-(setq auto-insert-directory  (concat my-dotemacs-path "/etc/autoinsert"))
+(setq auto-insert-directory  (concat my-dotemacs-dir "/etc/autoinsert"))
 (setq auto-insert-alist
       (nconc '(
                ("\\.pl$"   . ["perl.pl"       my-template])
