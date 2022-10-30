@@ -6,6 +6,8 @@
 (require '00_init-macro)
 (require '00_init-vars)
 
+(require 'org-table)
+(require 'dired)
 (require 'cl-lib)
 (require 'package)
 (require 'use-package)
@@ -234,7 +236,7 @@ FILENAME defaults to `buffer-file-name'."
 (defun my-edit-previous-line ()
   (interactive)
   (forward-line -1)
-  (if (not (= (current-line) 1))
+  (if (not (= (current-line-number) 1))
       (end-of-line))
   (newline-and-indent))
 
@@ -444,8 +446,8 @@ Example:
   (cond ((/= (count-windows) 2)
          (message "You need exactly 2 windows to do this."))
         (t
-         (let* ((w1 (first (window-list)))
-                (w2 (second (window-list)))
+         (let* ((w1 (cl-first (window-list)))
+                (w2 (cl-second (window-list)))
                 (b1 (window-buffer w1))
                 (b2 (window-buffer w2))
                 (s1 (window-start w1))
@@ -807,6 +809,68 @@ If a coding-system can't safely encode the character, display \"?\"."
   (if (f-this-file)
       (f-parent (f-this-file))
     (dired-current-directory)))
+
+(defconst my-save-frame-file
+  (locate-user-emacs-file ".framesize")
+  "フレームの位置、大きさを保存するファイルのパス")
+
+(defun my-save-frame-size()
+  "現在のフレームの位置、大きさを`my-save-frame-file'に保存します"
+  (interactive)
+  (let* ((param (frame-parameters (selected-frame)))
+         (current-height (frame-height))
+         (current-width (frame-width))
+         (current-top-margin (if (integerp (cdr (assoc 'top param)))
+                                 (cdr (assoc 'top param))
+                               0))
+         (current-left-margin (if (integerp (cdr (assoc 'left param)))
+                                  (cdr (assoc 'left param))
+                                0))
+         (buf nil)
+         (file my-save-frame-file)
+         )
+    ;; ファイルと関連付けられたバッファ作成
+    (unless (setq buf (get-file-buffer (expand-file-name file)))
+      (setq buf (find-file-noselect (expand-file-name file))))
+    (set-buffer buf)
+    (erase-buffer)
+    ;; ファイル読み込み時に直接評価させる内容を記述
+    (insert
+     (concat
+      "(set-frame-size (selected-frame) "(int-to-string current-width)" "(int-to-string current-height)")\n"
+      "(set-frame-position (selected-frame) "(int-to-string current-left-margin)" "(int-to-string current-top-margin)")\n"
+      ))
+    (save-buffer)))
+
+(defun my-load-frame-size()
+  "`my-save-frame-file'に保存されたフレームの位置、大きさを復元します."
+  (interactive)
+  (let ((file my-save-frame-file))
+    (when (file-exists-p file)
+      (load-file file))))
+
+(defun conv-google-url (rs re)
+  (interactive "r")
+  (let ((url1 (buffer-substring-no-properties rs re)))
+    (setq url1 (replace-regexp-in-string "%23" "#" url1))
+    (setq url1 (replace-regexp-in-string "%24" "$" url1))
+    (setq url1 (replace-regexp-in-string "%25" "$" url1))
+    (setq url1 (replace-regexp-in-string "%26" "&" url1))
+    (setq url1
+          (replace-regexp-in-string "%2f" "/" url1))
+    (setq url1
+          (replace-regexp-in-string "%3A" ":" url1))
+    (setq url1
+          (replace-regexp-in-string "%3B" ";" url1))
+    (setq url1
+          (replace-regexp-in-string "%3C" "<" url1))
+    (setq url1
+          (replace-regexp-in-string "%3D" "=" url1))
+    (setq url1
+          (replace-regexp-in-string "%3E" ">" url1))
+    (setq url1
+          (replace-regexp-in-string "%3F" "?" url1))
+    (message url1)))
 
 (provide 'mylib)
 ;;; mylib.el ends here
