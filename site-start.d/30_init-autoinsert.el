@@ -30,9 +30,9 @@
 (use-package s)
 (defconst template-replacements-alists
   '(
-    ("%file%" . (lambda()(file-name-nondirectory (buffer-file-name))))
-    ("%name%" . my-user-name)
-    ("%mail%" . (lambda()(identity user-mail-address)))
+    ("%file%" . (lambda () (file-name-nondirectory (buffer-file-name))))
+    ("%name%" . (lambda () my-user-name))
+    ("%mail%" . (lambda () (identity user-mail-address)))
     ("%file-without-ext%" . (lambda ()
                               (file-name-sans-extension
                                (file-name-nondirectory (buffer-file-name)))))
@@ -46,7 +46,7 @@
                       (capitalize
                        (file-name-sans-extension
                         (file-name-nondirectory (buffer-file-name)))))
-))
+                     ))
     ))
 
 (defun my-file-body-name (file-name)
