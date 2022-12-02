@@ -115,6 +115,8 @@ values."
                                       lsp-mode
                                       lsp-ui
                                       lsp-pyright
+                                      leaf
+                                      leaf-keywords
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -406,6 +408,7 @@ you should place your code here."
 
   (require 'use-package)
   (setq byte-compile-warnings '(not cl-functions obsolete))
+
   (use-package 01_init-global)
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
   ;; (use-package dired+
@@ -420,7 +423,6 @@ you should place your code here."
                 ;; indent-tabs-mode nil
                 )  ; インデントをタブでするかスペースでするか
 
-  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
   (use-package mylib)
   (use-package 00_init-vars)
@@ -434,9 +436,7 @@ you should place your code here."
   (use-package 50_init-ruby)
   (use-package 50_init-rust)
   ;; path
-
   (exec-path-from-shell-initialize)
-
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
