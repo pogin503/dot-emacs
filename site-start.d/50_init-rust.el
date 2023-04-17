@@ -10,14 +10,24 @@
 ;; (use-package rust-mode
 ;;   :hook ((flyckeck-mode . flycheck-rust-setup)))
 
-(use-package rustic
+;; (use-package rustic
+;;   :ensure t
+;;   :config
+;;   (setq rustic-lsp-server 'rls)
+;;   (setq lsp-rust-analyzer-server-command '("/usr/local/bin/rust-analyzer"))
+;;   (push 'rustic-clippy flycheck-checkers)
+;;   (remove-hook 'rustic-mode-hook 'flycheck-mode)
+;;   (setq rustic-flycheck-clippy-params "--message-format=json")
+;;   )
+
+(use-package rust-mode
   :ensure t
   :config
-  (setq rustic-lsp-server 'rls)
-  (setq lsp-rust-analyzer-server-command '("/usr/local/bin/rust-analyzer"))
-  (push 'rustic-clippy flycheck-checkers)
-  (remove-hook 'rustic-mode-hook 'flycheck-mode)
-  (setq rustic-flycheck-clippy-params "--message-format=json")
+  (setq rust-format-on-save t)
+  ;; (use-package flycheck-rust
+  ;;   :config
+  ;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  ;; (setq rust-rustfmt-bin )
   )
 
 (use-package cargo

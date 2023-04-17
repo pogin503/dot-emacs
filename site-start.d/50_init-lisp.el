@@ -83,4 +83,13 @@
 ;; | C-c C-M-l | S式を                           |
 ;; | M-q       | 一つのS式全体を再インデントする |
 
+(use-package elisp-slime-nav
+  :ensure elisp-slime-nav
+  :config
+  (progn
+	(dolist (hook '(emacs-lisp-mode-hook
+                    ielm-mode-hook
+                    lisp-interaction-mode-hook))
+	  (add-hook hook 'turn-on-elisp-slime-nav-mode))))
+
 ;;; 50_init-lisp.el ends here

@@ -26,5 +26,9 @@
 ;;; Magit のバッファからファイル名を抽出して利用
 ;;;
 
+(use-package gitter
+  :config
+  )
+
 (provide '50_init-magit)
 ;;; 50_init-magit.el ends here

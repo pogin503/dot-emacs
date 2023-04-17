@@ -11,17 +11,10 @@
 
 (require 'use-package)
 
-(use-package ag
-  :ensure ag)
 
-(use-package elisp-slime-nav
-  :ensure elisp-slime-nav
   :config
-  (progn
-	(dolist (hook '(emacs-lisp-mode-hook
-                    ielm-mode-hook
-                    lisp-interaction-mode-hook))
-	  (add-hook hook 'turn-on-elisp-slime-nav-mode))))
+(use-package ag
+  :ensure t)
 
 ;; (use-package ido
 ;;   :config
@@ -83,8 +76,6 @@
 (use-package ats-mode
   :mode ("\\.dats\\'" . ats-mode)
   :commands (ats-mode))
-
-(use-package peep-dired)
 
 (use-package sudo-ext)
 
@@ -158,15 +149,7 @@
   :config
   (projectile-global-mode))
 
-(use-package tabbar
-  :config
-  (tabbar-mode 1))
-
 (use-package jazzradio)
-
-(use-package nyan-mode
-  :config
-  (nyan-mode))
 
 ;; (use-package haskell-emacs)
 ;; M-x haskell-emacs-init
@@ -188,16 +171,6 @@
 ;; (use-package historyf
 ;;   :config
 ;;   (add-to-list 'historyf-minor-modes 'elisp-slime-nav))
-
-(use-package rust-mode
-  :ensure t
-  :config
-  (setq rust-format-on-save t)
-  ;; (use-package flycheck-rust
-  ;;   :config
-  ;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
-  ;; (setq rust-rustfmt-bin )
-  )
 
 (use-package helm-gtags
   :hook (
@@ -230,10 +203,6 @@
     (setq auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-save/")
                                             t)))
     (run-hooks 'use-package--no-littering--post-config-hook)))
-
-(use-package gitter
-  :config
-  )
 
 (use-package markdown-preview-mode
   :config
@@ -308,6 +277,22 @@
   (setq pipenv-projectile-after-switch-function
         #'pipenv-projectile-after-switch-extended))
 
-(provide '00_init-package)
+(use-package exec-path-from-shell
+  ;; :defun (exec-path-from-shell-initialize)
+  :custom
+  ((exec-path-from-shell-variables
+    . '(
+        "XDG_CONFIG_HOME"
+        "XDG_CACHE_HOME"
+        "XDG_DATA_HOME"
+        "XDG_STATE_HOME"
+        "SHELL"
+        "CARGO_HOME"
+        )))
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
+  )
+
 
 ;;; 00_init-package.el ends here

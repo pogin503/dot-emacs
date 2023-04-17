@@ -10,14 +10,6 @@
 (setq inhibit-startup-message t)            ; 起動メッセージの非表示
 (setq inhibit-startup-echo-area-message -1) ; スタートアップ時のエコー領域メッセージの非表示
 
-;; フレームタイトルの設定
-(setq frame-title-format (format "%%b - %s-%s" (invocation-name) emacs-version))
-
-(custom-set-variables
- '(truncate-lines t)                 ; バッファ画面外文字の切り詰め表示
- '(truncate-partial-width-windows 0) ; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
- )
-
 ;; 同一バッファ名にディレクトリ付与
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
@@ -231,10 +223,6 @@
 (defalias 'rv 'revert-buffer)
 (defalias 'deactivate-advice 'ad-deactivate-all)
 (defalias 'exit 'save-buffers-kill-emacs)
-
-(use-package exec-path-from-shell
-  :config
-  (exec-path-from-shell-initialize))
 
 (use-package woman
   :config

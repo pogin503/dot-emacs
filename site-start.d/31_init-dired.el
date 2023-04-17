@@ -283,5 +283,7 @@ Creates a buffer if necessary."
 ;; | C-c C-c | 編集を完了 |
 ;; | C-c ESC | 編集を中止する |
 
+(use-package peep-dired)
+
 (provide '31_init-dired)
 ;;; 31_init-dired ends here
