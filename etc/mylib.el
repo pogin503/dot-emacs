@@ -631,19 +631,22 @@ If a coding-system can't safely encode the character, display \"?\"."
   ;;                         (current-line-number)
   ;;                         (buffer-substring-no-properties s e))))))
 
+  (defun my-current-line-info (rs re)
+    (if (region-active-p)
+        (let ((line-start (save-excursion
+                            (goto-char rs)
+                            (current-line-number)))
+              (line-end (save-excursion
+                          (goto-char re)
+                          (if (bolp)
+                              (1- (current-line-number))
+                            (current-line-number)))))
+          (format "L%s-L%s" line-start line-end))
+      (format "L%s" (current-line-number))))
+
   (defun my-copy-current-line-info (rs re)
     (interactive "r")
-    (let ((line-info (if (region-active-p)
-                         (let ((line-start (save-excursion
-                                             (goto-char rs)
-                                             (current-line-number)))
-                               (line-end (save-excursion
-                                           (goto-char re)
-                                           (if (bolp)
-                                               (1- (current-line-number))
-                                             (current-line-number)))))
-                           (format "L%s-L%s" line-start line-end))
-                       (format "L%s" (current-line-number))))
+    (let ((line-info (my-current-line-info rs re))
           (rs (if (region-active-p)
                  rs
                (save-excursion (beginning-of-line) (point))))
@@ -657,19 +660,10 @@ If a coding-system can't safely encode the character, display \"?\"."
                            ))
         (kill-new result)
         result)))
+
   (defun my-copy-current-line-info-with-code (rs re)
     (interactive "r")
-    (let ((line-info (if (region-active-p)
-                         (let ((line-start (save-excursion
-                                             (goto-char rs)
-                                             (current-line-number)))
-                               (line-end (save-excursion
-                                           (goto-char re)
-                                           (if (bolp)
-                                               (1- (current-line-number))
-                                             (current-line-number)))))
-                           (format "L%s-L%s" line-start line-end))
-                       (format "L%s" (current-line-number))))
+    (let ((line-info (my-current-line-info rs re))
           (rs (if (region-active-p)
                  rs
                (save-excursion (beginning-of-line) (point))))
