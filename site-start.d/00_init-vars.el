@@ -57,23 +57,28 @@
                        (eq window-system 'ns)))
 
 ;; ref from https://github.com/tarsius/no-littering
+(defconst  my-use-dropbox nil)
 ;; ref https://github.com/Sarcasm/.emacs.d/init.el
-(defvar dropbox-directory
-  (cond
-   ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox/"))
-   (t (expand-file-name (convert-standard-filename "Dropbox/") "~/")))
-  "Dropbox directory.")
 
-(defun my-expand-dropbox-file-name (file)
-  "Expand filename FILE relative to `my-expand-dropbox-file-name'."
-  (expand-file-name (convert-standard-filename file)
-                    dropbox-directory))
+(if my-use-dropbox
+    (progn
+      (defvar dropbox-directory
+        (cond
+         ((eq run-windows t) (concat "c:/Users/" user-login-name "/Dropbox/"))
+         (t (expand-file-name (convert-standard-filename "Dropbox/") "~/")))
+        "Dropbox directory.")
 
-(cl-letf (((symbol-function 'dropbox)
-           (symbol-function #'my-expand-dropbox-file-name)))
-  (defvar my-emacs-workspace-path (dropbox "100_emacs/"))
-  (defvar my-initel-org-path (dropbox "100_emacs/initel.org"))
-  (defvar my-org-files-path (dropbox "100_workspace-etc")))
+      (defun my-expand-dropbox-file-name (file)
+        "Expand filename FILE relative to `my-expand-dropbox-file-name'."
+        (expand-file-name (convert-standard-filename file)
+                          dropbox-directory))
+      (cl-letf (((symbol-function 'dropbox)
+                 (symbol-function #'my-expand-dropbox-file-name)))
+        (defvar my-emacs-workspace-path (dropbox "100_emacs/"))
+        (defvar my-initel-org-path (dropbox "100_emacs/initel.org"))
+        (defvar my-org-files-path (dropbox "100_workspace-etc")))
+      ))
+
 
 (defvar my-dotfiles-repo-path
   (expand-file-name (convert-standard-filename "dotfiles/") "~/")
