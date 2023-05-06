@@ -2,17 +2,57 @@
 ;;; Commentary:
 ;;; Code:
 (require 'package)
+(require '00_init-vars)
 
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(eval-and-compile
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+  (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/") t)
+  (package-initialize)
+  (unless (package-installed-p 'leaf)
+    (package-refresh-contents)
+    (package-install 'leaf)))
 
 ;; (setq package-user-dir "~/.emacs.d/elap")
 
-(package-initialize)
 
 (require 'use-package)
+(require 'leaf)
 
+(leaf leaf-keywords
+  :ensure t
+  :init
+  ;; ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
+  (leaf hydra :ensure t)
+  (leaf el-get :ensure t)
+  (leaf blackout :ensure t)
 
   :config
+  ;; initialize leaf-keywords.el
+  (leaf-keywords-init))
+
+(leaf el-get
+  :config
+  (add-to-list 'el-get-recipe-path (expand-file-name "el-get" my-dotemacs-dir))
+  )
+
+;; (leaf feather
+;;   :el-get conao3/feather.el
+;;   :config (feather-mode))
+
+(leaf leaf
+  :config
+  ;; 選択したS式をleafブロックにしたものを別バッファに表示
+  ;; leaf-convert-replace-pop
+  ;; 選択したS式をleafブロックに置換
+  ;; leaf-convert-replace-regionが使える
+  (leaf leaf-convert :ensure t)
+  ;; leafのツリーを左に表示
+  (leaf leaf-tree
+    :ensure t
+    :custom ((imenu-list-size . 30)
+             (imenu-list-position . 'left))))
+
 (use-package ag
   :ensure t)
 
@@ -294,5 +334,10 @@
     (exec-path-from-shell-initialize))
   )
 
+(leaf tree-sitter :ensure t)
+(leaf tree-sitter-langs :ensure t)
 
+(el-get 'sync)
+
+(provide '00_init-package)
 ;;; 00_init-package.el ends here
