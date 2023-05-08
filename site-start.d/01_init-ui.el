@@ -36,5 +36,23 @@
  '(truncate-partial-width-windows 0) ; ウィンドウ縦分割時のバッファ画面外文字の切り詰め表示
  )
 
+;; (use-package linum
+;;   :defer t
+;;   :commands (linum-mode global-linum-mode)
+;;   :config
+;;   (set-face-attribute 'linum nil :foreground "red" :height 0.8)
+;;   (setq linum-format "%4d")
+;;   (setq linum-delay t))
+
+;; (line-number-mode t)   ; 行番号の表示
+;; (column-number-mode t) ; 列番号を表示
+
+;; (leaf nlinum
+;;   :ensure t
+;;   :init
+;;   (add-hook 'prog-mode-hook #'nlinum-mode)
+;;   :config
+;;   (global-nlinum-mode 1))
+
 (provide '01_init-ui)
 ;;; 01_init-ui.el ends here

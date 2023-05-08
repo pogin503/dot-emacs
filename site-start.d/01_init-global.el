@@ -5,6 +5,7 @@
 
 (require '00_init-vars)
 (require 'use-package)
+(require 'leaf)
 (require 'f)
 
 (setq inhibit-startup-message t)            ; 起動メッセージの非表示
@@ -15,18 +16,9 @@
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq uniquify-ignore-buffers-re "*[^*]+*")
 
-(line-number-mode t)   ; 行番号の表示
-(column-number-mode t) ; 列番号を表示
+
 
 (auto-fill-mode -1) ; 自動詰め込み(auto-file) モードにするかどうか
-
-;; (use-package linum
-;;   :defer t
-;;   :commands (linum-mode global-linum-mode)
-;;   :config
-;;   (set-face-attribute 'linum nil :foreground "red" :height 0.8)
-;;   (setq linum-format "%4d")
-;;   (setq linum-delay t))
 
 ;; 行間
 ;; (setq-default line-spacing 0)
@@ -53,10 +45,13 @@
 ;; (add-hook 'kill-emacs-query-functions 'my-byte-compile-func)
 
 ;; @recentf-mode
-(require 'recentf)
-(recentf-mode 1)
-(add-to-list 'recentf-exclude no-littering-var-directory)
-(add-to-list 'recentf-exclude no-littering-etc-directory)
+(leaf recentf
+  :config
+  (recentf-mode 1)
+  (add-to-list 'recentf-exclude no-littering-var-directory)
+  (add-to-list 'recentf-exclude no-littering-etc-directory)
+  )
+
 ;; (custom-set-variables
 ;;  ;; '(recentf-auto-cleanup 'never)
 ;;  '(recentf-max-saved-items 2000)

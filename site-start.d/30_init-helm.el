@@ -3,6 +3,7 @@
 ;;; Code:
 
 (require 'helm-config)
+(require '00_init-vars)
 
 ;; (require 'helm-descbinds)
 ;; (helm-descbinds-mode)
