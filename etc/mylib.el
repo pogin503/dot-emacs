@@ -676,7 +676,17 @@ If a coding-system can't safely encode the character, display \"?\"."
                            line-info
                            (buffer-substring-no-properties rs re)))
         (kill-new result)
-        result))))
+        result)))
+
+  (defun my-find-git-root (&optional dir)
+    (interactive)
+    (unless dir (setq dir (f-dirname (buffer-file-name))))
+    (let ((parent (f-parent dir)))
+      (unless (f-root? parent)
+        (if (f-exists? (f-expand ".git" dir))
+            dir
+          (find-git-root parent)))))
+  )
 
 ;; @see http://stackoverflow.com/questions/1511737/how-do-you-list-the-active-minor-modes-in-emacs
 (defun which-active-modes ()
