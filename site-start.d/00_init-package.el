@@ -11,7 +11,19 @@
   (package-initialize)
   (unless (package-installed-p 'leaf)
     (package-refresh-contents)
-    (package-install 'leaf)))
+    (package-install 'leaf))
+
+  (leaf leaf-keywords
+    :ensure t
+    :init
+    ;; ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
+    (leaf hydra :ensure t)
+    (leaf el-get :ensure t)
+    (leaf blackout :ensure t)
+
+    :config
+    ;; initialize leaf-keywords.el
+    (leaf-keywords-init)))
 
 ;; (setq package-user-dir "~/.emacs.d/elap")
 
@@ -19,17 +31,6 @@
 (require 'use-package)
 (require 'leaf)
 
-(leaf leaf-keywords
-  :ensure t
-  :init
-  ;; ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
-  (leaf hydra :ensure t)
-  (leaf el-get :ensure t)
-  (leaf blackout :ensure t)
-
-  :config
-  ;; initialize leaf-keywords.el
-  (leaf-keywords-init))
 
 (leaf el-get
   :config
@@ -40,21 +41,18 @@
 ;;   :el-get conao3/feather.el
 ;;   :config (feather-mode))
 
-(leaf leaf
-  :config
-  ;; 選択したS式をleafブロックにしたものを別バッファに表示
-  ;; leaf-convert-replace-pop
-  ;; 選択したS式をleafブロックに置換
-  ;; leaf-convert-replace-regionが使える
-  (leaf leaf-convert :ensure t)
-  ;; leafのツリーを左に表示
-  (leaf leaf-tree
-    :ensure t
-    :custom ((imenu-list-size . 30)
-             (imenu-list-position . 'left))))
-
-(use-package ag
-  :ensure t)
+(leaf leaf-convert :ensure t)
+(leaf leaf-tree
+  :ensure t
+  :custom ((imenu-list-size . 30)
+           (imenu-list-position . 'left)))
+;; leaf leaf
+;;   :config
+;; 選択したS式をleafブロックにしたものを別バッファに表示
+;; leaf-convert-replace-pop
+;; 選択したS式をleafブロックに置換
+;; leaf-convert-replace-regionが使える
+;; leafのツリーを左に表示
 
 ;; (use-package ido
 ;;   :config
@@ -113,41 +111,20 @@
   :config
   (volatile-highlights-mode t))
 
-(use-package ats-mode
-  :mode ("\\.dats\\'" . ats-mode)
-  :commands (ats-mode))
-
 (use-package sudo-ext)
 
 (use-package open-junk-file)
 
 (use-package anzu
+  ;; 検索情報をモードラインに表示
   :config
   (global-anzu-mode +1))
-
-(use-package helm-swoop)
 
 (use-package expand-region)
 
 (use-package sequential-command-config
   :config
   (sequential-command-setup-keys))
-
-(use-package diminish
-  :config
-  (defmacro safe-diminish (file mode &optional new-name)
-    `(with-eval-after-load ,file
-       (diminish ,mode ,new-name)))
-
-  (safe-diminish "anzu" 'anzu-mode)
-  (safe-diminish "auto-complete" 'auto-complete-mode)
-  (safe-diminish "eldoc" 'eldoc-mode)
-  (safe-diminish "flex-autopair" 'flex-autopair-mode)
-  (safe-diminish "git-gutter" 'git-gutter-mode "GG")
-  (safe-diminish "key-combo" 'key-combo-mode)
-  (safe-diminish "paredit" 'paredit-mode "()")
-  (safe-diminish "projectile" 'projectile-mode)
-  (safe-diminish "volatile-highlights" 'volatile-highlights-mode))
 
 (use-package editorconfig
   :config
@@ -212,26 +189,6 @@
 ;;   :config
 ;;   (add-to-list 'historyf-minor-modes 'elisp-slime-nav))
 
-(use-package helm-gtags
-  :hook (
-         (c-mode . helm-gtags-mode)
-         (c++-mode . helm-gtags-mode)
-         (asm-mode . helm-gtags-mode)
-         )
-  :config
-  ;; customize
-  (custom-set-variables
-   '(helm-gtags-path-style 'relative)
-   '(helm-gtags-ignore-case t)
-   '(helm-gtags-auto-update t)))
-
-(use-package sh-script
-  :config
-  (defun sh-mode-conf ()
-    (interactive)
-    (setq sh-basic-offset 2))
-  (add-hook 'sh-mode-hook #'sh-mode-conf))
-
 ;;
 (leaf no-littering
   :when (run-hook-with-args-until-failure 'use-package--no-littering--pre-init-hook)
@@ -248,18 +205,6 @@
   :config
   )
 
-(use-package company
-  :config
-  (global-company-mode)
-  (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-  ;; Trigger completion immediately.
-  ;; (setq company-idle-delay 0)
-
-  ;; Number the candidates (use M-1, M-2 etc to select completions).
-  (setq company-show-numbers t)
-  )
-
-
 (use-package lsp-mode
   :ensure t
   :init
@@ -273,66 +218,56 @@
   :custom (lsp-rust-server 'rust-analyzer)
   )
 
-(use-package lsp-pyright
-  :ensure t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp))))
-
-(use-package company
-  :config
-  (add-hook 'after-init-hook 'global-company-mode))
-
-
-  (use-package erc
-    :defer t
-    :config (progn
-              (use-package erc-hl-nicks :config (add-hook 'erc-mode-hook #'erc-hl-nicks-mode))
-              (erc-autojoin-mode t)
-              (erc-scrolltobottom-enable)
-              (erc-scrolltobottom-mode t)
-              (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#emacs" "#clojure"))
-                    erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
-                    erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                              "324"  "329"  "332"  "333"  "353" "477")
-                    erc-server "irc.freenode.net"
-                    erc-port 6667
-                    erc-nick "pogin"
-                    erc-track-position-in-mode-line t
-                    erc-input-line-position -2
-                    erc-prompt-for-password nil
-                    erc-header-line-face-method nil
-                    erc-server-coding-system '(utf-8 . utf-8)
-                    erc-prompt ">"
-                    erc-accidental-paste-threshold-seconds 0.5
-                    erc-join-buffer 'bury)))
-
-(use-package company-tabnine
-  :config
-  (add-to-list 'company-backends #'company-tabnine))
-
-(use-package pipenv
-  :hook (python-mode . pipenv-mode)
-  :init
-  (setq pipenv-projectile-after-switch-function
-        #'pipenv-projectile-after-switch-extended))
+(use-package erc
+  :defer t
+  :config (progn
+            (use-package erc-hl-nicks :config (add-hook 'erc-mode-hook #'erc-hl-nicks-mode))
+            (erc-autojoin-mode t)
+            (erc-scrolltobottom-enable)
+            (erc-scrolltobottom-mode t)
+            (setq erc-autojoin-channels-alist '((".*\\.freenode.net" "#emacs" "#clojure"))
+                  erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
+                  erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                            "324"  "329"  "332"  "333"  "353" "477")
+                  erc-server "irc.freenode.net"
+                  erc-port 6667
+                  erc-nick "pogin"
+                  erc-track-position-in-mode-line t
+                  erc-input-line-position -2
+                  erc-prompt-for-password nil
+                  erc-header-line-face-method nil
+                  erc-server-coding-system '(utf-8 . utf-8)
+                  erc-prompt ">"
+                  erc-accidental-paste-threshold-seconds 0.5
+                  erc-join-buffer 'bury)))
 
 (use-package exec-path-from-shell
   ;; :defun (exec-path-from-shell-initialize)
-  :custom
-  ((exec-path-from-shell-variables
-    . '(
-        "XDG_CONFIG_HOME"
-        "XDG_CACHE_HOME"
-        "XDG_DATA_HOME"
-        "XDG_STATE_HOME"
-        "SHELL"
-        "CARGO_HOME"
-        )))
+  ;; :custom
+  ;; ((exec-path-from-shell-variables
+  ;;   . '(
+  ;;       "XDG_CONFIG_HOME"
+  ;;       "XDG_CACHE_HOME"
+  ;;       "XDG_DATA_HOME"
+  ;;       "XDG_STATE_HOME"
+  ;;       "SHELL"
+  ;;       "CARGO_HOME"
+  ;;       )))
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
   )
+
+(use-package ats-mode
+  :mode ("\\.dats\\'" . ats-mode)
+  :commands (ats-mode))
+
+(use-package sh-script
+  :config
+  (defun sh-mode-conf ()
+    (interactive)
+    (setq sh-basic-offset 2))
+  (add-hook 'sh-mode-hook #'sh-mode-conf))
 
 (leaf tree-sitter :ensure t)
 (leaf tree-sitter-langs :ensure t)

@@ -425,7 +425,6 @@ you should place your code here."
 
 
   (use-package mylib)
-  (use-package 00_init-vars)
   (use-package 00_init-package)
   (use-package 01_init-encoding)
   (use-package 01_init-keybind)
@@ -435,8 +434,7 @@ you should place your code here."
   (use-package 50_init-html)
   (use-package 50_init-ruby)
   (use-package 50_init-rust)
-  ;; path
-  (exec-path-from-shell-initialize)
+  (use-package 50_init-auto-complete)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

@@ -19,5 +19,19 @@
   '(helm-M-x-always-save-history t)
   '(helm-adaptive-history-file (locate-user-emacs-file ".cache/helm-adaptive-history")))
 
+(use-package helm-gtags
+  :hook (
+         (c-mode . helm-gtags-mode)
+         (c++-mode . helm-gtags-mode)
+         (asm-mode . helm-gtags-mode)
+         )
+  :config
+  ;; customize
+  (custom-set-variables
+   '(helm-gtags-path-style 'relative)
+   '(helm-gtags-ignore-case t)
+   '(helm-gtags-auto-update t)))
+
+
 (provide '30_init-helm)
 ;;; 30_init-helm.el ends here

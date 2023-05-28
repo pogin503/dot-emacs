@@ -16,5 +16,8 @@
 	(setq ad-return-value (concat "'" argument "'")))
     ad-do-it))
 
+(use-package ag
+  :ensure t)
+
 (provide '30_init-grep)
 ;;; 30_init-grep ends here
