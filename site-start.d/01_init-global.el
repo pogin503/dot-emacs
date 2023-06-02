@@ -16,6 +16,10 @@
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 (setq uniquify-ignore-buffers-re "*[^*]+*")
 
+(leaf desktop
+  :config
+  (desktop-save-mode 1)
+  (desktop-read))
 
 
 (auto-fill-mode -1) ; 自動詰め込み(auto-file) モードにするかどうか

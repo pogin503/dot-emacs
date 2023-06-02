@@ -36,6 +36,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     windows-scripts
      lua
      ansible
      csv
@@ -117,6 +118,7 @@ values."
                                       lsp-pyright
                                       leaf
                                       leaf-keywords
+                                      org-roam
                                       )
 
    ;; A list of packages that cannot be updated.
